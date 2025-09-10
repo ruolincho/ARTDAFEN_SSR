@@ -1,0 +1,1 @@
+import{af as o,p as c}from"./C4Lasefb.js";const f=(e,s={},t,a="warning")=>new Promise((r,n)=>{o.confirm(`${t}`,"Tips",{confirmButtonText:"Yes",cancelButtonText:"No",type:a,draggable:!0}).then(async()=>{if(!await e(s))return n(!1);c({type:"success",message:"Success!"}),r(!0)})});export{f as u};

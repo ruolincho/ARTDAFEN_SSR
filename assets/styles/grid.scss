@@ -1,0 +1,129 @@
+/* 容器 */
+.container,
+.container-middle,
+.container-small,
+.container-fluid, {
+  position: relative;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin: 0 auto;
+}
+
+/* 行 */
+.row {
+  --gutter: var(--gutter-base);
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(-0.5 * var(--gutter));
+  margin-right: calc(-0.5 * var(--gutter));
+}
+
+/* 列公共样式 */
+[class^="col-"] {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-left: calc(0.5 * var(--gutter));
+  padding-right: calc(0.5 * var(--gutter));
+}
+
+/* 生成基础列 */
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 auto;
+    width: calc(100% * #{$i} / 12);
+  }
+}
+
+/* 一行5列的情况 */
+.col-average {
+  flex: 0 0 auto;
+  width: 20%;
+}
+
+/* 间距类名 */
+.gap-base { gap: var(--gutter-base); }
+.gap-row-base { row-gap: var(--gutter-base); }
+.gap-column-base { column-gap: var(--gutter-base); }
+
+.gap-xs { gap: var(--gutter-xs); }
+.gap-row-xs { row-gap: var(--gutter-xs); }
+.gap-column-xs { column-gap: var(--gutter-xs); }
+
+.gap-sm { gap: var(--gutter-sm); }
+.gap-row-sm { row-gap: var(--gutter-sm); }
+.gap-column-sm { column-gap: var(--gutter-sm); }
+
+.gap-md { gap: var(--gutter-md); }
+.gap-row-md { row-gap: var(--gutter-md); }
+.gap-column-md { column-gap: var(--gutter-md); }
+
+.gap-lg { gap: var(--gutter-lg); }
+.gap-row-lg { row-gap: var(--gutter-lg); }
+.gap-column-lg { column-gap: var(--gutter-lg); }
+
+.gap-xl { gap: var(--gutter-xl); }
+.gap-row-xl { row-gap: var(--gutter-xl); }
+.gap-column-xl { column-gap: var(--gutter-xl); }
+
+/* 响应式列 */
+@mixin make-col-responsive($breakpoint) {
+  @for $i from 1 through 12 {
+    .col-#{$breakpoint}-#{$i} {
+      flex: 0 0 auto;
+      width: calc(100% * #{$i} / 12);
+    }
+  }
+  .col-#{$breakpoint}-average {
+    flex: 0 0 auto;
+    width: 20%;
+  }
+}
+
+@media (min-width: 414px) {
+  @include make-col-responsive(xs);
+}
+
+@media (min-width: 768px) {
+  @include make-col-responsive(sm);
+  .container { width: 750px; }
+  .container-middle { width: 750px; }
+  .container-fluid {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+}
+
+@media (min-width: 992px) {
+  @include make-col-responsive(md);
+  .container { width: 970px; }
+  .container-middle { width: 970px; }
+  .container-small { width: 830px; }
+}
+
+@media (min-width: 1260px) {
+  @include make-col-responsive(lg);
+  .container { width: 1230px; }
+  .container-middle { width: 1060px; }
+  .container-fluid {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+}
+
+@media (min-width: 1460px) {
+  @include make-col-responsive(xl);
+  .container { width: 1430px; }
+  .container-middle { width: 1240px; }
+  .container-fluid {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+
+@media (min-width: 1680px) {
+  @include make-col-responsive(2xl);
+  .container { width: 1550px; }
+  .container-middle { width: 1350px; }
+
+}

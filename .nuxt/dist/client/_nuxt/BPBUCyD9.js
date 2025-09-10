@@ -1,0 +1,1 @@
+import{$ as r,T as a}from"./C4Lasefb.js";const e=t=>r().post(a+"/physical/order/manager",t),o=t=>r().get(a+`/physical/order/detail/${t}`),i=t=>r().post(a+"/physical/order/discount/calculation",t);export{o as a,i as d,e as g};

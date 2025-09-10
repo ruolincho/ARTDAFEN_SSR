@@ -1,0 +1,116 @@
+.text-12 { font-size: 12px; }
+.text-14 { font-size: 14px; }
+.text-16 { font-size: 16px; }
+.text-18 { font-size: 18px; }
+.text-20 { font-size: 20px; }
+.text-22 { font-size: 22px; }
+.text-24 { font-size: 24px; }
+.text-26 { font-size: 26px; }
+.text-28 { font-size: 28px; }
+.text-30 { font-size: 30px; }
+.text-40 { font-size: 40px; }
+.text-46 { font-size: 46px; }
+.text-50 { font-size: 50px; }
+.text-60 { font-size: 60px; }
+
+.f-bold { font-weight: bold; }
+.f-bold-200 { font-weight: 200; }
+.f-bold-500 { font-weight: 500; }
+.f-bold-600 { font-weight: 600; }
+.text-underline { text-decoration: underline; }
+.text-through { text-decoration: line-through }
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-lowercase { text-transform: lowercase; }
+.text-uppercase { text-transform: uppercase; }
+.text-capitalize { text-transform: capitalize; }
+.break-word { word-wrap: break-word; }
+.text-hover:hover { color: var(--color-primary); font-weight: unset; }
+
+/* 超小屏幕 (xs) - 兼容 414 以下 */
+@media (max-width: 414px) {
+  .text-12 { font-size: 10px; }
+  .text-14 { font-size: 11px; }
+  .text-16 { font-size: 12px; }
+  .text-18 { font-size: 13px; }
+  .text-20 { font-size: 14px; }
+  .text-22 { font-size: 15px; }
+  .text-24 { font-size: 16px; }
+  .text-26 { font-size: 17px; }
+  .text-28 { font-size: 18px; }
+  .text-30 { font-size: 19px; }
+  .text-40 { font-size: 22px; }
+  .text-46 { font-size: 24px; }
+  .text-50 { font-size: 26px; }
+  .text-60 { font-size: 30px; }
+}
+
+/* 小屏幕 (sm) - 414px ~ 768 */
+@media (min-width: 414px) and (max-width: 768px) {
+  .text-12 { font-size: 11px; }
+  .text-14 { font-size: 12px; }
+  .text-16 { font-size: 13px; }
+  .text-18 { font-size: 14px; }
+  .text-20 { font-size: 15px; }
+  .text-22 { font-size: 16px; }
+  .text-24 { font-size: 17px; }
+  .text-26 { font-size: 18px; }
+  .text-28 { font-size: 19px; }
+  .text-30 { font-size: 20px; }
+  .text-40 { font-size: 24px; }
+  .text-46 { font-size: 26px; }
+  .text-50 { font-size: 28px; }
+  .text-60 { font-size: 34px; }
+}
+
+/* 中等屏幕 (md) - 768 ~ 992 */
+@media (min-width: 768px) and (max-width: 992px) {
+  .text-12 { font-size: 12px; }
+  .text-14 { font-size: 13px; }
+  .text-16 { font-size: 14px; }
+  .text-18 { font-size: 15px; }
+  .text-20 { font-size: 16px; }
+  .text-22 { font-size: 18px; }
+  .text-24 { font-size: 19px; }
+  .text-26 { font-size: 20px; }
+  .text-28 { font-size: 22px; }
+  .text-30 { font-size: 24px; }
+  .text-40 { font-size: 28px; }
+  .text-46 { font-size: 30px; }
+  .text-50 { font-size: 32px; }
+  .text-60 { font-size: 38px; }
+}
+
+/* 大屏幕 (lg) - 992 ~ 1260 */
+@media (min-width: 992px) and (max-width: 1260px) {
+  .text-26 { font-size: 24px; }
+  .text-28 { font-size: 26px; }
+  .text-30 { font-size: 28px; }
+  .text-40 { font-size: 32px; }
+  .text-46 { font-size: 36px; }
+  .text-50 { font-size: 38px; }
+  .text-60 { font-size: 44px; }
+}
+
+/* 超大屏幕 (xl) - 1260 ~ 1460 */
+@media (min-width: 1260px) and (max-width: 1460px) {
+  .text-26 { font-size: 25px; }
+  .text-28 { font-size: 27px; }
+  .text-30 { font-size: 28px; }
+  .text-40 { font-size: 34px; }
+  .text-46 { font-size: 38px; }
+  .text-50 { font-size: 42px; }
+  .text-60 { font-size: 48px; }
+}
+
+/* 超大屏幕 (2xl) - 1460 ~ 1680 */
+@media (min-width: 1460px) and (max-width: 1680px) {
+  .text-26 { font-size: 26px; }
+  .text-28 { font-size: 28px; }
+  .text-30 { font-size: 30px; }
+  .text-40 { font-size: 36px; }
+  .text-46 { font-size: 42px; }
+  .text-50 { font-size: 46px; }
+  .text-60 { font-size: 54px; }
+}

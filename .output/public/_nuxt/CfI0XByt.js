@@ -1,0 +1,1 @@
+import{$ as r,T as o}from"./C4Lasefb.js";const s=t=>r().get(o+"/product/group",t),p=t=>r().post(o+"/product/attribute/value",t),u=t=>r().post(o+"/product/best",t),c=t=>r().post(o+"/product/search",t),a=t=>r().post(o+"/product/related",t),d=t=>r().post(o+"/product/brand",t),n=t=>r().post(o+"/product/artist/artworks",t);export{p as a,u as b,c,a as d,d as e,n as f,s as g};

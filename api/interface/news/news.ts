@@ -1,0 +1,42 @@
+import type {IPageQuery} from "~/api/interface";
+
+export namespace INews {
+
+    /*新闻查询条件*/
+    export interface RecQuery extends IPageQuery{
+        id: string
+        categoryId: string
+    }
+
+    /*新闻项*/
+    export interface Row {
+        /*ID编号*/
+        id: string
+        /*标题*/
+        title: string
+        /*副标题*/
+        subtitle: string
+        /*属性*/
+        labels: string[]
+        /*图片*/
+        img: string
+        /*分类编号*/
+        categoryId: string
+        /*作者*/
+        creator: ObjectNode.Creator
+        /*富文本*/
+        content: string
+        /*浏览量*/
+        visit: string
+        /*创建时间*/
+        createTime: number
+    }
+
+    /*更多新闻项*/
+    export interface MoreRow {
+        /*年月时间戳*/
+        index: number
+        /*新闻列表*/
+        news: Row[]
+    }
+}

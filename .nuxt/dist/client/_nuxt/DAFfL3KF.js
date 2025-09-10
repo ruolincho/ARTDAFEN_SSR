@@ -1,0 +1,1 @@
+const a=[{label:"Hand-painted oil painting",value:"3000012"},{label:"Print painting",value:"3000013"},{label:"Relief painting",value:"3000014"},{label:"Originals paintings",value:"3000015"}],i="Artists";export{i as A,a as T};

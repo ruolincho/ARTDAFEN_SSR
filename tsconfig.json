@@ -1,0 +1,18 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "element-plus/global",
+      "@types/node"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "types/**/*.d.ts",
+    "env.d.ts"
+  ]
+}

@@ -1,0 +1,26 @@
+.cho-button {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 10px;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  .iconfont {
+    margin-left: 10px;
+  }
+
+  &[plain="true"] {
+    border: 1px solid var(--color-primary);
+    background: transparent;
+    color: var(--color-primary);
+  }
+
+  & + & {
+    margin-left: 4px;
+  }
+}
