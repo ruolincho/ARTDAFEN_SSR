@@ -74,6 +74,7 @@
         <NuxtLink to="/privacy-policy" class="friends-item">Privacy Policy</NuxtLink>
         <NuxtLink to="/terms-and-conditions" class="friends-item">Terms of Condition</NuxtLink>
         <NuxtLink to="/cookies-policy" class="friends-item">Cookies Policy</NuxtLink>
+        <NuxtLink to="/our-return-policy" class="friends-item">Our Return Policy</NuxtLink>
       </div>
       <div class="text-gray-600 mt-10">
         Business Address: Kam Sheung Road, Yuen Long, Hong Kong DD106 Lot 1479C Lot

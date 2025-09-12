@@ -284,5 +284,22 @@ export const pageMeta: Record<string, { meta: Array<{ name: string; content: str
                     "terms and conditions, T&C, purchase terms, licensing, returns policy, legal"
             }
         ],
-    }
+    },
+
+    "/our-return-policy": {
+        meta: [
+            {
+                name: "description",
+                content:
+                    "Return Policy — ARTDAFEN's guidelines for returns, exchanges, refunds and damaged artwork for art prints, original paintings and custom commissions. Request returns within 14 days; contact info@artdafen.com."
+            },
+            {
+                name: "keywords",
+                content:
+                    "return policy, art returns, exchange policy, refund policy, damaged artwork, art prints returns, original paintings returns, custom artwork returns, commissioned art, international returns, return shipping, trackable returns, refund timeline, ARTDAFEN"
+            }
+        ],
+    },
+
+
 };
