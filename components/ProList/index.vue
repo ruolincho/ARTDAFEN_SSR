@@ -1,5 +1,5 @@
 <template>
- <div v-loading="loading">
+ <div style="min-height: 50vh" v-loading="loading">
    <template v-if="processTableData.length">
      <!-- 列表内容 -->
      <slot :rows="processTableData"/>
@@ -16,14 +16,16 @@
      </slot>
    </template>
    <!-- 空数据 -->
-   <slot name="empty" v-else>
-     <div class="text-center py-60">
-       <span class="iconfont icon-empty text-50"></span>
-       <p class="text-20 f-bold mt-20">No Data</p>
-       <p class="text-14 my-20">No data found, please check the query or try again later.</p>
-       <el-button size="large" type="primary" @click="getTableList">TRY AGAIN</el-button>
-     </div>
-   </slot>
+   <div v-if="!loading && !processTableData.length">
+     <slot name="empty">
+       <div class="text-center py-60">
+         <span class="iconfont icon-empty text-50"></span>
+         <p class="text-20 f-bold mt-20">No Data</p>
+         <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+         <el-button size="large" type="primary" @click="getTableList">TRY AGAIN</el-button>
+       </div>
+     </slot>
+   </div>
  </div>
 </template>
 

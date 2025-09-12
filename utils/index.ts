@@ -90,6 +90,20 @@ export const jumpToProduct = (item: General.GoodsItem) => {
 }
 
 /**
+ * 产品跳转链接
+ * @param item
+ */
+export const productLink = (item: General.GoodsItem) => {
+    if (['3000012', '3000013', '3000014'].includes(item.techniqueId)) {
+        return `/paint-detail/${item.id}`
+    } else if (['3000015'].includes(item.techniqueId)) {
+        return `/original-detail/${item.id}`
+    } else {
+        return `/spot-detail/${item.id}`
+    }
+}
+
+/**
  * 工具方法：dataURL -> Blob
  * @param dataurl
  */

@@ -25,12 +25,17 @@ export default defineNuxtConfig({
         cacheTime: 0,  // 调试时关缓存，避免看到旧的 XML
         // 动态生成条目
         routes: () => {
-            const totalPages = 7
+            const newsTotalPages = 7
+            const blogTotalPages = 2
             const urls = [
-                { url: '/news', changefreq  : 'daily', priority: 0.8 }
+                { url: '/news', changefreq  : 'daily', priority: 0.8 },
+                { url: '/blog', changefreq  : 'daily', priority: 0.8 },
             ]
-            for (let p = 2; p <= totalPages; p++) {
+            for (let p = 2; p <= newsTotalPages; p++) {
                 urls.push({ url: `/news?page=${p}`, changefreq: 'daily', priority: 0.6 })
+            }
+            for (let p = 2; p <= blogTotalPages; p++) {
+                urls.push({ url: `/blog?page=${p}`, changefreq: 'daily', priority: 0.6 })
             }
             return urls
         },

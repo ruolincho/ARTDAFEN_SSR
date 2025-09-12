@@ -219,7 +219,8 @@
             v-show="appStore.device === 'pc'"
           >
             <!--价格排序-->
-            <el-popover ref="pricePopoverRef" trigger="hover" placement="bottom-start" width="200" :popper-style="{ padding: 0 }">
+            <el-popover ref="pricePopoverRef" trigger="hover" placement="bottom-start" width="200"
+                        :popper-style="{ padding: 0 }">
               <template #reference>
                 <el-tag
                   size="large"
@@ -244,7 +245,8 @@
               </div>
             </el-popover>
             <!--销量排序-->
-            <el-popover ref="salesPopoverRef" trigger="hover" placement="bottom-start" width="200" :popper-style="{ padding: 0 }">
+            <el-popover ref="salesPopoverRef" trigger="hover" placement="bottom-start" width="200"
+                        :popper-style="{ padding: 0 }">
               <template #reference>
                 <el-tag
                   size="large"
@@ -269,7 +271,8 @@
               </div>
             </el-popover>
             <!--工艺筛选-->
-            <el-popover ref="techniquePopoverRef" trigger="hover" placement="bottom-start" width="200" :popper-style="{ padding: 0 }" v-if="hasTechniqueFilter">
+            <el-popover ref="techniquePopoverRef" trigger="hover" placement="bottom-start" width="200"
+                        :popper-style="{ padding: 0 }" v-if="hasTechniqueFilter">
               <template #reference>
                 <el-tag
                   size="large"
@@ -506,43 +509,45 @@
           </div>
 
           <!--商品数据-->
-          <div class="row product-list gap-row-base" v-loading="loading" v-if="productList.length">
-            <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="(item, index) in productList" :key="item.id">
-              <div class="product-item cursor-pointer" @click="jumpToProduct(item)">
-                <div class="img-wrapper bg-gray-100">
-                  <img v-lazy="imagePrefix(item.img)" alt="">
-                  <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === '3000015'">
-                    <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
-                    <div class="p-tag bg-error" v-if="item.status === '-1'">Sale Out</div>
+          <div style="min-height: 50vh" v-loading="loading">
+            <div class="row product-list gap-row-base" v-if="productList.length">
+              <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="(item, index) in productList" :key="item.id">
+                <div class="product-item cursor-pointer" @click="jumpToProduct(item)">
+                  <div class="img-wrapper bg-gray-100">
+                    <img v-lazy="imagePrefix(item.img)" alt="">
+                    <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === '3000015'">
+                      <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
+                      <div class="p-tag bg-error" v-if="item.status === '-1'">Sale Out</div>
+                    </div>
+                    <div class="operation rounded-full p-5">
+                  <span class="iconfont icon-follow text-24 text-primary" v-show="!item.like"
+                        @click.stop="productThumbs(item)"></span>
+                      <span class="iconfont icon-follow-fill text-24 text-error" v-show="item.like"
+                            @click.stop="productThumbs(item)"></span>
+                    </div>
+                    <div class="num acea-row row-center-wrapper text-20">{{ index + 1 }}</div>
                   </div>
-                  <div class="operation rounded-full p-5">
-                    <span class="iconfont icon-follow text-24 text-primary" v-show="!item.like"
-                          @click.stop="productThumbs(item)"></span>
-                    <span class="iconfont icon-follow-fill text-24 text-error" v-show="item.like"
-                          @click.stop="productThumbs(item)"></span>
-                  </div>
-                  <div class="num acea-row row-center-wrapper text-20">{{ index + 1 }}</div>
-                </div>
-                <div class="content-wrapper">
-                  <p class="my-8 line1">
-                    <span class="text-16 f-bold" @click.stop="handleClickArtist(item.creator)">{{
-                        item.creator?.name
-                      }}</span>
-                    <span class="iconfont icon-right text-16"></span>
-                  </p>
-                  <p class="line2 text-14">{{ item.title }}</p>
-                  <p class="text-16 f-bold my-8">{{ currencyStore.formatToCurrency(item.retailPrice) }}</p>
-                  <div class="acea-row gap-xs">
-                    <div class="p-tag bg-gray-400" v-for="label in item.labels" :key="label">{{ label }}</div>
+                  <div class="content-wrapper">
+                    <p class="my-8 line1">
+                  <span class="text-16 f-bold" @click.stop="handleClickArtist(item.creator)">{{
+                      item.creator?.name
+                    }}</span>
+                      <span class="iconfont icon-right text-16"></span>
+                    </p>
+                    <p class="line2 text-14">{{ item.title }}</p>
+                    <p class="text-16 f-bold my-8">{{ currencyStore.formatToCurrency(item.retailPrice) }}</p>
+                    <div class="acea-row gap-xs">
+                      <div class="p-tag bg-gray-400" v-for="label in item.labels" :key="label">{{ label }}</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="text-center py-60" v-else>
-            <span class="iconfont icon-empty text-50"></span>
-            <p class="text-20 f-bold mt-20">No Data</p>
-            <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+            <div class="text-center py-60" v-if="!loading && !productList.length">
+              <span class="iconfont icon-empty text-50"></span>
+              <p class="text-20 f-bold mt-20">No Data</p>
+              <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -1303,7 +1308,7 @@ const reset = () => {
 /**
  * 获取Best列表
  */
-const loading = ref(false)
+const loading = ref(true)
 const productList = ref<General.GoodsItem[]>([])
 const getProductBest = async () => {
   // MUTEX
@@ -1374,7 +1379,7 @@ const getProductBest = async () => {
     salesSort: salesSort.value,
     startPrice: start,
     endPrice: end,
-    creatorId: artistSelected.value.config?.referenceId || artistSelected.value.id  || null,
+    creatorId: artistSelected.value.config?.referenceId || artistSelected.value.id || null,
     techniqueId
   })
   productList.value = data
@@ -1397,7 +1402,7 @@ let appFilterItemRect = [] as DOMRect[]
 const isPopup = ref(false)
 const popupCurrentMenu = ref({} as IHome.MenuRow)
 // 表示在移动端中PopupHeader中额外的选项数量
-const extraLength = computed(() => hasTechniqueFilter.value? 3 : 2)
+const extraLength = computed(() => hasTechniqueFilter.value ? 3 : 2)
 
 // 点击App端的筛选按钮
 const clickAppFilter = (type: 'PRICE_SORT' | 'SALES_SORT' | 'TECHNIQUE_SORT' | 'POPUP', index: number, menu?: IHome.MenuRow) => {
@@ -1810,7 +1815,7 @@ if (import.meta.client) {
   }
 }
 
-@keyframes  animation-my5jl{
+@keyframes animation-my5jl {
   0% {
     margin-left: -220px;
     visibility: visible;

@@ -83,6 +83,7 @@
   </section>
 
   <!-- More -->
+  <div id="more-anchor"></div>
   <section class="list-section" v-loading="pending">
     <div class="container">
       <div class="row news-list mt-md-40 mt-20 ">
@@ -152,6 +153,7 @@ import type {INews} from "~/api/interface/news/news";
 import type {IPage, IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "../api/helper/prefix";
 import {pageMeta} from "~/composables/pageMeta";
+import {watch} from "vue";
 
 defineOptions({
   name: 'News'
@@ -187,6 +189,7 @@ const getNewsLatest = async () => {
   isLatestSkeleton.value = false
 }
 
+// More
 const page = computed<number>({
   get() {
     const p = Number(route.query.page ?? 1)
@@ -200,6 +203,17 @@ const page = computed<number>({
   }
 })
 const size = ref(12)
+
+if (import.meta.client) {
+  watch(page, (newPage) => {
+    document.getElementById('more-anchor')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+
+    })
+  })
+}
+
 const {data: moreData, pending, error} = await useAsyncData(
   'news-more',
   async () => {
@@ -375,11 +389,18 @@ useHead({
 
   .list-section {
     .news-list {
+      --gutter: 40px;
       row-gap: 40px;
 
       [class^="col-"] {
         .news-item {
           padding-bottom: 62px;
+
+
+          &::before {
+            right: -20px;
+          }
+
         }
 
         &:nth-child(3n) .news-item::before {
@@ -419,17 +440,13 @@ useHead({
 
   .list-section {
     .news-list {
+      --gutter: 15px;
+      row-gap: 15px;
 
       [class^="col-"] {
-
-        &:nth-child(3n) .news-item::before {
-          display: block;
+        .news-item::before {
+          display: none !important;
         }
-
-        &:nth-child(2n) .news-item::before {
-          display: none;
-        }
-
       }
     }
   }
