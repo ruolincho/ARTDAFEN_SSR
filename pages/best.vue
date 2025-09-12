@@ -896,6 +896,8 @@ import {formatInteger} from "~/utils/format";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {cloneDeep} from "lodash-es";
 import {TECHNIQUE_OPTIONS} from "~/constant";
+import {pageMeta} from "~/composables/pageMeta";
+
 
 defineOptions({
   name: 'Best'
@@ -915,6 +917,9 @@ const router = useRouter()
 const appStore = useAppStore()
 const userStore = useUserStore()
 const currencyStore = useCurrencyStore();
+
+useHead(pageMeta[route.path] ?? pageMeta["/best"]);
+
 
 // 获取左侧筛选数据
 const menuId = ref('')

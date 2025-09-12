@@ -61,8 +61,10 @@ import {type ElForm, ElMessage} from "element-plus";
 import {faqList} from "~/config/faq";
 import {sendConsulting} from "~/api/modules/message/message";
 import {emailReg} from "~/regular";
+import {pageMeta} from "~/composables/pageMeta";
 
 const route = useRoute()
+useHead(pageMeta[route.path] ?? pageMeta["/faq"]);
 
 const messageForm = ref({
   email: '',

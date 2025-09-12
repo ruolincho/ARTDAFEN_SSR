@@ -282,6 +282,10 @@
 
 <script setup lang="ts">
 import {CONTACT_EMAIL} from "@/config";
+import {pageMeta} from "~/composables/pageMeta";
+
+const route = useRoute()
+useHead(pageMeta[route.path] ?? pageMeta["/terms-and-conditions"]);
 
 defineOptions({
   name: 'PrivacyPolicy'

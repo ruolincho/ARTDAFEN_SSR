@@ -36,11 +36,13 @@ export default defineNuxtConfig({
             meta: [
                 {
                     name: 'description',
-                    content: 'Discover our online art gallery offering original abstract paintings, modern sculptures, and custom art commissions—your global art marketplace.'
+                    content: 'Artdafen — the Dafen community\'s hub for the latest art news, gallery highlights, and creative resources. Explore pixel art showcases, installation art examples, and hands-on art & craft project ideas, plus curated drawing tutorials and inspiration from platforms like DeviantArt and ArtStation. Perfect for artists, students, and collectors seeking trends, techniques, and project-ready references.'
                 },
                 {
                     name: 'keywords',
-                    content: 'ART DAFEN, ARTDAFEN art, artworks, contemporary art, gallery, sculpture, custom art, art workshops, Dafen, Dafen Oil Painting Village Shenzhen, oil painting'
+                    content:
+                        'ART DAFEN, ARTDAFEN art, artworks, contemporary art, gallery, sculpture, custom art, art workshops, Dafen, Dafen Oil Painting Village Shenzhen, oil painting' +
+                        'Artdafen, deviantart, arte, gallery, pixel art, draw, installation art examples, art and craft project ideas, drawing, artstation, drawings'
                 },
                 {property: 'og:type', content: 'website'},
                 {property: 'og:url', content: process.env.NUXT_PUBLIC_SITE_URL},

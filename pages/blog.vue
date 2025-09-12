@@ -68,16 +68,22 @@ import LoginWindow from "~/components/LoginWindow.vue";
 import {blogThumbsApi} from "~/api/modules/likes/likes";
 import ProInfinite from "~/components/ProInfinite.vue";
 import {useCurrencyStore} from "~/stores/modules/currency";
+import {pageMeta} from "~/composables/pageMeta";
+
 
 defineOptions({
   name: 'Blog'
 })
 
 const router = useRouter()
+const route = useRoute()
 const currencyStore = useCurrencyStore();
 const userStore = useUserStore()
 const mainShow = ref(false);
 const nid = ref("");
+
+useHead(pageMeta[route.path] ?? pageMeta["/best"]);
+
 
 // 获取博客数据
 const getBlogList1 = (params: IPageQuery) => getBlogListApi(params)

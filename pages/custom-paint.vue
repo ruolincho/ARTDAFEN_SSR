@@ -828,6 +828,9 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
+import {pageMeta} from "~/composables/pageMeta";
+
+
 defineOptions({
   name: 'CustomPaint'
 })
@@ -847,6 +850,8 @@ const moreInfoVisible = ref([false, false, false, false])
 
 const currentView = ref('custom')
 const contentNumber = ref(1)
+
+useHead(pageMeta[route.path] ?? pageMeta["/custom-paint"]);
 
 const paintingDefault = [
   {

@@ -76,6 +76,14 @@
 
 <script setup lang="ts">
 
+import {useHead} from "#imports";
+import {pageMeta} from "~/composables/pageMeta";
+
+const route = useRoute()
+
+useHead(pageMeta[route.path] ?? pageMeta["/contact"]);
+
+
 const pointList = ref([
   {
     detail: 'Kam Sheung Road, Yuen Long, Hong Kong DD106 Lot 1479C Lot',

@@ -191,9 +191,13 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import {imagePrefix} from "~/utils";
+import {pageMeta} from "~/composables/pageMeta";
 
 const bannerImage = imagePrefix('/static/artdafen/about-banner.webp');
 const modules = [Autoplay, Pagination, Navigation]
+
+const route = useRoute()
+useHead(pageMeta[route.path] ?? pageMeta["/about"]);
 
 const partnerData = ref([
   {
@@ -272,7 +276,9 @@ const partnerData = ref([
     title: 'John Hawkins - Father of the Global Creative Industries, Renowned British Expert in Creative Cultural Industries',
   }
 ])
+
 </script>
+
 
 <style scoped lang="scss">
 .banner-section {

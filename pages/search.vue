@@ -100,6 +100,8 @@ import {useUserStore} from "~/stores/modules/user";
 import {useHandleData} from "~/composables/useHandleData";
 import type {ISearch} from "~/api/interface/search/search";
 import {gen_path_obj} from "~/utils/product";
+import {pageMeta} from "~/composables/pageMeta";
+
 
 definePageMeta({
   layout: 'blank',
@@ -114,9 +116,13 @@ onMounted(() => {
 
 const userStore = useUserStore()
 const router = useRouter()
+const route = useRoute()
 
 const searchRef = ref()
 const keyword = ref('')
+
+useHead(pageMeta[route.path] ?? pageMeta["/search"]);
+
 
 // 获取历史搜索
 const historyList = ref<ISearch.CompletionRow[]>([])

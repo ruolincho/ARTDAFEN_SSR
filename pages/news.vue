@@ -127,6 +127,7 @@ import {useAppStore} from "~/stores/modules/app";
 import type {INews} from "~/api/interface/news/news";
 import type {IPageQuery} from "~/api/interface";
 import ProInfinite from "~/components/ProInfinite.vue";
+import {pageMeta} from "~/composables/pageMeta";
 
 defineOptions({
   name: 'News'
@@ -138,9 +139,12 @@ onMounted(() => {
 })
 
 const router = useRouter()
+const route = useRoute()
 const appStore = useAppStore()
 const modules = [Pagination, Navigation]
 const initParam = reactive({size: 12});
+
+useHead(pageMeta[route.path] ?? pageMeta["/news"]);
 
 // Topic
 const isTopicSkeleton = ref(true)

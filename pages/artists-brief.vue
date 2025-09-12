@@ -53,6 +53,7 @@ import {getArtistsListApi} from "~/api/modules/artists/artists";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
+import { pageMeta } from "~/composables/pageMeta";
 
 defineOptions({
   name: 'Artists'
@@ -65,6 +66,8 @@ onMounted(() => {
 const route = useRoute()
 const router = useRouter()
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+useHead(pageMeta[route.path] ?? pageMeta["/artists-brief"]);
 
 // 获取艺术家列表
 const artistsList = ref<IArtists.Res>({})

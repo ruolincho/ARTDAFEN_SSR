@@ -968,6 +968,8 @@ import type {ISearch} from "~/api/interface/search/search";
 import {PRODUCT_URL} from "~/config";
 import {cloneDeep} from "lodash-es";
 import {TECHNIQUE_OPTIONS} from "~/constant";
+import {pageMeta} from "~/composables/pageMeta";
+
 
 defineOptions({
   name: 'ProductList'
@@ -988,6 +990,9 @@ const router = useRouter()
 const appStore = useAppStore()
 const userStore = useUserStore()
 const currencyStore = useCurrencyStore();
+
+useHead(pageMeta[route.path] ?? pageMeta["/product"]);
+
 
 const proListRef = ref<InstanceType<typeof ProList>>();
 const getProductList = (params: IProduct.ListQuery) => getProductListApi(params)
