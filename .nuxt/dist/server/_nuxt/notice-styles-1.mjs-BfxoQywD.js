@@ -1,5 +1,0 @@
-const notice_vue_vue_type_style_index_0_scoped_2462ea94_lang = ".review-row[data-v-2462ea94]{align-items:center;display:flex}.review-row .review-col1[data-v-2462ea94]{flex-shrink:0;text-align:center;width:9.21%}.review-row .review-col2[data-v-2462ea94]{flex:1}.review-row .review-col3[data-v-2462ea94]{flex-shrink:0;min-width:100px;text-align:center;width:8.55%}";
-export {
-  notice_vue_vue_type_style_index_0_scoped_2462ea94_lang as default
-};
-//# sourceMappingURL=notice-styles-1.mjs-BfxoQywD.js.map

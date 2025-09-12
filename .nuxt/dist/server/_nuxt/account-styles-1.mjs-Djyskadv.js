@@ -1,5 +1,0 @@
-const account_vue_vue_type_style_index_0_scoped_86c941ab_lang = ".account-container .account-panel[data-v-86c941ab]{margin-right:30px;width:262px}.account-container .account-panel .account-info .account-avatar[data-v-86c941ab]{height:51px;position:relative;width:51px}.account-container .account-panel .account-info .account-avatar .camera[data-v-86c941ab]{background:#0009;border-radius:50%;color:#fff;inset:0;opacity:0;position:absolute;transition:all .3s ease-in-out}.account-container .account-panel .account-info .account-avatar:hover .camera[data-v-86c941ab]{opacity:1}.account-container .account-panel .account-menu .account-item.on[data-v-86c941ab]{background:var(--color-primary);color:#fff}@media (max-width:1259px){.account-container .account-panel[data-v-86c941ab]{margin-right:15px}}@media (max-width:991px){.account-container .account-panel[data-v-86c941ab]{margin-bottom:15px;margin-right:0;width:100%}}";
-export {
-  account_vue_vue_type_style_index_0_scoped_86c941ab_lang as default
-};
-//# sourceMappingURL=account-styles-1.mjs-Djyskadv.js.map

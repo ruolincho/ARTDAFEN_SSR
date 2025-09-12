@@ -1,1 +1,0 @@
-import{$ as e,T as t}from"./C4Lasefb.js";const n=()=>e().get(t+"/news/topic"),r=()=>e().get(t+"/news/latest"),p=s=>e().post(t+"/news/more",s),a=s=>e().post(t+"/news/recommend",s);export{r as a,p as b,a as c,n as g};

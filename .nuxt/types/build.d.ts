@@ -15,6 +15,8 @@ declare module "#build/test-component-wrapper.mjs";
 declare module "#build/element-plus-injection.plugin.mjs";
 declare module "#build/element-plus-teleports.plugin.mjs";
 declare module "#build/element-plus-methods.plugin.mjs";
+declare module "#build/devtools/settings.mjs";
+declare module "#build/runtime.vue-devtools-client._vbZn7ari7CYaaDEsrovDq_ltDgXPVvXlYSLd_tX1po.js";
 declare module "#build/routes.mjs";
 declare module "#build/pages.mjs";
 declare module "#build/router.options.mjs";

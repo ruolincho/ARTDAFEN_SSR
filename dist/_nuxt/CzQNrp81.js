@@ -1,0 +1,1 @@
+import{ah as o,m as c}from"./DywGN6IK.js";const m=(e,s={},t,a="warning")=>new Promise((r,n)=>{o.confirm(`${t}`,"Tips",{confirmButtonText:"Yes",cancelButtonText:"No",type:a,draggable:!0}).then(async()=>{if(!await e(s))return n(!1);c({type:"success",message:"Success!"}),r(!0)})});export{m as u};

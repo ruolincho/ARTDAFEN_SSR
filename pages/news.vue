@@ -60,10 +60,12 @@
           </div>
         </template>
         <div class="row single-post">
-          <div class="col-6" v-for="(item, index) in latestList" :key="item.id" v-aos="{ name: 'fade-up', delay: index % 2 * 100}">
+          <div class="col-6" v-for="(item, index) in latestList" :key="item.id"
+               v-aos="{ name: 'fade-up', delay: index % 2 * 100}">
             <div class="single-item cursor-pointer" @click="jumpNewWindow(`/news-detail/${item.id}`)">
               <div class="p-img overflow-hidden">
-                <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" alt="">
+                <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)"
+                     :alt="item.title">
               </div>
               <p class="text-22 mt-18 line1">{{ item.title }}</p>
               <p class="text-14 my-10 line2">{{ item.subtitle }}</p>
@@ -71,7 +73,7 @@
                 <div class="acea-row row-middle gap-xs">
                   <el-tag type="info" effect="plain" v-for="label in item.labels" :key="label">{{ label }}</el-tag>
                 </div>
-                <span class="text-12">{{ formatTimestamp(item.createTime, 'YYYY.MM.DD') }}</span>
+                <span class="text-12">{{ formatTimestamp(item.createTime, 'MMM Do YY') }}</span>
               </div>
             </div>
           </div>
@@ -81,35 +83,57 @@
   </section>
 
   <!-- More -->
-  <section class="list-section">
+  <section class="list-section" v-loading="pending">
     <div class="container">
-      <ProInfinite
-        ref="proInfiniteRef"
-        :request-api="getNewsMoreList"
-        :need-group="true"
-        :init-param="initParam"
-      >
-        <template #default="scope">
-          <div v-for="[timeStamp, data] in scope.rows" :key="timeStamp">
-            <h1 class="my-md-40 my-20 py-20 border-b-xl border-gray-700 text-26 font-bold">{{ formatTimestamp(timeStamp, 'MMM YYYY') }}</h1>
-            <div class="row news-list">
-              <div class="col-lg-3 col-md-4 col-6" v-for="(item, index) in data" :key="item.id" v-aos="{ name: 'fade-up', delay: index % 4 * 100}">
-                <div class="news-item cursor-pointer" @click="jumpNewWindow(`/news-detail/${item.id}`)">
-                  <div class="p-img overflow-hidden">
-                    <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" alt="">
-                  </div>
-                  <p class="text-22 mt-18 line2">{{ item.title }}</p>
-                  <p class="text-14 my-10 line3">{{ item.subtitle || '- -' }}</p>
-                  <div class="acea-row row-middle gap-xs">
-                    <el-tag type="info" effect="plain" v-for="label in item.labels" :key="label">{{ label }}</el-tag>
-                  </div>
-                  <div class="day text-60 f-bold-200">{{ formatTimestamp(item.createTime, 'DD') }}</div>
-                </div>
-              </div>
+      <div class="row news-list mt-md-40 mt-20 ">
+        <div class="col-lg-3 col-md-4 col-6" v-for="(item, index) in moreData.records" :key="item.id"
+             v-aos="{ name: 'fade-up', delay: index % 4 * 100}">
+          <NuxtLink class="news-item cursor-pointer" :to="`/news-detail/${item.id}`" target="_blank">
+            <div class="p-img overflow-hidden">
+              <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" alt="">
             </div>
-          </div>
-        </template>
-      </ProInfinite>
+            <h2 class="text-22 mt-18 line2">{{ item.title }}</h2>
+            <p class="text-14 my-10 line3">{{ item.subtitle || '- -' }}</p>
+            <div class="acea-row row-middle gap-xs">
+              <el-tag type="info" effect="plain" v-for="label in item.labels" :key="label">{{ label }}</el-tag>
+            </div>
+            <div class="day text-30 f-bold-200">{{ formatTimestamp(item.createTime, 'MMM Do YY') }}</div>
+          </NuxtLink>
+        </div>
+      </div>
+      <!-- 真实 <a> 链接的分页导航，保证禁用 JS 时仍可翻页 -->
+      <nav aria-label="Pagination" class="seo-pagination py-lg-40 py-20">
+        <NuxtLink
+          v-if="hasPrev"
+          :to="page - 1 === 1 ? '/news' : `/news?page=${page - 1}`"
+          rel="prev"
+        >
+          <span class="iconfont icon-left"/>
+        </NuxtLink>
+
+        <!-- 页码建议不要一次性全打出；这里举例显示当前页前后各 2 页 -->
+        <NuxtLink
+          v-for="p in Array.from({length: totalPages}, (_, i) => i + 1).filter(p => Math.abs(p - page) <= 2 || p === 1 || p === totalPages)"
+          :key="p"
+          :to="p === 1 ? '/news' : `/news?page=${p}`"
+          :aria-current="p === page ? 'page' : null"
+          :class="{'active': p === page}"
+        >
+          {{ p }}
+        </NuxtLink>
+
+        <NuxtLink
+          v-if="hasNext"
+          :to="`/news?page=${page + 1}`"
+          rel="next"
+        >
+          <span class="iconfont icon-right"/>
+        </NuxtLink>
+        <!-- 无脚本兜底 -->
+        <noscript>
+          <p><a href="/news?page=2">Next page</a></p>
+        </noscript>
+      </nav>
     </div>
   </section>
 </template>
@@ -120,13 +144,13 @@ import {Navigation, Pagination} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import {getNewsLatestApi, getNewsMoreApi, getNewsTopicApi} from "~/api/modules/news/news";
+import {getNewsLatestApi, getNewsTopicApi} from "~/api/modules/news/news";
 import {imagePrefix, jumpNewWindow, jumpToUrl} from "~/utils";
 import {formatTimestamp} from "~/utils/format";
 import {useAppStore} from "~/stores/modules/app";
 import type {INews} from "~/api/interface/news/news";
-import type {IPageQuery} from "~/api/interface";
-import ProInfinite from "~/components/ProInfinite.vue";
+import type {IPage, IResultData} from "~/api/interface";
+import {TRADE_MODULE} from "../api/helper/prefix";
 import {pageMeta} from "~/composables/pageMeta";
 
 defineOptions({
@@ -142,7 +166,6 @@ const router = useRouter()
 const route = useRoute()
 const appStore = useAppStore()
 const modules = [Pagination, Navigation]
-const initParam = reactive({size: 12});
 
 useHead(pageMeta[route.path] ?? pageMeta["/news"]);
 
@@ -164,8 +187,81 @@ const getNewsLatest = async () => {
   isLatestSkeleton.value = false
 }
 
-// 获取跟多新闻
-const getNewsMoreList = (params: IPageQuery) => getNewsMoreApi(params)
+const page = computed<number>({
+  get() {
+    const p = Number(route.query.page ?? 1)
+    return Number.isFinite(p) && p >= 1 ? Math.floor(p) : 1
+  },
+  set(v: number) {
+    if (process.client) {
+      const n = Number.isFinite(v) && v >= 1 ? Math.floor(v) : 1
+      router.push({query: {...route.query, page: n}})
+    }
+  }
+})
+const size = ref(12)
+const {data: moreData, pending, error} = await useAsyncData(
+  'news-more',
+  async () => {
+    const config = useRuntimeConfig()
+    const {data} = await $fetch<IResultData<IPage<INews.MoreRow>>>(config.public.apiBase + TRADE_MODULE + '/news/more', {
+      method: 'POST',
+      body: {
+        page: page.value,
+        size: size.value,
+      }
+    })
+    return data
+  },
+  {
+    watch: [page],
+    server: true,
+    default: () => ({
+      /*当前页数*/
+      current: 1,
+      /*总页码*/
+      pages: 0,
+      /*列表数据*/
+      records: [],
+      /*页数*/
+      size: 12,
+      /*数据条数*/
+      total: 0,
+    })
+  }
+)
+
+// 计算总页数（基于后端返回的 total 和当前 size）
+const totalPages = computed(() => {
+  const t = Number(moreData.value?.total ?? 0)
+  const s = Number(size.value ?? 1) || 1
+  return Math.max(1, Math.ceil(t / s))
+})
+
+const hasPrev = computed(() => page.value > 1)
+const hasNext = computed(() => page.value < totalPages.value)
+
+const origin = useRequestURL().origin
+const selfUrl = computed(() => (page.value === 1 ? `${origin}/news` : `${origin}/news?page=${page.value}`))
+const prevUrlAbs = computed(() => hasPrev.value
+  ? (page.value - 1 === 1 ? `${origin}/news` : `${origin}/news?page=${page.value - 1}`)
+  : null
+)
+const nextUrlAbs = computed(() => hasNext.value
+  ? `${origin}/news?page=${page.value + 1}`
+  : null
+)
+
+useHead({
+  link: [
+    {rel: 'canonical', href: selfUrl.value},
+    ...(prevUrlAbs.value ? [{rel: 'prev', href: prevUrlAbs.value}] : []),
+    ...(nextUrlAbs.value ? [{rel: 'next', href: nextUrlAbs.value}] : []),
+  ],
+  meta: [
+    {name: 'robots', content: 'index,follow'},
+  ]
+})
 
 </script>
 
@@ -224,6 +320,7 @@ const getNewsMoreList = (params: IPageQuery) => getNewsMoreApi(params)
         position: relative;
         height: 100%;
         padding-bottom: 82px;
+        display: block;
 
         .day {
           position: absolute;
@@ -245,6 +342,26 @@ const getNewsMoreList = (params: IPageQuery) => getNewsMoreApi(params)
       &:nth-child(4n) .news-item::before {
         display: none;
       }
+    }
+  }
+}
+
+.seo-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    opacity: 0.9;
+
+    &.active {
+      font-weight: bold;
+      opacity: 1;
     }
   }
 }

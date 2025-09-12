@@ -1,5 +1,5 @@
-/// <reference types="@pinia/nuxt" />
 /// <reference types="@element-plus/nuxt" />
+/// <reference types="@pinia/nuxt" />
 /// <reference types="@nuxtjs/robots" />
 /// <reference types="@nuxtjs/sitemap" />
 /// <reference types="@nuxt/devtools" />

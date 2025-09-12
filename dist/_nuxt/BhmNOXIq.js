@@ -1,0 +1,1 @@
+import{$ as s,T as e}from"./DywGN6IK.js";const p=t=>s().get(e+`/likes/is/thumbs/${t.mediaId}`,{type:t.type}),r=t=>s().post(e+"/likes/product/collect",t),u=t=>s().post(e+"/likes/blog/thumbs",t);export{u as b,p as g,r as p};

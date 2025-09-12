@@ -20,9 +20,20 @@ export default defineNuxtConfig({
     // Import our SCSS theme override entry BEFORE any component styles
     css: ['~/assets/styles/index.scss'], // We only introduce one version that we have compiled ourselves
     sitemap: {
-        siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
-        autoLastmod: true,
-        exclude: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register']
+        hostname: process.env.NUXT_PUBLIC_SITE_URL,
+        exclude: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register'],
+        cacheTime: 0,  // 调试时关缓存，避免看到旧的 XML
+        // 动态生成条目
+        routes: () => {
+            const totalPages = 7
+            const urls = [
+                { url: '/news', changefreq  : 'daily', priority: 0.8 }
+            ]
+            for (let p = 2; p <= totalPages; p++) {
+                urls.push({ url: `/news?page=${p}`, changefreq: 'daily', priority: 0.6 })
+            }
+            return urls
+        },
     },
     robots: {
         groups: [{ userAgent: '*', allow: '/' }],
