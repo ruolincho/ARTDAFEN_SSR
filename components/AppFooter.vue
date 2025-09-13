@@ -91,6 +91,7 @@
         <NuxtLink to="/privacy-policy">Privacy Policy</NuxtLink>
         <NuxtLink to="/terms-and-conditions">Terms of Condition</NuxtLink>
         <NuxtLink to="/cookies-policy">Cookies Policy</NuxtLink>
+        <NuxtLink to="/our-return-policy">Our Return Policy</NuxtLink>
       </div>
       <div class="foot-pad">
         <ul class="footer-item P_parent">

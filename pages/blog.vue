@@ -21,9 +21,9 @@
               <h1 class="text-22 f-bold-500 flex-1 line2 border-r-sm pr-md-20 pr-10">{{ item.title }}</h1>
               <div class="text-center px-md-20 px-10 text-gray-400">
               <span class="iconfont icon-follow cursor-pointer text-20" v-show="!item.like"
-                    @click.stop="blogThumbs(item)"></span>
+                    @click.prevent.stop="blogThumbs(item)"></span>
                 <span class="iconfont icon-follow-fill text-error cursor-pointer text-20" v-show="item.like"
-                      @click.stop="blogThumbs(item)"></span>
+                      @click.prevent.stop="blogThumbs(item)"></span>
                 <p class="text-14 mt-2">{{ item.likeVolume }}</p>
               </div>
             </div>
@@ -138,7 +138,7 @@ if (import.meta.client) {
   })
 }
 
-const {data: moreData, pending, error} = await useAsyncData(
+const {data: moreData, pending, error, refresh} = await useAsyncData(
   'blog-more',
   async () => {
     const config = useRuntimeConfig()
@@ -147,6 +147,10 @@ const {data: moreData, pending, error} = await useAsyncData(
       body: {
         page: page.value,
         size: size.value,
+      },
+      headers: {
+        'Token': userStore.token || '',
+        'X-Currency': currencyStore.currentCurrency
       }
     })
     data.records.forEach(item => {
@@ -211,8 +215,7 @@ const blogThumbs = debounce(async (item: IBlog.Row) => {
     return
   }
   await blogThumbsApi({mediaId: item.id, operate: ~~!item.like as Dict.ThumbsOperateType})
-  item.like = !item.like
-  item.likeVolume = (Number(item.likeVolume) + (item.like ? 1 : -1)).toString()
+  refresh()
 }, 300)
 
 const loginWindowRef = ref<InstanceType<typeof LoginWindow>>()

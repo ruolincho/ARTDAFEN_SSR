@@ -20,10 +20,19 @@ export const useCurrencyStore = defineStore(
 
         const setCurrentCurrency = async (currency: string) => {
             currentCurrency.value = currency
-            const cartStore = useCartStore()
-            await cartStore.shoppingPreCheck()
-            // 重新加载页面
-            window.location.reload()
+            const currencyCookie = useCookie('currency_code', {
+                path: '/',
+                sameSite: 'lax',
+                maxAge: 60 * 60 * 24 * 3, // 3天
+                // httpOnly: true // 如果需要前端也读取，就不要设 httpOnly；如需更安全策略，请改为后端 Set-Cookie
+            })
+            currencyCookie.value = currency
+            if (import.meta.client) {
+                const cartStore = useCartStore()
+                await cartStore.shoppingPreCheck()
+                // 重新加载页面
+                window.location.reload()
+            }
         }
 
         /**

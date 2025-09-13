@@ -1,14 +1,18 @@
 import { useUserStore } from '~/stores/modules/user'
 import { getCookie } from 'h3'
 import { HOME_URL, LOGIN_URL, REGISTER_URL, STORAGE_BACK_URL } from '~/config'
+import {useCurrencyStore} from '~/stores/modules/currency'
 
 export default defineNuxtRouteMiddleware((to) => {
     const userStore = useUserStore()
+    const currencyStore = useCurrencyStore()
 
     // 1) SSR：从 Cookie 恢复 token，防止刷新误判未登录
     if (import.meta.server) {
         const token = getCookie(useRequestEvent()!, 'auth_token') // 确保登录时也写了同名 Cookie
+        const currency: string = getCookie(useRequestEvent()!, 'currency_code')
         if (token && !userStore.token) userStore.setToken(token)
+        if (currency) currencyStore.setCurrentCurrency(currency)
     }
 
     // 统一小写对齐，避免大小写造成的比较误差

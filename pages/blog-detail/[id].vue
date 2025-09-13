@@ -24,7 +24,7 @@
           <div class="text-18">{{ blogDetail?.content }}</div>
           <div class="text-14 acea-row gap-xs mt-10" v-if="blogDetail?.labels?.length">
             <span class="text-secondary cursor-pointer" v-for="(label, labelIndex) in blogDetail.labels"
-                  :key="labelIndex">{{ label }}</span>
+                  :key="labelIndex">#{{ label }}</span>
           </div>
         </div>
       </div>
