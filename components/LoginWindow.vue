@@ -142,9 +142,9 @@ defineExpose({
 
 <style lang="scss">
 .wall-dialog {
-  padding: 0;
+  padding: 0 !important;
   .el-dialog__header {
-    padding-bottom: 0;
+    padding-bottom: 0 !important;
   }
 }
 </style>
@@ -163,6 +163,7 @@ defineExpose({
   .el-form {
     :deep(.el-form-item__label) {
       display: block;
+      width: auto;
     }
   }
 

@@ -107,6 +107,14 @@ defineOptions({
   name: 'Blog'
 })
 
+onMounted(() => {
+  const {$bus} = useNuxtApp()
+  $bus.on('loginSuccess', () => {
+    refresh()
+  })
+})
+
+
 const router = useRouter()
 const route = useRoute()
 const currencyStore = useCurrencyStore();

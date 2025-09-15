@@ -54,6 +54,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
    */
   instance.interceptors.response.use(
       response => {
+        const userStore = useUserStore()
         const router = useRouter();
         const {data} = response;
         // 如果是文件流，直接返回整个响应对象
@@ -63,8 +64,8 @@ export default defineNuxtPlugin((_nuxtApp) => {
 
         // 无效Token
         if (data.status === CODE_TOKEN_FAIL) {
-          router.replace(LOGIN_URL);
-          ElMessage.error(data.message);
+          ElMessage.error(data.message || 'Login expired please log in again!');
+          userStore.clear()
           return Promise.reject(data);
         }
 

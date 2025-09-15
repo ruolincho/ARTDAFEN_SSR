@@ -6,6 +6,7 @@ import {getUserBaseInfoApi, getUserEchoInfoApi} from "~/api/modules/mine/mine";
 import { imagePrefix } from "~/utils";
 import {checkToken} from "~/api/modules/oauth/oauth";
 import {computed, ref} from 'vue';
+import {LOGIN_URL} from "~/config";
 
 export const useUserStore = defineStore(
     'user',
@@ -52,7 +53,7 @@ export const useUserStore = defineStore(
             tokenCookie.value = ''
             userInfo.value = {} as IMine.UserInfoRow;
             headerList.value = []
-            jump && router.replace('/')
+            jump && router.replace(LOGIN_URL)
         }
 
         // 检测Token是否过期
