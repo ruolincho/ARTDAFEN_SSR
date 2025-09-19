@@ -165,6 +165,8 @@ import type {ISpecs} from "~/api/interface/specs/specs";
 import {getSpecsListApi} from "~/api/modules/specs/specs";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
+import {useUserStore} from "../../stores/modules/user";
+import {useOriginalProductJsonLd} from "../../composables/useOriginalProductJsonLd";
 
 onMounted(() => {
   if (goodsDetail.value.status === '-1') getSpecsList()
@@ -172,6 +174,7 @@ onMounted(() => {
 
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore()
 const currencyStore = useCurrencyStore()
 
 const isOpenDesc = ref(false) // 是否展开产品详情
@@ -179,9 +182,19 @@ const isOpenDesc = ref(false) // 是否展开产品详情
 // 获取详情
 const {data: goodsDetail} = await useAsyncData('goods-detail', async () => {
   const config = useRuntimeConfig()
-  const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', {params: {productId: route.params.id}})
+  const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', {
+    method: 'GET',
+    params: {productId: route.params.id},
+    headers: {
+      'Token': userStore.token || '',
+      'X-Currency': currencyStore.currentCurrency
+    }
+  })
   return data
 })
+
+const {injectProductJsonLd} = useOriginalProductJsonLd(goodsDetail.value, {})
+injectProductJsonLd()
 
 // 获取SKu
 const currentSpecId = ref('')

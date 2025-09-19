@@ -333,6 +333,9 @@ import {shoppingFaq} from "~/config/faq";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
+import {packQuery} from "~/composables/useQueryShort";
+import {unpackSpecs} from "~/composables/useSpotSpecToken";
+import {useProductJsonLd} from "~/composables/useProductJsonLd";
 
 defineOptions({
   name: 'SpotDetail'
@@ -340,10 +343,10 @@ defineOptions({
 
 onMounted(async () => {
   specsList.value = goodsDetail.value.specs
+  specsCombination.value = goodsDetail.value.specsCombo
+  _initSpecs()
   if (goodsDetail.value.brand?.id) await getBrandRecommend() // 获取品牌推荐
   await getRelatedRecommend()
-  await getSpecsList()
-  isSkeleton.value = false
   if (userStore.isLogin) {
     await getIsThumbs()
   }
@@ -370,18 +373,23 @@ const isOpenDesc = ref(false) // 是否展开产品详情
 // 获取详情
 const {data: goodsDetail, pending: isSkeleton} = await useAsyncData('goods-detail', async () => {
   const config = useRuntimeConfig()
-  const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', {params: {productId: route.params.id}})
+  const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', {
+    method: 'GET',
+    params: {
+      productId: route.params.id
+    },
+    headers: {
+      'Token': userStore.token || '',
+      'X-Currency': currencyStore.currentCurrency
+    }
+  })
   return data
 })
 
-// 获取SKu
-const specsCombination = ref<ISpecs.Row[]>([])
-const getSpecsList = async () => {
-  const {data} = await getSpecsListApi(route.params.id)
-  specsCombination.value = data
-  _initSpecs()
-}
+const { injectProductJsonLd } = useProductJsonLd(goodsDetail.value, {})
+injectProductJsonLd()
 
+const specsCombination = ref<ISpecs.Row[]>([]) // Sku组合数据
 const specsList = ref({} as Record<string, ISpecs.SpecsListSchema[]>)
 const subIndex = ref<number[]>([]) // 是否选中 因为不确定是多规格还是单规格，所以这里定义数组来判断
 const shopItemInfo = ref({}) // 可选的SKU组合对象
@@ -400,12 +408,33 @@ const _initSpecs = () => {
     })
   }, [])
 
-  // 2.默认选择所有中的第一个
-  mySpecsList.value.forEach((item, i) => {
-    selectedCombination.value[item.name] = item.list[0].val
-    selectArr.value[i] = item.list[0].val
-    subIndex.value[i] = -1
-  })
+  // 2.默认选择,没有的话选择所有中的第一个
+  if (route.query.q) {
+    const pairs = unpackSpecs(route.query.q)
+    const desired = new Map<string, string>(pairs.map(p => [p.name, p.val]))
+    const _selectedCombination: Record<string, string> = {}
+    const _selectArr: string[] = []
+    const _subIndex: number[] = []
+    for (const group of mySpecsList.value) {
+      const gName = group.name
+      const wantVal = desired.get(gName) ?? ''            // 没给就置空
+      _selectedCombination[gName] = wantVal                // 1) 键值对（按组名）
+      _selectArr.push(wantVal)                             // 2) 顺序数组（按组顺序）
+      const idx = group.list.findIndex(it => it.val === wantVal)
+      _subIndex.push(idx)                                  // 3) 索引数组（找不到为 -1）
+    }
+
+    selectedCombination.value = _selectedCombination
+    selectArr.value = _selectArr
+    subIndex.value = _subIndex
+
+  } else {
+    mySpecsList.value.forEach((item, i) => {
+      selectedCombination.value[item.name] = item.list[0].val
+      selectArr.value[i] = item.list[0].val
+      subIndex.value[i] = 0
+    })
+  }
 
   // 3.去除库存小于等于0的商品sku,并生成可以选中的组合列表
   checkItem()
@@ -616,7 +645,6 @@ const getBrandRecommend = async () => {
 // 是否收藏
 const isThumbs = ref(false)
 const getIsThumbs = async () => {
-  console.log('不小心触发了')
   const {data} = await getIsThumbsApi({mediaId: route.params.id, type: '0'})
   isThumbs.value = data
 }
@@ -636,7 +664,7 @@ const productThumbs = debounce(async () => {
 const handleClickArtist = () => {
   router.push({
     path: PRODUCT_URL,
-    query: gen_path_obj(goodsDetail.value.creator, 'ARTIST', ['name'])
+    query: {q: packQuery(gen_path_obj(goodsDetail.value.creator, 'ARTIST', ['name']))}
   })
 }
 
@@ -644,7 +672,7 @@ const handleClickArtist = () => {
 const handleClickBrand = () => {
   router.push({
     path: PRODUCT_URL,
-    query: gen_path_obj(goodsDetail.value.brand, 'BRAND', ['name'])
+    query: {q: gen_path_obj(goodsDetail.value.brand, 'BRAND', ['name'])}
   })
 }
 

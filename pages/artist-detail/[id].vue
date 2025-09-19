@@ -102,6 +102,7 @@ import {useCurrencyStore} from "~/stores/modules/currency";
 import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import type {IArtists} from "~/api/interface/artists/artists";
+import {packQuery} from "~/composables/useQueryShort";
 
 onMounted(() => {
   if (route.params.id) getDetail()
@@ -134,7 +135,7 @@ const initParam = ref({
 const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
   router.push({
     path: PRODUCT_URL,
-    query: gen_path_obj(creator, 'ARTIST', ['name'])
+    query: {q: packQuery(gen_path_obj(creator, 'ARTIST', ['name']))}
   })
 }
 

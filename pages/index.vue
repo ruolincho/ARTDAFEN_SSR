@@ -27,7 +27,6 @@
       </swiper>
     </el-skeleton>
   </section>
-
   <!--OFFICIAL-->
   <section class="sec-welcome">
     <div class="container">
@@ -245,7 +244,7 @@
   <section class="sec-elevating">
     <div class="container">
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
-        <h1 class="text-50" >ELEVATING YOUR STYLE GAME</h1>
+        <h1 class="text-50">ELEVATING YOUR STYLE GAME</h1>
         <p class="mt-20 text-gray-600 text-16 f-bold-500" style="max-width: 608px; margin: auto">
           Discover the Perfect Blend of Comfort and Trend with Our Exclusive Collection. Explore Deals on print, Trendy
           Play, and More!
@@ -382,6 +381,7 @@ import {useUserStore} from "~/stores/modules/user";
 import LoginWindow from "~/components/LoginWindow.vue";
 import PromoCode from "~/components/PromoCode.vue";
 import {pageMeta} from "~/composables/pageMeta";
+import {packQuery} from "~/composables/useQueryShort";
 
 defineOptions({
   name: 'Home'
@@ -408,7 +408,7 @@ useHead(pageMeta[route.path] ?? pageMeta["/"]);
 const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
   router.push({
     path: PRODUCT_URL,
-    query: gen_path_obj(creator, 'ARTIST', ['name'])
+    query: {q: packQuery(gen_path_obj(creator, 'ARTIST', ['name']))}
   })
 }
 
@@ -436,7 +436,7 @@ const getHomeExplore = async () => {
 const handleSeeMoreBest = () => {
   router.push({
     path: BEST_URL,
-    query: {menuId: '1000001'}
+    query: {q: packQuery({MENU_ID: '1000001'})}
   })
 }
 

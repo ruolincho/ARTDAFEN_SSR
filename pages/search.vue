@@ -101,6 +101,7 @@ import {useHandleData} from "~/composables/useHandleData";
 import type {ISearch} from "~/api/interface/search/search";
 import {gen_path_obj} from "~/utils/product";
 import {pageMeta} from "~/composables/pageMeta";
+import {packQuery} from "~/composables/useQueryShort";
 
 
 definePageMeta({
@@ -168,7 +169,10 @@ const clickKeyword = (item: ISearch.CompletionRow) => {
 
 // 搜索
 const search = () => {
-  if (keyword.value) router.push({path: PRODUCT_URL, query: {KEYWORD: keyword.value}})
+  if (keyword.value) {
+    const q = packQuery({KEYWORD: keyword.value})
+    router.push({path: PRODUCT_URL, query: {q}})
+  }
 }
 
 const lastValidData = ref<ISearch.CompletionRow[]>([]) // 新增缓存变量
@@ -210,16 +214,19 @@ const handleInput = (text: string) => {
 // 跳转
 const startJump = (rawItem: ISearch.CompletionRow) => {
   if (rawItem.type === 'product') {
-    router.push({path: PRODUCT_URL, query: {KEYWORD: rawItem.keyword}})
+    const q = packQuery({KEYWORD: rawItem.keyword})
+    router.push({path: PRODUCT_URL, query: {q}})
   }
   if (rawItem.type === 'artists') {
+    const params = {
+      SEARCH_TYPE: rawItem.type,
+      KEYWORD: rawItem.keyword,
+      ...gen_path_obj({name: rawItem.keyword, id: rawItem.id!}, 'ARTIST', ['name'])
+    }
+    const q = packQuery(params)
     router.push({
       path: PRODUCT_URL,
-      query: Object.assign(
-        {},
-        gen_path_obj({name: rawItem.keyword, id: rawItem.id!}, 'ARTIST', ['name']),
-        {SEARCH_TYPE: rawItem.type, KEYWORD: rawItem.keyword}
-      )
+      query: {q}
     })
   }
 }

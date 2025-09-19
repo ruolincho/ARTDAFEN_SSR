@@ -18,7 +18,7 @@
                   class="menu-item cursor-pointer my-20 "
                   :class="{ on: mutexSelected.id === item.id }"
                   v-for="item in group.children"
-                  :key="item.parentId + '_' + item.id"
+                  :key="item.id"
                   @click="clickMutexType(item)"
                 >
                   {{ item.name }}
@@ -38,7 +38,7 @@
                   class="menu-item cursor-pointer my-20 line1"
                   :class="{ on: groupSelected.get(item.parentId)?.id === item.id }"
                   v-for="item in group.children"
-                  :key="item.parentId + '_' + item.id"
+                  :key="item.id"
                   @click="clickGroupType(item)"
                 >
                   {{ item.name }}
@@ -57,7 +57,7 @@
                 <div
                   class="acea-row row-between-wrapper py-20 border-t-sm cursor-pointer"
                   v-for="item in group.children"
-                  :key="item.parentId + '_' + item.id"
+                  :key="item.id"
                   @click="clickPriceType(item)"
                 >
                   <span class="text-16">{{ item.name }}</span>
@@ -105,7 +105,7 @@
                 <div
                   class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
                   v-for="item in group.children"
-                  :key="item.parentId + '_' + item.id"
+                  :key="item.id"
                   @click="clickRadioType(item)"
                 >
                   <span class="text-16">{{ item.name }}</span>
@@ -128,7 +128,7 @@
                 <div
                   class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
                   v-for="item in group.children"
-                  :key="item.parentId + '_' + item.id"
+                  :key="item.id"
                   @click="clickCheckoutType(item)"
                 >
                   <span class="text-16">{{ item.name }}</span>
@@ -151,7 +151,7 @@
                 <div
                   class="color-item acea-row row-middle cursor-pointer"
                   v-for="item in group.children"
-                  :key="item.parentId + '_' + item.id"
+                  :key="item.id"
                   @click="clickColorType(item)"
                 >
                   <div class="rounded-full border-sm p-2" :class="{ 'border-gray-700': colorSelected?.includes(item) }">
@@ -180,7 +180,7 @@
                   class="menu-item cursor-pointer my-20"
                   :class="{ on: artistSelected?.id === item.id }"
                   v-for="item in group.children"
-                  :key="item.parentId + '_' + item.id"
+                  :key="item.id"
                   @click="clickArtistType(item)"
                 >
                   {{ item.name }}
@@ -229,7 +229,7 @@
                   :closable="priceSort !== null"
                   @close="handleSort('PRICE_SORT', null)"
                 >
-                  <div class="acea-row row-middle">
+                  <div class="acea-row row-middle nowrap">
                     <span>{{ priceSort === '0' ? 'Price Desc' : priceSort === '1' ? 'Price Asc' : 'Price Sort' }}</span>
                     <span v-show="priceSort === null" class="iconfont icon-down text-16 ml-10"/>
                   </div>
@@ -255,7 +255,7 @@
                   :closable="salesSort !== null"
                   @close="handleSort('SALES_SORT', null)"
                 >
-                  <div class="acea-row row-middle">
+                  <div class="acea-row row-middle nowrap">
                     <span>{{ salesSort === '0' ? 'Sales Desc' : salesSort === '1' ? 'Sales Asc' : 'Sales Sort' }}</span>
                     <span v-show="salesSort === null" class="iconfont icon-down text-16 ml-10"/>
                   </div>
@@ -279,7 +279,7 @@
                   :type="techniqueSelected.value ? 'primary' : 'info'" round effect="dark"
                   class="cursor-pointer"
                 >
-                  <div class="acea-row row-middle">
+                  <div class="acea-row row-middle nowrap">
                     <span>{{ techniqueSelected.value ? techniqueSelected.label : 'Technique' }}</span>
                     <span class="iconfont icon-down text-16 ml-10"/>
                   </div>
@@ -610,7 +610,7 @@
             : 'text-gray-500'
           ]"
             v-for="item in popupCurrentMenu.children"
-            :key="item.parentId + '_' + item.id"
+            :key="item.id"
             @click="() => { sortType === 'PRICE_SORT' || sortType === 'SALES_SORT' ? handleSort(sortType!, item.config.code!) : handleTechnique(item.config.code!)}"
           >
             {{ item.name }}
@@ -623,7 +623,7 @@
             class="text-20 py-16 border-b-sm border-gray-200"
             :class="[mutexSelected.id === item.id ? 'text-gray-700' : 'text-gray-500']"
             v-for="item in popupCurrentMenu.children"
-            :key="item.parentId + '_' + item.id"
+            :key="item.id"
             @click="clickMutexType(item)"
           >
             {{ item.name }}
@@ -636,7 +636,7 @@
             class="text-20 py-16 border-b-sm border-gray-200"
             :class="[groupSelected.get(item.parentId)?.id === item.id ? 'text-gray-700' : 'text-gray-500']"
             v-for="item in popupCurrentMenu.children"
-            :key="item.parentId + '_' + item.id"
+            :key="item.id"
             @click="clickGroupType(item)"
           >
             {{ item.name }}
@@ -667,7 +667,7 @@
               type="info"
               round
               v-for="item in popupCurrentMenu.children"
-              :key="item.parentId + '_' + item.id"
+              :key="item.id"
               @click="clickPriceType(item, true)"
             >
               {{ item.name }}
@@ -681,7 +681,7 @@
           <div
             class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
             v-for="item in popupCurrentMenu.children"
-            :key="item.parentId + '_' + item.id"
+            :key="item.id"
             @click="clickRadioType(item)"
           >
             <span>{{ item.name }}</span>
@@ -698,7 +698,7 @@
           <div
             class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
             v-for="item in popupCurrentMenu.children"
-            :key="item.parentId + '_' + item.id"
+            :key="item.id"
             @click="clickCheckoutType(item)"
           >
             <span>{{ item.name }}</span>
@@ -716,7 +716,7 @@
             <div
               class="color-item acea-row row-middle cursor-pointer"
               v-for="item in popupCurrentMenu.children"
-              :key="item.parentId + '_' + item.id"
+              :key="item.id"
               @click="clickColorType(item)"
             >
               <div class="rounded-full border-sm p-2" :class="{ 'border-gray-700': colorSelected?.includes(item) }">
@@ -739,7 +739,7 @@
             class="text-20 py-16 border-b-sm border-gray-200"
             :class="[artistSelected?.id === item.id ? 'text-gray-700' : 'text-gray-500']"
             v-for="item in popupCurrentMenu.children"
-            :key="item.parentId + '_' + item.id"
+            :key="item.id"
             @click="clickArtistType(item)"
           >
             {{ item.name }}
@@ -902,7 +902,7 @@ import {useCurrencyStore} from "~/stores/modules/currency";
 import {cloneDeep} from "lodash-es";
 import {TECHNIQUE_OPTIONS} from "~/constant";
 import {pageMeta} from "~/composables/pageMeta";
-
+import {unpackQuery, packQuery, type QueryParams} from '~/composables/useQueryShort'
 
 defineOptions({
   name: 'Best'
@@ -930,7 +930,7 @@ useHead(pageMeta[route.path] ?? pageMeta["/best"]);
 const menuId = ref('')
 const groupList = ref<IHome.MenuRow[]>([])
 const getProductGroup = async () => {
-  menuId.value = route.query.menuId as string
+  menuId.value = routerParams.value.MENU_ID || ''
   const {data} = await getProductGroupApi({parentId: menuId.value})
   const oldGroups = cloneDeep(groupList.value)
   groupList.value = data.map(newItem => {
@@ -1495,7 +1495,9 @@ const showLoginWindow = () => {
  * @param partial (用于局部更新，只会传递提交过的数据,主要用于关闭tag的时候使用)
  */
 const routerJump = (partial = false) => {
-  const params: any = {menuId: menuId.value}
+  const {START_PRICE, END_PRICE, PRICE} = routerParams.value
+
+  const params: any = {MENU_ID: menuId.value}
 
   // TECHNIQUE
   const technique = techniqueSelected.value
@@ -1541,8 +1543,8 @@ const routerJump = (partial = false) => {
         if (!startPrice.value || !endPrice.value || parseInt(startPrice.value) > parseInt(endPrice.value)) {
           return ElMessage.error('Please input valid price range')
         }
-        params['startPrice'] = startPrice.value
-        params['endPrice'] = endPrice.value
+        params['START_PRICE'] = startPrice.value
+        params['END_PRICE'] = endPrice.value
       }
       // 固定价格区间
       else if (priceSelected.value.id) {
@@ -1551,18 +1553,18 @@ const routerJump = (partial = false) => {
     } else {
       // 只有滑动了或者打开弹出才需要提交
       if (isSliderPrice.value) {
-        params['startPrice'] = priceRange.value[0]
-        params['endPrice'] = priceRange.value[1]
+        params['START_PRICE'] = priceRange.value[0]
+        params['END_PRICE'] = priceRange.value[1]
       }
     }
   } else {
     if (priceSubmitted.value) {
-      if (route.query.startPrice && route.query.endPrice) {
-        params['startPrice'] = route.query.startPrice as string
-        params['endPrice'] = route.query.endPrice as string
+      if (START_PRICE && END_PRICE) {
+        params['START_PRICE'] = START_PRICE
+        params['END_PRICE'] = END_PRICE
       }
-      if (route.query.PRICE) {
-        params['PRICE'] = route.query.PRICE
+      if (PRICE) {
+        params['PRICE'] = PRICE
       }
     }
   }
@@ -1573,21 +1575,39 @@ const routerJump = (partial = false) => {
     Object.assign(params, gen_path_obj(artist, 'ARTIST', ['name']))
   }
 
-  router.replace({query: params})
+  const q = packQuery(params)
+  router.replace({query: {q}})
 }
 
+const routerParams = ref({} as QueryParams)
 /**
  * 监听路由变化
  */
 const paramsWatch = async () => {
+  if (route.query.q) routerParams.value = unpackQuery(route.query.q)
+
+  const {
+    MENU_ID,
+    TECHNIQUE,
+    MUTEX,
+    GROUP,
+    PRICE,
+    START_PRICE,
+    END_PRICE,
+    RADIO,
+    CHECKBOX,
+    COLOR,
+    ARTIST,
+  } = routerParams.value
+
   await getProductGroup()
 
   // 是否有工艺筛选
-  hasTechniqueFilter.value = !!(route.query.menuId && route.query.menuId !== '1000002');
+  hasTechniqueFilter.value = !!(MENU_ID && MENU_ID !== '1000002');
 
   // TECHNIQUE
-  if (route.query.TECHNIQUE) {
-    const val = route.query.TECHNIQUE as string
+  if (TECHNIQUE) {
+    const val = TECHNIQUE
     const cur = TECHNIQUE_OPTIONS.find(item => item.value === val)
     if (cur) techniqueSelected.value = cur
   } else {
@@ -1595,22 +1615,22 @@ const paramsWatch = async () => {
   }
 
   // MUTEX类型的值
-  if (route.query.MUTEX) {
-    mutexSelected.value = gen_MUTEX(groupList.value, route.query.MUTEX as string)!
+  if (MUTEX) {
+    mutexSelected.value = gen_MUTEX(groupList.value, MUTEX)!
   } else {
     mutexSelected.value = {} as IHome.MenuRow
   }
 
   // GROUP类型的值
-  if (route.query.GROUP) {
-    groupSelected.value = gen_GROUP_RADIO(groupList.value, route.query.GROUP as string)
+  if (GROUP) {
+    groupSelected.value = gen_GROUP_RADIO(groupList.value, GROUP)
   } else {
     groupSelected.value.clear()
   }
 
   // PRICE类型的值（固定区间）
-  if (route.query.PRICE) {
-    priceSelected.value = gen_PRICE(groupList.value, route.query.PRICE as string)!
+  if (PRICE) {
+    priceSelected.value = gen_PRICE(groupList.value, PRICE)!
     if (appStore.device === 'app') {
       isSliderPrice.value = true
       priceRange.value[0] = Number(priceSelected.value.config.startPrice)
@@ -1618,40 +1638,42 @@ const paramsWatch = async () => {
     }
   }
   // PRICE类型的值（指定区间）
-  else if (route.query.startPrice && route.query.endPrice) {
+  else if (START_PRICE && END_PRICE) {
     if (appStore.device === 'pc') {
       isCustomPrice.value = true
-      startPrice.value = route.query.startPrice as string
-      endPrice.value = route.query.endPrice as string
+      startPrice.value = START_PRICE
+      endPrice.value = END_PRICE
     } else {
       isSliderPrice.value = true
-      priceRange.value[0] = Number(route.query.startPrice)
-      priceRange.value[1] = Number(route.query.endPrice)
+      priceRange.value[0] = Number(START_PRICE)
+      priceRange.value[1] = Number(END_PRICE)
     }
   }
 
   // RADIO类型的值
-  if (route.query.RADIO) {
-    radioSelected.value = gen_GROUP_RADIO(groupList.value, route.query.RADIO as string)
+  if (RADIO) {
+    radioSelected.value = gen_GROUP_RADIO(groupList.value, RADIO)
   } else {
     radioSelected.value.clear()
   }
 
   // CHECKBOX类型的值
-  if (route.query.CHECKBOX) {
-    checkboxSelected.value = gen_CHECKBOX(groupList.value, route.query.CHECKBOX as string)
+  if (CHECKBOX) {
+    checkboxSelected.value = gen_CHECKBOX(groupList.value, CHECKBOX)
   } else {
     checkboxSelected.value.clear()
   }
 
   // COLOR类型的值
-  if (route.query.COLOR) {
-    colorSelected.value = gen_COLOR(groupList.value, route.query.COLOR as string)
+  if (COLOR) {
+    colorSelected.value = gen_COLOR(groupList.value, COLOR)
+  } else {
+    colorSelected.value = []
   }
 
   // ARTIST类型的值
-  if (route.query.ARTIST) {
-    artistSelected.value = gen_ARTIST(groupList.value, route.query.ARTIST as string)!
+  if (ARTIST) {
+    artistSelected.value = gen_ARTIST(groupList.value, ARTIST)
   } else {
     artistSelected.value = {} as IHome.MenuRow
   }

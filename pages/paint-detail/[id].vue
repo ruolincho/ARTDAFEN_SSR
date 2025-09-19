@@ -39,7 +39,7 @@
           />
         </ClientOnly>
       </div>
-      <div class="acea-row row-evenly py-20" >
+      <div class="acea-row row-evenly py-20">
         <div class="acea-row row-middle cursor-pointer" @click="openWallColor">
           <span class="iconfont icon-user-defined text-20"></span>
           <span class="text-14 ml-10">SELECT WALL COLOR</span>
@@ -137,7 +137,7 @@
                   />
                 </ClientOnly>
               </div>
-              <div class="acea-row row-evenly py-20" >
+              <div class="acea-row row-evenly py-20">
                 <div class="acea-row row-middle cursor-pointer" @click="openWallColor">
                   <span class="iconfont icon-user-defined text-20"></span>
                   <span class="text-14 ml-10">SELECT WALL COLOR</span>
@@ -621,7 +621,7 @@ import {Autoplay, Navigation, Pagination} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import {getBrandRecommendApi, getProductDetailApi, getRelatedRecommendApi} from "~/api/modules/product/product";
+import {getBrandRecommendApi, getRelatedRecommendApi} from "~/api/modules/product/product";
 import {getCombinationApi} from "~/api/modules/paint/paint";
 import type {IPaint} from "~/api/interface/paint/paint";
 import type {IProduct} from "~/api/interface/product/product";
@@ -643,6 +643,8 @@ import {shoppingFaq} from "~/config/faq";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
+import {packQuery} from "~/composables/useQueryShort";
+import {useCustomProductJsonLd} from "~/composables/useCustomProductJsonLd";
 
 defineOptions({
   name: 'PaintDetail'
@@ -698,11 +700,23 @@ const handleImageChange = () => {
 }
 
 // 获取详情
-const { data: goodsDetail , pending: isSkeleton } = await useAsyncData('goods-detail', async () => {
+const {data: goodsDetail, pending: isSkeleton} = await useAsyncData('goods-detail', async () => {
   const config = useRuntimeConfig()
-  const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', { params: { productId: route.params.id } })
+  const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', {
+    method: 'GET',
+    params: {
+      productId: route.params.id
+    },
+    headers: {
+      'Token': userStore.token || '',
+      'X-Currency': currencyStore.currentCurrency
+    }
+  })
   return data
 })
+
+const { injectProductJsonLd } = useCustomProductJsonLd(goodsDetail.value, {})
+injectProductJsonLd()
 
 // 获取SKu
 const specsCombination = ref<ISpecs.Row[]>([])
@@ -1019,7 +1033,7 @@ const productThumbs = debounce(async () => {
 const handleClickArtist = () => {
   router.push({
     path: PRODUCT_URL,
-    query: gen_path_obj(goodsDetail.value.creator, 'ARTIST', ['name'])
+    query: {q: packQuery(gen_path_obj(goodsDetail.value.creator, 'ARTIST', ['name']))}
   })
 }
 
@@ -1027,7 +1041,7 @@ const handleClickArtist = () => {
 const handleClickBrand = () => {
   router.push({
     path: PRODUCT_URL,
-    query: gen_path_obj(goodsDetail.value.brand, 'BRAND', ['name'])
+    query: {q: packQuery(gen_path_obj(goodsDetail.value.brand, 'BRAND', ['name']))}
   })
 }
 
@@ -1090,6 +1104,7 @@ const showLoginWindow = () => {
 
           .frame-box {
             padding-bottom: 25px;
+
             .frame-money {
               position: absolute;
               left: 5px;

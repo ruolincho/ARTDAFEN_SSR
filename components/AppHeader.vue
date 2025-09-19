@@ -260,6 +260,7 @@ import {throttle} from "lodash-es";
 import {useCustomStore} from "~/stores/modules/custom";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
+import {packQuery, unpackQuery} from "~/composables/useQueryShort";
 
 // ✅ 只在客户端挂载/清理监听
 if (import.meta.client) {
@@ -415,10 +416,10 @@ const clickNavFirst = (firstMenu: IHome.MenuRow, index: number) => {
   // 如果没有子菜单可以点击，则跳转到对应页面
   const hasChildren = headerList.value[index].children?.length
   if (!hasChildren) {
-    const params: any = {}
+    const q = packQuery({MENU_ID: firstMenu.id})
     router.push({
       path: firstMenu.config.type === 'BEST' ? BEST_URL : PRODUCT_URL,
-      query: Object.assign({}, {menuId: firstMenu.id}, params)
+      query: {q}
     })
     openMenu.value = false
     hideDropdown()
@@ -485,9 +486,10 @@ const clickNavThird = (thirdMenu: IHome.MenuRow, subType: Dict.CategoryType, fir
   }
 
   hideDropdown()
+  const q = packQuery(Object.assign({}, {MENU_ID: firstMenu.id}, params))
   router.push({
     path: firstMenu.config.type === 'BEST' ? BEST_URL : PRODUCT_URL,
-    query: Object.assign({}, {menuId: firstMenu.id}, params)
+    query: {q}
   })
 }
 
@@ -497,8 +499,11 @@ const currentDropdownMenu = computed(() => headerList.value[activeNavIndex.value
 // 当前路由
 const currentRouteText = computed(() => {
   let path = route.path
-  if (route.query.menuId) {
-    path += `_${route.query.menuId}`
+  if (route.query.q) {
+    const { MENU_ID } = unpackQuery(route.query.q)
+    if (MENU_ID) {
+      path += `_${MENU_ID}`
+    }
   }
   return path
 })

@@ -40,6 +40,7 @@ export namespace IProduct {
         creator: ObjectNode.Creator // 创作者信息
         brand: ObjectNode.Brand // 品牌信息
         status: Dict.ProductSaleStatus // 商品状态
+        specsCombo: ISpecs.Row[] // SKU组合
     }
 
     /*左侧筛选菜单请求参数*/
@@ -75,7 +76,7 @@ export namespace IProduct {
     }
 
     /*产品列表请求参数*/
-    export interface ListQuery extends IPageQuery{
+    export interface ListQuery extends IPageQuery {
         /*商品分类编号列表 */
         categoryIds?: never[];
         /*商品属性值编号列表 */
@@ -115,7 +116,7 @@ export namespace IProduct {
     }
 
     /*品牌相关推荐请求参数*/
-    export interface ArtworksQuery extends IPageQuery{
+    export interface ArtworksQuery extends IPageQuery {
         /*创作者编号 */
         creatorId: string;
     }

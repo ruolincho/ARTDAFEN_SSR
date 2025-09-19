@@ -34,6 +34,7 @@ import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import {getHomeArtistsApi} from "~/api/modules/home/home";
 import {pageMeta} from "~/composables/pageMeta";
+import {packQuery} from "~/composables/useQueryShort";
 
 defineOptions({
   name: 'ArtistsTop'
@@ -60,7 +61,7 @@ const getHomeArtists = async () => {
 const handleClickArtist = (artist: IArtists.Row) => {
   router.push({
     path: PRODUCT_URL,
-    query: gen_path_obj(artist, 'ARTIST', ['name'])
+    query: {q: packQuery(gen_path_obj(artist, 'ARTIST', ['name']))}
   })
 }
 
