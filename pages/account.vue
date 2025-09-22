@@ -31,7 +31,7 @@
         </div>
         <div class="account-menu my-lg-20 my-15">
           <div
-            class="account-item acea-row row-middle py-15 px-20 cursor-pointer"
+            class="account-item acea-row nowrap row-middle py-15 px-20 cursor-pointer"
             :class="{ 'on': currentRoute === menu.path }"
             @click="router.replace(menu.path)"
             v-for="menu in menuList"

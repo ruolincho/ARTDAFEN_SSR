@@ -228,7 +228,7 @@
                   <span class="iconfont icon-right text-16"></span>
                 </h1>
                 <p class="line1 text-14 my-15 px-10" style="word-break: break-word">{{ item.title }}</p>
-                <p class="text-16 f-bold px-10 pb-10">{{ currencyStore.formatToCurrency(item.retailPrice) }}</p>
+                <p class="text-16 f-bold px-10 pb-10 line1">{{ currencyStore.formatToCurrency(item.retailPrice) }}</p>
               </div>
             </swiper-slide>
           </swiper>

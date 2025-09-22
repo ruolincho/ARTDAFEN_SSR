@@ -1,9 +1,10 @@
 <template>
   <el-config-provider :locale="en">
     <NuxtLayout>
-      <NuxtPage />
+      <NuxtPage/>
     </NuxtLayout>
-    <el-backtop :right="backtopPosition" :bottom="backtopPosition" />
+    <el-backtop :right="backtopPosition" :bottom="backtopPosition"/>
+    <Chat :right="backtopPosition" :bottom="backtopPosition + 60"/>
   </el-config-provider>
 </template>
 
@@ -14,7 +15,7 @@ import {useUserStore} from "~/stores/modules/user";
 
 const appStore = useAppStore();
 const userStore = useUserStore();
-const backtopPosition = computed(() => appStore.isPc? 50 : 25)
+const backtopPosition = computed(() => appStore.isPc ? 50 : 25)
 
 onMounted(() => {
   userStore.checkTokenStatus()

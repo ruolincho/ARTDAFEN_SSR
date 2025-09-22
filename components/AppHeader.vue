@@ -71,6 +71,22 @@
             <span class="iconfont icon-login"></span>
             <span class="operation-text">LOGIN</span>
           </div>
+          <ClientOnly>
+            <div class="operation-item acea-row row-middle currency">
+              <span class="operation-text ignore">{{ currentLang }}</span>
+              <span class="iconfont icon-down"></span>
+              <ul class="currency-list">
+                <li
+                  class="ignore"
+                  v-for="item in languageData"
+                  :key="item.id"
+                  @click="switchLanguage(item.id)"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+            </div>
+          </ClientOnly>
           <div class="operation-item acea-row row-middle currency">
             <span class="operation-text">{{ currencyStore.currentCurrency }}</span>
             <span class="iconfont icon-down"></span>
@@ -195,7 +211,7 @@
       <el-divider border-style="solid"></el-divider>
 
       <ul class="nav-list">
-        <li class="P_parent" :class="{ open: openLangApp }" @click="openLangApp = !openLangApp">
+        <li class="P_parent" :class="{ open: openCurrencyApp }" @click="openCurrencyApp = !openCurrencyApp">
           <div class="cate-item">
             <div class="category-a">{{ currencyStore.currentCurrency }}</div>
             <div class="category-tig P_tig">
@@ -211,6 +227,29 @@
                 @click="currencyStore.setCurrentCurrency(item.code)"
               >
                 {{ item.code }} - {{ item.name }}
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="nav-list">
+        <li class="P_parent" :class="{ open: openLangApp }" @click="openLangApp = !openLangApp">
+          <div class="cate-item">
+            <div class="category-a">{{ currentLang }}</div>
+            <div class="category-tig P_tig">
+              <span><i class="iconfont icon-down"></i></span>
+            </div>
+          </div>
+          <div class="category-cont P_slide">
+            <div class="category-pad">
+              <div
+                class="pad-a"
+                v-for="item in languageData"
+                :key="item.id"
+                @click="switchLanguage(item.id)"
+              >
+                {{ item.name }}
               </div>
             </div>
           </div>
@@ -261,6 +300,9 @@ import {useCustomStore} from "~/stores/modules/custom";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {packQuery, unpackQuery} from "~/composables/useQueryShort";
+import { useTranslateLang } from '~/composables/useTranslateLang'
+
+const { currentLang, languageData, switchLanguage } = useTranslateLang()
 
 // ✅ 只在客户端挂载/清理监听
 if (import.meta.client) {
@@ -316,6 +358,7 @@ const router = useRouter()
 const route = useRoute()
 const openMenu = ref(false)
 const openIndex = ref<null | number>(null);
+const openCurrencyApp = ref(false)
 const openLangApp = ref(false)
 const toggleMenu = (index: number) => {
   openIndex.value = openIndex.value === index ? null : index

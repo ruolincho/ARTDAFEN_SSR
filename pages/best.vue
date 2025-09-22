@@ -149,7 +149,7 @@
               </div>
               <div class="color-list pr-4 scroll-y scroll-custom acea-row" v-show="group.isShow">
                 <div
-                  class="color-item acea-row row-middle cursor-pointer"
+                  class="color-item acea-row nowrap row-middle cursor-pointer"
                   v-for="item in group.children"
                   :key="item.id"
                   @click="clickColorType(item)"
@@ -190,7 +190,7 @@
 
           </template>
 
-          <div class="acea-row side-button mt-40 pb-40">
+          <div class="acea-row nowrap side-button mt-40 pb-40">
             <el-button @click="reset()">Reset</el-button>
             <el-button type="primary" class="flex-1" @click="routerJump()">See all items</el-button>
           </div>

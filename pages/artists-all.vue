@@ -4,7 +4,7 @@
   <div class="sec-head">
     <div class="container">
       <div class="text-center py-lg-40 py-20 header-section f-bold-500">
-        <h1 class="text-50 mb-20">Browse All "{{ letter }}" Artists</h1>
+        <h1 class="text-50 mb-20">Browse All <span class="ignore">"{{ letter }}"</span> Artists</h1>
         <p class="text-16 text-gray-600 description">
           Our oil paintings are 100% hand-painted on canvas by skilled artists
         </p>
@@ -15,7 +15,7 @@
   </div>
 
   <!--索引-->
-  <section class="sec-letter">
+  <section class="sec-letter ignore">
     <div class="container">
       <div class="letter-list acea-row row-between-wrapper gap-column-base">
         <div
