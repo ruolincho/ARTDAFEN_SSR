@@ -125,7 +125,6 @@
 </template>
 
 <script setup lang="ts">
-import {loadScript, type PayPalNamespace} from '@paypal/paypal-js';
 import type {OnApproveActions, OnApproveData} from "@paypal/paypal-js/types/components/buttons";
 import {debounce, imagePrefix} from "~/utils";
 import {useCartStore} from "~/stores/modules/cart";
@@ -149,6 +148,7 @@ import {PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {discountCalcApi} from "~/api/modules/physical/physical";
 import type {IPhysical} from "../api/interface/physical/physical";
+import { initPaypal } from '~/composables/usePayment'
 
 defineOptions({
   name: 'Cart'
@@ -193,25 +193,15 @@ const rules = reactive({
 const canCarts = computed(() => cartStore.canCarts)
 
 // 加载 PayPal SDK
-let paypal: PayPalNamespace | null;
 const loadPaypal = async () => {
   const config = useRuntimeConfig()
-  try {
-    paypal = await loadScript({clientId: config.public.paypalClientId, currency: currencyStore.currentCurrency});
-  } catch (error) {
-    console.error("failed to load the PayPal JS SDK script", error);
-  }
-
-  if (paypal) {
-    try {
-      await paypal.Buttons!({
-        createOrder: createOrderCallback,
-        onApprove: onApproveCallback,
-      }).render("#paypal-button-container");
-    } catch (error) {
-      console.error("failed to render the PayPal Buttons", error);
-    }
-  }
+  initPaypal({
+    containerId: '#paypal-button-container',
+    clientId: config.public.paypalClientId,
+    currency: currencyStore.currentCurrency,
+    createOrder: createOrderCallback,
+    onApprove: onApproveCallback,
+  })
 }
 
 const remarks = ref({})

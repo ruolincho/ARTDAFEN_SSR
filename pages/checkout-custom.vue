@@ -331,6 +331,8 @@ const createOrderCallback = async () => {
       throw new Error("Please select the address first.");
     }
 
+    await waitForUploadSuccess();
+
     const formData = new TypedFormData<ICustom.CreateQuery>();
     const previewImg = dataURLtoBlob(customStore.carts.previewImg); // 转回 Blob
     formData.append('previewImg', previewImg)
@@ -360,8 +362,6 @@ const createOrderCallback = async () => {
 
     isCreate.value = true;
     isDiscount.value = true;
-
-    await waitForUploadSuccess();
 
     const {data: paymentData} = await paymentApi({
       payChannelStr: 'paypal_checkout', // 支付方式

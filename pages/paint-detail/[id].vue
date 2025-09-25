@@ -959,7 +959,7 @@ const addToCart = () => {
     deliveryType: goodsDetail.value.deliveryType || '0', // 配送方式
     retailPrice: totalPrice.value, // 商品售价
     redeemPoints: goodsDetail.value.redeemPoints, // 商品积分
-    img: goodsDetail.value.img, // 商品图片
+    img: goodsDetail.value.img.split('?')[0], // 商品图片
     shopId: goodsDetail.value.merchant?.id, // 商家编号
     specsId: currentSpecId, // 商品规格编号
     specs: specs.value, // 商品规格值
