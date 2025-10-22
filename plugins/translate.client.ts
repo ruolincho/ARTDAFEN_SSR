@@ -1,16 +1,16 @@
-import { defineNuxtPlugin } from '#app'
 import { nextTick } from 'vue'
+// @ts-ignore
 import translate from 'i18n-jsautotranslate'
 
 export default defineNuxtPlugin((nuxtApp) => {
     if (process.server) return // 确保只在客户端执行
 
     // 挂到 window，方便调试
-    // @ts-ignore
     window.translate = translate
 
     // 语言设置
-    // translate.language.setDefaultTo('english');
+    translate.setAutoDiscriminateLocalLanguage() // 自动识别本地语言
+    // translate.language.setDefaultTo('english'); // 设置默认语言为英文
 
     // 翻译通道
     translate.service.use('client.edge')

@@ -680,6 +680,17 @@ const loginWindowRef = ref<InstanceType<typeof LoginWindow>>()
 const showLoginWindow = () => {
   loginWindowRef.value?.open()
 }
+
+const origin = useRequestURL().origin
+useHead({
+  link: [
+    {rel: 'canonical', href: `${origin}${route.path}`},
+  ],
+  meta: [
+    { name: 'robots', content: 'index, follow' },
+  ],
+})
+
 </script>
 
 <style scoped lang="scss">

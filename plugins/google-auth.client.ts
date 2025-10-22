@@ -1,6 +1,6 @@
 import { getUrlQuery } from '~/utils'
 
-class AuthGoogle {
+export class AuthGoogle {
     /**
      * 自动去授权
      */
@@ -42,14 +42,3 @@ export default defineNuxtPlugin(() => {
         }
     }
 })
-
-declare module '#app' {
-    interface NuxtApp {
-        $google: InstanceType<typeof AuthGoogle>
-    }
-}
-declare module 'vue' {
-    interface ComponentCustomProperties {
-        $google: InstanceType<typeof AuthGoogle>
-    }
-}

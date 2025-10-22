@@ -56,7 +56,7 @@
       <nav aria-label="Pagination" class="seo-pagination py-lg-40 py-20">
         <NuxtLink
           v-if="hasPrev"
-          :to="page - 1 === 1 ? '/blog' : `/blog?page=${page - 1}`"
+          :to="page - 1 === 1 ? '/blog' : `/blog/${page - 1}`"
           rel="prev"
         >
           <span class="iconfont icon-left"/>
@@ -66,7 +66,7 @@
         <NuxtLink
           v-for="p in Array.from({length: totalPages}, (_, i) => i + 1).filter(p => Math.abs(p - page) <= 2 || p === 1 || p === totalPages)"
           :key="p"
-          :to="p === 1 ? '/blog' : `/blog?page=${p}`"
+          :to="p === 1 ? '/blog' : `/blog/${p}`"
           :aria-current="p === page ? 'page' : null"
           :class="{'active': p === page}"
         >
@@ -75,14 +75,14 @@
 
         <NuxtLink
           v-if="hasNext"
-          :to="`/blog?page=${page + 1}`"
+          :to="`/blog/${page + 1}`"
           rel="next"
         >
           <span class="iconfont icon-right"/>
         </NuxtLink>
         <!-- 无脚本兜底 -->
         <noscript>
-          <p><a href="/blog?page=2">Next page</a></p>
+          <p><a href="/blog/2">Next page</a></p>
         </noscript>
       </nav>
     </div>
@@ -100,7 +100,7 @@ import {ref, watch} from "vue";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {blogThumbsApi} from "~/api/modules/likes/likes";
 import {useCurrencyStore} from "~/stores/modules/currency";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 
 defineOptions({
@@ -120,18 +120,16 @@ const route = useRoute()
 const currencyStore = useCurrencyStore();
 const userStore = useUserStore()
 
-useHead(pageMeta[route.path] ?? pageMeta["/blog"]);
-
 // 获取博客数据
 const page = computed<number>({
   get() {
-    const p = Number(route.query.page ?? 1)
+    const p = Number(route.params.page ?? 1)
     return Number.isFinite(p) && p >= 1 ? Math.floor(p) : 1
   },
   set(v: number) {
     if (process.client) {
       const n = Number.isFinite(v) && v >= 1 ? Math.floor(v) : 1
-      router.push({query: {...route.query, page: n}})
+      router.push(n === 1 ? '/blog' : `/blog/${n}`)
     }
   }
 })
@@ -147,7 +145,7 @@ if (import.meta.client) {
 }
 
 const {data: moreData, pending, error, refresh} = await useAsyncData(
-  'blog-more',
+  `blog-more-${page.value}`,
   async () => {
     const config = useRuntimeConfig()
     const {data} = await $fetch<IResultData<IPage<IBlog.Row>>>(config.public.apiBase + TRADE_MODULE + '/blog/example', {
@@ -195,13 +193,13 @@ const hasPrev = computed(() => page.value > 1)
 const hasNext = computed(() => page.value < totalPages.value)
 
 const origin = useRequestURL().origin
-const selfUrl = computed(() => (page.value === 1 ? `${origin}/blog` : `${origin}/blog?page=${page.value}`))
+const selfUrl = computed(() => (page.value === 1 ? `${origin}/blog` : `${origin}/blog/${page.value}`))
 const prevUrlAbs = computed(() => hasPrev.value
-  ? (page.value - 1 === 1 ? `${origin}/blog` : `${origin}/blog?page=${page.value - 1}`)
+  ? (page.value - 1 === 1 ? `${origin}/blog` : `${origin}/blog/${page.value - 1}`)
   : null
 )
 const nextUrlAbs = computed(() => hasNext.value
-  ? `${origin}/blog?page=${page.value + 1}`
+  ? `${origin}/blog/${page.value + 1}`
   : null
 )
 
@@ -212,6 +210,7 @@ useHead({
     ...(nextUrlAbs.value ? [{rel: 'next', href: nextUrlAbs.value}] : []),
   ],
   meta: [
+    ...(pageMeta["/blog"]?.meta ?? []),
     {name: 'robots', content: 'index,follow'},
   ]
 })

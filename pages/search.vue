@@ -100,7 +100,7 @@ import {useUserStore} from "~/stores/modules/user";
 import {useHandleData} from "~/composables/useHandleData";
 import type {ISearch} from "~/api/interface/search/search";
 import {gen_path_obj} from "~/utils/product";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 
 

@@ -1,4 +1,6 @@
-export const pageMeta: Record<string, { meta: Array<{ name: string; content: string }> }> = {
+import {ArtCode} from "~/types/enumeration.d";
+
+export const pageMeta: Record<string, any> = {
     "/": {
         meta: [
             {
@@ -152,18 +154,46 @@ export const pageMeta: Record<string, { meta: Array<{ name: string; content: str
     },
 
     "/custom-paint": {
-        meta: [
-            {
-                name: "description",
-                content:
-                    "Custom painting & reproduction — order museum-quality oil painting reproductions, hand-finished canvases and proofing. Choose framing and finishes online."
-            },
-            {
-                name: "keywords",
-                content:
-                    "custom painting, oil painting reproduction, canvas reproduction, hand-finished prints, proofing, museum quality"
-            }
-        ],
+        [ArtCode.Painting]: {
+            title: 'Custom Hand-Painted Oil Paintings | Portrait & Masterpiece Reproduction | ArtDafen',
+            meta: [
+                {
+                    name: "description",
+                    content:
+                        "Order your own hand-painted custom oil painting from professional artists. Whether it’s a portrait, pet, or reproduction of a famous masterpiece, each piece is crafted with museum-quality detail and brushwork."
+                },
+                {
+                    name: "keywords",
+                    content: "custom oil painting, hand-painted art, portrait painting, oil painting reproduction, famous painting replica, custom canvas art"
+                }
+            ]
+        },
+        [ArtCode.Prints]: {
+            title: 'Printed Custom Paintings | Professional Canvas Reproduction | ArtDafen',
+            meta: [
+                {
+                    name: "description",
+                    content: "Discover our printed custom painting service for precise art reproductions. Using professional-grade printing on premium canvas, we deliver museum-quality details and vibrant colors—ideal for décor, art collections, or gallery displays."
+                },
+                {
+                    name: "keywords",
+                    content: "printed custom painting, canvas reproduction, art print on canvas, digital painting print, high-quality art reproduction, print to canvas"
+                }
+            ]
+        },
+        [ArtCode.Certificates]: {
+            title: 'Custom Certificate Printing with 3D Texture | Personalized Art Certificate | ArtDafen',
+            meta: [
+                {
+                    name: "description",
+                    content: "Upload your own certificate and turn it into a textured masterpiece. ArtDafen provides professional certificate printing with 3D relief texture for a premium, artistic finish—perfect for collectors, artists, and institutions looking to display authenticity with style."
+                },
+                {
+                    name: "keywords",
+                    content: "custom certificate printing, 3D texture certificate, art certificate print, personalized certificate, textured printing, custom document display"
+                }
+            ]
+        },
     },
 
     "/faq": {

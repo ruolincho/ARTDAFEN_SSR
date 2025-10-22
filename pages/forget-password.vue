@@ -71,7 +71,7 @@ import VerificationCode from "~/components/VerificationCode.vue";
 import {useAuth} from "~/composables/useAuth";
 import {emailReg} from "~/regular";
 import {CONTACT_EMAIL, LOGIN_URL} from "~/config";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 
 defineOptions({
   name: 'ResetPassword'

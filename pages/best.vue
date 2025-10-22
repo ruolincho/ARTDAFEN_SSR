@@ -901,7 +901,7 @@ import {formatInteger} from "~/utils/format";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {cloneDeep} from "lodash-es";
 import {TECHNIQUE_OPTIONS} from "~/constant";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 import {unpackQuery, packQuery, type QueryParams} from '~/composables/useQueryShort'
 
 defineOptions({
@@ -923,8 +923,12 @@ const appStore = useAppStore()
 const userStore = useUserStore()
 const currencyStore = useCurrencyStore();
 
-useHead(pageMeta[route.path] ?? pageMeta["/best"]);
-
+useHead({
+  meta: [
+    ...(pageMeta["/best"]?.meta ?? []),
+    { name: 'robots', content: route.query.q ? 'noindex, nofollow' : 'index, follow' }
+  ]
+});
 
 // 获取左侧筛选数据
 const menuId = ref('')

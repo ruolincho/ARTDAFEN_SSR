@@ -1,21 +1,18 @@
 <template>
-  <el-config-provider :locale="en">
+  <el-config-provider :locale="currentElementPlusLocale">
     <NuxtLayout>
       <NuxtPage/>
     </NuxtLayout>
-    <el-backtop :right="backtopPosition" :bottom="backtopPosition"/>
-    <Chat :right="backtopPosition" :bottom="backtopPosition + 60"/>
   </el-config-provider>
 </template>
 
 <script setup lang="ts">
-import en from 'element-plus/es/locale/lang/en';
-import {useAppStore} from "~/stores/modules/app";
+import {onMounted} from 'vue'
 import {useUserStore} from "~/stores/modules/user";
+import {useTranslateLang} from '~/composables/useTranslateLang'
 
-const appStore = useAppStore();
+const {currentElementPlusLocale} = useTranslateLang();
 const userStore = useUserStore();
-const backtopPosition = computed(() => appStore.isPc ? 50 : 25)
 
 onMounted(() => {
   userStore.checkTokenStatus()

@@ -1,9 +1,12 @@
+import translate from 'i18n-jsautotranslate'
+
 declare global {
     interface Window {
         webkitRequestAnimationFrame?: typeof window.requestAnimationFrame;
         mozRequestAnimationFrame?: typeof window.requestAnimationFrame;
         dataLayer: any[];
         gtag: (...args: any[]) => void;
+        translate: typeof translate
     }
 }
 

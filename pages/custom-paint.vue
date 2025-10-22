@@ -150,7 +150,7 @@
       </ClientOnly>
 
       <div class="spu-wrapper row">
-        <div class="col-sm-6">
+        <div class="col-sm-7">
           <ClientOnly>
             <!--示例图-->
             <div class="example-preview sticky-column" v-if="!imageUrl">
@@ -250,7 +250,7 @@
             </template>
           </ClientOnly>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-5">
           <div class="spu-spec border-sm">
             <!--没有上传图片-->
             <template v-if="!imageUrl">
@@ -277,8 +277,8 @@
                 </p>
               </div>
               <div class="p-md-20 p-15">
+                <!--v-if="userStore.isLogin"-->
                 <el-upload
-                  v-if="userStore.isLogin"
                   class="upload-box"
                   :accept="fileType.join(',')"
                   :before-upload="beforeUpload"
@@ -291,8 +291,9 @@
                     <div class="mt-10">{{ fileType.join(' , ') }} files with a size less than {{ fileSize }}MB.</div>
                   </template>
                 </el-upload>
-                <el-button v-else class="w-full" size="large" type="primary" @click="showLoginWindow">Choose File
-                </el-button>
+<!--                <el-button v-else class="w-full" size="large" type="primary" @click="showLoginWindow">-->
+<!--                  Choose File-->
+<!--                </el-button>-->
               </div>
 
               <!--说明-->
@@ -827,16 +828,11 @@ import {Autoplay, Navigation, Pagination, Thumbs} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-
-import {pageMeta} from "~/composables/pageMeta";
-
+import {pageMeta} from "~/config/pageMeta";
+import { useIndexedDBBase64 } from '~/composables/useIndexedDBBase64'
 
 defineOptions({
   name: 'CustomPaint'
-})
-
-onMounted(() => {
-
 })
 
 const userStore = useUserStore()
@@ -845,58 +841,58 @@ const customStore = useCustomStore()
 const route = useRoute()
 const router = useRouter()
 const currencyStore = useCurrencyStore();
+const { saveBase64 } = useIndexedDBBase64()
 
 const moreInfoVisible = ref([false, false, false, false])
 
 const currentView = ref('custom')
 const contentNumber = ref(1)
 
-useHead(pageMeta[route.path] ?? pageMeta["/custom-paint"]);
+const META = pageMeta["/custom-paint"] || {}
 
-const paintingDefault = [
-  {
-    photo: '/static/custom/example/hand/example_photo1.png',
-    paint: '/static/custom/example/hand/example_paint1.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo2.png',
-    paint: '/static/custom/example/hand/example_paint2.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo3.png',
-    paint: '/static/custom/example/hand/example_paint3.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo4.png',
-    paint: '/static/custom/example/hand/example_paint4.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo5.png',
-    paint: '/static/custom/example/hand/example_paint5.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo6.png',
-    paint: '/static/custom/example/hand/example_paint6.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo7.png',
-    paint: '/static/custom/example/hand/example_paint7.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo8.png',
-    paint: '/static/custom/example/hand/example_paint8.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo9.png',
-    paint: '/static/custom/example/hand/example_paint9.png',
-  },
-  {
-    photo: '/static/custom/example/hand/example_photo10.png',
-    paint: '/static/custom/example/hand/example_paint10.png',
-  }
-]
 const exampleArr = ref<Record<CodeType, { photo: string, paint: string }[]>>({
-  [ArtCode.Painting]: paintingDefault,
+  [ArtCode.Painting]: [
+    {
+      photo: '/static/custom/example/hand/example_photo1.png',
+      paint: '/static/custom/example/hand/example_paint1.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo2.png',
+      paint: '/static/custom/example/hand/example_paint2.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo3.png',
+      paint: '/static/custom/example/hand/example_paint3.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo4.png',
+      paint: '/static/custom/example/hand/example_paint4.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo5.png',
+      paint: '/static/custom/example/hand/example_paint5.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo6.png',
+      paint: '/static/custom/example/hand/example_paint6.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo7.png',
+      paint: '/static/custom/example/hand/example_paint7.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo8.png',
+      paint: '/static/custom/example/hand/example_paint8.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo9.png',
+      paint: '/static/custom/example/hand/example_paint9.png',
+    },
+    {
+      photo: '/static/custom/example/hand/example_photo10.png',
+      paint: '/static/custom/example/hand/example_paint10.png',
+    }
+  ],
   [ArtCode.Prints]: [
     {
       photo: '/static/custom/example/print/example_photo1.webp',
@@ -938,6 +934,8 @@ const exampleArr = ref<Record<CodeType, { photo: string, paint: string }[]>>({
     },
   ],
 })
+
+useHead(META[route.query.work]);
 
 const reReckon = ref(false) // 重新识别
 const handleImageChange = () => {
@@ -1431,7 +1429,7 @@ const lastThemeObj = computed(() => {
 const finalCode = computed(() => {
   const {work} = route.query;
   const isPainting = work === ArtCode.Painting;
-  if (isPainting && isPrint.value) return '40USD-M2';
+  if (isPainting && isPrint.value) return ArtCode.Prints;
   if (isPainting && getFavoriteReference.value) return getFavoriteReference.value.code;
   return work;
 })
@@ -1440,15 +1438,20 @@ const finalCode = computed(() => {
 const addToCart = () => {
   if (!imageUrl.value) return ElMessage.warning('Please upload the image first!')
 
-  if (!userStore.isLogin) {
-    showLoginWindow()
-    return
-  }
+  // if (!userStore.isLogin) {
+  //   showLoginWindow()
+  //   return
+  // }
+
+  // 存进 IndexedDB，值保存健名到 pinia
+  const previewIndexDbKey = `preview-${Date.now()}`, originalIndexDbKey = `original-${Date.now()}`;
+  saveBase64(previewIndexDbKey, generatorImg.value)
+  saveBase64(originalIndexDbKey, imageUrl.value)
 
   const cartRow: ICustom.ShoppingCartsStorageRow = {
     code: finalCode.value, // 画芯代码
-    previewImg: generatorImg.value, // 预览图片
-    originalImg: imageUrl.value, // 原图
+    previewImg: previewIndexDbKey, // 预览图片（只保存 IndexedDB 键）
+    originalImg: originalIndexDbKey, // 原图 （只保存 IndexedDB 键）
     title: 'Photo to art', // 商品标题
     specs: specs.value, // 商品规格值
     dimensionId: currentSizeId.value, // 尺寸编号

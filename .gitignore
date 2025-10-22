@@ -63,6 +63,6 @@ typings/
 
 # nuxt.js
 .nuxt
-dist
+dist/
 
-.idea
+.idea/

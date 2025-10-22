@@ -10,8 +10,9 @@
               :key="index"
               :ref="(el) => sectionRefs[index] = el as HTMLElement"
             >
-              <div class="text-center my-20 f-bold-500">{{  item.headTitle  }}</div>
-              <el-collapse-item v-for="subItem in item.list" :title="subItem.title" :name="subItem.name" :key="subItem.name">
+              <div class="text-center my-20 f-bold-500">{{ item.headTitle }}</div>
+              <el-collapse-item v-for="subItem in item.list" :title="subItem.title" :name="subItem.name"
+                                :key="subItem.name">
                 <template #icon="{ isActive }">
                   <p style="margin-left:  auto">
                     <span class="iconfont text-20 ml-10" :class="isActive ? 'icon-reduce' : 'icon-add'"></span>
@@ -61,10 +62,19 @@ import {type ElForm, ElMessage} from "element-plus";
 import {faqList} from "~/config/faq";
 import {sendConsulting} from "~/api/modules/message/message";
 import {emailReg} from "~/regular";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 
 const route = useRoute()
-useHead(pageMeta[route.path] ?? pageMeta["/faq"]);
+
+console.log('route =>>>>', route.path)
+
+const origin = useRequestURL().origin
+useHead({
+  link: [
+    {rel: 'canonical', href: `${origin}${route.path}`},
+  ],
+  ...pageMeta[route.path] ?? pageMeta["/faq"]
+});
 
 const messageForm = ref({
   email: '',

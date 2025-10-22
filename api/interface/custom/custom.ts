@@ -40,20 +40,28 @@ export namespace ICustom {
         addressId?: string;
         /*购买数量*/
         quantity: number
+        /*优惠券编号*/
+        couponCode?: string | null;
     }
 
     /** 确认订单接口返回参数 */
     export interface OfferRow {
-        /*实付金额*/
-        actualAmount: string
-        /*运费金额*/
-        deliveryAmount: string
+        /*预计实付金额*/
+        estimatedAmount: string
+        /*预计运费金额*/
+        estimatedDeliveryAmount: string
         /*运费模板*/
         deliveryTemplate: {}
         /*优惠金额*/
         discountAmount: string
         /*原始金额*/
         originalAmount: string
+        /*商品列表*/
+        products: OfferProductsRow[]
+    }
+
+    export interface OfferProductsRow extends OfferQuery{
+        promoOffer: string[]
     }
 
     /** 上传订单原图接口请求参数 */
@@ -77,7 +85,7 @@ export namespace ICustom {
         /*尺寸编号*/
         dimensionId: string;
         /*已选油画配件列表, key: 配件编号, value: 已选配件规格 JSON字符串 */
-        parts: string;
+        part: string;
         /*预览图*/
         previewImg: Blob
         /*用户收货地址编号/商户自提点编号 */

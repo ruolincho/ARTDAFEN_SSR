@@ -33,7 +33,7 @@ import type {IArtists} from "~/api/interface/artists/artists";
 import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import {getHomeArtistsApi} from "~/api/modules/home/home";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 
 defineOptions({

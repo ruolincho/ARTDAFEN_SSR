@@ -966,7 +966,7 @@ import {useCurrencyStore} from "~/stores/modules/currency";
 import type {ISearch} from "~/api/interface/search/search";
 import {cloneDeep} from "lodash-es";
 import {TECHNIQUE_OPTIONS} from "~/constant";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 import {unpackQuery, packQuery, type QueryParams} from '~/composables/useQueryShort'
 
 defineOptions({
@@ -988,8 +988,12 @@ const appStore = useAppStore()
 const userStore = useUserStore()
 const currencyStore = useCurrencyStore();
 
-useHead(pageMeta[route.path] ?? pageMeta["/product"]);
-
+useHead({
+  meta: [
+    ...(pageMeta["/product"]?.meta ?? []),
+    { name: 'robots', content: route.query.q ? 'noindex, nofollow' : 'index, follow' }
+  ]
+});
 
 const proListRef = ref<InstanceType<typeof ProList>>();
 const getProductList = (params: IProduct.ListQuery) => getProductListApi(params)

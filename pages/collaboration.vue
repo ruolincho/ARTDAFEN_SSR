@@ -200,7 +200,7 @@ import {CONTACT_EMAIL} from "~/config";
 import {emailReg} from "~/regular";
 import {sendConsulting} from "~/api/modules/message/message";
 import {imagePrefix} from "~/utils";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 
 const route = useRoute()
 useHead(pageMeta[route.path] ?? pageMeta["/collaboration"]);

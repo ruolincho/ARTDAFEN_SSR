@@ -8,7 +8,7 @@ export const useAppStore = defineStore(
     () => {
         const codeCountDown = ref(0); // 验证码倒计时
         const lastStartTime = ref<number | null>(null); // 记录倒计时开始的时间戳
-        let timer: number | undefined | null = null; // 验证码倒计时定时器
+        let timer: any = null; // 验证码倒计时定时器
 
         const device = ref<DeviceType>('pc'); // 设备类型
 

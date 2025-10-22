@@ -86,6 +86,7 @@ const {
 
 defineExpose({
   tableData,
+  pageable,
   search,
   reset,
   clear,

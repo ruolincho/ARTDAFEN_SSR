@@ -1,9 +1,7 @@
 import JSEncrypt from 'jsencrypt'
 import {getPublicKeyApi} from "~/api/modules/oauth/oauth";
 
-type GetKeyFn = () => Promise<string>
-
-class Encrypt {
+export class Encrypt {
     private publicKey: string
     private instance: JSEncrypt
 
@@ -83,14 +81,3 @@ export default defineNuxtPlugin(() => {
         }
     }
 })
-
-declare module '#app' {
-    interface NuxtApp {
-        $encrypt: InstanceType<typeof Encrypt>
-    }
-}
-declare module 'vue' {
-    interface ComponentCustomProperties {
-        $encrypt: InstanceType<typeof Encrypt>
-    }
-}

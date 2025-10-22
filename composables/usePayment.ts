@@ -17,7 +17,8 @@ export async function initPaypal(options: PaypalOptions) {
         paypal = await loadScript({
             clientId: options.clientId,
             currency: options.currency,
-            components: ['buttons']
+            components: ['buttons'],
+            disableFunding: ['card']
         })
     } catch (err) {
         console.error("Failed to load PayPal SDK", err)

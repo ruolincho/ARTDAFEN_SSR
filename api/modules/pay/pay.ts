@@ -16,5 +16,5 @@ export const paymentApi = (params: IPay.Query) => {
  * @returns {*}
  */
 export const paymentCallbackApi = (params: IPay.CallbackQuery) => {
-    return $http().post<IPay.CallbackRow>(TRADE_MODULE + `/pay/callback/paypal`, params)
+    return $http().post<IPay.CallbackRow>(TRADE_MODULE + `/pay/capture/paypal`, params)
 }

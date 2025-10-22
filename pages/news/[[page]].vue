@@ -106,7 +106,7 @@
       <nav aria-label="Pagination" class="seo-pagination py-lg-40 py-20">
         <NuxtLink
           v-if="hasPrev"
-          :to="page - 1 === 1 ? '/news' : `/news?page=${page - 1}`"
+          :to="page - 1 === 1 ? '/news' : `/news/${page - 1}`"
           rel="prev"
         >
           <span class="iconfont icon-left"/>
@@ -116,7 +116,7 @@
         <NuxtLink
           v-for="p in Array.from({length: totalPages}, (_, i) => i + 1).filter(p => Math.abs(p - page) <= 2 || p === 1 || p === totalPages)"
           :key="p"
-          :to="p === 1 ? '/news' : `/news?page=${p}`"
+          :to="p === 1 ? '/news' : `/news/${p}`"
           :aria-current="p === page ? 'page' : null"
           :class="{'active': p === page}"
         >
@@ -125,14 +125,14 @@
 
         <NuxtLink
           v-if="hasNext"
-          :to="`/news?page=${page + 1}`"
+          :to="`/news/${page + 1}`"
           rel="next"
         >
           <span class="iconfont icon-right"/>
         </NuxtLink>
         <!-- 无脚本兜底 -->
         <noscript>
-          <p><a href="/news?page=2">Next page</a></p>
+          <p><a href="/news/2">Next page</a></p>
         </noscript>
       </nav>
     </div>
@@ -151,9 +151,9 @@ import {formatTimestamp} from "~/utils/format";
 import {useAppStore} from "~/stores/modules/app";
 import type {INews} from "~/api/interface/news/news";
 import type {IPage, IResultData} from "~/api/interface";
-import {TRADE_MODULE} from "../api/helper/prefix";
-import {pageMeta} from "~/composables/pageMeta";
-import {watch} from "vue";
+import {TRADE_MODULE} from "~/api/helper/prefix";
+import {pageMeta} from "~/config/pageMeta";
+import {ref, watch} from "vue";
 
 defineOptions({
   name: 'News'
@@ -168,8 +168,6 @@ const router = useRouter()
 const route = useRoute()
 const appStore = useAppStore()
 const modules = [Pagination, Navigation]
-
-useHead(pageMeta[route.path] ?? pageMeta["/news"]);
 
 // Topic
 const isTopicSkeleton = ref(true)
@@ -192,13 +190,13 @@ const getNewsLatest = async () => {
 // More
 const page = computed<number>({
   get() {
-    const p = Number(route.query.page ?? 1)
+    const p = Number(route.params.page ?? 1)
     return Number.isFinite(p) && p >= 1 ? Math.floor(p) : 1
   },
   set(v: number) {
     if (process.client) {
       const n = Number.isFinite(v) && v >= 1 ? Math.floor(v) : 1
-      router.push({query: {...route.query, page: n}})
+      router.push(n === 1 ? '/news' : `/news/${n}`)
     }
   }
 })
@@ -215,7 +213,7 @@ if (import.meta.client) {
 }
 
 const {data: moreData, pending, error} = await useAsyncData(
-  'news-more',
+  `news-more-${page.value}`,
   async () => {
     const config = useRuntimeConfig()
     const {data} = await $fetch<IResultData<IPage<INews.MoreRow>>>(config.public.apiBase + TRADE_MODULE + '/news/more', {
@@ -256,13 +254,13 @@ const hasPrev = computed(() => page.value > 1)
 const hasNext = computed(() => page.value < totalPages.value)
 
 const origin = useRequestURL().origin
-const selfUrl = computed(() => (page.value === 1 ? `${origin}/news` : `${origin}/news?page=${page.value}`))
+const selfUrl = computed(() => (page.value === 1 ? `${origin}/news` : `${origin}/news/${page.value}`))
 const prevUrlAbs = computed(() => hasPrev.value
-  ? (page.value - 1 === 1 ? `${origin}/news` : `${origin}/news?page=${page.value - 1}`)
+  ? (page.value - 1 === 1 ? `${origin}/news` : `${origin}/news/${page.value - 1}`)
   : null
 )
 const nextUrlAbs = computed(() => hasNext.value
-  ? `${origin}/news?page=${page.value + 1}`
+  ? `${origin}/news/${page.value + 1}`
   : null
 )
 
@@ -273,6 +271,7 @@ useHead({
     ...(nextUrlAbs.value ? [{rel: 'next', href: nextUrlAbs.value}] : []),
   ],
   meta: [
+    ...(pageMeta["/news"]?.meta ?? []),
     {name: 'robots', content: 'index,follow'},
   ]
 })

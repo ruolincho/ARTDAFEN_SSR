@@ -28,49 +28,11 @@
                 />
                 <p class="text-14 f-bold">{{ currencyStore.formatToCurrency(Number(item.retailPrice) * Number(item.quantity)) }}</p>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 选择地址 -->
-        <div class="row gap-row-base address-list">
-          <template v-for="(item, index) in addressList" :key="item.id">
-            <div class="col-sm-6 col-12" v-if="isExpand ? true : index < 2">
-              <div class="address-item p-lg-20 p-15 border-sm border-gray-200 bg-gray-100">
-                <div class="acea-row row-between-wrapper">
-                <span class="text-20 f-bold">
-                  {{ item.firstName }} {{ item.lastName }} <el-tag type="primary" v-if="item.defaultFlag === '0'">Default</el-tag>
-                </span>
-                  <span
-                    class="iconfont text-24 cursor-pointer"
-                    :class="[item.id === addressId ? 'icon-checkbox-fill' : 'icon-checkbox']"
-                    @click="handleAddress(item.id)"
-                  ></span>
-                </div>
-                <p class="mt-10 text-14 line1">{{ item.mobile }}</p>
-                <p class="mt-10 mb-lg-20 mb-15 text-14 line1">{{ item.detail }}</p>
-                <el-button type="primary" class="w-full" size="large" @click="openAddEdit('Edit address', item, false)">
-                  Edit
-                </el-button>
+              <div class="mt-10 text-right text-secondary f-bold">
+                <p v-for="(promo, promoIndex) in item.promoOffer" :key="promoIndex">{{  promo  }}</p>
               </div>
             </div>
-          </template>
-          <div class="col-sm-6 col-12" v-if="isExpand || addressList.length < 2">
-            <div
-              class="address-item h-full border-sm border-gray-200 bg-gray-100 acea-row row-center-wrapper cursor-pointer"
-              @click="openAddEdit('Add a new address')"
-            >
-              <span class="iconfont icon-add text-20"></span>
-              <span class="text-16 f-bold-500 ml-10">Add Address</span>
-            </div>
           </div>
-        </div>
-        <div class="acea-row row-center-wrapper py-20 cursor-pointer"
-             @click="isExpand = !isExpand"
-             v-if="addressList.length >= 2"
-        >
-          <span class="mr-10 text-16 f-bold-500">{{ isExpand ? 'Less' : 'More' }} Address</span>
-          <span class="iconfont text-20" :class="{ 'icon-down': !isExpand, 'icon-up': isExpand}"></span>
         </div>
       </div>
       <div class="review-summary shadow-lg p-xl-20 p-15">
@@ -88,26 +50,39 @@
             </el-input>
           </el-form-item>
         </el-form>
-        <div class="acea-row row-right row-center text-error" v-if="discountDetail?.discountAmount">
+        <div class="acea-row row-right row-center text-error mb-10" v-if="isDiscount">
           <span class="text-14">not using discounts <span class="iconfont icon-close text-14 cursor-pointer" @click="delCode" /></span>
         </div>
+        <div class="text-16">
+          Promo codes cannot be combined with sitewide promos or markdown items.
+        </div>
         <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
-          <span>Delivery Amount</span>
-          <span>{{ currencyStore.formatToCurrency(offerData.deliveryAmount || 0)  }}</span>
+          <span>Estimated Shipping</span>
+          <span>{{ currencyStore.formatToCurrency(offerData.estimatedDeliveryAmount || 0)  }}</span>
         </div>
         <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
           <span>Discount Amount</span>
-          <span>{{ currencyStore.formatToCurrency(Number(offerData.discountAmount || 0) + Number(discountDetail.discountAmount || 0))}}</span>
+          <span>{{ currencyStore.formatToCurrency(Number(offerData?.discountAmount || 0)) }}</span>
         </div>
         <div class="acea-row row-between-wrapper text-16 f-bold pt-20 my-20 border-t-sm border-gray-200">
-          <span>Grand Total</span>
+          <span>Estimated Total</span>
           <div>
-            <p :class="[discountDetail.discountAmount ? 'text-through text-gray-600' : '']">{{ currencyStore.formatToCurrency(Number(offerData.actualAmount || 0) || cartStore.subtotal) }}</p>
-            <p v-if="discountDetail.discountAmount">{{ currencyStore.formatToCurrency((Number(offerData.actualAmount || 0) - Number(discountDetail.discountAmount || 0)) || cartStore.subtotal) }}</p>
+            <!-- 优惠之前的金额（需要加上预计运费） -->
+            <p v-if="offerData?.discountAmount > 0" class="text-through text-gray-600">{{ currencyStore.formatToCurrency(Number(offerData.originalAmount || 0) + Number(offerData.estimatedDeliveryAmount || 0)) }}</p>
+            <!-- 实付金额 -->
+            <p>{{ currencyStore.formatToCurrency(Number(offerData.estimatedAmount || 0) || cartStore.subtotal) }}</p>
           </div>
         </div>
         <div id="paypal-button-container" class="paypal-button-container"></div>
-        <!--        <el-button type="primary" size="large" class="w-full" @click="test">Proceed to Checkout</el-button>-->
+        <div class="mt-15 text-16">
+          The estimated shipping will be confirmed once you added your shipping address in checkout.
+        </div>
+        <div class="mt-15 acea-row row-middle">
+          <span class="mr-5 text-16">Promotion Rules</span>
+          <el-tooltip :content="PromotionRuleText" placement="top" popper-style="max-width: 345px;">
+            <span class="iconfont icon-info-fill text-30"></span>
+          </el-tooltip>
+        </div>
       </div>
     </div>
     <div class="text-center py-60" v-show="canCarts.length === 0">
@@ -119,7 +94,6 @@
       </el-button>
     </div>
   </div>
-  <AddressInfo ref="addressInfoRef" @add="addAddressCB"/>
   <PaySuccessPopup :trade-no="tradeNo" ref="paySuccessPopupRef"/>
   <LoginWindow ref="loginWindowRef"/>
 </template>
@@ -129,26 +103,16 @@ import type {OnApproveActions, OnApproveData} from "@paypal/paypal-js/types/comp
 import {debounce, imagePrefix} from "~/utils";
 import {useCartStore} from "~/stores/modules/cart";
 import {useUserStore} from '~/stores/modules/user'
-import AddressInfo from "~/components/AddressInfoForm.vue";
 import PaySuccessPopup from "~/components/PaySuccessPopup.vue";
 import LoginWindow from "~/components/LoginWindow.vue";
-import {
-  addAddressApi,
-  detailAddressApi,
-  editAddressApi,
-  getAddressListApi,
-  getDefaultAddressApi
-} from "~/api/modules/address/address";
 import {type ElForm, ElMessage} from "element-plus";
-import type {IAddress} from "~/api/interface/address/address";
 import type {IShopping} from "~/api/interface/shopping/shopping";
 import {confirmOrderApi, createOrderApi} from "~/api/modules/shopping/shopping";
 import {paymentApi, paymentCallbackApi} from "~/api/modules/pay/pay";
 import {PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
-import {discountCalcApi} from "~/api/modules/physical/physical";
-import type {IPhysical} from "../api/interface/physical/physical";
 import { initPaypal } from '~/composables/usePayment'
+import {isEqual} from "lodash-es";
 
 defineOptions({
   name: 'Cart'
@@ -157,9 +121,7 @@ defineOptions({
 onMounted(() => {
   if (canCarts.value.length > 0) {
     loadPaypal()
-    if (userStore.isLogin) {
-      _init()
-    }
+    _init()
   }
   $bus.emit('closeCartWindow')
   $bus.on('loginSuccess', _init)
@@ -170,9 +132,7 @@ onUnmounted(() => {
 })
 
 const _init = async () => {
-  await getDefaultAddress()
   await confirmOrder()
-  await getAddressList()
 }
 
 const {$bus} = useNuxtApp()
@@ -181,7 +141,8 @@ const userStore = useUserStore()
 const cartStore = useCartStore();
 const currencyStore = useCurrencyStore();
 
-const isExpand = ref(false)
+const PromotionRuleText = '*Promotion applies to order total before shipping, taxes, and duties. Promotions that involve a price reduction may take a variety of forms, including strikethrough prices or a discount code (e.g., percent-off or dollar-off discount code) that is applied by the customer at checkout (collectively “Product Discounts”). Promotional offers may be used one time only per household. Only one discount or promotional offer may be used per item. “Bonus Discounts” that are automatically applied to your order total may not be combined with one-time use discount codes or gift codes. Discounts will not be applied to previous or existing orders, We offer fair shipping rates based on the size and quantity of the items in an order. Final shipping charges will be calculated during checkout.'
+
 const form = reactive({
   discountCode: ''
 })
@@ -206,24 +167,6 @@ const loadPaypal = async () => {
 
 const remarks = ref({})
 
-// 获取默认地址
-const addressId = ref('')
-const getDefaultAddress = async () => {
-  const {data} = await getDefaultAddressApi()
-  if (!data) {
-    ElMessage.warning('Address information not found, please add address information first.')
-    return
-  }
-  addressId.value = data.id
-}
-
-// 获取地址列表
-const addressList = ref<IAddress.Row[]>([])
-const getAddressList = async () => {
-  const {data} = await getAddressListApi()
-  addressList.value = data
-}
-
 // 确认订单
 const shoppingCartData = ref<IShopping.ShoppingCartsRow[]>([])
 const offerData = ref({} as IShopping.OfferRow)
@@ -243,42 +186,62 @@ const confirmOrder = async () => {
 
   const params: IShopping.OfferQuery = {
     shoppingCarts: shoppingCartData.value,
-    addressId: addressId.value,
-    deliveryType: '0',
+    couponCode: isDiscount.value ? form.discountCode : null,
   }
 
-  const {data} = await confirmOrderApi(params)
-  offerData.value = data
+  try {
+    const {data} = await confirmOrderApi(params)
+    const products = data?.detail[0]?.products || []
+    offerData.value = data
+
+    // 匹配优惠
+    // if (products.length > 0) {
+    //   cartStore.carts.forEach(item1 => {
+    //
+    //     item1.promoOffer = []
+    //
+    //     for (const item2 of products) {
+    //       if (
+    //         item1.specsId === item2.specsId &&
+    //         item1.dimensionId === item2.dimensionId &&
+    //         isEqual(item1.parts, item2.parts)
+    //       ) {
+    //         item1.promoOffer = item2.promoOffer || []
+    //       }
+    //     }
+    //   });
+    // }
+
+    // 匹配优惠
+    if (products.length > 0) {
+      // 创建产品映射表，以唯一标识为键
+      const productMap = new Map();
+
+      // 构建映射表 O(m)
+      products.forEach(item => {
+        const key = `${item.specsId}_${item.dimensionId}_${JSON.stringify(item.parts)}`;
+        productMap.set(key, item.promoOffer || []);
+      });
+
+      // 查找匹配项 O(n)
+      cartStore.carts.forEach(item => {
+        const key = `${item.specsId}_${item.dimensionId}_${JSON.stringify(item.parts)}`;
+        item.promoOffer = productMap.get(key) || [];
+      });
+    }
+
+  } catch (err) {
+    setTimeout(() => {
+      form.discountCode = ''
+      isDiscount.value = false
+    }, 1000)
+  }
 }
 
 // 数量变化
 const quantityChange = debounce(() => {
-  if (userStore.isLogin) confirmOrder()
-})
-
-// 地址变化
-const handleAddress = (id: string) => {
-  if (addressId.value === id) return
-  addressId.value = id
   confirmOrder()
-}
-
-const addressInfoRef = ref<InstanceType<typeof AddressInfo>>()
-const openAddEdit = async (title: string, row: any = {}, isAdd = true) => {
-  if (!userStore.isLogin) return showLoginWindow()
-  if (!isAdd) {
-    const record = await detailAddressApi(row?.id)
-    row = record?.data
-  }
-  const params = {
-    isAdd,
-    title,
-    row: {...row},
-    api: isAdd ? addAddressApi : editAddressApi,
-    getTableList: getAddressList
-  }
-  addressInfoRef.value?.acceptParams(params)
-}
+})
 
 const paySuccessPopupRef = ref<InstanceType<typeof PaySuccessPopup>>()
 
@@ -286,26 +249,14 @@ const paySuccessPopupRef = ref<InstanceType<typeof PaySuccessPopup>>()
 const tradeNo = ref('')
 const createOrderCallback = async () => {
   try {
-    if (!userStore.isLogin) {
-      showLoginWindow()
-      throw new Error("Please login first.");
-    }
-
-    if (addressId.value === '') {
-      ElMessage.error('Please select the address first.')
-      throw new Error("Please select the address first.");
-    }
-
     const params = {
-      actualAmount: String(Number(offerData.value?.actualAmount || 0) - Number(discountDetail.value?.discountAmount || 0)),
+      actualAmount: String(Number(offerData.value?.originalAmount || 0) - Number(offerData.value?.discountAmount || 0)),
       spentPoints: offerData.value.spentPoints,
       shoppingCarts: shoppingCartData.value,
-      addressId: addressId.value,
       remarks: remarks.value,
-      deliveryType: '0',
     } as  IShopping.CreateQuery
 
-    if (discountDetail.value?.discountAmount) {
+    if (isDiscount.value) {
       params['couponCode'] = form.discountCode
     }
 
@@ -372,36 +323,41 @@ const showLoginWindow = () => {
 
 const removeCart = (index: number) => {
   cartStore.remove(index)
-  if (canCarts.value.length > 0 && userStore.isLogin) confirmOrder()
-}
-
-// 添加地址的回调
-const addAddressCB = (id: string) => {
-  addressId.value = id
-  confirmOrder()
+  if (canCarts.value.length > 0) confirmOrder()
 }
 
 // 应用优惠券
 const isDiscount = ref(false)
-const discountDetail = ref({} as IPhysical.DiscountCalcRow)
 const formRef = ref<InstanceType<typeof ElForm>>()
 const applyCode = () => {
+  if (!userStore.isLogin) {
+    ElMessage({
+      message: 'You can only apply coupons after logging in!',
+      type: 'warning',
+      duration: 2000,
+      showClose: true,
+      onClose: () => {
+        showLoginWindow()
+      }
+    })
+    return
+  }
+
   formRef.value!.validate(async valid => {
     if (!valid) return;
-    const {data} = await discountCalcApi({
-      couponCode: form.discountCode,
-      shoppingCarts: shoppingCartData.value
-    })
-    discountDetail.value = data
     isDiscount.value = true
+    try {
+      await confirmOrder()
+    } catch (e) {
+      isDiscount.value = false
+    }
   });
 }
 const delCode = () => {
   form.discountCode = ''
-  discountDetail.value = {} as IPhysical.DiscountCalcRow
   isDiscount.value = false
+  confirmOrder()
 }
-
 </script>
 
 <style scoped lang="scss">

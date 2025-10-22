@@ -1,7 +1,6 @@
 <template>
   <!--规格选择-->
   <section>
-
     <!-- 移动兼容 -->
     <div class="app-preview aspect-ratio" v-if="!appStore.isPc">
       <div class="img-wrapper acea-row row-center-wrapper flex-1 scroll-y">
@@ -60,7 +59,7 @@
 
     <div class="container">
       <div class="spu-wrapper row pt-md-50 pt-20">
-        <div class="col-sm-6" v-if="appStore.isPc">
+        <div class="col-sm-7" v-if="appStore.isPc">
           <el-skeleton :loading="isSkeleton" animated>
             <template #template>
               <el-skeleton-item variant="image" style="width: 100%; height: 34vw"/>
@@ -150,7 +149,7 @@
             </div>
           </el-skeleton>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-5">
           <el-skeleton :loading="isSkeleton" animated>
             <template #template>
               <div>
@@ -262,7 +261,7 @@
               <div class="p-md-20 p-15">
                 <div class="frame-scroll scroll-y border-sm p-10">
                   <div class="frame-list row">
-                    <div class="col-2xl-2 col-xl-average col-md-3 col-xs-3 col-4"
+                    <div class="col-2xl-2 col-xl-average col-md-3 col-sm-4 col-xs-3 col-4"
                          v-for="(item, index) in frameOptions" :key="item.id">
                       <div
                         class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
@@ -561,6 +560,47 @@
     </div>
   </section>
 
+  <!-- 客户评价 -->
+  <section class="mt-lg-60 mt-sm-20">
+    <div class="container">
+      <div class="py-sm-30 py-20 acea-row row-middle">
+        <span class="text-26 f-bold mr-10">Comment({{ commentTotal }})</span>
+<!--        <el-rate-->
+<!--          v-model="rate"-->
+<!--          disabled-->
+<!--          size="small"-->
+<!--          style="height: auto"-->
+<!--        />-->
+      </div>
+      <ProInfinite
+        ref="proInfiniteRef"
+        :request-api="_getCommentList"
+        :initParam="{productId: route.params.id}"
+      >
+        <template #default="scope">
+          <div class="reviews-list">
+            <div class="reviews-item" v-for="item in scope.rows" :key="item.id">
+              <img class="w-full" :src="imagePrefix(item.img)" :alt="item.name">
+              <div class="p-content border-sm">
+                <div class="p-10">
+                  <p class="text-18 f-bold-500">{{ item.name }}</p>
+                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>
+                  <el-rate
+                    v-model="item.rating"
+                    disabled
+                    size="small"
+                    style="height: auto"
+                  />
+                  <p class="text-16 mt-md-10 mt-5" style="line-height: 1.5">{{ item.content }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </ProInfinite>
+    </div>
+  </section>
+
   <el-dialog v-model="centerDialogVisible" title="Summary of Differences" width="720" center>
     <span>
       It should be noted that the content will not be aligned in center by
@@ -645,6 +685,10 @@ import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {packQuery} from "~/composables/useQueryShort";
 import {useCustomProductJsonLd} from "~/composables/useCustomProductJsonLd";
+import type {IMessage} from "~/api/interface/message/message";
+import {getCommentList} from "~/api/modules/message/message";
+import ProInfinite from "~/components/ProInfinite.vue";
+import {formatTimestamp} from "~/utils/format";
 
 defineOptions({
   name: 'PaintDetail'
@@ -680,6 +724,7 @@ const generatorImg = ref('') // 最终图片
 const pixel = ref({width: 0, height: 0}) // 最终尺寸
 const imgViewVisible = ref(false)
 const centerDialogVisible = ref(false)
+const rate = ref(4)
 
 // 生成步骤索引
 const generateStepIndex = () => {
@@ -870,7 +915,7 @@ const frameMoney = computed(() => {
     if (currentMaterialId.value === '') { // 没有选择卡纸
       return price + surcharge + Number((innerFrame.value?.price || 0))
     } else {
-      return price + surcharge
+      return price  + surcharge
     }
   }
 })
@@ -961,7 +1006,7 @@ const addToCart = () => {
     redeemPoints: goodsDetail.value.redeemPoints, // 商品积分
     img: goodsDetail.value.img.split('?')[0], // 商品图片
     shopId: goodsDetail.value.merchant?.id, // 商家编号
-    specsId: currentSpecId, // 商品规格编号
+    specsId: currentSpecId.value, // 商品规格编号
     specs: specs.value, // 商品规格值
     quantity: 1, // 购买数量
     dimensionId: currentSizeId.value, // 尺寸编号
@@ -1049,6 +1094,16 @@ const loginWindowRef = ref<InstanceType<typeof LoginWindow>>()
 const showLoginWindow = () => {
   loginWindowRef.value?.open()
 }
+
+// 获取买家秀数据
+const _getCommentList = (params: IMessage.CommentQuery) => getCommentList(params)
+
+const proInfiniteRef = ref<InstanceType<typeof ProInfinite>>()
+
+const commentTotal = computed(() => {
+  return proInfiniteRef.value?.pageable?.total || 0
+})
+
 </script>
 
 <style scoped lang="scss">
@@ -1251,6 +1306,28 @@ const showLoginWindow = () => {
   }
 }
 
+.reviews-list {
+  column-count: 4; /* 列数 */
+  column-gap: 26px; /* 列间距 */
+
+  .reviews-item {
+    break-inside: avoid; /* 防止内容被分割到不同列 */
+    margin-bottom: 26px; /* 项目间距 */
+    display: block;
+
+    .product-list {
+
+      .product-item {
+        .p-img {
+          width: 48px;
+          height: 48px;
+        }
+      }
+
+    }
+
+  }
+}
 
 :deep(.swiper-pagination-lock),
 :deep(.swiper-button-lock) {
@@ -1323,6 +1400,37 @@ const showLoginWindow = () => {
     }
   }
 
+  .reviews-list {
+    column-count: 3; /* 列数 */
+    column-gap: 20px; /* 列间距 */
+
+    .reviews-item {
+      margin-bottom: 20px; /* 项目间距 */
+    }
+  }
+
+}
+
+@media (max-width: 991px) {
+  .reviews-list {
+    column-count: 2; /* 列数 */
+    column-gap: 15px; /* 列间距 */
+
+    .reviews-item {
+      margin-bottom: 15px; /* 项目间距 */
+
+      .product-list {
+
+        .product-item {
+          .p-img {
+            width: 35px;
+            height: 35px;
+          }
+        }
+
+      }
+    }
+  }
 }
 
 @media (max-width: 768px) {

@@ -88,7 +88,7 @@
             </div>
           </ClientOnly>
           <div class="operation-item acea-row row-middle currency">
-            <span class="operation-text">{{ currencyStore.currentCurrency }}</span>
+            <span class="operation-text ignore">{{ currencyStore.currentCurrency }}</span>
             <span class="iconfont icon-down"></span>
             <ul class="currency-list">
               <li
@@ -96,7 +96,7 @@
                 :key="item.id"
                 @click="currencyStore.setCurrentCurrency(item.code)"
               >
-                {{ item.code }} - {{ item.name }}
+                <span class="ignore">{{ item.code }}</span> - {{ item.name }}
               </li>
             </ul>
           </div>
@@ -118,24 +118,24 @@
             :space-between="40"
             slides-per-view="auto"
           >
-            <swiper-slide class="slide" v-for="subMenu in currentDropdownMenu.children" :key="subMenu.name">
+            <swiper-slide class="slide" v-for="subMenu in currentDropdownMenu?.children" :key="subMenu.name">
               <div class="drop-menu">
                 <dl>
-                  <dt @click="clickNavSecond(currentDropdownMenu, subMenu)">
+                  <dt @click="clickNavSecond(currentDropdownMenu!, subMenu)">
                     {{ subMenu.name }}
                     <span class="iconfont icon-right"/>
                   </dt>
                   <dd
-                    v-if="currentDropdownMenu.name === ARTIST_MENU_NAME && subMenu.config.type === 'ARTIST'"
+                    v-if="currentDropdownMenu?.name === ARTIST_MENU_NAME && subMenu.config.type === 'ARTIST'"
                     @click="() => {hideDropdown(); router.push(`/artists-top?categoryId=${subMenu.id}`)}"
                   >
                     TOP 50 {{ subMenu.name }} <span class="iconfont icon-right"/>
                   </dd>
                   <dd v-for="subitem in subMenu.children" :key="subitem.name"
-                      @click="clickNavThird(subitem, subMenu.config.type, currentDropdownMenu)">{{ subitem.name }}
+                      @click="clickNavThird(subitem, subMenu.config.type, currentDropdownMenu!)">{{ subitem.name }}
                   </dd>
                   <dd
-                    v-if="currentDropdownMenu.name === ARTIST_MENU_NAME && subMenu.config.type === 'ARTIST'"
+                    v-if="currentDropdownMenu?.name === ARTIST_MENU_NAME && subMenu.config.type === 'ARTIST'"
                     @click="() => {hideDropdown(); router.push(`/artists-brief?categoryId=${subMenu.id}`)}"
                   >
                     All <span class="iconfont icon-right"/>
@@ -213,7 +213,7 @@
       <ul class="nav-list">
         <li class="P_parent" :class="{ open: openCurrencyApp }" @click="openCurrencyApp = !openCurrencyApp">
           <div class="cate-item">
-            <div class="category-a">{{ currencyStore.currentCurrency }}</div>
+            <div class="category-a ignore">{{ currencyStore.currentCurrency }}</div>
             <div class="category-tig P_tig">
               <span><i class="iconfont icon-down"></i></span>
             </div>
@@ -226,7 +226,7 @@
                 :key="item.id"
                 @click="currencyStore.setCurrentCurrency(item.code)"
               >
-                {{ item.code }} - {{ item.name }}
+                <span class="ignore">{{ item.code }}</span> - {{ item.name }}
               </div>
             </div>
           </div>
@@ -255,15 +255,6 @@
           </div>
         </li>
       </ul>
-
-      <!--      <el-select v-model="currencyStore.currentCurrency" class="mt-15">-->
-      <!--        <el-option-->
-      <!--          v-for="item in currencyStore.currencyList"-->
-      <!--          :key="item.code"-->
-      <!--          :label="item.name"-->
-      <!--          :value="item.code"-->
-      <!--        />-->
-      <!--      </el-select>-->
     </div>
   </header>
   <div :style="{ height: 50 + 'px' }" v-show="!appStore.isPc"/>
@@ -415,7 +406,7 @@ const unlockScrolling = () => {
 // 悬浮菜单显示下沉导航
 const showDropdown = (index: number) => {
   // 如果没有子菜单则不显示下沉导航
-  const hasChildren = headerList.value[index].children?.length
+  const hasChildren = headerList.value?.[index]?.children?.length
   if (hasChildren) {
     isDropdownVisible.value = true;
     lockScrolling()
@@ -456,8 +447,24 @@ const hideDropdown = () => {
  * @param index
  */
 const clickNavFirst = (firstMenu: IHome.MenuRow, index: number) => {
+
+  if (firstMenu.name === ARTIST_MENU_NAME) {
+    router.push('/artists-brief')
+    openMenu.value = false
+    hideDropdown()
+    return
+  }
+
+  if (firstMenu.name === 'Photo to art') {
+    router.push('/custom-paint?work=HPOP')
+    openMenu.value = false
+    hideDropdown()
+    return
+  }
+
   // 如果没有子菜单可以点击，则跳转到对应页面
-  const hasChildren = headerList.value[index].children?.length
+  const hasChildren = headerList.value?.[index]?.children?.length
+
   if (!hasChildren) {
     const q = packQuery({MENU_ID: firstMenu.id})
     router.push({
@@ -468,11 +475,6 @@ const clickNavFirst = (firstMenu: IHome.MenuRow, index: number) => {
     hideDropdown()
   } else if (appStore.device === 'app' && firstMenu.name !== ARTIST_MENU_NAME) {
     toggleMenu(index)
-  }
-  if (firstMenu.name === ARTIST_MENU_NAME) {
-    router.push('/artists-brief')
-    openMenu.value = false
-    hideDropdown()
   }
 }
 
@@ -495,7 +497,7 @@ const clickNavSecond = (firstMenu: IHome.MenuRow, secondMenu: IHome.MenuRow) => 
   // 跳转到筛选页面
   else {
     // 点击二级默认选中第一个三级菜单
-    clickNavThird(secondMenu.children[0], secondMenu.config.type, firstMenu)
+    clickNavThird(secondMenu.children[0]!, secondMenu.config.type, firstMenu)
   }
 
   if (appStore.device === 'app') {
@@ -537,13 +539,13 @@ const clickNavThird = (thirdMenu: IHome.MenuRow, subType: Dict.CategoryType, fir
 }
 
 // 当前下沉导航菜单（一级）
-const currentDropdownMenu = computed(() => headerList.value[activeNavIndex.value!])
+const currentDropdownMenu = computed(() => headerList.value?.[activeNavIndex.value!])
 
 // 当前路由
 const currentRouteText = computed(() => {
   let path = route.path
   if (route.query.q) {
-    const { MENU_ID } = unpackQuery(route.query.q)
+    const { MENU_ID } = unpackQuery(route.query.q as string)
     if (MENU_ID) {
       path += `_${MENU_ID}`
     }

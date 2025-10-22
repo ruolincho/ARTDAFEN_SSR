@@ -16,6 +16,13 @@
             <span class="iconfont icon-right ml-10"></span>
           </a>
         </el-button>
+        <el-button type="primary" size="large">
+          <a href="https://www.trustpilot.com/review/artdafen.com" target="_blank" rel="noopener">
+            <span class="iconfont icon-favorites-fill"></span>
+            Check our reviews on Trustpilot
+            <span class="iconfont icon-right ml-10"></span>
+          </a>
+        </el-button>
       </div>
       <div class="social-icon acea-row gap-base">
         <a href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">

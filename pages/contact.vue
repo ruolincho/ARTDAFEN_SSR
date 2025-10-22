@@ -77,7 +77,7 @@
 <script setup lang="ts">
 
 import {useHead} from "#imports";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 
 const route = useRoute()
 

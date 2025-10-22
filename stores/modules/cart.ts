@@ -3,6 +3,7 @@ import {computed, ref} from 'vue';
 import piniaPersistConfig from "../helper/persist";
 import type {IShopping} from "~/api/interface/shopping/shopping";
 import {shoppingPreCheckApi} from "~/api/modules/shopping/shopping";
+import {isEqual} from "lodash-es";
 
 export const useCartStore = defineStore(
     'cart',
@@ -12,29 +13,16 @@ export const useCartStore = defineStore(
         // 可以购买的商品
         const canCarts = computed(() => carts.value.filter(item => item.disable !== true))
 
-        // 规范化 parts 对象，使键的顺序一致
-        function normalizeParts(parts?: Record<string, any> | null) {
-            if (!parts) return null; // 处理 null
-            return JSON.stringify(
-                Object.keys(parts)
-                    .sort() // 确保键顺序一致
-                    .reduce<Record<string, string>>((obj, key) => {
-                        obj[key] = parts[key];
-                        return obj;
-                    }, {})
-            );
-        }
-
         // 添加购物车商品
         function addition(cart: IShopping.ShoppingCartsStorageRow) {
             // 查找购物车中是否已有相同的商品
             const existingItem = carts.value.find(item =>
                 item.specsId === cart.specsId &&
                 item.dimensionId === cart.dimensionId &&
-                normalizeParts(item.parts) === normalizeParts(cart.parts)
+                isEqual(item.parts, cart.parts)
             );
 
-            console.log('existingItem', existingItem)
+            // console.log('existingItem', existingItem)
 
             if (existingItem) {
                 // 如果找到相同的商品，则增加数量
@@ -92,7 +80,11 @@ export const useCartStore = defineStore(
             const { data } = await shoppingPreCheckApi(params)
 
             carts.value.forEach((cart, index) => {
-                const checkItem = data.find(i => i.specsId === cart.specsId && i.dimensionId === cart.dimensionId && normalizeParts(i.parts) === normalizeParts(cart.parts))
+                const checkItem = data.find(i =>
+                    i.specsId === cart.specsId &&
+                    i.dimensionId === cart.dimensionId &&
+                    isEqual(i.parts, cart.parts)
+                )
                 if (checkItem) {
                     cart.retailPrice = checkItem.retailPrice
                     cart.disable = checkItem.disable

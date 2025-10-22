@@ -1,6 +1,7 @@
 import { $http } from '~/api/http'
 import {TRADE_MODULE, USER_MODULE} from "~/api/helper/prefix";
 import type {IMessage} from "~/api/interface/message/message";
+import type {IPage} from "~/api/interface";
 
 /**
  * 消息订阅（匿名）
@@ -23,4 +24,19 @@ export const subscribeForRealName = () => {
  */
 export const sendConsulting = (params: IMessage.Query) => {
     return $http().post(TRADE_MODULE + `/message/send`, params)
+}
+
+/**
+ * 查询最新评论列表
+ */
+export const getLatestComment = () => {
+    return $http().get<IMessage.CommentRes[]>(TRADE_MODULE + `/message/comment/latest`)
+}
+
+/**
+ * 获取博客列表
+ * @param params
+ */
+export const getCommentList = (params: IMessage.CommentQuery) => {
+    return $http().post<IPage<IMessage.CommentRes>>(TRADE_MODULE + `/message/comment/page`, params)
 }

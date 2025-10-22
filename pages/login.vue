@@ -118,6 +118,12 @@ const toGoogleAuth = () => {
   window.localStorage.setItem(STORAGE_BACK_URL, HOME_URL)
   $google.oAuth()
 }
+
+useHead({
+  meta: [
+    {name: 'robots', content: 'index,follow'},
+  ]
+})
 </script>
 
 <style scoped lang="scss">

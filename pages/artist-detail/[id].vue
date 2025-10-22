@@ -118,7 +118,7 @@ const userStore = useUserStore()
 const currencyStore = useCurrencyStore();
 
 // 获取详情
-const artistDetail = ref({} as any)
+const artistDetail = ref({} as ObjectNode.Creator)
 const getDetail = async () => {
   const {data} = await getArtistDetailApi(route.params.id as string)
   artistDetail.value = data

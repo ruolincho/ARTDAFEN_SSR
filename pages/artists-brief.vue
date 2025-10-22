@@ -53,7 +53,7 @@ import {getArtistsListApi} from "~/api/modules/artists/artists";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
-import { pageMeta } from "~/composables/pageMeta";
+import { pageMeta } from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 
 defineOptions({

@@ -86,7 +86,7 @@ const menuList = [
   {name: 'Personal Information', icon: 'icon-customer', path: '/account/profile'},
   {name: 'My Orders', icon: 'icon-goods', path: '/account/orders'},
   {name: 'My Wishlists', icon: 'icon-follow', path: '/account/favorites'},
-  {name: 'Manage Addresses', icon: 'icon-location', path: '/account/addresses'},
+  // {name: 'Manage Addresses', icon: 'icon-location', path: '/account/addresses'},
   // {name: 'Saved Cards', icon: 'icon-money-wallet', path: '/account/payments'},
 ]
 

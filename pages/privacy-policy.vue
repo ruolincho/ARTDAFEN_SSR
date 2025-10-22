@@ -593,7 +593,7 @@
 
 <script setup lang="ts">
 import {CONTACT_EMAIL} from "~/config";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 
 const route = useRouter();
 useHead(pageMeta[route.path] ?? pageMeta["/privacy-policy"]);

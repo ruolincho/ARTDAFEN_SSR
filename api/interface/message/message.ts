@@ -1,3 +1,5 @@
+import type {IPageQuery} from "~/api/interface";
+
 export namespace IMessage {
 
     export interface Query {
@@ -8,4 +10,27 @@ export namespace IMessage {
         /*消息 */
         message: string;
     }
+
+    export interface CommentRes {
+        /*评论ID */
+        id: string;
+        /*用户名 */
+        name: string;
+        /*图片 */
+        img: string;
+        /*评分 */
+        rating: number;
+        /*内容 */
+        content: string;
+        /*创建时间 */
+        createTime: number;
+        /* */
+        product: General.GoodsItem;
+    }
+
+    export interface CommentQuery extends IPageQuery {
+        /*产品编号 */
+        productId?: number;
+    }
+
 }

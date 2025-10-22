@@ -21,7 +21,7 @@ export namespace IShopping {
         /*尺寸编号 */
         dimensionId?: string | null;
         /*已选油画配件列表, key: 配件编号, value: 已选配件规格 */
-        parts?: Record<string, any> | null;
+        parts?: Record<string, any>;
         /*购买数量 */
         quantity: number;
         /*零售价 */
@@ -32,6 +32,8 @@ export namespace IShopping {
         disable?: boolean;
         /*零售库存*/
         retailStock?: string | number;
+        /*优惠信息*/
+        promoOffer?: string[];
     }
 
     /** 购物车数据 */
@@ -56,6 +58,8 @@ export namespace IShopping {
         redeemPoints?: string | number;
         /*分销代码 */
         salesCode?: string;
+        /*优惠信息*/
+        promoOffer?: string[];
     }
 
     /** 确认订单接口请求参数 */
@@ -63,19 +67,23 @@ export namespace IShopping {
         /*购物车列表 */
         shoppingCarts: ShoppingCartsRow[];
         /*配送类型*/
-        deliveryType: Dict.DeliveryType;
+        deliveryType?: Dict.DeliveryType;
         /*用户收货地址编号/商户自提点编号 */
         addressId?: string;
+        /*优惠券编码*/
+        couponCode?: string | null;
     }
 
     /** 确认订单接口返回参数 */
     export interface OfferRow {
+        /*原价*/
+        originalAmount: string
         /*优惠金额*/
         discountAmount: string
-        /*运费金额*/
-        deliveryAmount: string
-        /*实付金额*/
-        actualAmount: string
+        /*预计运费金额*/
+        estimatedDeliveryAmount: string
+        /*预计实付金额*/
+        estimatedAmount: string
         /*积分抵扣数*/
         spentPoints: string
         /*店铺费用明细*/
@@ -96,6 +104,8 @@ export namespace IShopping {
         deliveryTemplate: {}
         /*赠品*/
         gifts: GiftsRow[]
+        /*商品列表*/
+        products: ShoppingCartsRow[]
     }
 
     /** 赠品数据 */

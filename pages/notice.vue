@@ -41,7 +41,7 @@ import {getNoticeListApi} from "~/api/modules/notice/notice";
 import type {IPageQuery} from "~/api/interface";
 import ProList from "~/components/ProList/index.vue";
 import {formatTimestamp} from "~/utils/format";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 
 const route = useRouter();
 useHead(pageMeta[route.path] ?? pageMeta["/notice"]);

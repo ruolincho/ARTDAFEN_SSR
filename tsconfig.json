@@ -3,16 +3,19 @@
   "compilerOptions": {
     "types": [
       "element-plus/global",
-      "@types/node"
+      "@types/node",
+      "@nuxt/types"
     ],
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "~~/*": ["./*"]  // 补充Nuxt常用别名
     }
   },
   "include": [
     "types/**/*.d.ts",
-    "env.d.ts"
+    "env.d.ts",
+    ".nuxt/**/*.ts"  // 包含.nuxt生成文件
   ]
 }

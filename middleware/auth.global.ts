@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to) => {
     const userStore = useUserStore()
     const currencyStore = useCurrencyStore()
 
-    // 1) SSR：从 Cookie 恢复 token，防止刷新误判未登录
+    // 1) SSR：从 Cookie 恢复 token，防止刷新误判未登录, 同时恢复货币选择
     if (import.meta.server) {
         const token = getCookie(useRequestEvent()!, 'auth_token') // 确保登录时也写了同名 Cookie
         const currency: string = getCookie(useRequestEvent()!, 'currency_code')

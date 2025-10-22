@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import {CONTACT_EMAIL} from "@/config";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 
 const route = useRoute()
 useHead(pageMeta[route.path] ?? pageMeta["/our-return-policy"]);

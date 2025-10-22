@@ -191,7 +191,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import {imagePrefix} from "~/utils";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 
 const bannerImage = imagePrefix('/static/artdafen/about-banner.webp');
 const modules = [Autoplay, Pagination, Navigation]

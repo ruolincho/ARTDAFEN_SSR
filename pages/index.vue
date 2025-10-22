@@ -352,6 +352,52 @@
     </div>
   </section>
 
+  <!--WHAT CUSTOMERS SAY-->
+  <section class="sec-review">
+    <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+      <h1 class="text-50">WHAT CUSTOMERS SAY</h1>
+    </div>
+
+    <el-skeleton :loading="isSkeletonComment" animated :count="4" class="review-skeleton">
+      <template #template>
+          <el-skeleton-item variant="image" style="width: 100%; height: 17vw"/>
+      </template>
+      <swiper
+        class="review-swiper"
+        :slidesPerView="'auto'"
+        :spaceBetween="4"
+        :centeredSlides="true"
+        :loop="true"
+        :autoplay="{ delay: 3000 }"
+        :modules="modules"
+        :navigation="true"
+      >
+        <swiper-slide v-for="item in commentData" :key="item.id">
+          <div class="review-item h-full w-full">
+            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.name">
+            <div class="p-content acea-row row-column nowrap p-20">
+              <div class="flex-1">
+                <p class="text-18 f-bold-500">{{ item.name }}</p>
+                <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>
+                <el-rate
+                  v-model="item.rating"
+                  disabled
+                  size="small"
+                  style="height: auto"
+                />
+                <p class="text-16 mt-md-10 mt-5 line4" style="line-height: 1.5">{{ item.content }}</p>
+              </div>
+              <el-button color="#fff" size="large" @click="router.push('/customer-reviews')">
+                View All Testimonials
+                <span class="iconfont icon-right ml-10"></span>
+              </el-button>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+    </el-skeleton>
+  </section>
+
   <LoginWindow ref="loginWindowRef"/>
 
   <PromoCode ref="promoCodeRef"/>
@@ -372,7 +418,7 @@ import {gen_path_obj} from "~/utils/product";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {ElMessage} from "element-plus";
-import {subscribeForRealName} from "~/api/modules/message/message";
+import {subscribeForRealName, getLatestComment} from "~/api/modules/message/message";
 import {useCustomStore} from "~/stores/modules/custom";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
@@ -380,8 +426,10 @@ import {ArtCode} from "~/types/enumeration.d";
 import {useUserStore} from "~/stores/modules/user";
 import LoginWindow from "~/components/LoginWindow.vue";
 import PromoCode from "~/components/PromoCode.vue";
-import {pageMeta} from "~/composables/pageMeta";
+import {pageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
+import type {IMessage} from "~/api/interface/message/message";
+import {formatTimestamp} from "~/utils/format";
 
 defineOptions({
   name: 'Home'
@@ -389,6 +437,7 @@ defineOptions({
 
 onMounted(() => {
   getHomeExplore()
+  _getLatestComment()
   if (route.query.couponId) showPromoCode(route.query.couponId)
 })
 
@@ -471,6 +520,16 @@ const promoCodeRef = ref<InstanceType<typeof PromoCode>>()
 const showPromoCode = (id: string) => {
   promoCodeRef.value?.open(id)
 }
+
+// 获取买家秀
+const commentData = ref<IMessage.CommentRes[]>([])
+const isSkeletonComment = ref(true)
+const _getLatestComment = async () => {
+  const {data} = await getLatestComment()
+  commentData.value = data.map(item => ({...item, rating: Number(item.rating)}))
+  isSkeletonComment.value = false
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -703,6 +762,69 @@ const showPromoCode = (id: string) => {
   }
 }
 
+.sec-review {
+  .review-swiper {
+
+    --swiper-navigation-color: #fff;
+    --swiper-navigation-size: 30px;
+
+    :deep(.swiper-slide) {
+      width: 340px;
+      aspect-ratio: 1 / 1;
+
+      &.swiper-slide-active .review-item .p-content {
+        top: 0;
+      }
+    }
+
+    :deep(.swiper-button-prev) {
+      left: clamp(15px, 3.125vw, 60px);
+    }
+
+    :deep(.swiper-button-next) {
+      right: clamp(15px, 3.125vw, 60px);
+    }
+
+    :deep(.swiper-button-prev),
+    :deep(.swiper-button-next) {
+      background: var(--color-primary);
+      width: 58px;
+      height: 90px;
+      margin-top: 0;
+      transform: translateY(-50%);
+    }
+
+    .review-item {
+      position: relative;
+      display: block;
+      overflow: hidden;
+
+      .p-content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        transition: top .38s ease-in;
+      }
+
+      &:hover {
+        .p-content {
+          top: 0;
+        }
+      }
+
+    }
+  }
+}
+
+.review-skeleton {
+  display: flex;
+  gap: 4px;
+}
+
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -811,6 +933,23 @@ const showPromoCode = (id: string) => {
           --gutter: var(--gutter-base);
           row-gap: var(--gutter-base);
         }
+      }
+    }
+  }
+
+  .sec-review {
+    .review-swiper {
+      --swiper-navigation-size: 20px;
+
+      :deep(.swiper-slide) {
+        width: 250px;
+        aspect-ratio: 1 / 1;
+      }
+
+      :deep(.swiper-button-prev),
+      :deep(.swiper-button-next) {
+        width: 38px;
+        height: 60px;
       }
     }
   }

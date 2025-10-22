@@ -139,8 +139,44 @@ const getFrameWidthPx = (
   return widthCm * scale;
 }
 
+// 添加缓存机制，使用 Map 存储，key 为序列化的 props 组合，value 为生成的 base64 URL
+const cache = ref(new Map<string, { src: string, pixel: PixelType; ratio: PixelType }>());
+
+// 生成缓存 key，基于所有影响绘制的 props
+const generateCacheKey = () => {
+  const propsForKey = {
+    // coreImage: props.coreImage,
+    hasMat: props.hasMat,
+    matThickness: props.matThickness,
+    matColor: props.matColor,
+    hasFrame: props.hasFrame,
+    frameCornerImages: props.frameCornerImages,
+    frameSideImages: props.frameSideImages,
+    frameCm: props.frameCm,
+    embeddedFrame: props.embeddedFrame,
+    sizeCm: props.sizeCm,
+  };
+  return JSON.stringify(propsForKey);
+}
+
 // 绘制函数
 const draw = async () => {
+  const key = generateCacheKey();
+
+  // 检查缓存
+  if (cache.value.has(key)) {
+    console.log('检测到缓存')
+    const cached = cache.value.get(key)!;
+    imageSrc.value = cached.src;
+    wRatio.value = cached.ratio.width;
+    hRatio.value = cached.ratio.height;
+    emit('update:modelValue', imageSrc.value);
+    emit('update:pixel', cached.pixel);
+    emit('change', imageSrc.value);
+    isLoading.value = false;
+    return;
+  }
+
   try {
     isLoading.value = true; // 开始加载，显示加载动画
     isError.value = false; // 隐藏错误信息
@@ -346,6 +382,8 @@ const draw = async () => {
 
     // 将 Canvas 转换为图片 URL
     imageSrc.value = canvas.toDataURL('image/png');
+    // 存入缓存
+    cache.value.set(key, { src: imageSrc.value, pixel: { width: totalWidth, height: totalHeight }, ratio: { width: wRatio.value, height: hRatio.value } });
     emit('update:modelValue', imageSrc.value); // 触发更新
     emit('update:pixel', {width: totalWidth, height: totalHeight}); // 触发更新
     emit('change', imageSrc.value); // 触发事件
