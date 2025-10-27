@@ -1,12 +1,11 @@
 <template>
   <div class="customer-widget">
-    <a
-      :href="`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('One-on-One Consultation')}`"
-      class="widget-btn"
-    >
-      <span class="iconfont icon-message "></span>
-    </a>
-
+<!--    <a-->
+<!--      :href="`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('One-on-One Consultation')}`"-->
+<!--      class="widget-btn"-->
+<!--    >-->
+<!--      <span class="iconfont icon-message "></span>-->
+<!--    </a>-->
     <a v-if="showBackTop" class="widget-btn" @click="scrollToTop" href="javascript:void(0)">
       <span class="iconfont icon-top "></span>
     </a>
@@ -44,8 +43,8 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .customer-widget {
   position: fixed;
-  right: 16px;
-  bottom: 80px;
+  right: 35px;
+  bottom: 100px;
   display: flex;
   flex-direction: column;
   gap: 12px;

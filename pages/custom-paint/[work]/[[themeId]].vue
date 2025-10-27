@@ -21,7 +21,7 @@
 
       <div class="row gap-row-base style-list">
         <div class="col-lg-average col-md-3 col-sm-4 col-6" v-for="item in themeOptions" :key="item.id">
-          <div class="style-item" :class="{on: themeIdMap[0] === item.id}" @click="chooseTheme(item, 0)">
+          <div class="style-item" :class="{on: themeIdMap[0] === item.id}" @click="chooseTheme(item.id)">
             <img class="p-img aspect-ratio" :src="imagePrefix(item.img)" alt="">
             <p class="p-text text-30">{{ item.name }}</p>
             <div class="p-btn border-white border-md">CUSTOMIZE NOW</div>
@@ -49,27 +49,8 @@
               />
             </div>
           </div>
-          <el-button class="w-full mt-15" type="primary" size="large" @click="chooseTheme(item)">Customize Now
+          <el-button class="w-full mt-15" type="primary" size="large" @click="chooseTheme(item.id)">Customize Now
           </el-button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 全部案例 -->
-    <div class="container" v-show="currentView === 'case'">
-      <div class="text-center py-lg-40 py-30">
-        <h1 class="text-50">CUSTOM PORTRAIT SHOWCASE — FROM YOUR PHOTO TO ART</h1>
-        <p class="mt-20 text-gray-600 text-20 f-bold-500 text-capitalize">
-          Discover how an ordinary photo transforms into extraordinary art. <br/> In our Custom Portrait Showcase,
-          you’ll see
-          real examples of before-and-after results — side-by-side comparisons revealing the remarkable detail, color,
-          and emotion that our artists bring to life.
-        </p>
-      </div>
-      <div class="case-waterfall">
-        <div class="item cursor-pointer overflow-hidden" v-for="(sample, index) in caseContrastData" :key="sample.id"
-             @click="showCaseContrast(caseContrastData, index)">
-          <img class="w-full img-hover " :src="imagePrefix(sample.paintImg)" alt="">
         </div>
       </div>
     </div>
@@ -86,9 +67,9 @@
           Photos.
         </p>
       </div>
-      <div class="row favorite-list gap-row-base">
+      <div class="row favorite-list gap-row-base" v-show="currentThemeOption">
         <div class="col-lg-3 col-sm-4 col-6" v-for="item in currentThemeOption?.children" :key="item.id">
-          <div class="favorite-item" :class="{ 'on': themeIdMap[1] === item.id }" @click="chooseStyle(item)">
+          <div class="favorite-item" :class="{ 'on': themeIdMap[1] === item.id }" @click="chooseStyle(item.id)">
             <img class="w-full aspect-ratio" :src="imagePrefix(item.img)" alt="">
             <p class="p-text text-28 line1 p-sm-20 p-15">{{ item.name }}</p>
             <div class="p-content">
@@ -96,6 +77,11 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="text-center py-60" v-show="!currentThemeOption">
+        <span class="iconfont icon-empty text-50"></span>
+        <p class="text-20 f-bold mt-20">No Data</p>
+        <p class="text-14 my-20">No data found, please check the query or try again later.</p>
       </div>
     </div>
 
@@ -154,7 +140,7 @@
           <ClientOnly>
             <!--示例图-->
             <div class="example-preview sticky-column" v-if="!imageUrl">
-              <template v-if="route.query.work === ArtCode.Painting && lastThemeObj">
+              <template v-if="route.params.work === ArtCode.Painting && lastThemeObj">
                 <div class="p-md-20 p-15 border-sm acea-row row-center-wrapper">
                   <div class="favorite-list" style="max-width: 450px">
                     <div class="favorite-item">
@@ -165,7 +151,7 @@
                 </div>
               </template>
               <template v-else>
-                <div class="example-preview-box row" v-for="(example, index) in exampleArr[route.query.work as CodeType]"
+                <div class="example-preview-box row" v-for="(example, index) in TECHNIQUE_EXAMPLE[route.params.work as CodeType]"
                      :key="index">
                   <div class="col-6">
                     <img :src="imagePrefix(example.photo)" alt="">
@@ -326,7 +312,7 @@
             <!--有上传图片-->
             <template v-else>
               <!--工艺/规格选择-->
-              <template v-if="route.query.work === ArtCode.Painting">
+              <template v-if="route.params.work === ArtCode.Painting">
                 <div class="acea-row row-between-wrapper p-md-20 p-15">
                   <div class="acea-row row-middle flex-1 mr-10">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
@@ -398,7 +384,7 @@
               </div>
 
               <!--复杂层度选择-->
-              <template v-if="route.query.work === ArtCode.Painting && !isPrint">
+              <template v-if="route.params.work === ArtCode.Painting && !isPrint">
                 <div class="acea-row row-between-wrapper p-20">
                   <div class="acea-row row-middle">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
@@ -653,7 +639,7 @@
     <div
       class="foot-wrapper"
       :style="{ position: currentView === 'custom' ? 'relative' : 'sticky' }"
-      v-if="route.query.work === ArtCode.Painting && currentView !== 'theme'"
+      v-if="route.params.work === ArtCode.Painting && currentView !== 'theme'"
     >
       <div class="container">
         <div class="foot-inner py-20">
@@ -676,71 +662,7 @@
   </section>
 
   <ClientOnly>
-    <div class="case-preview" v-show="isShowCaseContrast">
-      <div class="wrapper">
-        <div class="main-swiper-wrapper">
-          <swiper
-            class="main-swiper"
-            :modules="modules"
-            :navigation="{ nextEl: '.main-next', prevEl: '.main-prev' }"
-            :thumbs="{ swiper: thumbsSwiper }"
-            @swiper="onSwiper"
-          >
-            <swiper-slide
-              v-for="item in caseContrastData"
-              :key="item.id + '_main'"
-            >
-              <div class="contrast-wrapper">
-                <div class="contrast-item">
-                  <div class="header text-18 py-12 line1">🖼️ OUR PAINTING</div>
-                  <div class="content">
-                    <img class="w-full h-full fit-cover" :src="imagePrefix(item.paintImg)" alt=""/>
-                  </div>
-                </div>
-                <div class="contrast-item">
-                  <div class="header text-18 py-12 line1">📸 ORIGINAL PHOTO</div>
-                  <div class="content">
-                    <img class="w-full h-full fit-cover" :src="imagePrefix(item.actualImg)" alt=""/>
-                  </div>
-                </div>
-              </div>
-
-            </swiper-slide>
-          </swiper>
-          <div class="main-button main-next swiper-button-next"></div>
-          <div class="main-button main-prev swiper-button-prev"></div>
-        </div>
-        <div class="thumb-swiper-wrapper" v-if="appStore.isPc">
-          <swiper
-            class="thumb-swiper"
-            :modules="modules"
-            :space-between="10"
-            @swiper="setThumbsSwiper"
-            :breakpoints="{
-            767: {
-              slidesPerView: 5,
-            },
-            990: {
-              slidesPerView: 6,
-            },
-            1260: {
-              slidesPerView: 8,
-            },
-          }"
-          >
-            <swiper-slide
-              v-for="item in caseContrastData"
-              :key="item.id + '_thumb'"
-            >
-              <img class="w-full h-full fit-cover" :src="imagePrefix(item.paintImg)" alt=""/>
-            </swiper-slide>
-          </swiper>
-        </div>
-      </div>
-      <div class="close cursor-pointer" @click="isShowCaseContrast = false">
-        <span class="iconfont icon-error-fill text-30"></span>
-      </div>
-    </div>
+    <CasePreview v-model="isShowCaseContrast" :items="caseContrastData" :index="caseIndex" />
   </ClientOnly>
 
   <el-dialog v-model="centerDialogVisible" title="Summary of Differences" width="720" center>
@@ -771,7 +693,7 @@
     <!-- 图片查看器 -->
     <el-image-viewer
       v-if="exampleViewVisible"
-      :url-list="[imagePrefix(exampleArr[route.query.work as CodeType][exampleArrIndex].paint)]"
+      :url-list="[imagePrefix(TECHNIQUE_EXAMPLE[route.params.work as CodeType][exampleArrIndex].paint)]"
       @close="exampleViewVisible = false"
     />
   </ClientOnly>
@@ -805,7 +727,7 @@
 </template>
 
 <script setup lang="ts">
-import {getCombinationApi, getSampleApi, getThemeApi} from "~/api/modules/paint/paint";
+import {getCombinationApi, getThemeApi} from "~/api/modules/paint/paint";
 import type {IPaint} from "~/api/interface/paint/paint";
 import type {UploadFile, UploadProps} from "element-plus";
 import {ElMessage} from "element-plus";
@@ -822,19 +744,15 @@ import {useCurrencyStore} from "~/stores/modules/currency";
 import {findClosestMatch} from "~/utils/calculateShape";
 import {ArtCode, type CodeType} from "~/types/enumeration.d";
 import {rangeVerify} from "~/utils/matchingInterval";
-import {Swiper, SwiperSlide} from 'swiper/vue'
-import type {Swiper as SwiperClass} from 'swiper'
-import {Autoplay, Navigation, Pagination, Thumbs} from 'swiper'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 import {pageMeta} from "~/config/pageMeta";
 import { useIndexedDBBase64 } from '~/composables/useIndexedDBBase64'
+import {TECHNIQUE_EXAMPLE} from "~/constant";
 
 defineOptions({
   name: 'CustomPaint'
 })
 
+const {$bus} = useNuxtApp()
 const userStore = useUserStore()
 const appStore = useAppStore()
 const customStore = useCustomStore()
@@ -843,6 +761,24 @@ const router = useRouter()
 const currencyStore = useCurrencyStore();
 const { saveBase64 } = useIndexedDBBase64()
 
+onMounted(() => {
+  $bus.off('continueCustomPaint') // 防止重复注册
+  $bus.on('continueCustomPaint', (themeId: string) => chooseTheme(themeId))
+
+  // 在手绘工艺下，默认选中主题
+  const {work, themeId} = route.params
+  if (work === ArtCode.Painting && themeId) {
+    getTheme(themeId)
+    currentView.value = 'style'
+    viewHistory.value = ['theme']
+    themeIdMap.value = [themeId]
+    customStore.setCurrentView(currentView.value)
+    customStore.setViewHistory(viewHistory.value)
+    customStore.setThemeIdMap(themeIdMap.value)
+    router.replace(`/custom-paint/${work}`)
+  }
+})
+
 const moreInfoVisible = ref([false, false, false, false])
 
 const currentView = ref('custom')
@@ -850,92 +786,7 @@ const contentNumber = ref(1)
 
 const META = pageMeta["/custom-paint"] || {}
 
-const exampleArr = ref<Record<CodeType, { photo: string, paint: string }[]>>({
-  [ArtCode.Painting]: [
-    {
-      photo: '/static/custom/example/hand/example_photo1.png',
-      paint: '/static/custom/example/hand/example_paint1.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo2.png',
-      paint: '/static/custom/example/hand/example_paint2.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo3.png',
-      paint: '/static/custom/example/hand/example_paint3.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo4.png',
-      paint: '/static/custom/example/hand/example_paint4.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo5.png',
-      paint: '/static/custom/example/hand/example_paint5.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo6.png',
-      paint: '/static/custom/example/hand/example_paint6.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo7.png',
-      paint: '/static/custom/example/hand/example_paint7.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo8.png',
-      paint: '/static/custom/example/hand/example_paint8.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo9.png',
-      paint: '/static/custom/example/hand/example_paint9.png',
-    },
-    {
-      photo: '/static/custom/example/hand/example_photo10.png',
-      paint: '/static/custom/example/hand/example_paint10.png',
-    }
-  ],
-  [ArtCode.Prints]: [
-    {
-      photo: '/static/custom/example/print/example_photo1.webp',
-      paint: '/static/custom/example/print/example_paint1.webp',
-    },
-    {
-      photo: '/static/custom/example/print/example_photo2.webp',
-      paint: '/static/custom/example/print/example_paint2.webp',
-    },
-    {
-      photo: '/static/custom/example/print/example_photo3.webp',
-      paint: '/static/custom/example/print/example_paint3.webp',
-    },
-    {
-      photo: '/static/custom/example/print/example_photo4.webp',
-      paint: '/static/custom/example/print/example_paint4.webp',
-    },
-    {
-      photo: '/static/custom/example/print/example_photo5.webp',
-      paint: '/static/custom/example/print/example_paint5.webp',
-    },
-  ],
-  [ArtCode.Certificates]: [
-    {
-      photo: '/static/custom/example/certificate/example_photo1.webp',
-      paint: '/static/custom/example/certificate/example_paint1.webp',
-    },
-    {
-      photo: '/static/custom/example/certificate/example_photo2.webp',
-      paint: '/static/custom/example/certificate/example_paint2.webp',
-    },
-    {
-      photo: '/static/custom/example/certificate/example_photo3.webp',
-      paint: '/static/custom/example/certificate/example_paint3.webp',
-    },
-    {
-      photo: '/static/custom/example/certificate/example_photo4.webp',
-      paint: '/static/custom/example/certificate/example_paint4.webp',
-    },
-  ],
-})
-
-useHead(META[route.query.work]);
+useHead(META[route.params.work]);
 
 const reReckon = ref(false) // 重新识别
 const handleImageChange = () => {
@@ -943,19 +794,6 @@ const handleImageChange = () => {
   nextTick(() => {
     reReckon.value = true
   })
-}
-
-const modules = [Autoplay, Pagination, Navigation, Thumbs]
-const thumbsSwiper = ref<SwiperClass>()
-const mainSwiperInstance = ref()
-const setThumbsSwiper = (swiper: SwiperClass) => {
-  thumbsSwiper.value = swiper
-}
-const onSwiper = (swiper: SwiperClass) => {
-  mainSwiperInstance.value = swiper
-}
-const slideTo = (index: number) => {
-  mainSwiperInstance.value.slideTo(index)
 }
 
 const generatorImg = ref('') // 最终图片
@@ -1253,21 +1091,18 @@ const getTheme = async (id: string) => {
 
 // 选择主题
 const currentThemeOption = computed(() => themeOptions.value.find(item => item.id === themeIdMap.value[0]))
-const chooseTheme = (theme: IPaint.ThemeRow | string) => {
-  let id = ''
-  if (typeof theme === 'string') id = theme
-  else id = theme.id
-  setThemeIdMap(id, 0)
-  getTheme(id)
+const chooseTheme = (themeId: string) => {
+  setThemeIdMap(themeId, 0)
+  getTheme(themeId)
   switchStep('style')
 }
 
 // 选择风格
-const chooseStyle = (theme: IPaint.ThemeRow) => {
-  if (themeIdMap.value[1] === theme.id) {
+const chooseStyle = (styleId: string) => {
+  if (themeIdMap.value[1] === styleId) {
     switchStep('custom')
   } else {
-    setThemeIdMap(theme.id, 1)
+    setThemeIdMap(styleId, 1)
     imageUrl.value = ''
   }
 }
@@ -1276,7 +1111,6 @@ const setThemeIdMap = (id: string, index: number) => {
   themeIdMap.value[index] = id
   customStore.setThemeIdMap(themeIdMap.value)
 }
-
 
 // 获取人头数量应该获取的Code选项
 const getFavoriteReference = computed(() => {
@@ -1293,18 +1127,16 @@ const getFavoriteReference = computed(() => {
 
 // 获取喜欢的风格预览图
 const seeMoreSample = async (themeId: string) => {
-  const {data} = await getSampleApi(themeId)
-  caseContrastData.value = data
-  switchStep('case')
-  customStore.setCaseContrastData(data)
+  router.push(`/custom-case/${themeId}`)
 }
 
+const caseIndex = ref(-1)
 const isShowCaseContrast = ref(false)
 const caseContrastData = ref<IPaint.SampleRow[]>([])
 const showCaseContrast = (item: IPaint.SampleRow[], index: number) => {
   caseContrastData.value = item
   isShowCaseContrast.value = true
-  slideTo(index)
+  caseIndex.value = index
 }
 
 const chooseNumber = (num: number) => {
@@ -1317,12 +1149,6 @@ const chooseNumber = (num: number) => {
 
 // 点击继续
 const handleContinue = () => {
-  if (currentView.value === 'case') {
-    const themeId = caseContrastData.value[0]!.themeId
-    chooseTheme(themeId)
-    return
-  }
-
   if (currentView.value === 'style') {
     if (!themeIdMap.value[1]) {
       ElMessage.warning('Please choose your favorite style!')
@@ -1332,16 +1158,27 @@ const handleContinue = () => {
       return
     }
   }
-
 }
 
 // 返回上一步
 const handleBack = () => {
-  if (viewHistory.value.length > 0) {
-    currentView.value = viewHistory.value.pop();
-    customStore.setCurrentView(currentView.value)
-    customStore.setViewHistory(viewHistory.value)
+  // 没有视图历史就不用处理了
+  if (viewHistory.value.length <= 0) return
+
+  // 1. 删除最后一个视图，并更新当前 view
+  currentView.value = viewHistory.value.pop()
+  customStore.setCurrentView(currentView.value)
+  customStore.setViewHistory(viewHistory.value)
+
+  // 2. 保证 themeIdMap 和 viewHistory 长度一致
+  //    - 如果一样长 → pop() 删除最后一个即可
+  //    - 如果 theme 比 view 多 → 截取至相同长度
+  if (themeIdMap.value.length > viewHistory.value.length) {
+    themeIdMap.value.length = viewHistory.value.length
+  } else {
+    themeIdMap.value.pop()
   }
+  customStore.setThemeIdMap(themeIdMap.value)
 }
 
 // 重置
@@ -1360,13 +1197,12 @@ const reset = () => {
   contentNumber.value = 1
   isPrint.value = false
 
-  if (route.query.work !== ArtCode.Painting) {
+  if (route.params.work !== ArtCode.Painting) {
     currentView.value = 'custom'
   } else {
     currentView.value = customStore.currentView || 'theme'
     viewHistory.value = customStore.viewHistory || []
     themeIdMap.value = customStore.themeIdMap || []
-    caseContrastData.value = customStore.caseContrastData || []
 
     if (customStore.themeOptions.length) {
       themeOptions.value = customStore.themeOptions
@@ -1390,7 +1226,7 @@ const specs = computed(() => {
     specs['Mat Color'] = currentMaterialOption.value?.name // 卡纸颜色
     specs['Mat Width'] = currentMaterialWidth.value + '″' // 卡纸宽度
   }
-  if (route.query.work === ArtCode.Painting && lastThemeObj.value) {
+  if (route.params.work === ArtCode.Painting && lastThemeObj.value) {
     specs['Style'] = lastThemeObj.value.name
   }
   return specs
@@ -1427,7 +1263,7 @@ const lastThemeObj = computed(() => {
 
 // 最终提交到后台的Code
 const finalCode = computed(() => {
-  const {work} = route.query;
+  const {work} = route.params;
   const isPainting = work === ArtCode.Painting;
   if (isPainting && isPrint.value) return ArtCode.Prints;
   if (isPainting && getFavoriteReference.value) return getFavoriteReference.value.code;
@@ -1827,116 +1663,6 @@ watch(() => currentView.value, () => {
   }
 }
 
-.case-preview {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1001;
-  background-color: rgba(0, 0, 0, .85);
-
-  .wrapper {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-
-    .main-swiper-wrapper {
-      position: relative;
-      max-width: 700px;
-      width: 100%;
-
-      .main-swiper {
-        height: 100%;
-        //aspect-ratio: 1 / 0.85;
-
-        :deep(.swiper-slide) {
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          .contrast-wrapper {
-            display: flex;
-
-            .contrast-item {
-              flex: 1;
-              flex-shrink: 0;
-              display: flex;
-              flex-direction: column;
-
-              .header {
-                text-align: center;
-                color: #fff;
-                background: linear-gradient(rgba(0, 0, 0, 0.8), transparent);
-              }
-
-              .content {
-                flex: 1;
-                overflow: hidden;
-                flex-shrink: 0;
-                max-height: 460px;
-              }
-            }
-          }
-        }
-      }
-
-      .main-button {
-        --swiper-navigation-color: #fff;
-        top: calc(50%);
-        width: clamp(26px, 2.60vw, 50px);
-        height: clamp(26px, 2.60vw, 50px);
-        transform: translateY(-50%);
-
-        &::after {
-          font-size: clamp(26px, 2.60vw, 30px);
-        }
-
-        &.main-prev {
-          left: -15%;
-        }
-
-        &.main-next {
-          right: -15%;
-        }
-      }
-    }
-
-    .thumb-swiper-wrapper {
-      max-width: 1180px;
-      padding: 0 50px;
-      width: 100%;
-
-      .thumb-swiper {
-        .swiper-slide {
-          aspect-ratio: 1 / 1;
-          cursor: pointer;
-          opacity: .5;
-
-          &.swiper-slide-thumb-active,
-          &:hover {
-            opacity: 1;
-          }
-        }
-      }
-    }
-
-  }
-
-  .close {
-    position: absolute;
-    right: 2vw;
-    top: 2vw;
-    font-size: 30px;
-    color: #fff;
-  }
-}
-
 @media (max-width: 1260px) {
   .spu-wrapper .spu-spec {
     .frame-scroll {
@@ -2045,28 +1771,6 @@ watch(() => currentView.value, () => {
 
   .case-waterfall {
     column-count: 2;
-  }
-
-  .case-preview .wrapper .main-swiper-wrapper {
-    padding: 0 15px;
-
-    .main-button {
-      top: -30px;
-      transform: unset;
-
-      &::after {
-        font-size: 16px;
-      }
-
-      &.main-prev {
-        left: 0;
-      }
-
-      &.main-next {
-        left: 40px;
-        right: unset;
-      }
-    }
   }
 }
 </style>

@@ -508,7 +508,7 @@ const handleSubscribe = async () => {
 
 const goCustomPaint = () => {
   customStore.clearCache()
-  router.push(`/custom-paint?work=${ArtCode.Painting}`)
+  router.push(`/custom-paint/${ArtCode.Painting}`)
 }
 
 const loginWindowRef = ref<InstanceType<typeof LoginWindow>>()

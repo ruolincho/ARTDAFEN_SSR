@@ -7,6 +7,9 @@ declare global {
         dataLayer: any[];
         gtag: (...args: any[]) => void;
         translate: typeof translate
+        Tawk_API: any; // 聊天组件API对象
+        Tawk_LoadStart: any; // 聊天组件启动的时间
+        __tawk_logged_in__: boolean; // 聊天组件是否已经登录
     }
 }
 

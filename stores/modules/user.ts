@@ -14,7 +14,6 @@ export const useUserStore = defineStore(
         const token = ref('');
         const userInfo = ref({} as IMine.UserInfoRow);
         const isLogin = computed(() => !!token.value)
-        const headerList = ref<IHome.MenuRow[]>([])
 
         const setToken = (tokenStr: string) => {
             token.value = tokenStr;
@@ -52,7 +51,6 @@ export const useUserStore = defineStore(
             const tokenCookie = useCookie('auth_token', { path: '/' })
             tokenCookie.value = ''
             userInfo.value = {} as IMine.UserInfoRow;
-            headerList.value = []
             jump && router.replace(LOGIN_URL)
         }
 
@@ -62,10 +60,6 @@ export const useUserStore = defineStore(
             if (!token.value) return false
             const {data} = await checkToken()
             !data && clear(false)
-        }
-
-        const setHeaderList = (list: IHome.MenuRow[]) => {
-            headerList.value = list
         }
 
         const updateSubscribe = (subscribe: Dict.SubscribeType) => {
@@ -81,8 +75,6 @@ export const useUserStore = defineStore(
             getUserEcho,
             clear,
             checkTokenStatus,
-            headerList,
-            setHeaderList,
             updateSubscribe,
         };
     },

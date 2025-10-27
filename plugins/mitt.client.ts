@@ -4,6 +4,7 @@ export type MittEvents = {
     closeCartWindow: void;
     openCartWindow: void;
     loginSuccess: void;
+    continueCustomPaint: void;
 };
 
 export default defineNuxtPlugin((_nuxtApp) => {

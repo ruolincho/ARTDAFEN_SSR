@@ -50,13 +50,6 @@ export const useCustomStore = defineStore(
             viewHistory.value = history
         }
 
-        // 缓存的案例对比数据
-        const caseContrastData = ref<IPaint.SampleRow[]>([])
-
-        const setCaseContrastData = (data: IPaint.SampleRow[]) => {
-            caseContrastData.value = data
-        }
-
         // 缓存的当前选中的ID集合
         const themeIdMap = ref<string[]>([])
 
@@ -67,7 +60,6 @@ export const useCustomStore = defineStore(
         const clearCache = () => {
             themeOptions.value = []
             themeIdMap.value = []
-            caseContrastData.value = []
             currentView.value = null
             viewHistory.value = []
         }
@@ -84,8 +76,6 @@ export const useCustomStore = defineStore(
             setCurrentView,
             viewHistory,
             setViewHistory,
-            caseContrastData,
-            setCaseContrastData,
             themeIdMap,
             setThemeIdMap,
             clearCache

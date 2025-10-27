@@ -16,7 +16,9 @@ export namespace IMine {
         /*是否实名认证*/
         certify: boolean
         /*邮箱*/
-        email?: string
+        email: string
+        /*哈希值： tawkHash*/
+        chatHash: string
         /*生日*/
         birthday?: string
         /*角色类型*/

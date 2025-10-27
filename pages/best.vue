@@ -1589,7 +1589,7 @@ const routerParams = ref({} as QueryParams)
  */
 const paramsWatch = async () => {
   if (route.query.q) routerParams.value = unpackQuery(route.query.q)
-
+  console.log(routerParams.value)
   const {
     MENU_ID,
     TECHNIQUE,

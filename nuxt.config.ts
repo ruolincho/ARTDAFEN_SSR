@@ -1,7 +1,4 @@
 // @ts-ignore
-// @ts-ignore
-// @ts-ignore
-// @ts-ignore
 export default defineNuxtConfig({
     ssr: true,
     modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots'],
@@ -12,7 +9,7 @@ export default defineNuxtConfig({
             obsUrl: process.env.NUXT_PUBLIC_OBS_URL,
             paypalClientId: process.env.NUXT_PUBLIC_PAYPAL_CLIENT_ID,
             httpTimeout: process.env.NUXT_PUBLIC_HTTP_TIMEOUT,
-            gaId: process.env.NUXT_PUBLIC_GA_ID
+            gtmId: process.env.NUXT_PUBLIC_GTM_ID,
         },
     },
     elementPlus: {
@@ -33,9 +30,9 @@ export default defineNuxtConfig({
             const newsTotalPages = 7
             const blogTotalPages = 2
             const urls = [
-                { url: '/custom-paint?work=HPOP', priority: 0.8 },
-                { url: '/custom-paint?work=40USD-M2', priority: 0.8 },
-                { url: '/custom-paint?work=CTS', priority: 0.8 },
+                { url: '/custom-paint/HPOP', priority: 0.8 },
+                { url: '/custom-paint/40USD-M2', priority: 0.8 },
+                { url: '/custom-paint/CTS', priority: 0.8 },
                 { url: '/news', changefreq  : 'daily', priority: 0.8 },
                 { url: '/blog', changefreq  : 'daily', priority: 0.8 },
             ]
@@ -68,6 +65,11 @@ export default defineNuxtConfig({
                         'ART DAFEN, ARTDAFEN art, artworks, contemporary art, gallery, sculpture, custom art, art workshops, Dafen, Dafen Oil Painting Village Shenzhen, oil painting' +
                         'Artdafen, deviantart, arte, gallery, pixel art, draw, installation art examples, art and craft project ideas, drawing, artstation, drawings'
                 },
+                {
+                    name: 'p:domain_verify',
+                    content: 'dc566406ce7fa6878cd0ea11514dbe49'
+
+                },
                 {property: 'og:type', content: 'website'},
                 {property: 'og:url', content: process.env.NUXT_PUBLIC_SITE_URL},
             ],
@@ -93,6 +95,9 @@ export default defineNuxtConfig({
                     additionalData: `@use '~/assets/styles/element/index.scss' as *;`,
                 }
             }
+        },
+        esbuild: {
+            drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
         }
     },
     nitro: {

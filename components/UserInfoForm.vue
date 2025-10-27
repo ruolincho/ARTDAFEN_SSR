@@ -44,7 +44,7 @@ const formData = ref<IMine.ModifyQuery>({
 })
 const rules = reactive({
   nickname: [{required: true, message: 'Please enter your nickname'}],
-  intro: [{required: true, message: 'Please enter your introduction'}],
+  // intro: [{required: true, message: 'Please enter your introduction'}],
 })
 
 const visible = ref(false)

@@ -258,3 +258,21 @@ export const copyToClipboard = (text: string) => {
     })
 }
 
+/**
+ * Base64 解码为16进制
+ * @param base64
+ */
+export const base64ToHex = (base64: string)=> {
+    // 1. Base64 解码为二进制字符串
+    const binaryString = atob(base64);
+
+    // 2. 将二进制字符串转换为16进制
+    let hex = '';
+    for (let i = 0; i < binaryString.length; i++) {
+        // 获取每个字符的 charCode
+        const hexChar = binaryString.charCodeAt(i).toString(16);
+        // 补齐两位
+        hex += hexChar.padStart(2, '0');
+    }
+    return hex;
+}

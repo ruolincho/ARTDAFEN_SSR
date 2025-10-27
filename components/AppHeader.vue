@@ -126,7 +126,7 @@
                     <span class="iconfont icon-right"/>
                   </dt>
                   <dd
-                    v-if="currentDropdownMenu?.name === ARTIST_MENU_NAME && subMenu.config.type === 'ARTIST'"
+                    v-if="currentDropdownMenu?.name !== BEST_MENU_NAME && subMenu.config.type === 'ARTIST'"
                     @click="() => {hideDropdown(); router.push(`/artists-top?categoryId=${subMenu.id}`)}"
                   >
                     TOP 50 {{ subMenu.name }} <span class="iconfont icon-right"/>
@@ -135,7 +135,7 @@
                       @click="clickNavThird(subitem, subMenu.config.type, currentDropdownMenu!)">{{ subitem.name }}
                   </dd>
                   <dd
-                    v-if="currentDropdownMenu?.name === ARTIST_MENU_NAME && subMenu.config.type === 'ARTIST'"
+                    v-if="currentDropdownMenu?.name !== BEST_MENU_NAME && subMenu.config.type === 'ARTIST'"
                     @click="() => {hideDropdown(); router.push(`/artists-brief?categoryId=${subMenu.id}`)}"
                   >
                     All <span class="iconfont icon-right"/>
@@ -285,13 +285,14 @@ import {useAppStore} from "~/stores/modules/app";
 import {BEST_URL, PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useCartStore} from "~/stores/modules/cart";
-import {ARTIST_MENU_NAME, TECHNIQUE_OPTIONS} from "~/constant";
+import {ARTIST_MENU_NAME, BEST_MENU_NAME, CUSTOM_MENU_NAME, TECHNIQUE_OPTIONS} from "~/constant";
 import {throttle} from "lodash-es";
 import {useCustomStore} from "~/stores/modules/custom";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {packQuery, unpackQuery} from "~/composables/useQueryShort";
 import { useTranslateLang } from '~/composables/useTranslateLang'
+import {ArtCode} from "~/types/enumeration.d";
 
 const { currentLang, languageData, switchLanguage } = useTranslateLang()
 
@@ -370,12 +371,11 @@ const { data: headerList } = await useAsyncData('header-menu', async () => {
       item.path = [`${PRODUCT_URL}_${item.id}`, '/artists-brief', '/artists-all', '/artists-top']
     }
     if (item.config.type === 'CUSTOM') {
-      item.path = ['/custom-paint']
+      item.path = [`/custom-paint/${ArtCode.Painting}`, `/custom-paint/${ArtCode.Prints}`, `/custom-paint/${ArtCode.Certificates}`]
     }
   })
   return data
 })
-
 
 // 页面滚动
 const isScrollingPositive = ref(false);
@@ -455,10 +455,11 @@ const clickNavFirst = (firstMenu: IHome.MenuRow, index: number) => {
     return
   }
 
-  if (firstMenu.name === 'Photo to art') {
-    router.push('/custom-paint?work=HPOP')
+  if (firstMenu.name === CUSTOM_MENU_NAME) {
+    router.push(`/custom-paint/${ArtCode.Painting}`)
     openMenu.value = false
     hideDropdown()
+    customStore.clearCache()
     return
   }
 
@@ -487,12 +488,7 @@ const clickNavSecond = (firstMenu: IHome.MenuRow, secondMenu: IHome.MenuRow) => 
   // 跳转到自定义版画页面
   if (firstMenu.config.type === 'CUSTOM') {
     customStore.clearCache()
-    router.push({
-      path: '/custom-paint',
-      query: {
-        work: secondMenu.config.code
-      }
-    })
+    router.push(`/custom-paint/${secondMenu.config.code}`)
   }
   // 跳转到筛选页面
   else {

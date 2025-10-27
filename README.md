@@ -26,6 +26,7 @@
 | 第三方登录     | [Google OAuth](https://developers.google.com/identity/protocols/oauth2?hl=zh-cn)                                           | Google 授权登录集成        |
 | 数据压缩      | [fflate](https://github.com/101arrowz/fflate)                                                                              | 前端数据压缩库              |
 | 邮件模板      | [MJML](https://mjml.io/)                                                                                                   | 邮件模板引擎               |
+| GTM后台     | [Google Tag Manager](https://tagmanager.google.com/)                                                                         | 标签管理工具               |
 
 ---
 
@@ -260,54 +261,69 @@ $bus.off('closeCartWindow')
 
 ---
 
-## 📊 网站统计（Google Analytics 4）
+## 📊 Google Tag Manager（GTM）统一埋点与广告追踪
 
-* 本项目通过 Google Analytics 4 (GA4) 进行页面访问统计与分析。
-* GA4 插件在 `plugins/ga4.client.ts` 中注册，仅在 生产环境 生效。
+> 本项目未直接引入 `gtag.js` 或 GA4 脚本，而是通过 Google Tag Manager (GTM) 作为统一容器，托管以下功能：
+
+| 功能                            | 是否通过 GTM 管理 |
+| ----------------------------- | ----------- |
+| GA4（Google Analytics 4）数据统计   | ✅ 是         |
+| Google Ads 转化追踪 & Remarketing | ✅ 是         |
+| 自定义事件 (例如加入购物车、下单成功)          | ✅ 是         |
+| DataLayer 数据推送                | ✅ 支持        |
+
+> GTM 插件在 `plugins/gtm.client.ts` 中注册，仅在 生产环境 生效。
 
 ### 🔧 插件实现
 
 ```ts
-// plugins/ga4.client.ts
+// plugins/gtm.client.ts
 export default defineNuxtPlugin((nuxtApp) => {
-    // 仅生产环境启用
+    // 只在生产环境生效
     if (import.meta.env.MODE !== 'production') {
-        console.log('[ga4] 当前非生产环境：', import.meta.env.MODE)
+        console.log('[gtm] 当前非生产环境：', import.meta.env.MODE)
         return
     }
 
-    const config = useRuntimeConfig()
-    const gaId = config.public.gaId
+    if (!process.client) return
 
-    if (!process.client || !gaId) return
-        // 动态插入 GA4 脚本
-        ;
-    (function loadGtag() {
-        const script1 = document.createElement('script')
-        script1.async = true
-        script1.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
-        document.head.appendChild(script1)
+    const config = useRuntimeConfig();
+    const GTM_ID = config.public.gtmId;
 
-        const script2 = document.createElement('script')
-        script2.innerHTML = `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      window.gtag = gtag;
-      gtag('js', new Date());
-      gtag('config', '${gaId}');
-    `
-        document.head.appendChild(script2)
-    })()
+    if (!GTM_ID) {
+        console.warn('[gtm] GTM Measurement ID is not provided.')
+        return;
+    }
 
-    // 监听页面变化并上报
+    // 插入 <head>：gtm.js
+    // 1. 将此代码粘贴到网页的 <head> 中尽可能靠上的位置：
+    const script = document.createElement('script')
+    script.innerHTML = `
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','${GTM_ID}');
+  `
+    document.head.appendChild(script)
+
+    // 插入 <body> 最前面：noscript iframe
+    // 2. 请将此代码粘帖到紧跟起始 <body> 标记之后的位置：
+    const noscript = document.createElement('noscript')
+    noscript.innerHTML = `
+    <iframe src="https://www.googletagmanager.com/ns.html?id=${GTM_ID}"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  `
+    document.body.prepend(noscript)
+
+    // 推送 page_view 事件给 GTM dataLayer
     nuxtApp.hook('page:finish', () => {
         const route = useRoute()
-        if (typeof window.gtag === 'function') {
-            window.gtag('config', gaId, {
-                page_path: route.fullPath,
-                page_title: (route.meta?.title as string) || (route.name as string) || document.title,
-            })
-        }
+        window.dataLayer?.push({
+            event: 'page_view',
+            page_path: route.fullPath,
+            page_title: document.title
+        })
     })
 })
 ```
@@ -316,10 +332,41 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 ```ts
 // .env
-NUXT_PUBLIC_GA_ID = G - XXXXXXXXXX
+NUXT_PUBLIC_GTM_ID = G - XXXXXXXXXX
+```
+在非生产环境下（如 `development` 或 `staging`），不会加载或上报统计信息，以避免干扰数据。
+
+### 如何触发页面浏览（page_view）事件？
+```ts
+nuxtApp.hook('page:finish', () => {
+    const route = useRoute()
+    window.dataLayer?.push({
+        event: 'page_view',
+        page_path: route.fullPath,
+        page_title: document.title
+    })
+})
+```
+说明： 
+* 在 GTM → 触发器 → 选择 “自定义事件”，监听 `page_view` 即可绑定 GA4 的 PageView。
+* 不再手动调用 gtag('config', 'G-XXXX')。
+
+### 发送自定义事件（例如加入购物车）
+```ts
+window.dataLayer?.push({
+  event: 'add_to_cart',
+  items: [{
+    item_id: goods.id,
+    item_name: goods.name,
+    price: goods.price,
+    quantity: 1
+  }]
+})
 ```
 
-在非生产环境下（如 `development` 或 `staging`），不会加载或上报统计信息，以避免干扰数据。
+在 GTM 中设置：
+* 触发器：自定义事件 → `add_to_cart`
+* 标签：GA4 事件 → 参数映射 → 发送至 GA4 或 Google Ads
 
 ---
 
@@ -507,7 +554,6 @@ OpenSeadragon 并不能直接读取普通的 `.jpg`、`.png `图片，它需要�
 #### 💡 使用示例
 
 ```vue
-
 <HighResViewer
   :thumbnail-src="imagePrefix(goodsDetail.img)"
   :dzi-url="imagePrefix(goodsDetail.dzi)"
