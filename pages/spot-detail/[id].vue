@@ -153,7 +153,7 @@
                 <p class="f-bold">Total：<span
                   class="text-26 text-error">{{ currencyStore.formatToCurrency(currentPrice || 0) }}</span></p>
               </div>
-              <el-button class="w-full" size="large" type="danger" @click="addToCart"
+              <el-button class="w-full add-cart__button" size="large" type="danger" @click="addToCart"
                          :disabled="!chooseComplete || stockNum == 0 || isShelves == true">Add To Cart
               </el-button>
             </div>
@@ -684,7 +684,7 @@ const showLoginWindow = () => {
 const origin = useRequestURL().origin
 useHead({
   link: [
-    {rel: 'canonical', href: `${origin}${route.path}`},
+    {rel: 'canonical', href: `${origin}/spot-detail`},
   ],
   meta: [
     { name: 'robots', content: 'index, follow' },

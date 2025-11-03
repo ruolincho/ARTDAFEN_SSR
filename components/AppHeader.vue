@@ -19,9 +19,9 @@
                 class="nav-item"
                 v-for="(menu, index) in headerList"
                 :key="menu.name"
-                @touchstart.stop.prevent="showDropdown(index)"
-                @mouseenter.stop.prevent="showDropdown(index)"
-                @mouseleave.stop.prevent="scheduleHideDropdown"
+                @touchstart.stop.prevent="entryNav(index)"
+                @mouseenter.stop.prevent="entryNav(index)"
+                @mouseleave.stop.prevent="exitNav"
                 @click="clickNavFirst(menu, index)"
               >
                   <span
@@ -293,6 +293,7 @@ import {TRADE_MODULE} from "~/api/helper/prefix";
 import {packQuery, unpackQuery} from "~/composables/useQueryShort";
 import { useTranslateLang } from '~/composables/useTranslateLang'
 import {ArtCode} from "~/types/enumeration.d";
+import {useLockScroll} from "~/composables/useLockScroll";
 
 const { currentLang, languageData, switchLanguage } = useTranslateLang()
 
@@ -395,24 +396,14 @@ const activeNavIndex = ref<number | null>(null);
 const isDropdownVisible = ref(false)
 let hideTimeout: ReturnType<typeof setTimeout> | null = null;
 
-const lockScrolling = () => {
-  document.body.style.overflow = 'hidden'
-}
-
-const unlockScrolling = () => {
-  document.body.style.overflow = ''
-}
-
 // 悬浮菜单显示下沉导航
-const showDropdown = (index: number) => {
+const entryNav = (index: number) => {
   // 如果没有子菜单则不显示下沉导航
   const hasChildren = headerList.value?.[index]?.children?.length
   if (hasChildren) {
     isDropdownVisible.value = true;
-    lockScrolling()
   } else {
     isDropdownVisible.value = false;
-    unlockScrolling()
   }
   activeNavIndex.value = index;
   clearTimeout(hideTimeout!);
@@ -420,11 +411,10 @@ const showDropdown = (index: number) => {
 }
 
 // 移除菜单隐藏下沉导航
-const scheduleHideDropdown = () => {
+const exitNav = () => {
   hideTimeout = setTimeout(() => {
     isDropdownVisible.value = false;
     activeNavIndex.value = null;
-    unlockScrolling()
   }, 200);
 }
 
@@ -437,8 +427,8 @@ const cancelHideDropdown = () => {
 // 隐藏下沉导航
 const hideDropdown = () => {
   isDropdownVisible.value = false;
+  openMenu.value = false
   activeNavIndex.value = null;
-  unlockScrolling()
 }
 
 /**
@@ -450,14 +440,12 @@ const clickNavFirst = (firstMenu: IHome.MenuRow, index: number) => {
 
   if (firstMenu.name === ARTIST_MENU_NAME) {
     router.push('/artists-brief')
-    openMenu.value = false
     hideDropdown()
     return
   }
 
   if (firstMenu.name === CUSTOM_MENU_NAME) {
     router.push(`/custom-paint/${ArtCode.Painting}`)
-    openMenu.value = false
     hideDropdown()
     customStore.clearCache()
     return
@@ -472,7 +460,6 @@ const clickNavFirst = (firstMenu: IHome.MenuRow, index: number) => {
       path: firstMenu.config.type === 'BEST' ? BEST_URL : PRODUCT_URL,
       query: {q}
     })
-    openMenu.value = false
     hideDropdown()
   } else if (appStore.device === 'app' && firstMenu.name !== ARTIST_MENU_NAME) {
     toggleMenu(index)
@@ -490,16 +477,10 @@ const clickNavSecond = (firstMenu: IHome.MenuRow, secondMenu: IHome.MenuRow) => 
     customStore.clearCache()
     router.push(`/custom-paint/${secondMenu.config.code}`)
   }
-  // 跳转到筛选页面
   else {
     // 点击二级默认选中第一个三级菜单
     clickNavThird(secondMenu.children[0]!, secondMenu.config.type, firstMenu)
   }
-
-  if (appStore.device === 'app') {
-    openMenu.value = false
-  }
-
   hideDropdown()
 }
 
@@ -561,6 +542,7 @@ const handleOpenCart = () => {
   cartStore.shoppingPreCheck()
 }
 
+useLockScroll(isDropdownVisible, openMenu)
 </script>
 
 <style scoped lang="scss">

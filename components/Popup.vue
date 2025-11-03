@@ -26,7 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import {onUnmounted, ref, watch} from "vue";
+import {onUnmounted, ref} from "vue";
+import {useLockScroll} from "~/composables/useLockScroll";
 
 // 父组件控制显示与否
 const props = defineProps({
@@ -97,16 +98,8 @@ onUnmounted(() => {
   document.removeEventListener("touchend", stopDrag);
 });
 
-// 监听 isVisible 的变化来禁用和启用滚动
-watch(() => props.modelValue, (newValue) => {
-  if (newValue) {
-    // 禁用页面滚动
-    document.body.style.overflow = 'hidden';
-  } else {
-    // 启用页面滚动
-    document.body.style.overflow = '';
-  }
-});
+// 监听 visible 变化 锁定滚动
+useLockScroll(toRef(props, 'modelValue'))
 </script>
 
 <style scoped lang="scss">

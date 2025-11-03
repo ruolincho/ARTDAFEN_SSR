@@ -66,17 +66,15 @@ import {pageMeta} from "~/config/pageMeta";
 
 const route = useRoute()
 
-console.log('route =>>>>', route.path)
-
 const origin = useRequestURL().origin
 useHead({
   link: [
-    {rel: 'canonical', href: `${origin}${route.path}`},
+    {rel: 'canonical', href: `${origin}/faq`},
   ],
   ...pageMeta[route.path] ?? pageMeta["/faq"]
 });
 
-const messageForm = ref({
+const messageForm = ref( {
   email: '',
   subject: '',
   message: '',

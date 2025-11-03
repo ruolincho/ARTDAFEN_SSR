@@ -21,12 +21,12 @@ export const useCustomStore = defineStore(
 
         // 计算总价
         const subtotal = computed(() => {
-            return Number(carts.value.actualAmount) * Number(carts.value.quantity)
+            return Number(carts.value.actualAmount ?? 0) * Number(carts.value.quantity ?? 0)
         })
 
         // 计算总数量
         const subtotalQuantity = computed(() => {
-            return Number(carts.value.quantity)
+            return Number(carts.value.quantity ?? 0)
         })
 
         // 缓存的主题

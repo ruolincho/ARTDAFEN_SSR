@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import OpenSeadragon from 'openseadragon'
 import type {HighResViewerType} from "~/components/interface";
+import {useLockScroll} from "~/composables/useLockScroll";
 
 const props = withDefaults(defineProps<HighResViewerType>(), {
   showNavigator: true,
@@ -121,9 +122,6 @@ const openViewer = async () => {
   // 等待DOM挂载后再进行动画
   await nextTick()
 
-  // 禁用滚动条
-  document.body.style.overflow = 'hidden'
-
   requestAnimationFrame(() => {
     Object.assign(previewStyle, {
       width: '100vw',
@@ -161,7 +159,6 @@ function closeViewer() {
     showPreview.value = false
     viewer.value?.destroy()
     viewer.value = null
-    document.body.style.overflow = ''
   }, 300)
 }
 
@@ -178,6 +175,9 @@ const handleEsc = (e: KeyboardEvent) => {
   }
 }
 
+// 监听 visible 变化 锁定滚动
+useLockScroll(showPreview)
+
 onMounted(() => {
   window.addEventListener('keydown', handleEsc)
 })
@@ -185,7 +185,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleEsc)
   destroyOSD()
-  document.body.style.overflow = ''
 })
 </script>
 

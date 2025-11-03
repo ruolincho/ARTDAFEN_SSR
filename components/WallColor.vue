@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div class="wall-color" v-show="visible" @click="visible = false">
       <div class="wrapper" :style="{'background-color': color }" @click.stop>
-        <div class="preview-box w-full acea-row row-center-wrapper">
+        <div class="preview-box w-full acea-row row-center-wrapper aspect-ratio">
           <img :src="wallImage" alt="wallImage">
         </div>
         <div class="acea-row row-center-wrapper py-sm-40 py-20">
@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import {useLockScroll} from "~/composables/useLockScroll";
 
 defineOptions({
   name: 'WallColor',
@@ -55,9 +56,8 @@ const open = () => {
   visible.value = true
 }
 
-watch(() => visible.value, (newVal) => {
-  document.body.style.overflow = newVal ? 'hidden' : 'auto'
-})
+// 监听 visible 变化 锁定滚动
+useLockScroll(visible)
 
 defineExpose({
   open
@@ -81,9 +81,9 @@ defineExpose({
     transform: translate(-50%, -50%);
     max-width: 1100px;
     width: 100%;
+    background: #fff;
 
     .preview-box {
-      aspect-ratio: 1 / 1;
       max-height: 500px;
 
       img {
@@ -125,6 +125,13 @@ defineExpose({
     .wrapper {
       margin: auto;
       height: 100%;
+
+      .preview-box {
+        img {
+          max-width: 300px !important;
+          max-height: 300px !important;
+        }
+      }
 
       .swatches-box {
         grid-template-columns: repeat(7, 1fr);

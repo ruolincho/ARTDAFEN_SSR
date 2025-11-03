@@ -367,7 +367,7 @@
                 <p class="f-bold">Total：<span
                   class="text-26 text-error">{{ currencyStore.formatToCurrency(totalPrice || 0) }}</span></p>
               </div>
-              <el-button style="border-radius: 0" class="w-full" size="large" type="danger" @click="addToCart"
+              <el-button style="border-radius: 0" class="w-full add-cart__button" size="large" type="danger" @click="addToCart"
                          :disabled="isBan">{{ isBan ? 'Sold Out' : 'Add To Cart' }}
               </el-button>
             </div>
@@ -561,16 +561,10 @@
   </section>
 
   <!-- 客户评价 -->
-  <section class="mt-lg-60 mt-sm-20">
+  <section class="mt-lg-60 mt-sm-20" v-show="commentTotal > 0">
     <div class="container">
       <div class="py-sm-30 py-20 acea-row row-middle">
         <span class="text-26 f-bold mr-10">Comment({{ commentTotal }})</span>
-<!--        <el-rate-->
-<!--          v-model="rate"-->
-<!--          disabled-->
-<!--          size="small"-->
-<!--          style="height: auto"-->
-<!--        />-->
       </div>
       <ProInfinite
         ref="proInfiniteRef"
@@ -724,7 +718,6 @@ const generatorImg = ref('') // 最终图片
 const pixel = ref({width: 0, height: 0}) // 最终尺寸
 const imgViewVisible = ref(false)
 const centerDialogVisible = ref(false)
-const rate = ref(4)
 
 // 生成步骤索引
 const generateStepIndex = () => {
@@ -745,8 +738,8 @@ const handleImageChange = () => {
 }
 
 // 获取详情
+const config = useRuntimeConfig()
 const {data: goodsDetail, pending: isSkeleton} = await useAsyncData('goods-detail', async () => {
-  const config = useRuntimeConfig()
   const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', {
     method: 'GET',
     params: {
@@ -760,8 +753,14 @@ const {data: goodsDetail, pending: isSkeleton} = await useAsyncData('goods-detai
   return data
 })
 
-const { injectProductJsonLd } = useCustomProductJsonLd(goodsDetail.value, {})
+useHead({
+  title: `${goodsDetail.value?.name || ''} - ${config.public?.siteName}`,
+})
+
+const { injectProductJsonLd, jsonLd } = useCustomProductJsonLd(goodsDetail.value, {})
 injectProductJsonLd()
+
+console.log('injectProductJsonLd=>', jsonLd.value)
 
 // 获取SKu
 const specsCombination = ref<ISpecs.Row[]>([])

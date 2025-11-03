@@ -1,4 +1,5 @@
 import type {UploadFile} from "element-plus";
+import type {General} from "~/types/global";
 
 /**
  * 图片添加服务器前缀
@@ -105,12 +106,12 @@ export const productLink = (item: General.GoodsItem) => {
 
 /**
  * 工具方法：dataURL -> Blob
- * @param dataurl
+ * @param dataUrl
  */
-export const dataURLtoBlob = (dataurl: string): Blob => {
-    const arr = dataurl.split(',');
-    const mime = arr[0].match(/:(.*?);/)![1];
-    const bstr = atob(arr[1]);
+export const dataURLtoBlob = (dataUrl: string): Blob => {
+    const [header = '', base64 = ''] = dataUrl.split(',');
+    const mime = (header.match(/:(.*?);/)?.[1]) || 'application/octet-stream';
+    const bstr = atob(base64);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
     while (n--) u8arr[n] = bstr.charCodeAt(n);
@@ -121,28 +122,42 @@ export const dataURLtoBlob = (dataurl: string): Blob => {
  * 获取路径参数（自动获取当前页面的 query 参数）
  * @returns 返回一个对象，包含所有解析的 query 参数
  */
-export const getUrlQuery = function (): Record<string, string | string[]> {
+export const getUrlQuery = (): Record<string, string | string[]> => {
     const res: Record<string, string | string[]> = {}
 
-    // 优化点1：使用更高效的正则分割获取查询参数
-    const query = (location.href.split(/[?#]/)[1] || '').trim().replace(/^[&]/, '')
+    // SSR 或非浏览器环境安全处理
+    if (typeof location === 'undefined' || !location.href) {
+        return res
+    }
+
+    // 分割获取 ? 或 # 后的查询部分
+    const queryPart = location.href.split(/[?#]/)[1] ?? ''
+    const query = queryPart.trim().replace(/^[&]/, '')
 
     if (!query) return res
 
     query.split('&').forEach((param) => {
-        // 优化点2：合并参数解码操作
-        const [encodedKey, ...encodedValues] = param.replace(/\+/g, ' ').split('=')
-        if (!encodedKey) return // 跳过空参数
+        if (!param) return
+
+        const cleaned = param.replace(/\+/g, ' ')
+        const [encodedKey, ...encodedValues] = cleaned.split('=')
+
+        if (!encodedKey) return
 
         const key = decodeURIComponent(encodedKey)
         const value = encodedValues.length > 0
             ? decodeURIComponent(encodedValues.join('='))
             : ''
 
-        // 优化点3：简化参数合并逻辑
-        res[key] = key in res
-            ? [...(Array.isArray(res[key]) ? res[key] : [res[key]]), value]
-            : value
+        // 参数合并逻辑（带类型断言避免推断错误）
+        if (res[key] !== undefined) {
+            const existing = res[key]
+            res[key] = Array.isArray(existing)
+                ? [...existing, value]
+                : [existing, value]
+        } else {
+            res[key] = value
+        }
     })
 
     return res
@@ -234,6 +249,10 @@ export const flattenTree = (nodes: any[]): any[] => {
     }, [])
 }
 
+/**
+ * 复制文本到剪贴板
+ * @param text
+ */
 export const copyToClipboard = (text: string) => {
     if (typeof window !== 'undefined' && navigator.clipboard) {
         return Promise.resolve(navigator.clipboard.writeText(text))
@@ -250,7 +269,7 @@ export const copyToClipboard = (text: string) => {
         try {
             const success = document.execCommand('copy')
             document.body.removeChild(textarea)
-            success ? resolve() : reject(new Error('复制失败'))
+            success ? resolve('') : reject(new Error('复制失败'))
         } catch (err) {
             document.body.removeChild(textarea)
             reject(err)

@@ -38,6 +38,10 @@
           <p class="f-bold">{{ formatPayChannel(orderDetail?.order?.payChannel) }}</p>
           <p>{{ formatTimestamp(orderDetail?.order?.payTime) }}</p>
         </div>
+        <div class="border-b-sm border-gray-200 my-20 pb-20 text-20 acea-row row-between-wrapper">
+          <p class="f-bold">Trade No</p>
+          <p>{{ orderDetail?.order?.tradeNo || '-' }}</p>
+        </div>
       </div>
 
       <div class="review-summary shadow-lg p-20">

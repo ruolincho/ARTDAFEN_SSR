@@ -145,6 +145,7 @@ const register = () => {
   .el-form {
     :deep(.el-form-item__label) {
       display: block;
+      width: auto;
     }
 
     .el-checkbox {

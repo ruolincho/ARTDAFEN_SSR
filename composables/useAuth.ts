@@ -11,7 +11,7 @@ import {HOME_URL, STORAGE_BACK_URL} from "~/config";
 import {ElMessage} from "element-plus";
 import {useCustomStore} from "~/stores/modules/custom";
 import {useUserStore} from "~/stores/modules/user";
-import {base64ToHex} from "~/utils";
+import {useTawk} from "~/composables/useTawk";
 
 export const useAuth = () => {
     const { $encrypt, $bus } = useNuxtApp()
@@ -61,21 +61,8 @@ export const useAuth = () => {
         const backUrl = window.localStorage.getItem(STORAGE_BACK_URL) || HOME_URL
         !component && router.replace(backUrl)
         $bus.emit('loginSuccess')
-
-        if (process.client && window.Tawk_API) {
-            const hash = base64ToHex(userinfo.chatHash) // 解码为16进制
-            window.Tawk_API.login({
-                userId: userinfo.id,
-                name: userinfo.nickname,
-                email: userinfo.email,
-                hash
-            }, function(error: any) {
-                if (error) {
-                    console.error('tawk.to login error:', error);
-                }
-            });
-        }
-
+        const {tawkLogin} = useTawk()
+        tawkLogin({ userId: userinfo.id, name: userinfo.nickname, email: userinfo.email,  hash: userinfo.chatHash })
         ElMessage.success(type === 'login' ? 'Login succeeded' : 'Registered succeeded')
     }
 
@@ -99,13 +86,8 @@ export const useAuth = () => {
                     resolve('logout success')
                     userStore.clear()
                     customStore.clearCache()
-                    if (process.client && window.Tawk_API) {
-                        window.Tawk_API.logout(function(error: any) {
-                            if (error) {
-                                console.error('tawk.to logout error:', error);
-                            }
-                        });
-                    }
+                    const {tawkLogout} = useTawk()
+                    tawkLogout();
                 })
                 .catch((err) => reject(err))
         })

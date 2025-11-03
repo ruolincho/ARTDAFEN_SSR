@@ -115,6 +115,7 @@ import {ElMessage} from "element-plus";
 import type {PixelType} from "./interface";
 import list from '~/config/room'
 import {useAppStore} from "~/stores/modules/app";
+import {useLockScroll} from "~/composables/useLockScroll";
 
 defineOptions({
   name: 'Room',
@@ -339,9 +340,8 @@ const open = () => {
   centerDragBox()
 }
 
-watch(() => visible.value, (newVal) => {
-  document.body.style.overflow = newVal ? 'hidden' : 'auto'
-})
+// 监听 visible 变化 锁定滚动
+useLockScroll(visible)
 
 onBeforeUnmount(() => {
   document.removeEventListener('mousemove', onResizing);

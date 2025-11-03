@@ -922,11 +922,18 @@ const router = useRouter()
 const appStore = useAppStore()
 const userStore = useUserStore()
 const currencyStore = useCurrencyStore();
+const origin = useRequestURL().origin
 
 useHead({
   meta: [
     ...(pageMeta["/best"]?.meta ?? []),
-    { name: 'robots', content: route.query.q ? 'noindex, nofollow' : 'index, follow' }
+    { name: 'robots', content: route.query.q ? 'noindex, follow' : 'index, follow' }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${origin}/best`
+    }
   ]
 });
 

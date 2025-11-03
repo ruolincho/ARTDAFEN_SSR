@@ -64,8 +64,19 @@ onMounted(() => {
 const router = useRouter()
 const route = useRoute()
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+const origin = useRequestURL().origin
 
-useHead(pageMeta[route.path] ?? pageMeta["/artists-all"]);
+useHead({
+  meta: [
+    ...(pageMeta["/artists-all"]?.meta ?? []),
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${origin}/artists-all`
+    }
+  ]
+})
 
 // 获取艺术家列表
 const artistsList = ref<IArtists.Row[]>([])
@@ -99,7 +110,7 @@ const categoryId = computed(() => {
 
 // 获取关键词
 const letter = computed(() => {
-  return route.query.id
+  return route.query.id || 'A'
 })
 
 watch(

@@ -68,12 +68,19 @@
           <span>Estimated Total</span>
           <div>
             <!-- 优惠之前的金额（需要加上预计运费） -->
-            <p v-if="offerData?.discountAmount > 0" class="text-through text-gray-600">{{ currencyStore.formatToCurrency(Number(offerData.originalAmount || 0) + Number(offerData.estimatedDeliveryAmount || 0)) }}</p>
+            <p v-if="offerData?.discountAmount > 0" class="text-through text-gray-600">
+              {{
+                currencyStore.formatToCurrency(Number(offerData.originalAmount || 0) + Number(offerData.estimatedDeliveryAmount || 0))
+              }}
+            </p>
             <!-- 实付金额 -->
-            <p>{{ currencyStore.formatToCurrency(Number(offerData.estimatedAmount || 0) || cartStore.subtotal) }}</p>
+            <p>{{ currencyStore.formatToCurrency(actualAmount) }}</p>
           </div>
         </div>
-        <div id="paypal-button-container" class="paypal-button-container"></div>
+        <!-- paypal 按钮 -->
+        <div id="paypal-button-container" class="paypal-button-container" v-if="actualAmount !== 0"></div>
+        <!-- 积分支付 按钮 -->
+        <el-button type="primary" class="w-full checkout-btn" @click="createOrderCallback" v-else>Secure Checkout</el-button>
         <div class="mt-15 text-16">
           The estimated shipping will be confirmed once you added your shipping address in checkout.
         </div>
@@ -112,7 +119,6 @@ import {paymentApi, paymentCallbackApi} from "~/api/modules/pay/pay";
 import {PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import { initPaypal } from '~/composables/usePayment'
-import {isEqual} from "lodash-es";
 
 defineOptions({
   name: 'Cart'
@@ -120,7 +126,6 @@ defineOptions({
 
 onMounted(() => {
   if (canCarts.value.length > 0) {
-    loadPaypal()
     _init()
   }
   $bus.emit('closeCartWindow')
@@ -195,24 +200,6 @@ const confirmOrder = async () => {
     offerData.value = data
 
     // 匹配优惠
-    // if (products.length > 0) {
-    //   cartStore.carts.forEach(item1 => {
-    //
-    //     item1.promoOffer = []
-    //
-    //     for (const item2 of products) {
-    //       if (
-    //         item1.specsId === item2.specsId &&
-    //         item1.dimensionId === item2.dimensionId &&
-    //         isEqual(item1.parts, item2.parts)
-    //       ) {
-    //         item1.promoOffer = item2.promoOffer || []
-    //       }
-    //     }
-    //   });
-    // }
-
-    // 匹配优惠
     if (products.length > 0) {
       // 创建产品映射表，以唯一标识为键
       const productMap = new Map();
@@ -264,12 +251,27 @@ const createOrderCallback = async () => {
 
     tradeNo.value = orderData[0]!.tradeNo
 
+    const payChannelStr = actualAmount.value === 0 ? 'inner_points' : 'paypal_checkout'  // 支付方式
+
     const {data: paymentData} = await paymentApi({
-      payChannelStr: 'paypal_checkout', // 支付方式
+      payChannelStr,
       tradeNo: tradeNo.value,
       orderType: '0',
     })
 
+    // 0元支付
+    if (actualAmount.value === 0) {
+      if (paymentData === 'success') {
+        cartStore.clear()
+        paySuccessPopupRef.value?.show()
+        return ''
+      } else {
+        throw new Error('Payment failed')
+      }
+      return
+    }
+
+    // 非0元支付（走 PayPal 支付）
     if (paymentData) {
       return paymentData;
     } else {
@@ -330,18 +332,18 @@ const removeCart = (index: number) => {
 const isDiscount = ref(false)
 const formRef = ref<InstanceType<typeof ElForm>>()
 const applyCode = () => {
-  if (!userStore.isLogin) {
-    ElMessage({
-      message: 'You can only apply coupons after logging in!',
-      type: 'warning',
-      duration: 2000,
-      showClose: true,
-      onClose: () => {
-        showLoginWindow()
-      }
-    })
-    return
-  }
+  // if (!userStore.isLogin) {
+  //   ElMessage({
+  //     message: 'You can only apply coupons after logging in!',
+  //     type: 'warning',
+  //     duration: 2000,
+  //     showClose: true,
+  //     onClose: () => {
+  //       showLoginWindow()
+  //     }
+  //   })
+  //   return
+  // }
 
   formRef.value!.validate(async valid => {
     if (!valid) return;
@@ -358,6 +360,17 @@ const delCode = () => {
   isDiscount.value = false
   confirmOrder()
 }
+
+// 实际付款金额
+const actualAmount = computed<number>(() => {
+  return Number(offerData.value?.estimatedAmount || 0)
+})
+
+watch(() => actualAmount.value, (newVal) => {
+  if (newVal > 0) {
+    loadPaypal()
+  }
+})
 </script>
 
 <style scoped lang="scss">
@@ -397,6 +410,18 @@ const delCode = () => {
   width: 110px;
 }
 
+.checkout-btn {
+  height: 45px;
+  font-size: 16px;
+}
+
+@media (max-width: 1259px) {
+  .checkout-btn {
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 991px) {
   .cart-container {
     .review-container {
@@ -409,6 +434,11 @@ const delCode = () => {
       position: static;
     }
   }
+
+  .checkout-btn {
+    height: 55px;
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -417,4 +447,17 @@ const delCode = () => {
   }
 }
 
+@media (max-width: 559px) {
+  .checkout-btn {
+    height: 45px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 359px) {
+  .checkout-btn {
+    height: 35px;
+    font-size: 13px;
+  }
+}
 </style>

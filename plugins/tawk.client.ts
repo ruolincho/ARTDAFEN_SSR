@@ -1,12 +1,18 @@
 import {useUserStore} from "~/stores/modules/user";
 
 export default defineNuxtPlugin(() => {
+
+    // 只在生产环境生效
+    if (import.meta.env.MODE !== 'production') {
+        console.log('[tawk] 当前非生产环境：', import.meta.env.MODE)
+        return
+    }
+
     if (process.server) return; // 确保只在客户端执行
 
     // 插入 tawk.to 嵌入脚本
     (function() {
         // 保证 Tawk_API 可访问
-
         window.Tawk_API = window.Tawk_API || {}
         window.Tawk_LoadStart = new Date()
 

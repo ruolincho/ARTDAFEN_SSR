@@ -573,7 +573,7 @@
                 <p class="f-bold">Total：<span
                   class="text-26 text-error">{{ currencyStore.formatToCurrency(totalPrice || 0) }}</span></p>
               </div>
-              <el-button class="w-full" size="large" type="danger" @click="addToCart">Add To Cart</el-button>
+              <el-button class="w-full add-cart__button" size="large" type="danger" @click="addToCart">Add To Cart</el-button>
             </template>
           </div>
         </div>
@@ -784,9 +784,22 @@ const moreInfoVisible = ref([false, false, false, false])
 const currentView = ref('custom')
 const contentNumber = ref(1)
 
-const META = pageMeta["/custom-paint"] || {}
+const HEAD = pageMeta["/custom-paint"][route.params.work] || {}
+const origin = useRequestURL().origin
 
-useHead(META[route.params.work]);
+useHead({
+  title: HEAD?.title || '',
+  meta: [
+    ...(HEAD?.meta ?? []),
+    { name: 'robots', content: route.params.themeId ? 'noindex, follow' : 'index, follow' }
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: `${origin}/custom-paint/${route.params.work}`
+    }
+  ]
+});
 
 const reReckon = ref(false) // 重新识别
 const handleImageChange = () => {

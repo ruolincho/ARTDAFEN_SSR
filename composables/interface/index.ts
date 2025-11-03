@@ -58,7 +58,7 @@ export namespace JsonLd {
    */
   export interface ProductJsonLdOptions {
     siteUrl?: string                       // 站点根域名（用于拼 canonical / 变体URL）
-    countryCodes?: string[]                // 可配送国家（ISO 3166-1 alpha-2）
+    countryCodes?: string[]            // 可配送国家（ISO 3166-1 alpha-2）
     handlingDays?: { min: number; max: number }
     transitDays?: { min: number; max: number }
     returnDays?: number                    // 退货窗口（天）
@@ -76,8 +76,5 @@ export namespace JsonLd {
       reviewBody?: string
       datePublished?: string                // ISO 日期 '2025-09-17'
     }>
-    // shippingRate（两种方式二选一；你提供金额）
-    shippingRateUSD?: number                // 方式A：全球统一基准邮费（USD）
-    shippingRateByCountry?: Record<string, number> // 方式B：按国家设定邮费（USD）
   }
 }

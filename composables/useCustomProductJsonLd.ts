@@ -1,8 +1,9 @@
+import { computed } from 'vue'
 import type {IProduct} from "~/api/interface/product/product";
 import type {JsonLd} from "~/composables/interface";
 import {POP_COUNTRY_CODES} from "~/composables/useProductJsonLd";
 import {useCurrencyStore} from "~/stores/modules/currency";
-import {imagePrefix} from "../utils";
+import {imagePrefix} from "~/utils";
 
 export function useCustomProductJsonLd(
     goodsDetail: IProduct.Row | null | undefined,
@@ -29,61 +30,6 @@ export function useCustomProductJsonLd(
         return d.toISOString().slice(0, 10) // 仅日期部分 YYYY-MM-DD
     }
 
-    // —— 生成 shippingDetails ——（增加 shippingRate 支持）
-    // 方式A：全局统一邮费
-    const shippingDetailsGlobal: any = {
-        "@context": "https://schema.org/",
-        "@type": "OfferShippingDetails",
-        "@id": "#shipping_global_standard",
-        "shippingDestination": {"@type": "DefinedRegion", "addressCountry": countryCodes},
-        "deliveryTime": {
-            "@type": "ShippingDeliveryTime",
-            "handlingTime": {
-                "@type": "QuantitativeValue",
-                "minValue": handling.min,
-                "maxValue": handling.max,
-                "unitCode": "DAY"
-            },
-            "transitTime": {
-                "@type": "QuantitativeValue",
-                "minValue": transit.min,
-                "maxValue": transit.max,
-                "unitCode": "DAY"
-            }
-        }
-    }
-    if (typeof options.shippingRateUSD === 'number') {
-        shippingDetailsGlobal.shippingRate = {
-            "@type": "MonetaryAmount",
-            "currency": "USD",
-            "value": String(options.shippingRateUSD.toFixed(2))
-        }
-    }
-
-    // 方式B：按国家分组邮费（会额外生成多条 shippingDetails）
-    const shippingDetailsByCountry: any[] = []
-    if (options.shippingRateByCountry && Object.keys(options.shippingRateByCountry).length) {
-        // 按“相同邮费值”把国家聚合起来，减少对象数量
-        const groups = new Map<number, string[]>()
-        for (const c of countryCodes) {
-            const rate = options.shippingRateByCountry[c]
-            if (typeof rate === 'number') {
-                if (!groups.has(rate)) groups.set(rate, [])
-                groups.get(rate)!.push(c)
-            }
-        }
-        let i = 1
-        for (const [rate, countries] of groups.entries()) {
-            shippingDetailsByCountry.push({
-                "@context": "https://schema.org/",
-                "@type": "OfferShippingDetails",
-                "@id": `#shipping_group_${i++}`,
-                "shippingDestination": {"@type": "DefinedRegion", "addressCountry": countries},
-                "deliveryTime": shippingDetailsGlobal.deliveryTime,
-                "shippingRate": {"@type": "MonetaryAmount", "currency": "USD", "value": String(rate.toFixed(2))}
-            })
-        }
-    }
 
     const jsonLd = computed(() => {
         const p = goodsDetail
@@ -125,9 +71,9 @@ export function useCustomProductJsonLd(
                     "maxValue": transit.max,
                     "unitCode": "DAY"
                 }
-            }
-            // 如能提供代表价，可加：
-            // ,"shippingRate": { "@type":"MonetaryAmount", "currency": defaultCurrency, "value": "12.99" }
+            },
+            "shippingRate": { "@type":"MonetaryAmount", "currency": defaultCurrency, "value": "0.00" },
+            "shippingRateType": "https://schema.org/FreeShipping"
         }
 
         // 商品详情
@@ -146,9 +92,7 @@ export function useCustomProductJsonLd(
                 "availability": "https://schema.org/InStock",
                 "itemCondition": "https://schema.org/NewCondition",
                 // 如果你使用“按国家邮费”，把所有组都挂上；否则挂全局对象
-                "shippingDetails": shippingDetailsByCountry.length
-                    ? shippingDetailsByCountry.map((_, idx) => ({"@id": `#shipping_group_${idx + 1}`}))
-                    : [{"@id": "#shipping_global_standard"}], // 引用上面统一的运费对象
+                "shippingDetails":[{"@id": "#shipping_global_standard"}], // 引用上面统一的运费对象
                 "hasMerchantReturnPolicy": {"@id": "#return_policy_global"} // 引用上面统一的退货对象
             },
             "additionalProperty": [
@@ -194,7 +138,7 @@ export function useCustomProductJsonLd(
         }
 
         // 返回数组：Google 支持同一 <script> 中输出多个 JSON-LD 对象（shipping 可能是“全局1条 + 每国分组若干条”）
-        return [product, ...(shippingDetailsByCountry.length ? shippingDetailsByCountry : [shippingDetailsGlobal]), returnPolicy]
+        return [product, shippingDetailsGlobal, returnPolicy]
     })
 
     /** 便捷方法：直接把 JSON-LD 注入到 <head>（SSR/CSR均可） */

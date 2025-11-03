@@ -75,6 +75,7 @@ import {formatTimestamp} from "~/utils/format";
 import {debounce} from "lodash-es";
 import {useUserStore} from "~/stores/modules/user";
 import {blogThumbsApi} from "~/api/modules/likes/likes";
+import {useLockScroll} from "~/composables/useLockScroll";
 
 defineOptions({
   name: 'BlogPopup',
@@ -114,18 +115,8 @@ watch(
   }
 )
 
-watch(
-  () => props.modelValue,
-  (newValue) => {
-    if (newValue) {
-      // 禁用页面滚动
-      document.body.style.overflow = 'hidden';
-    } else {
-      // 启用页面滚动
-      document.body.style.overflow = '';
-    }
-  }
-)
+// 监听 visible 变化 锁定滚动
+useLockScroll(toRef(props, 'modelValue'))
 
 const close = () => {
   emit("update:modelValue", false);

@@ -1,9 +1,10 @@
 // @ts-ignore
 export default defineNuxtConfig({
-    ssr: true,
+    ssr: process.env.NUXT_PUBLIC_ENABLE_SSR === 'true',
     modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots'],
     runtimeConfig: {
         public: {
+            siteName: process.env.NUXT_PUBLIC_SITE_NAME,
             siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
             apiBase: process.env.NUXT_PUBLIC_API_BASE,
             obsUrl: process.env.NUXT_PUBLIC_OBS_URL,
@@ -101,6 +102,6 @@ export default defineNuxtConfig({
         }
     },
     nitro: {
-        compatibilityDate: '2025-09-08'
+        compatibilityDate: '2025-10-29',
     }
 })

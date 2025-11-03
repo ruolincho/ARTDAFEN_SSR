@@ -76,6 +76,7 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import {useAppStore} from "~/stores/modules/app";
 import {imagePrefix} from "~/utils";
+import {useLockScroll} from '~/composables/useLockScroll'
 
 defineOptions({
   name: 'CasePreview',
@@ -90,6 +91,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 const appStore = useAppStore()
+useLockScroll(toRef(props, 'modelValue'))
 
 const modules = [Autoplay, Pagination, Navigation, Thumbs]
 const thumbsSwiper = ref<SwiperClass>()

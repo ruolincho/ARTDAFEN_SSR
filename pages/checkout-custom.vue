@@ -71,14 +71,19 @@
           <span>Estimated Total</span>
           <div>
             <!-- 优惠之前的金额（需要加上预计运费） -->
-            <p v-if="offerData?.discountAmount > 0" class="text-through text-gray-600">{{
+            <p v-if="offerData?.discountAmount > 0" class="text-through text-gray-600">
+              {{
                 currencyStore.formatToCurrency(Number(offerData.originalAmount || 0) + Number(offerData.estimatedDeliveryAmount || 0))
-              }}</p>
+              }}
+            </p>
             <!-- 实付金额 -->
-            <p>{{ currencyStore.formatToCurrency(Number(offerData.estimatedAmount || 0) || customStore.subtotal) }}</p>
+            <p>{{ currencyStore.formatToCurrency(actualAmount) }}</p>
           </div>
         </div>
-        <div id="paypal-button-container" class="paypal-button-container"></div>
+        <!-- paypal 按钮 -->
+        <div id="paypal-button-container" class="paypal-button-container" v-if="actualAmount !== 0"></div>
+        <!-- 积分支付 按钮 -->
+        <el-button type="primary" class="w-full checkout-btn" @click="createOrderCallback" v-else>Secure Checkout</el-button>
         <div class="mt-15 text-16">
           The estimated shipping will be confirmed once you added your shipping address in checkout.
         </div>
@@ -133,7 +138,6 @@ const previewImg = ref('')
 
 onMounted(() => {
   if (customStore.subtotalQuantity > 0) {
-    loadPaypal()
     _init()
   }
   $bus.on('loginSuccess', _init)
@@ -274,12 +278,27 @@ const createOrderCallback = async () => {
     !isCreate.value && await createOrderApi(formData.getFormData())
     isCreate.value = true;
 
+    const payChannelStr = actualAmount.value === 0 ? 'inner_points' : 'paypal_checkout'  // 支付方式
+
     const {data: paymentData} = await paymentApi({
-      payChannelStr: 'paypal_checkout', // 支付方式
+      payChannelStr,
       tradeNo: tradeNo.value,
       orderType: '4',
     })
 
+    // 0元支付
+    if (actualAmount.value === 0) {
+      if (paymentData === 'success') {
+        customStore.clear()
+        paySuccessPopupRef.value?.show()
+        return ''
+      } else {
+        throw new Error('Payment failed')
+      }
+      return
+    }
+
+    // 非0元支付（走 PayPal 支付）
     if (paymentData) {
       return paymentData;
     } else {
@@ -354,18 +373,18 @@ const waitForUploadSuccess = (): Promise<void> => {
 const isDiscount = ref(false)
 const formRef = ref<InstanceType<typeof ElForm>>()
 const applyCode = () => {
-  if (!userStore.isLogin) {
-    ElMessage({
-      message: 'You can only apply coupons after logging in!',
-      type: 'warning',
-      duration: 2000,
-      showClose: true,
-      onClose: () => {
-        showLoginWindow()
-      }
-    })
-    return
-  }
+  // if (!userStore.isLogin) {
+  //   ElMessage({
+  //     message: 'You can only apply coupons after logging in!',
+  //     type: 'warning',
+  //     duration: 2000,
+  //     showClose: true,
+  //     onClose: () => {
+  //       showLoginWindow()
+  //     }
+  //   })
+  //   return
+  // }
 
   if (isCreate.value) return ElMessage.warning('Order has been created, coupon cannot be applied repeatedly!')
   formRef.value!.validate(async valid => {
@@ -384,6 +403,17 @@ const delCode = () => {
   isDiscount.value = false
   confirmOrder()
 }
+
+// 实际付款金额
+const actualAmount = computed<number>(() => {
+  return Number(offerData.value?.estimatedAmount || 0)
+})
+
+watch(() => actualAmount.value, (newVal) => {
+  if (newVal > 0) {
+    loadPaypal()
+  }
+})
 </script>
 
 <style scoped lang="scss">
@@ -429,6 +459,18 @@ const delCode = () => {
   width: 103px;
 }
 
+.checkout-btn {
+  height: 45px;
+  font-size: 16px;
+}
+
+@media (max-width: 1259px) {
+  .checkout-btn {
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 991px) {
   .cart-container {
     .review-container {
@@ -441,6 +483,11 @@ const delCode = () => {
       position: static;
     }
   }
+
+  .checkout-btn {
+    height: 55px;
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -449,4 +496,17 @@ const delCode = () => {
   }
 }
 
+@media (max-width: 559px) {
+  .checkout-btn {
+    height: 45px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 359px) {
+  .checkout-btn {
+    height: 35px;
+    font-size: 13px;
+  }
+}
 </style>
