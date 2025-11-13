@@ -3,6 +3,7 @@ import {TRADE_MODULE} from "~/api/helper/prefix";
 import type {IProduct} from "~/api/interface/product/product";
 import type {IHome} from "~/api/interface/home/home";
 import type {IPage} from "~/api/interface";
+import type {General} from "~/types/global";
 
 /**
  * 产品详情
@@ -70,4 +71,12 @@ export const getBrandRecommendApi = (params: IProduct.BrandQuery) => {
  */
 export const getArtworksApi = (params: IProduct.ArtworksQuery) => {
     return $http().post<IPage<General.GoodsItem[]>>(TRADE_MODULE + `/product/artist/artworks`, params)
+}
+
+/**
+ * 购物车链接查询
+ * @param params
+ */
+export const checkoutLinkApi = (params: IProduct.CheckoutLinkQuery) => {
+    return $http().post<IProduct.CheckoutLinkRow>(TRADE_MODULE + `/product/checkout/link`, params)
 }

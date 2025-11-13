@@ -20,6 +20,7 @@
     "aos": "^2.3.4",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
+    "decimal.js": "^10.6.0",
     "fflate": "^0.8.2",
     "i18n-jsautotranslate": "^3.18.0",
     "jsencrypt": "^3.3.2",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@element-plus/nuxt": "^1.1.4",
     "@nuxt/types": "^2.18.1",
+    "@types/google.accounts": "^0.0.18",
     "@types/openseadragon": "^4.1.0",
     "element-plus": "^2.11.2",
     "sass": "^1.92.1",

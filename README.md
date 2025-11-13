@@ -287,9 +287,6 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     if (!process.client) return
 
-    const config = useRuntimeConfig();
-    const GTM_ID = config.public.gtmId;
-
     if (!GTM_ID) {
         console.warn('[gtm] GTM Measurement ID is not provided.')
         return;

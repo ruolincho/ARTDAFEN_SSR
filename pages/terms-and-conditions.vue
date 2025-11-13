@@ -284,8 +284,7 @@
 import {CONTACT_EMAIL} from "@/config";
 import {pageMeta} from "~/config/pageMeta";
 
-const route = useRoute()
-useHead(pageMeta[route.path] ?? pageMeta["/terms-and-conditions"]);
+useHead(pageMeta["/terms-and-conditions"] ?? {});
 
 defineOptions({
   name: 'PrivacyPolicy'

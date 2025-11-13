@@ -1,3 +1,5 @@
+import type {TechniqueCodeType} from "~/types/enumeration";
+
 export namespace IHome {
     /*菜单数据*/
     export interface MenuRow {
@@ -16,7 +18,7 @@ export namespace IHome {
             endPrice?: string | null
             color?: string
             code?: string
-            techniqueId?: string
+            techniqueId?: TechniqueCodeType
             referenceId?: string
         }
         /*子*/

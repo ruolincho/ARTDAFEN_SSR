@@ -1,6 +1,8 @@
 import type {RouteParamValue} from "vue-router";
 import type {ISpecs} from "~/api/interface/specs/specs";
 import type {IPageQuery} from "~/api/interface";
+import type { General, ObjectNode} from "~/types/global";
+import type {TechniqueCodeType} from "~/types/enumeration";
 
 export namespace IProduct {
 
@@ -15,7 +17,7 @@ export namespace IProduct {
     /*产品详情*/
     export interface Row {
         code: string //	版画代码
-        techniqueId: string // 工艺编号
+        techniqueId: TechniqueCodeType // 工艺编号
         id: string //	商品编号
         name: string // 名称
         title: string // 标题
@@ -73,6 +75,8 @@ export namespace IProduct {
         endPrice?: string | null;
         /*创作者编号 */
         creatorId?: string | null;
+        /*商品工艺编号 */
+        techniqueId?: TechniqueCodeType | null;
     }
 
     /*产品列表请求参数*/
@@ -100,7 +104,7 @@ export namespace IProduct {
     /*相关推荐请求参数*/
     export interface RelatedQuery {
         /*商品工艺编号 */
-        techniqueId: string;
+        techniqueId: TechniqueCodeType;
         /*商品编号 */
         productId: string;
         /*创作者编号 */
@@ -119,5 +123,25 @@ export namespace IProduct {
     export interface ArtworksQuery extends IPageQuery {
         /*创作者编号 */
         creatorId: string;
+    }
+
+    /*购物车链接请求参数*/
+    export interface CheckoutLinkQuery {
+        /*Google提供的编号 */
+        offerId: string;
+        /*尺寸编号 */
+        dimensionId?: string;
+        /*已选油画配件列表, key: 配件编号, value: 已选配件规格 JSON字符串 */
+        parts?: Record<string, any>;
+    }
+
+    /*购物车链接响应参数*/
+    export interface CheckoutLinkRow {
+        /*商品 */
+        product: General.GoodsItem;
+        /*规格 */
+        specs: ISpecs.Row;
+        /*尺寸编号 */
+        dimensionId: string;
     }
 }

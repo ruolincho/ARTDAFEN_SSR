@@ -1,4 +1,7 @@
-import {ArtCode} from "~/types/enumeration.d";
+import {ArtCodeEnum} from "~/types/enumeration";
+import {mergeWith} from "lodash-es";
+
+type HeadObject = Record<string, any>
 
 export const pageMeta: Record<string, any> = {
     "/": {
@@ -19,6 +22,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/about": {
+        title: "About - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -34,6 +38,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/artists-all": {
+        title: "Artists - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -47,8 +52,8 @@ export const pageMeta: Record<string, any> = {
             }
         ],
     },
-
     "/artists-brief": {
+        title: "Artists - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -64,6 +69,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/artists-top": {
+        title: "Top Artists - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -79,6 +85,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/best": {
+        title: "Best Sellers - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -94,6 +101,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/blog": {
+        title: "Blog - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -109,6 +117,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/collaboration": {
+        title: "Collaboration - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -124,6 +133,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/contact": {
+        title: "Contact - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -139,6 +149,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/cookies-policy": {
+        title: "Cookies & Tracking - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -154,7 +165,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/custom-paint": {
-        [ArtCode.Painting]: {
+        [ArtCodeEnum.Painting]: {
             title: 'Custom Hand-Painted Oil Paintings | Portrait & Masterpiece Reproduction | ArtDafen',
             meta: [
                 {
@@ -168,7 +179,7 @@ export const pageMeta: Record<string, any> = {
                 }
             ]
         },
-        [ArtCode.Prints]: {
+        [ArtCodeEnum.Prints]: {
             title: 'Printed Custom Paintings | Professional Canvas Reproduction | ArtDafen',
             meta: [
                 {
@@ -181,7 +192,7 @@ export const pageMeta: Record<string, any> = {
                 }
             ]
         },
-        [ArtCode.Certificates]: {
+        [ArtCodeEnum.Certificates]: {
             title: 'Custom Certificate Printing with 3D Texture | Personalized Art Certificate | ArtDafen',
             meta: [
                 {
@@ -197,6 +208,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/faq": {
+        title: "FAQ - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -212,6 +224,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/forget-password": {
+        title: "Password Recovery - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -227,6 +240,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/news": {
+        title: "News - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -242,6 +256,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/notice": {
+        title: "Notice - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -257,6 +272,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/privacy-policy": {
+        title: "Privacy & Policy - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -272,6 +288,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/product": {
+        title: "Products - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -287,6 +304,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/search": {
+        title: "Search - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -302,6 +320,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/terms-and-conditions": {
+        title: "Terms & Conditions - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -317,6 +336,7 @@ export const pageMeta: Record<string, any> = {
     },
 
     "/our-return-policy": {
+        title: "Return Policy - ART DAFEN",
         meta: [
             {
                 name: "description",
@@ -330,6 +350,18 @@ export const pageMeta: Record<string, any> = {
             }
         ],
     },
-
-
 };
+
+/**
+ * 合并 useHead 对象，数组拼接、对象递归合并、普通值覆盖
+ */
+export const mergeHeadWithLodash = (base: HeadObject, extend: HeadObject): HeadObject => {
+    return mergeWith({}, base, extend, (objValue, srcValue) => {
+        // 如果是数组，则拼接
+        if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+            return objValue.concat(srcValue)
+        }
+        // 否则交给 lodash 默认逻辑（递归合并或覆盖）
+        return undefined
+    })
+}

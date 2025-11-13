@@ -152,7 +152,7 @@ import {useAppStore} from "~/stores/modules/app";
 import type {INews} from "~/api/interface/news/news";
 import type {IPage, IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
-import {pageMeta} from "~/config/pageMeta";
+import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {ref, watch} from "vue";
 
 defineOptions({
@@ -264,17 +264,19 @@ const nextUrlAbs = computed(() => hasNext.value
   : null
 )
 
-useHead({
-  link: [
-    {rel: 'canonical', href: selfUrl.value},
-    ...(prevUrlAbs.value ? [{rel: 'prev', href: prevUrlAbs.value}] : []),
-    ...(nextUrlAbs.value ? [{rel: 'next', href: nextUrlAbs.value}] : []),
-  ],
-  meta: [
-    ...(pageMeta["/news"]?.meta ?? []),
-    {name: 'robots', content: 'index,follow'},
-  ]
-})
+useHead(mergeHeadWithLodash(
+  pageMeta["/news"] ?? {},
+  {
+    link: [
+      {rel: 'canonical', href: selfUrl.value},
+      ...(prevUrlAbs.value ? [{rel: 'prev', href: prevUrlAbs.value}] : []),
+      ...(nextUrlAbs.value ? [{rel: 'next', href: nextUrlAbs.value}] : []),
+    ],
+    meta: [
+      {name: 'robots', content: 'index,follow'},
+    ]
+  }
+))
 
 </script>
 

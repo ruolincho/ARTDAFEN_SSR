@@ -78,10 +78,9 @@ defineOptions({
 })
 
 const router = useRouter()
-const route = useRoute()
 const { resetPasswordFn } = useAuth()
 
-useHead(pageMeta[route.path] ?? pageMeta["/forget-password"]);
+useHead(pageMeta["/forget-password"] ?? {});
 
 const validatePassword = (rule: any, value: any, callback: any) => {
   if (ruleForm.value.password !== value) callback(new Error('Passwords do not match'))

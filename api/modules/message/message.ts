@@ -4,7 +4,7 @@ import type {IMessage} from "~/api/interface/message/message";
 import type {IPage} from "~/api/interface";
 
 /**
- * 消息订阅（匿名）
+ * 消息订阅（匿名）在 https://portraitpainting.com/ 的项目中使用到了记得同步到另外一边
  * @param params
  */
 export const subscribe = (params: { email: string }) => {

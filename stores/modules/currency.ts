@@ -51,22 +51,27 @@ export const useCurrencyStore = defineStore(
 
         /**
          * 格式化金额
-         * @param value
-         * @param code
+         * @param value 金额值
+         * @param code 货币代码，默认当前货币
          */
         const formatToCurrency = (value: string | number, code?: string) => {
             if (!import.meta.client) return ''
-            // 如果输入是字符串，先尝试将其转换为数字
-            if (typeof value === 'string') {
-                value = parseFloat(value);
-                if (isNaN(value)) {
-                    throw new Error('Invalid number format');
-                }
+
+            // 转换输入为数字
+            const num = typeof value === 'string' ? parseFloat(value) : value;
+            if (isNaN(num)) {
+                throw new Error('Invalid number format');
             }
+
+            // 判断是否为整数
+            const isInteger = Number.isInteger(num);
+
             // 使用toLocaleString方法格式化数字为金额格式
-            return value.toLocaleString(navigator.language, {
+            return num.toLocaleString(navigator.language, {
                 style: 'currency',
                 currency: code || currentCurrency.value,
+                minimumFractionDigits: isInteger ? 0 : 2,
+                maximumFractionDigits: 2,
             });
         }
 

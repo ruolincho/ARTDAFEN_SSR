@@ -13,7 +13,7 @@ export const useTawk = () => {
 
         const hash = base64ToHex(hashStr);
 
-        window.Tawk_API.login({
+        window.Tawk_API.login?.({
             userId,
             name,
             email,
@@ -31,7 +31,7 @@ export const useTawk = () => {
     const tawkLogout = () => {
         if (!isLoaded) return;
 
-        window.Tawk_API.logout((error: any) => {
+        window.Tawk_API.logout?.((error: any) => {
             if (!error) {
                 window.__tawk_logged_in__ = false;
                 console.log('Tawk logout success');

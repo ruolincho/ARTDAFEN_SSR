@@ -3,6 +3,7 @@ import {computed, ref} from 'vue';
 import piniaPersistConfig from "../helper/persist";
 import type {ICustom} from "~/api/interface/custom/custom";
 import type {IPaint} from "~/api/interface/paint/paint";
+import Decimal from "decimal.js";
 
 export const useCustomStore = defineStore(
     'custom',
@@ -21,7 +22,9 @@ export const useCustomStore = defineStore(
 
         // 计算总价
         const subtotal = computed(() => {
-            return Number(carts.value.actualAmount ?? 0) * Number(carts.value.quantity ?? 0)
+            return new Decimal(carts.value.actualAmount || 0)
+                .mul(carts.value.quantity || 0)
+                .toNumber()
         })
 
         // 计算总数量

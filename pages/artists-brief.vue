@@ -68,7 +68,7 @@ const route = useRoute()
 const router = useRouter()
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
-useHead(pageMeta[route.path] ?? pageMeta["/artists-brief"]);
+useHead(pageMeta["/artists-brief"] ?? {});
 
 // 获取艺术家列表
 const artistsList = ref<IArtists.Res>({})

@@ -1,13 +1,13 @@
 <template>
   <section class="contact-section">
     <div class="container">
-      <h2 class="text-26 f-bold pt-lg-50 pt-30">Contact Us</h2>
+      <h1 class="text-26 f-bold pt-lg-50 pt-30">Contact Us</h1>
       <p class="text-16 text-gray-600 my-20">
         ARTDAFEN is a curated online platform for art transactions, introducing a wide range of domestic and
         international brands. If you are interested in having your brand listed on our platform, working with us as a
         partner, or inquiring about bulk purchases or consulting, please fill out the appropriate form for each case.
       </p>
-      <h3 class="text-20 f-bold-500 my-20">Brand Entry Procedure</h3>
+      <h2 class="text-20 f-bold-500 my-20">Brand Entry Procedure</h2>
       <ul class="list-ul decimal my-20">
         <li class="text-16 text-gray-600 mb-10">Submit an entry application.</li>
         <li class="text-16 text-gray-600 mb-10">Our team will review your application. (If your brand/category fits our
@@ -18,7 +18,7 @@
           confirmed.
         </li>
       </ul>
-      <h3 class="text-20 f-bold-500 my-20">※ Important Notes on Brand Entry</h3>
+      <h2 class="text-20 f-bold-500 my-20">※ Important Notes on Brand Entry</h2>
       <ul class="list-ul decimal my-20">
         <li class="text-16 text-gray-600 mb-10">ARTDAFEN only accepts brands that align with our business direction and
           sales strategy.
@@ -34,8 +34,8 @@
           registration, delivery, and CS) or assign a dedicated manager, your application may be declined.
         </li>
       </ul>
-      <h3 class="text-20 f-bold-500 my-20">※ For bulk purchase inquiries, please include [brand/product introduction],
-        intended items, quantity, and preferred delivery date.</h3>
+      <h2 class="text-20 f-bold-500 my-20">※ For bulk purchase inquiries, please include [brand/product introduction],
+        intended items, quantity, and preferred delivery date.</h2>
       <ul class="list-ul my-20">
         <li class="text-16 text-gray-600 mb-10">We appreciate your interest in ARTDAFEN and value your proposal.</li>
         <li class="text-16 text-gray-600 mb-10">Our team will review your proposal in the order received.</li>
@@ -75,14 +75,9 @@
 </template>
 
 <script setup lang="ts">
-
-import {useHead} from "#imports";
 import {pageMeta} from "~/config/pageMeta";
 
-const route = useRoute()
-
-useHead(pageMeta[route.path] ?? pageMeta["/contact"]);
-
+useHead(pageMeta["/contact"] ?? {});
 
 const pointList = ref([
   {

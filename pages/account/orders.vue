@@ -33,7 +33,7 @@
                 <div class="acea-row row-middle p-content flex-1">
                   <div class="p-img mr-lg-20 mr-10">
                     <div class="aspect-ratio p-10 border-sm border-gray-200">
-                      <img class="w-full h-full fit-contain" :src="imagePrefix(goods.img)" alt="">
+                      <img class="w-full h-full fit-contain" :src="imagePrefix(goods.img)" :alt="goods.title">
                     </div>
                   </div>
                   <div class="flex-1 mr-lg-20 mr-sm-10">

@@ -39,8 +39,8 @@
               <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="item in scope.rows" :key="item.id">
                 <div class="product-item cursor-pointer" v-no-click-when-selected="() => jumpToProduct(item)">
                   <div class="img-wrapper bg-gray-100">
-                    <img v-lazy="imagePrefix(item.img)" alt="">
-                    <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === '3000015'">
+                    <img v-lazy="imagePrefix(item.img)" :alt="item.title">
+                    <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === TechniqueCodeEnum.Originals">
                       <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
                       <div class="p-tag bg-error" v-if="item.status === '-1'">Sale Out</div>
                     </div>
@@ -103,6 +103,7 @@ import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {packQuery} from "~/composables/useQueryShort";
+import {TechniqueCodeEnum} from "~/types/enumeration";
 
 onMounted(() => {
   if (route.params.id) getDetail()

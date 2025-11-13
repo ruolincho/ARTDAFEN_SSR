@@ -50,7 +50,7 @@ import {getArtistsListBySearchApi} from "~/api/modules/artists/artists";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
-import {pageMeta} from "~/config/pageMeta";
+import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 
 defineOptions({
@@ -66,17 +66,14 @@ const route = useRoute()
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 const origin = useRequestURL().origin
 
-useHead({
-  meta: [
-    ...(pageMeta["/artists-all"]?.meta ?? []),
-  ],
-  link: [
-    {
-      rel: 'canonical',
-      href: `${origin}/artists-all`
-    }
-  ]
-})
+useHead(mergeHeadWithLodash(
+  pageMeta["/artists-all"] ?? {},
+  {
+    link: [
+      {rel: 'canonical', href: `${origin}/artists-all`},
+    ]
+  }
+))
 
 // 获取艺术家列表
 const artistsList = ref<IArtists.Row[]>([])

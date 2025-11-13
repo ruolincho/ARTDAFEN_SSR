@@ -52,8 +52,7 @@
 import {CONTACT_EMAIL} from "@/config";
 import {pageMeta} from "~/config/pageMeta";
 
-const route = useRoute()
-useHead(pageMeta[route.path] ?? pageMeta["/our-return-policy"]);
+useHead(pageMeta["/our-return-policy"] ?? {});
 
 defineOptions({
   name: 'PrivacyPolicy'

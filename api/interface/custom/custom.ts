@@ -85,7 +85,7 @@ export namespace ICustom {
         /*尺寸编号*/
         dimensionId: string;
         /*已选油画配件列表, key: 配件编号, value: 已选配件规格 JSON字符串 */
-        part: string;
+        partStr: string;
         /*预览图*/
         previewImg: Blob
         /*用户收货地址编号/商户自提点编号 */
@@ -96,6 +96,8 @@ export namespace ICustom {
         contentNumber: number | null;
         /*主题编号*/
         themeId: string | null;
+        /*用户手机号*/
+        mobile: string
     }
 
     /** 创建订单返回结果 */

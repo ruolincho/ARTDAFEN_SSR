@@ -1,3 +1,5 @@
+import type {TechniqueCodeType} from "~/types/enumeration";
+
 export namespace IShopping {
 
     /** 本地存储购物车数据 */
@@ -5,7 +7,7 @@ export namespace IShopping {
         /*店铺编号 */
         shopId: string;
         /*工艺编号 */
-        techniqueId: string;
+        techniqueId: TechniqueCodeType;
         /*商品编号 */
         productId: string;
         /*商品图片 */
@@ -41,7 +43,7 @@ export namespace IShopping {
         /*店铺编号 */
         shopId: string;
         /*工艺编号 */
-        techniqueId: string;
+        techniqueId: TechniqueCodeType;
         /*商品编号 */
         productId: string;
         /*商品规格编号 */
@@ -146,6 +148,8 @@ export namespace IShopping {
         addressId: string
         /*备注信息*/
         remarks: object
+        /*用户手机号*/
+        mobile: string
     }
 
     /** 创建订单返回结果 */

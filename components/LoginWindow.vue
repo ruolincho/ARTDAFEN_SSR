@@ -5,6 +5,7 @@
     width="424px"
     append-to-body
     class="wall-dialog"
+    @opened="handleOpened"
   >
     <div class="login-container border-gray-200 rounded-sm shadow-lg p-lg-32 p-20">
       <img class="logo" src="~/assets/images/logo.png" alt="logo">
@@ -48,9 +49,12 @@
         <NuxtLink to="/register" class="text-secondary ml-6 cursor-pointer">Create account</NuxtLink>
       </div>
       <el-divider><span class="text-gray-600 text-14">or</span></el-divider>
-      <div class="other-login text-14 text-gray-600 border-sm border-gray-600 text-center cursor-pointer" @click="toGoogleAuth">
+      <div v-if="isDev" class="other-login text-14 text-gray-600 border-sm border-gray-600 text-center cursor-pointer" @click="toGoogleAuth">
         <img class="icon" src="~/assets/images/google.png" alt="google">
         Login with Google
+      </div>
+      <div class="acea-row row-center-wrapper" v-else>
+        <div :id="BUTTON_ID"></div>
       </div>
     </div>
   </el-dialog>
@@ -63,6 +67,7 @@ import type {ElForm} from "element-plus";
 import {useAuth} from "~/composables/useAuth";
 import {emailReg} from "~/regular";
 import {HOME_URL, LOGIN_URL, STORAGE_BACK_URL} from "~/config";
+import { useGoogleAuth } from "~/composables/useGoogleAuth";
 
 defineOptions({
   name: 'LoginWindow'
@@ -72,6 +77,9 @@ onMounted(() => {
   reloadCaptcha()
 })
 
+const isDev = import.meta.env.MODE !== 'production'
+const BUTTON_ID = 'google-login-button'
+const { renderButton } = useGoogleAuth()
 const route = useRoute()
 const visible = ref(false)
 
@@ -133,6 +141,14 @@ const toGoogleAuth = () => {
 
 const open = () => {
   visible.value = true
+}
+
+const close = () => {
+  visible.value = false
+}
+
+const handleOpened = () => {
+  renderButton(BUTTON_ID, true, close)
 }
 
 defineExpose({

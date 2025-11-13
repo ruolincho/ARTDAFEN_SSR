@@ -1,4 +1,5 @@
 import {useUserStore} from "~/stores/modules/user";
+import {TAWK_WIDGET_ID, TAWK_PROPERTY_ID} from "~/config";
 
 export default defineNuxtPlugin(() => {
 
@@ -21,7 +22,7 @@ export default defineNuxtPlugin(() => {
             var s1 = document.createElement("script");
             s1.id = 'tawk-script';
             s1.async = true;
-            s1.src = 'https://embed.tawk.to/68f9a9b103c0d7194f5d0e4d/1j87jtnt0';
+            s1.src = `https://embed.tawk.to/${TAWK_PROPERTY_ID}/${TAWK_WIDGET_ID}`;
             s1.charset = 'UTF-8';
             (s1 as any).setAttribute('crossorigin','*');
             var s0 = document.getElementsByTagName("script")[0];
@@ -46,7 +47,7 @@ export default defineNuxtPlugin(() => {
 
             const hash = base64ToHex(chatHash) // 解码为16进制
 
-            window.Tawk_API.login({ userId, hash }, function(error: any) {
+            window.Tawk_API.login?.({ userId, hash }, function(error) {
                 if (!error) {
                     window.__tawk_logged_in__ = true // ✅ 标识已登录
                     console.log('Tawk login success')

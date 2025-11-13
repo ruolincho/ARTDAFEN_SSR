@@ -1,20 +1,97 @@
-import {ArtCode, type CodeType} from "~/types/enumeration.d";
+import {ArtCodeEnum, type ArtCodeType, SortCodeEnum, TechniqueCodeEnum} from "~/types/enumeration";
+import type {IHome} from "~/api/interface/home/home";
 
-// 工艺筛选可选项
-export const TECHNIQUE_OPTIONS = [
-    {label: 'Hand-painted oil painting', value: '3000012'},
-    // {label: 'Print painting', value: '3000013'},
-    {label: 'Relief painting', value: '3000014'},
-    {label: 'Originals paintings', value: '3000015'},
-]
+// 移动端中Popup模拟工艺的菜单数据
+export const techniqueMenu: IHome.MenuRow = {
+    id: '7777',
+    parentId: '0',
+    name: 'Technique',
+    config: { type: 'SORT' },
+    children: [
+        {
+            id: '7776',
+            parentId: '7777',
+            name: 'Hand-painted oil painting',
+            config: { type: 'SORT', code: TechniqueCodeEnum.Painting },
+            children: [],
+        },
+        // {
+        //   id: '7775',
+        //   parentId: '7777',
+        //   name: 'Print painting',
+        //   config: {type: 'SORT', code: TechniqueCodeEnum.Prints},
+        //   children: []
+        // },
+        {
+            id: '7774',
+            parentId: '7777',
+            name: 'Relief painting',
+            config: { type: 'SORT', code: TechniqueCodeEnum.Relief },
+            children: [],
+        },
+        {
+            id: '7773',
+            parentId: '7777',
+            name: 'Originals paintings',
+            config: { type: 'SORT', code: TechniqueCodeEnum.Originals },
+            children: [],
+        },
+    ],
+}
+// 移动端中Popup模拟价格排序的菜单数据
+export const priceMenu: IHome.MenuRow = {
+    id: '9999',
+    parentId: '0',
+    name: 'Price Sort',
+    config: { type: 'SORT' },
+    children: [
+        {
+            id: '9998',
+            parentId: '9999',
+            name: 'Price Sort By Desc',
+            config: { type: 'SORT', code: SortCodeEnum.Desc },
+            children: [],
+        },
+        {
+            id: '9997',
+            parentId: '9999',
+            name: 'Price Sort By Asc',
+            config: { type: 'SORT', code: SortCodeEnum.Asc },
+            children: [],
+        },
+    ],
+}
+// 移动端中Popup模拟销量排序的菜单数据
+export const salesMenu: IHome.MenuRow = {
+    id: '8888',
+    parentId: '0',
+    name: 'Sales Sort',
+    config: { type: 'SORT' },
+    children: [
+        {
+            id: '8887',
+            parentId: '8888',
+            name: 'Sales Sort By Desc',
+            config: { type: 'SORT', code: SortCodeEnum.Desc },
+            children: [],
+        },
+        {
+            id: '8886',
+            parentId: '8888',
+            name: 'Sales Sort By Asc',
+            config: { type: 'SORT', code: SortCodeEnum.Asc },
+            children: [],
+        },
+    ],
+}
 
 export const ARTIST_MENU_NAME = 'Artists' // 艺术家菜单名称
 export const CUSTOM_MENU_NAME = 'Photo to art' // 自定义商品菜单名称
 export const BEST_MENU_NAME = 'Best Sellers' // 热门商品菜单名称
 
 // 定制不同工艺的示例图片
-export const TECHNIQUE_EXAMPLE: Record<CodeType, { photo: string, paint: string }[]> = {
-    [ArtCode.Painting]: [
+export const TECHNIQUE_EXAMPLE: Record<ArtCodeType, { photo: string, paint: string }[]> = {
+    [ArtCodeEnum.Painting]: [
         {
             photo: '/static/custom/example/hand/example_photo1.png',
             paint: '/static/custom/example/hand/example_paint1.png',
@@ -56,7 +133,7 @@ export const TECHNIQUE_EXAMPLE: Record<CodeType, { photo: string, paint: string 
             paint: '/static/custom/example/hand/example_paint10.png',
         }
     ],
-    [ArtCode.Prints]: [
+    [ArtCodeEnum.Prints]: [
         {
             photo: '/static/custom/example/print/example_photo1.webp',
             paint: '/static/custom/example/print/example_paint1.webp',
@@ -78,7 +155,7 @@ export const TECHNIQUE_EXAMPLE: Record<CodeType, { photo: string, paint: string 
             paint: '/static/custom/example/print/example_paint5.webp',
         },
     ],
-    [ArtCode.Certificates]: [
+    [ArtCodeEnum.Certificates]: [
         {
             photo: '/static/custom/example/certificate/example_photo1.webp',
             paint: '/static/custom/example/certificate/example_paint1.webp',

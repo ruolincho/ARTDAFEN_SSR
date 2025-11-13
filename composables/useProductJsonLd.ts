@@ -260,6 +260,7 @@ export function useProductJsonLd(
 
     /** 便捷方法：直接把 JSON-LD 注入到 <head>（SSR/CSR均可） */
     function injectProductJsonLd() {
+
         useHead({
             script: [
                 {

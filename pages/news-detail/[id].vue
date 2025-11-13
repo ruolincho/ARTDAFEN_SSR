@@ -36,7 +36,7 @@
                   </div>
                 </div>
                 <div class="p-img overflow-hidden">
-                  <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" alt="">
+                  <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" :alt="item.title">
                 </div>
               </div>
             </div>

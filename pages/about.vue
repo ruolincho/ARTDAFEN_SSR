@@ -6,7 +6,7 @@
       <div class="intro-box-left border-r-sm">
         <div class="acea-row row-middle row-column f-bold-500 viscosity">
           <div>
-            <p class="text-50" v-aos="'zoom-in-up'">ABOUT<br/> ART<br/> DAFEN</p>
+            <h1 class="text-50" v-aos="'zoom-in-up'">ABOUT<br/>ART<br/>DAFEN</h1>
             <p class="text-16 text-gray-600 mt-10" v-aos="'zoom-in-up'">
               Since 1989 · <br/>
               Reimagined 2020<br/>
@@ -18,7 +18,7 @@
       </div>
       <div class="intro-box-right">
         <div class="max-wrap">
-          <div class="app-title text-50 f-bold-500 mb-40 text-center" v-aos="'fade-up'">ABOUT ART DAF EN</div>
+          <div class="app-title text-50 f-bold-500 mb-40 text-center" v-aos="'fade-up'">ABOUT ART DAFEN</div>
           <div class="text-22 f-bold-500 text-gray-600 pb-20 mb-20 border-b-md border-gray-600" v-aos="'fade-up'">
             WHERE IT ALL BEGAN: THE ROOTS OF DAFEN
           </div>
@@ -170,7 +170,7 @@
                 class="explore-item text-center p-10 border-sm border-gray-200 cursor-pointer select-none"
               >
                 <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="item.img" alt=""/>
+                  <img class="w-full h-full fit-cover" :src="item.img" alt="partner"/>
                 </div>
                 <p class="line2 text-14 mt-15" style="word-break: break-word; min-height: 34px;">{{ item.title }}</p>
               </div>
@@ -196,8 +196,7 @@ import {pageMeta} from "~/config/pageMeta";
 const bannerImage = imagePrefix('/static/artdafen/about-banner.webp');
 const modules = [Autoplay, Pagination, Navigation]
 
-const route = useRoute()
-useHead(pageMeta[route.path] ?? pageMeta["/about"]);
+useHead(pageMeta["/about"] ?? {})
 
 const partnerData = ref([
   {

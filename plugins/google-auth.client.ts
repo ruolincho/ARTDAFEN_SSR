@@ -1,4 +1,5 @@
 import { getUrlQuery } from '~/utils'
+import {GOOGLE_CLIENT_ID} from "~/config";
 
 export class AuthGoogle {
     /**
@@ -24,7 +25,7 @@ export class AuthGoogle {
     getAuthUrl() {
         const redirect_uri = `https://artdafen.com/get-google-code.html`
         const scope = 'email profile'
-        const client_id = '455586942399-nu9h43lv56jprqmq4sqeffr72n9d5u8a.apps.googleusercontent.com' // 应用的客户端ID
+        const client_id = GOOGLE_CLIENT_ID // 应用的客户端ID
         const access_type = 'offline'
         const response_type = 'code'
         const project_url = `${encodeURIComponent(location.origin + '/auth')}`

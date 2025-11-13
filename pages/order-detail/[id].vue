@@ -9,7 +9,7 @@
           <div class="review-item acea-row gap-base" v-for="(item, index) in generateList" :key="index">
             <div class="p-img">
               <div class="aspect-ratio p-10 border-sm border-gray-200">
-                <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" alt="">
+                <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" :alt="item.title">
               </div>
             </div>
             <div class="p-cont flex-1">

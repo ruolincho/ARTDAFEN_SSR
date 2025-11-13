@@ -37,7 +37,7 @@
                       :key="index"
                     >
                       <div class="w-full h-full acea-row row-center-wrapper">
-                        <img :src="imagePrefix(banner)" alt=""
+                        <img :src="imagePrefix(banner)" alt="banner"
                              style="user-select: none; max-height: 100%; max-width: 100%;"/>
                       </div>
                     </swiper-slide>
@@ -60,7 +60,7 @@
                       :key="index"
                     >
                       <div class="w-full h-full acea-row row-center-wrapper">
-                        <img :src="imagePrefix(banner)" alt=""
+                        <img :src="imagePrefix(banner)" alt="banner"
                              style="user-select: none; max-height: 100%; max-width: 100%;"/>
                       </div>
                     </swiper-slide>
@@ -142,7 +142,7 @@
                       @click="handleSelectSpecs(item_value, index1, index2, item.name)"
                     >
                       <div class="sku-img aspect-ratio" v-if="item_value.img">
-                        <img class="w-full h-full fit-cover" :src="imagePrefix(item_value.img)" alt=""/>
+                        <img class="w-full h-full fit-cover" :src="imagePrefix(item_value.img)" :alt="item_value.val"/>
                       </div>
                       <p class="line1 my-10 mx-20 text-center text-18">{{ item_value.val }}</p>
                     </div>
@@ -187,7 +187,7 @@
     <div class="container-middle">
       <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">Product Description</h1>
       <div class="img-box">
-        <img v-for="item in goodsDetail.details" :key="item" class="w-full" :src="imagePrefix(item)" alt="">
+        <img v-for="item in goodsDetail.details" :key="item" class="w-full" :src="imagePrefix(item)" alt="detail">
       </div>
       <div class="btn-box">
         <el-button class="w-full mt-20" plain size="large" @click="isOpenDesc = !isOpenDesc">
@@ -222,7 +222,7 @@
             <swiper-slide v-for="item in relatedList" :key="item.id">
               <div class="explore-item cursor-pointer" @click="jumpToProduct(item)">
                 <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" alt=""/>
+                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p class="text-12 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice || 0) }}</p>
@@ -250,8 +250,8 @@
           Brand Home
           <span class="iconfont icon-right-arrow text-28 ml-xs-60 ml-30"></span>
         </button>
-        <img class="w-full pc" :src="imagePrefix(goodsDetail?.brand?.background)" alt="">
-        <img class="w-full app" :src="imagePrefix(goodsDetail?.brand?.img)" alt="">
+        <img class="w-full pc" :src="imagePrefix(goodsDetail?.brand?.background)" alt="brand">
+        <img class="w-full app" :src="imagePrefix(goodsDetail?.brand?.img)" alt="brand">
       </div>
       <ClientOnly>
         <div class="recommend-swiper">
@@ -273,7 +273,7 @@
             <swiper-slide v-for="item in brandRecList" :key="item.id">
               <div class="explore-item cursor-pointer" @click="jumpToProduct(item)">
                 <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" alt=""/>
+                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p class="text-12 f-bold">{{ item.retailPrice }}</p>
@@ -386,8 +386,9 @@ const {data: goodsDetail, pending: isSkeleton} = await useAsyncData('goods-detai
   return data
 })
 
-const { injectProductJsonLd } = useProductJsonLd(goodsDetail.value, {})
+const { injectProductJsonLd, jsonLd } = useProductJsonLd(goodsDetail.value, { priceValidUntilDays: 7 })
 injectProductJsonLd()
+console.log('injectProductJsonLd =>', jsonLd.value)
 
 const specsCombination = ref<ISpecs.Row[]>([]) // Sku组合数据
 const specsList = ref({} as Record<string, ISpecs.SpecsListSchema[]>)
@@ -609,7 +610,7 @@ const addToCart = () => {
     specs: currentSpecs, // 商品规格值
     quantity: 1, // 购买数量
     dimensionId: null,
-    parts: null
+    parts: {}
   }
   cartStore.addition(cartRow)
   ElMessage.success('Add to cart success!')

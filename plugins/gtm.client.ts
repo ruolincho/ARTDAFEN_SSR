@@ -1,3 +1,5 @@
+import {GTM_ID} from "~/config";
+
 export default defineNuxtPlugin((nuxtApp) => {
     // 只在生产环境生效
     if (import.meta.env.MODE !== 'production') {
@@ -6,9 +8,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     if (!process.client) return
-
-    const config = useRuntimeConfig();
-    const GTM_ID = config.public.gtmId;
 
     if (!GTM_ID) {
         console.warn('[gtm] GTM Measurement ID is not provided.')

@@ -62,17 +62,19 @@ import {type ElForm, ElMessage} from "element-plus";
 import {faqList} from "~/config/faq";
 import {sendConsulting} from "~/api/modules/message/message";
 import {emailReg} from "~/regular";
-import {pageMeta} from "~/config/pageMeta";
+import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 
 const route = useRoute()
 
 const origin = useRequestURL().origin
-useHead({
-  link: [
-    {rel: 'canonical', href: `${origin}/faq`},
-  ],
-  ...pageMeta[route.path] ?? pageMeta["/faq"]
-});
+useHead(mergeHeadWithLodash(
+  pageMeta["/faq"] ?? {},
+  {
+    link: [
+      {rel: 'canonical', href: `${origin}/faq`},
+    ]
+  }
+))
 
 const messageForm = ref( {
   email: '',

@@ -1,4 +1,6 @@
 import translate from 'i18n-jsautotranslate'
+import type {Tawk_API} from "~/types/tawk-api";
+import type {TechniqueCodeType} from "~/types/enumeration";
 
 declare global {
     interface Window {
@@ -7,9 +9,16 @@ declare global {
         dataLayer: any[];
         gtag: (...args: any[]) => void;
         translate: typeof translate
-        Tawk_API: any; // 聊天组件API对象
-        Tawk_LoadStart: any; // 聊天组件启动的时间
-        __tawk_logged_in__: boolean; // 聊天组件是否已经登录
+        // 聊天组件API对象
+        Tawk_API: Tawk_API;
+        // 聊天组件启动的时间
+        Tawk_LoadStart: Date;
+        // 聊天组件是否已经登录
+        __tawk_logged_in__: boolean;
+        // 商家评价组件对象
+        merchantwidget: any;
+        // Google 登录 API 对象 (google 对象已经安装 @types/google.accounts 包)
+        google: typeof google;
     }
 }
 
@@ -92,7 +101,9 @@ declare namespace General {
     /*通用实物商品详情*/
     interface GoodsItem {
         /*商品编号*/
-        id: number
+        id: string
+        /*商品编号*/
+        productId?: string
         /*标题*/
         title: string
         /*商品标签*/
@@ -112,11 +123,13 @@ declare namespace General {
         /*作者*/
         creator: ObjectNode.Creator
         /*工艺编号*/
-        techniqueId: string
+        techniqueId: TechniqueCodeType
         /*收藏状态*/
         like: boolean
         /* 状态 */
         status: Dict.ProductSaleStatus
+        /* 商家 */
+        merchant?: ObjectNode.Merchant
     }
 
     /* 媒体类型 */

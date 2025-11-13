@@ -9,7 +9,7 @@
           :pagination="{ clickable: true }"
         >
           <swiper-slide v-for="item in blogDetail?.banner" :key="item">
-            <img v-lazy="imagePrefix(item)" alt="">
+            <img v-lazy="imagePrefix(item)" alt="blog">
           </swiper-slide>
         </swiper>
       </div>

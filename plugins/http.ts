@@ -2,9 +2,6 @@ import type {AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig} from
 import axios from 'axios';
 import {checkStatus, CODE_SUCCESS, CODE_TOKEN_FAIL} from '~/api/helper';
 import type {IResultData} from "~/api/interface";
-import { useRouter } from '#app'
-import { useRuntimeConfig } from '#imports'
-import {LOGIN_URL} from "~/config";
 import {ElMessage} from "element-plus";
 import type {HttpClient} from "~/api/interface";
 import {useUserStore} from '~/stores/modules/user'

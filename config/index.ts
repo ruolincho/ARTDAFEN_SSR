@@ -2,6 +2,8 @@
 export const LOGIN_URL: string = '/login';
 // 注册页地址
 export const REGISTER_URL: string = '/register';
+// 忘记密码页地址
+export const FORGET_PASSWORD_URL: string = '/forget-password';
 // 首页地址（默认）
 export const HOME_URL: string = '/';
 // 产品检索地址
@@ -18,3 +20,11 @@ export const CONTACT_EMAIL: string  = 'info@artdafen.com';
 export const GA_ID: string  = 'G-ZYVS05RLZV';
 // 存储登录返回地址的key
 export const STORAGE_BACK_URL: string  = 'login_back_url';
+// Google 客户端ID
+export const GOOGLE_CLIENT_ID: string = '455586942399-nu9h43lv56jprqmq4sqeffr72n9d5u8a.apps.googleusercontent.com'
+// Google Tag Manager Id
+export const GTM_ID: string = 'GTM-PWBGFBBV'
+// Tawk Property Id 客服属性ID
+export const TAWK_PROPERTY_ID: string = '68f9a9b103c0d7194f5d0e4d'
+// Tawk Widget Id 客服组件ID
+export const TAWK_WIDGET_ID: string = '1j87jtnt0'

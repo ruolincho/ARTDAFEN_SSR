@@ -40,7 +40,7 @@
                 :key="goods.id"
               >
                 <div class="p-img mr-6">
-                  <img :src="imagePrefix(goods.img)" alt="">
+                  <img :src="imagePrefix(goods.img)" :alt="goods.title">
                 </div>
                 <div class="flex-1 overflow-hidden">
                   <h1 class="line1 text-16">{{ goods.title }}</h1>
@@ -100,7 +100,7 @@ import {ref, watch} from "vue";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {blogThumbsApi} from "~/api/modules/likes/likes";
 import {useCurrencyStore} from "~/stores/modules/currency";
-import {pageMeta} from "~/config/pageMeta";
+import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 
 defineOptions({
@@ -203,17 +203,19 @@ const nextUrlAbs = computed(() => hasNext.value
   : null
 )
 
-useHead({
-  link: [
-    {rel: 'canonical', href: selfUrl.value},
-    ...(prevUrlAbs.value ? [{rel: 'prev', href: prevUrlAbs.value}] : []),
-    ...(nextUrlAbs.value ? [{rel: 'next', href: nextUrlAbs.value}] : []),
-  ],
-  meta: [
-    ...(pageMeta["/blog"]?.meta ?? []),
-    {name: 'robots', content: 'index,follow'},
-  ]
-})
+useHead(mergeHeadWithLodash(
+  pageMeta["/blog"] ?? {},
+  {
+    link: [
+      {rel: 'canonical', href: selfUrl.value},
+      ...(prevUrlAbs.value ? [{rel: 'prev', href: prevUrlAbs.value}] : []),
+      ...(nextUrlAbs.value ? [{rel: 'next', href: nextUrlAbs.value}] : []),
+    ],
+    meta: [
+      {name: 'robots', content: 'index,follow'},
+    ]
+  }
+))
 
 // 点赞/取消点赞
 const blogThumbs = debounce(async (item: IBlog.Row) => {

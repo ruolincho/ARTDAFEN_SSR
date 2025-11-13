@@ -24,8 +24,9 @@
                   :max="99"
                   @change="quantityChange"
                   :disabled="isCreate"
+                  :value-on-clear="1"
                 />
-                <p class="text-14 f-bold">{{ currencyStore.formatToCurrency(customStore.subtotal || 0) }}</p>
+                <p class="text-14 f-bold">{{ currencyStore.formatToCurrency(customStore.subtotal) }}</p>
               </div>
               <div class="mt-10 text-right text-secondary f-bold" v-if="getOfferProduct.length">
                 <p v-for="(promo, index) in getOfferProduct[0]?.promoOffer" :key="index"> {{ promo }}</p>
@@ -37,27 +38,61 @@
       <div class="review-summary shadow-lg p-xl-20 p-15">
         <div class="acea-row row-between-wrapper text-16 f-bold pb-20 mb-20 border-b-sm border-gray-200">
           <span>Subtotal</span>
-          <span>{{ currencyStore.formatToCurrency(customStore.subtotal || 0) }}</span>
+          <span>{{ currencyStore.formatToCurrency(customStore.subtotal) }}</span>
         </div>
-        <p class="text-16 text-gray-600 mb-8">Enter Discount Code</p>
-        <el-form :model="form" ref="formRef" :rules="rules" :auto-complete="false">
-          <el-form-item prop="discountCode">
-            <el-input v-model="form.discountCode" placeholder="Enter your discount code" size="large"
-                      :disabled="isDiscount || isCreate">
-              <template #append>
-                <el-button size="large" @click="applyCode">Apply</el-button>
-              </template>
-            </el-input>
-          </el-form-item>
-        </el-form>
-        <div class="acea-row row-right row-center text-error mb-10" v-if="isDiscount">
-          <span class="text-14">not using discounts <span class="iconfont icon-close text-14 cursor-pointer" @click="delCode"/></span>
+        <div class="acea-row row-between-wrapper mb-20">
+          <div class="acea-row row-middle">
+            <span class="f-bold text-16 mr-5">Phone Number</span>
+            <el-tooltip :content="phoneRuleText" placement="top" popper-style="max-width: 345px;">
+              <span class="iconfont icon-info-fill text-18"></span>
+            </el-tooltip>
+          </div>
+          <span></span>
         </div>
-        <div class="acea-row row-right row-center text-error mb-10" v-if="isCreate && isDiscount">
-          <span class="text-14">The order has been created and the discount code cannot be modified</span>
+        <el-input
+          ref="phoneInputRef"
+          class="mb-20"
+          v-model="phone"
+          placeholder="Enter your phone number"
+          size="large"
+          maxlength="20"
+          @input="checkPhone"
+          :disabled="isCreate"
+        />
+        <div class="acea-row row-right row-center text-error mb-10" v-if="isCreate">
+          <span class="text-14">The order has been created and the phone number cannot be modified</span>
         </div>
-        <div class="text-16">
-          Promo codes cannot be combined with sitewide promos or markdown items.
+        <div class="acea-row row-between-wrapper mb-20">
+          <div class="acea-row row-middle">
+            <span class="f-bold text-16 mr-5">Apply Discount Code</span>
+            <el-tooltip :content="discountRuleText" placement="top" popper-style="max-width: 345px;">
+              <span class="iconfont icon-info-fill text-18"></span>
+            </el-tooltip>
+          </div>
+          <span class="iconfont text-24 cursor-pointer" :class="[showDiscountInput ? 'icon-reduce' : 'icon-add']"
+                @click="showDiscountInput = !showDiscountInput"/>
+        </div>
+        <div v-show="showDiscountInput">
+          <el-input
+            v-model="discountCode"
+            placeholder="Enter your discount code"
+            size="large"
+            :disabled="isDiscount || isCreate"
+            @keydown.enter="applyCode"
+          >
+            <template #append>
+              <el-button size="large" @click="applyCode">Apply</el-button>
+            </template>
+          </el-input>
+          <div class="acea-row row-right row-center text-error my-20" v-if="isDiscount">
+            <span class="text-14">
+              not using discounts
+              <i class="iconfont icon-close text-14 cursor-pointer" @click="delCode"/>
+            </span>
+          </div>
+          <div class="acea-row row-right row-center text-error mb-10" v-if="isCreate && isDiscount">
+            <span class="text-14">The order has been created and the discount code cannot be modified</span>
+          </div>
         </div>
         <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
           <span>Estimated Shipping</span>
@@ -70,27 +105,26 @@
         <div class="acea-row row-between-wrapper text-16 f-bold pt-20 my-20 border-t-sm border-gray-200">
           <span>Estimated Total</span>
           <div>
-            <!-- 优惠之前的金额（需要加上预计运费） -->
-            <p v-if="offerData?.discountAmount > 0" class="text-through text-gray-600">
-              {{
-                currencyStore.formatToCurrency(Number(offerData.originalAmount || 0) + Number(offerData.estimatedDeliveryAmount || 0))
-              }}
+            <!-- 优惠之前的金额 -->
+            <p v-if="Number(offerData?.discountAmount || 0) > 0" class="text-through text-gray-600">
+              {{ currencyStore.formatToCurrency(totalBeforeDiscount) }}
             </p>
-            <!-- 实付金额 -->
-            <p>{{ currencyStore.formatToCurrency(actualAmount) }}</p>
+            <!-- 付款前的预估金额 -->
+            <p>{{ currencyStore.formatToCurrency(prePaymentEstimatedAmount) }}</p>
           </div>
         </div>
         <!-- paypal 按钮 -->
-        <div id="paypal-button-container" class="paypal-button-container" v-if="actualAmount !== 0"></div>
+        <div id="paypal-button-container" class="paypal-button-container" v-if="prePaymentEstimatedAmount !== 0"></div>
         <!-- 积分支付 按钮 -->
-        <el-button type="primary" class="w-full checkout-btn" @click="createOrderCallback" v-else>Secure Checkout</el-button>
+        <el-button type="primary" class="w-full checkout-btn" @click="createOrderCallback" v-else>Secure Checkout
+        </el-button>
         <div class="mt-15 text-16">
           The estimated shipping will be confirmed once you added your shipping address in checkout.
         </div>
         <div class="mt-15 acea-row row-middle">
           <span class="mr-5 text-16">Promotion Rules</span>
-          <el-tooltip :content="PromotionRuleText" placement="top" popper-style="max-width: 345px;">
-            <span class="iconfont icon-info-fill text-30"></span>
+          <el-tooltip :content="promotionRuleText" placement="top" popper-style="max-width: 345px;">
+            <span class="iconfont icon-info-fill text-18"></span>
           </el-tooltip>
         </div>
       </div>
@@ -105,17 +139,19 @@
     </div>
   </div>
   <PaySuccessPopup :trade-no="tradeNo" ref="paySuccessPopupRef"/>
-  <LoginWindow ref="loginWindowRef"/>
 </template>
 
 <script setup lang="ts">
-import {type PayPalNamespace} from '@paypal/paypal-js';
-import type {OnApproveActions, OnApproveData} from "@paypal/paypal-js/types/components/buttons";
+import {computed, watch, onMounted, onUnmounted, ref} from 'vue'
+import type {
+  PayPalButtonCreateOrder,
+  PayPalButtonOnApprove,
+  PayPalButtonOnClick,
+  PayPalButtonOnInit
+} from "@paypal/paypal-js/types/components/buttons";
 import {dataURLtoBlob, debounce} from "~/utils";
-import {useUserStore} from '~/stores/modules/user'
 import PaySuccessPopup from "~/components/PaySuccessPopup.vue";
-import LoginWindow from "~/components/LoginWindow.vue";
-import {type ElForm, ElMessage} from "element-plus";
+import {ElMessage, type ElInput} from "element-plus";
 import {paymentApi, paymentCallbackApi} from "~/api/modules/pay/pay";
 import {useCustomStore} from "~/stores/modules/custom";
 import {advanceOrderNoApi, confirmOrderApi, createOrderApi, uploadOrderOriginImgApi} from "~/api/modules/custom/custom";
@@ -124,6 +160,9 @@ import TypedFormData from "~/api/helper/formData";
 import {PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useIndexedDBBase64} from '~/composables/useIndexedDBBase64'
+import {phoneReg} from "~/regular";
+import Decimal from 'decimal.js';
+import {initPaypal} from '~/composables/usePayment'
 
 defineOptions({
   name: 'CustomPaintCheckout',
@@ -134,7 +173,7 @@ definePageMeta({
   auth: false
 })
 
-const previewImg = ref('')
+const previewImg = ref<string | null>('')
 
 onMounted(() => {
   if (customStore.subtotalQuantity > 0) {
@@ -155,24 +194,18 @@ const _init = async () => {
 
 const {$bus} = useNuxtApp()
 const router = useRouter()
-const userStore = useUserStore()
 const customStore = useCustomStore()
 const currencyStore = useCurrencyStore();
-const { getBase64 } = useIndexedDBBase64()
+const {getBase64} = useIndexedDBBase64()
 
-const PromotionRuleText = '*Promotion applies to order total before shipping, taxes, and duties. Promotions that involve a price reduction may take a variety of forms, including strikethrough prices or a discount code (e.g., percent-off or dollar-off discount code) that is applied by the customer at checkout (collectively “Product Discounts”). Promotional offers may be used one time only per household. Only one discount or promotional offer may be used per item. “Bonus Discounts” that are automatically applied to your order total may not be combined with one-time use discount codes or gift codes. Discounts will not be applied to previous or existing orders, We offer fair shipping rates based on the size and quantity of the items in an order. Final shipping charges will be calculated during checkout.'
-
-const form = reactive({
-  discountCode: ''
-})
-const rules = reactive({
-  discountCode: [
-    {required: true, message: 'Please enter the discount code', trigger: []},
-  ]
-})
+const promotionRuleText = '*Promotion applies to order total before shipping, taxes, and duties. Promotions that involve a price reduction may take a variety of forms, including strikethrough prices or a discount code (e.g., percent-off or dollar-off discount code) that is applied by the customer at checkout (collectively “Product Discounts”). Promotional offers may be used one time only per household. Only one discount or promotional offer may be used per item. “Bonus Discounts” that are automatically applied to your order total may not be combined with one-time use discount codes or gift codes. Discounts will not be applied to previous or existing orders, We offer fair shipping rates based on the size and quantity of the items in an order. Final shipping charges will be calculated during checkout.'
+const discountRuleText = 'Promo codes cannot be combined with sitewide promos or markdown items.'
+const phoneRuleText = 'For delivery questions.'
+const discountCode = ref('')
+const showDiscountInput = ref(false)
+const phone = ref('')
 
 // 加载 PayPal SDK
-let paypal: PayPalNamespace | null;
 const loadPaypal = async () => {
   const config = useRuntimeConfig()
   initPaypal({
@@ -181,6 +214,8 @@ const loadPaypal = async () => {
     currency: currencyStore.currentCurrency,
     createOrder: createOrderCallback,
     onApprove: onApproveCallback,
+    onInit: onPaypalInit,
+    onClick: onPaypalClick,
   })
 }
 
@@ -210,14 +245,15 @@ const confirmOrder = async () => {
     dimensionId: customStore.carts.dimensionId,
     parts: customStore.carts.parts,
     quantity: customStore.carts.quantity,
-    couponCode: isDiscount.value ? form.discountCode : null,
+    couponCode: isDiscount.value ? discountCode.value : null,
   }
 
   try {
     const {data} = await confirmOrderApi(shoppingCartData.value)
 
     // 切换货币后,需要重新计算金额
-    customStore.carts.actualAmount = Number(data.originalAmount) / customStore.carts.quantity
+    const originalAmount = new Decimal(data.originalAmount || 0)
+    customStore.carts.actualAmount = originalAmount.div(customStore.carts.quantity).toNumber()
 
     offerData.value = data
     if (!isGeneratedOrderNo) {
@@ -226,7 +262,7 @@ const confirmOrder = async () => {
     }
   } catch (err) {
     setTimeout(() => {
-      form.discountCode = ''
+      discountCode.value = ''
       isDiscount.value = false
     }, 1000)
   }
@@ -243,28 +279,51 @@ const quantityChange = debounce(() => {
   confirmOrder()
 })
 
+const phoneInputRef =  ref<InstanceType<typeof ElInput>>()
 const paySuccessPopupRef = ref<InstanceType<typeof PaySuccessPopup>>()
+
+// PayPal 初始化回调
+let paypalActions: any = null
+const onPaypalInit: PayPalButtonOnInit = (data, actions) => {
+  paypalActions = actions
+  actions.disable() // 默认禁用按钮，直到手机号有效
+}
+
+// 点击支付按钮
+const onPaypalClick: PayPalButtonOnClick = (data, actions) => {
+  return new Promise((resolve, reject) => {
+    const isValid = validatePhone(phone.value)
+    if (!isValid) {
+      paypalActions.disable()
+      ElMessage.error('Please enter a valid phone number before paying.')
+      phoneInputRef?.value?.focus()
+      reject()
+    } else {
+      paypalActions.enable()
+      resolve()
+    }
+  })
+}
 
 const isCreate = ref(false) // 是否创建订单,用于判断是否需要再次创建订单
 
 // 创建订单唤起支付回调
-const createOrderCallback = async () => {
+const createOrderCallback: PayPalButtonCreateOrder = async (data, actions) => {
   try {
-
+    // ② 等待图片上传完成
     await waitForUploadSuccess();
 
     const formData = new TypedFormData<ICustom.CreateQuery>();
-    const previewImgStr = dataURLtoBlob(previewImg.value); // 转回 Blob
+    const previewImgStr = dataURLtoBlob(previewImg.value!); // 转回 Blob
     formData.append('previewImg', previewImgStr)
     formData.append('tradeNo', tradeNo.value)
-    formData.append('actualAmount',
-      String(Number(offerData.value?.originalAmount || 0) - Number(offerData.value?.discountAmount || 0))
-    )
+    formData.append('actualAmount', actualPaidAmount.value.toString())
     formData.append('paintCode', customStore.carts.code)
     formData.append('quantity', customStore.carts.quantity.toString())
     formData.append('dimensionId', customStore.carts.dimensionId)
-    formData.append('part', JSON.stringify(customStore.carts.parts))
+    formData.append('partStr', JSON.stringify(customStore.carts.parts))
     formData.append('remark', customStore.carts.remark)
+    formData.append('mobile', phone.value)
 
     if (customStore.carts.themeId) {
       formData.append('contentNumber', customStore.carts.contentNumber)
@@ -272,13 +331,14 @@ const createOrderCallback = async () => {
     }
 
     if (isDiscount.value) {
-      formData.append('couponCode', form.discountCode)
+      formData.append('couponCode', discountCode.value)
     }
 
+    // 创建订单（只创建一次）
     !isCreate.value && await createOrderApi(formData.getFormData())
     isCreate.value = true;
 
-    const payChannelStr = actualAmount.value === 0 ? 'inner_points' : 'paypal_checkout'  // 支付方式
+    const payChannelStr = prePaymentEstimatedAmount.value === 0 ? 'inner_points' : 'paypal_checkout'  // 支付方式
 
     const {data: paymentData} = await paymentApi({
       payChannelStr,
@@ -287,31 +347,31 @@ const createOrderCallback = async () => {
     })
 
     // 0元支付
-    if (actualAmount.value === 0) {
+    if (payChannelStr === 'inner_points') {
       if (paymentData === 'success') {
         customStore.clear()
         paySuccessPopupRef.value?.show()
-        return ''
+        return Promise.resolve(tradeNo.value); // 返回 tradeNo 保持类型一致
       } else {
-        throw new Error('Payment failed')
+        throw new Error("0 amount payment failed");
       }
-      return
     }
 
     // 非0元支付（走 PayPal 支付）
-    if (paymentData) {
-      return paymentData;
-    } else {
-      throw new Error("Payment failed");
+    if (typeof paymentData === "string" && paymentData.length > 0) {
+      return Promise.resolve(paymentData); // PayPal 要求返回订单ID
     }
 
+    throw new Error("Payment failed: invalid PayPal response");
+
   } catch (error) {
-    throw error;
+    console.error("[createOrderCallback] error:", error);
+    throw error instanceof Error ? error : new Error(String(error));
   }
 }
 
 // 支付成功回调
-const onApproveCallback = async (data: OnApproveData, actions: OnApproveActions) => {
+const onApproveCallback: PayPalButtonOnApprove = async (data, actions) => {
   try {
     const {data: orderData} = await paymentCallbackApi({orderId: data.orderID})
 
@@ -337,6 +397,13 @@ const onApproveCallback = async (data: OnApproveData, actions: OnApproveActions)
       }
       throw new Error(errorMessage);
     } else {
+      // 发送页面视图事件
+      window.dataLayer?.push({
+        event: 'purchase_success', // 👈 事件名称，自定义但要与GTM触发器对应
+        transactionId: tradeNo.value, // 订单号（字符串）
+        transactionValue: prePaymentEstimatedAmount.value, // 实际支付金额（数字）
+        transactionCurrency: currencyStore.currentCurrency // 货币代码，如 'CNY'
+      })
       customStore.clear()
       paySuccessPopupRef.value?.show()
     }
@@ -344,11 +411,6 @@ const onApproveCallback = async (data: OnApproveData, actions: OnApproveActions)
   } catch (error) {
     console.error(error);
   }
-}
-
-const loginWindowRef = ref<InstanceType<typeof LoginWindow>>()
-const showLoginWindow = () => {
-  loginWindowRef.value?.open()
 }
 
 const waitForUploadSuccess = (): Promise<void> => {
@@ -371,45 +433,71 @@ const waitForUploadSuccess = (): Promise<void> => {
 
 // 应用优惠券
 const isDiscount = ref(false)
-const formRef = ref<InstanceType<typeof ElForm>>()
-const applyCode = () => {
-  // if (!userStore.isLogin) {
-  //   ElMessage({
-  //     message: 'You can only apply coupons after logging in!',
-  //     type: 'warning',
-  //     duration: 2000,
-  //     showClose: true,
-  //     onClose: () => {
-  //       showLoginWindow()
-  //     }
-  //   })
-  //   return
-  // }
-
+const applyCode = async () => {
   if (isCreate.value) return ElMessage.warning('Order has been created, coupon cannot be applied repeatedly!')
-  formRef.value!.validate(async valid => {
-    if (!valid) return;
+  if (!discountCode.value) return
+  try {
     isDiscount.value = true
-    try {
-      await confirmOrder()
-    } catch (e) {
-      isDiscount.value = false
-    }
-  });
+    await confirmOrder()
+  } catch (e) {
+    isDiscount.value = false
+  }
 }
 const delCode = () => {
   if (isCreate.value) return ElMessage.warning('The order has been created, the coupon cannot be deleted!')
-  form.discountCode = ''
+  discountCode.value = ''
   isDiscount.value = false
   confirmOrder()
 }
 
-// 实际付款金额
-const actualAmount = computed<number>(() => {
-  return Number(offerData.value?.estimatedAmount || 0)
+// 检查手机号是否合法
+function validatePhone(value: string): boolean {
+  const cleaned = value.trim()
+  return phoneReg.test(cleaned)
+}
+
+// 检查手机号格式
+const checkPhone = debounce((val: string) => {
+  // 允许：数字、空格、加号、连字符、括号
+  phone.value = val.replace(/[^\d+\-\s()]/g, '')
+
+  // 限制 "+" 只能出现在开头
+  if (phone.value.indexOf('+') > 0) {
+    phone.value = phone.value.replace(/\+/g, '')
+  }
+
+  // 校验手机号是否有效
+  const isValid = validatePhone(phone.value)
+
+  // 动态控制 PayPal 按钮状态
+  if (paypalActions) {
+    if (isValid) paypalActions.enable()
+    else paypalActions.disable()
+  }
+
+  return isValid
 })
 
-watch(() => actualAmount.value, (newVal) => {
+//  优惠之前的金额（原价 + 运费）
+const totalBeforeDiscount = computed<number>(() => {
+  const originalAmount = new Decimal(offerData.value?.originalAmount || 0);
+  const estimatedDeliveryAmount = new Decimal(offerData.value?.estimatedDeliveryAmount || 0);
+  return originalAmount.plus(estimatedDeliveryAmount).toNumber()
+})
+
+// 付款前的预估金额
+const prePaymentEstimatedAmount = computed<number>(() => {
+  return new Decimal(offerData.value?.estimatedAmount || 0).toNumber();
+})
+
+// 实际支付金额（提交给后端的金额）
+const actualPaidAmount = computed<number>(() => {
+  const originalAmount = new Decimal(offerData.value?.originalAmount || 0);
+  const discountAmount = new Decimal(offerData.value?.discountAmount || 0);
+  return originalAmount.minus(discountAmount).toNumber();
+})
+
+watch(() => prePaymentEstimatedAmount.value, (newVal: number) => {
   if (newVal > 0) {
     loadPaypal()
   }

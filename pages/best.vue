@@ -224,24 +224,24 @@
               <template #reference>
                 <el-tag
                   size="large"
-                  :type="priceSort !== null ? 'primary' : 'info'" round effect="dark"
+                  :type="priceSortSelected.id ? 'primary' : 'info'" round effect="dark"
                   class="cursor-pointer"
-                  :closable="priceSort !== null"
-                  @close="handleSort('PRICE_SORT', null)"
+                  :closable="priceSortSelected.id"
+                  @close="handleSort('PRICE_SORT', {} as IHome.MenuRow)"
                 >
                   <div class="acea-row row-middle nowrap">
-                    <span>{{ priceSort === '0' ? 'Price Desc' : priceSort === '1' ? 'Price Asc' : 'Price Sort' }}</span>
-                    <span v-show="priceSort === null" class="iconfont icon-down text-16 ml-10"/>
+                    <span>{{ priceSortSelected.name ?? 'Price Sor' }}</span>
+                    <span v-show="!priceSortSelected.id" class="iconfont icon-down text-16 ml-10"/>
                   </div>
                 </el-tag>
               </template>
               <div
                 class="text-14 cursor-pointer text-center my-15 text-hover"
-                v-for="sort in SORT_OPTIONS"
-                :key="sort.value"
-                @click="handleSort('PRICE_SORT', sort.value)"
+                v-for="item in priceMenu.children"
+                :key="item.id"
+                @click="handleSort('PRICE_SORT', item)"
               >
-                {{ sort.label }}
+                {{ item.name }}
               </div>
             </el-popover>
             <!--销量排序-->
@@ -250,24 +250,24 @@
               <template #reference>
                 <el-tag
                   size="large"
-                  :type="salesSort !== null ? 'primary' : 'info'" round effect="dark"
+                  :type="salesSortSelected.id ? 'primary' : 'info'" round effect="dark"
                   class="cursor-pointer"
-                  :closable="salesSort !== null"
-                  @close="handleSort('SALES_SORT', null)"
+                  :closable="salesSortSelected.id"
+                  @close="handleSort('SALES_SORT', {} as IHome.MenuRow)"
                 >
                   <div class="acea-row row-middle nowrap">
-                    <span>{{ salesSort === '0' ? 'Sales Desc' : salesSort === '1' ? 'Sales Asc' : 'Sales Sort' }}</span>
-                    <span v-show="salesSort === null" class="iconfont icon-down text-16 ml-10"/>
+                    <span>{{ salesSortSelected.name ?? 'Sales Sort' }}</span>
+                    <span v-show="!salesSortSelected.id" class="iconfont icon-down text-16 ml-10"/>
                   </div>
                 </el-tag>
               </template>
               <div
                 class="text-14 cursor-pointer text-center my-15 text-hover"
-                v-for="sort in SORT_OPTIONS"
-                :key="sort.value"
-                @click="handleSort('SALES_SORT', sort.value)"
+                v-for="item in salesMenu.children"
+                :key="item.id"
+                @click="handleSort('SALES_SORT', item)"
               >
-                {{ sort.label }}
+                {{ item.name }}
               </div>
             </el-popover>
             <!--工艺筛选-->
@@ -276,22 +276,22 @@
               <template #reference>
                 <el-tag
                   size="large"
-                  :type="techniqueSelected.value ? 'primary' : 'info'" round effect="dark"
+                  :type="techniqueSelected.id ? 'primary' : 'info'" round effect="dark"
                   class="cursor-pointer"
                 >
                   <div class="acea-row row-middle nowrap">
-                    <span>{{ techniqueSelected.value ? techniqueSelected.label : 'Technique' }}</span>
+                    <span>{{ techniqueSelected.name ?? 'Technique' }}</span>
                     <span class="iconfont icon-down text-16 ml-10"/>
                   </div>
                 </el-tag>
               </template>
               <div
                 class="text-14 cursor-pointer text-center my-15 text-hover"
-                v-for="item in TECHNIQUE_OPTIONS"
-                :key="item.value"
-                @click="handleTechnique(item.value)"
+                v-for="item in techniqueMenu.children"
+                :key="item.id"
+                @click="handleTechnique(item)"
               >
-                {{ item.label }}
+                {{ item.name }}
               </div>
             </el-popover>
             <!--Mutex 选中的值-->
@@ -386,30 +386,30 @@
             <!--价格排序-->
             <el-tag
               size="large"
-              :type="priceSort !== null ? 'primary' : 'info'" round effect="dark"
+              :type="priceSortSelected.id ? 'primary' : 'info'" round effect="dark"
               class="cursor-pointer"
               @click="clickAppFilter('PRICE_SORT', 0)"
             >
-              {{ priceSort === '0' ? 'Price Desc' : priceSort === '1' ? 'Price Asc' : 'Price Sort' }}
+              {{ priceSortSelected.name ?? 'Price Sort' }}
             </el-tag>
             <!--销量排序-->
             <el-tag
               size="large"
-              :type="salesSort !== null ? 'primary' : 'info'" round effect="dark"
+              :type="salesSortSelected.id ? 'primary' : 'info'" round effect="dark"
               class="cursor-pointer"
               @click="clickAppFilter('SALES_SORT', 1)"
             >
-              {{ salesSort === '0' ? 'Sales Desc' : salesSort === '1' ? 'Sales Asc' : 'Sales Sort' }}
+              {{ salesSortSelected.name ?? 'Sales Sort' }}
             </el-tag>
             <!--工艺筛选-->
             <el-tag
               v-if="hasTechniqueFilter"
               size="large"
-              :type="techniqueSelected.value ? 'primary' : 'info'" round effect="dark"
+              :type="techniqueSelected.id ? 'primary' : 'info'" round effect="dark"
               class="cursor-pointer"
               @click="clickAppFilter('TECHNIQUE_SORT', 2)"
             >
-              {{ techniqueSelected.value ? techniqueSelected.label : 'Technique' }}
+              {{ techniqueSelected.name ?? 'Technique' }}
             </el-tag>
             <!--全部的筛选-->
             <template v-for="(group, index) in groupList" :key="group.id">
@@ -514,8 +514,8 @@
               <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="(item, index) in productList" :key="item.id">
                 <div class="product-item cursor-pointer" @click="jumpToProduct(item)">
                   <div class="img-wrapper bg-gray-100">
-                    <img v-lazy="imagePrefix(item.img)" alt="">
-                    <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === '3000015'">
+                    <img v-lazy="imagePrefix(item.img)" :alt="item.title">
+                    <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === TechniqueCodeEnum.Originals">
                       <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
                       <div class="p-tag bg-error" v-if="item.status === '-1'">Sale Out</div>
                     </div>
@@ -605,13 +605,13 @@
           <div
             class="text-20 py-16 border-b-sm border-gray-200"
             :class="[
-            (sortType === 'PRICE_SORT' ? priceSort : sortType === 'SALES_SORT' ? salesSort : techniqueSelected.value) === item.config.code
+            (sortType === 'PRICE_SORT' ? priceSortSelected : sortType === 'SALES_SORT' ? salesSortSelected : techniqueSelected).id === item.id
             ? 'text-gray-700'
             : 'text-gray-500'
           ]"
             v-for="item in popupCurrentMenu.children"
             :key="item.id"
-            @click="() => { sortType === 'PRICE_SORT' || sortType === 'SALES_SORT' ? handleSort(sortType!, item.config.code!) : handleTechnique(item.config.code!)}"
+            @click="() => { sortType === 'PRICE_SORT' || sortType === 'SALES_SORT' ? handleSort(sortType!, item) : handleTechnique(item)}"
           >
             {{ item.name }}
           </div>
@@ -752,34 +752,34 @@
         <div class="mt-20 mb-12 acea-row nowrap gap-column-xs scroll-x scroll-hide">
           <!--价格排序 选中的值-->
           <el-tag
-            v-if="priceSort !== null"
+            v-if="priceSortSelected.id"
             size="large"
             type="primary" round effect="dark"
             class="cursor-pointer"
             :closable="true"
-            @close="handleSort('PRICE_SORT', null)"
+            @close="handleSort('PRICE_SORT', {} as IHome.MenuRow)"
           >
-            {{ priceSort === '0' ? 'Price Desc' : priceSort === '1' ? 'Price Asc' : '' }}
+            {{ priceSortSelected.name }}
           </el-tag>
           <!--销量排序 选中的值-->
           <el-tag
-            v-if="salesSort !== null"
+            v-if="salesSortSelected.id"
             size="large"
             type="primary" round effect="dark"
             class="cursor-pointer"
             :closable="true"
-            @close="handleSort('SALES_SORT', null)"
+            @close="handleSort('SALES_SORT', {} as IHome.MenuRow)"
           >
-            {{ salesSort === '0' ? 'Sales Desc' : salesSort === '1' ? 'Sales Asc' : '' }}
+            {{ salesSortSelected.name }}
           </el-tag>
           <!--工艺筛选 选中的值-->
           <el-tag
-            v-if="hasTechniqueFilter && techniqueSelected.value"
+            v-if="hasTechniqueFilter && techniqueSelected.id"
             size="large"
             type="primary" round effect="dark"
             class="cursor-pointer"
           >
-            {{ techniqueSelected.label }}
+            {{ techniqueSelected.name }}
           </el-tag>
 
           <!--Mutex 选中的值-->
@@ -885,14 +885,15 @@ import {debounce, imagePrefix, jumpToProduct} from "~/utils";
 import {useAppStore} from "~/stores/modules/app";
 import {ElMessage, type ElPopover} from "element-plus";
 import {
-  gen_ARTIST,
-  gen_CHECKBOX,
-  gen_COLOR,
-  gen_GROUP_RADIO,
-  gen_MUTEX,
   gen_path_arr,
   gen_path_obj,
-  gen_PRICE
+  process_ARTIST,
+  process_CHECKBOX,
+  process_COLOR,
+  process_GROUP_RADIO,
+  process_MUTEX,
+  process_PRICE,
+  process_SORT
 } from "~/utils/product";
 import {productThumbsApi} from "~/api/modules/likes/likes";
 import {useUserStore} from "~/stores/modules/user";
@@ -900,9 +901,11 @@ import LoginWindow from "~/components/LoginWindow.vue";
 import {formatInteger} from "~/utils/format";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {cloneDeep} from "lodash-es";
-import {TECHNIQUE_OPTIONS} from "~/constant";
-import {pageMeta} from "~/config/pageMeta";
+import {techniqueMenu, priceMenu, salesMenu} from "~/constant";
+import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {unpackQuery, packQuery, type QueryParams} from '~/composables/useQueryShort'
+import {TechniqueCodeEnum} from "~/types/enumeration";
+import type {General} from "~/types/global";
 
 defineOptions({
   name: 'Best'
@@ -924,18 +927,17 @@ const userStore = useUserStore()
 const currencyStore = useCurrencyStore();
 const origin = useRequestURL().origin
 
-useHead({
-  meta: [
-    ...(pageMeta["/best"]?.meta ?? []),
-    { name: 'robots', content: route.query.q ? 'noindex, follow' : 'index, follow' }
-  ],
-  link: [
-    {
-      rel: 'canonical',
-      href: `${origin}/best`
-    }
-  ]
-});
+useHead(mergeHeadWithLodash(
+  pageMeta["/best"] ?? {},
+  {
+    meta: [
+      { name: 'robots', content: route.query.q ? 'noindex, follow' : 'index, follow' }
+    ],
+    link: [
+      { rel: 'canonical', href: `${origin}/best` }
+    ]
+  }
+));
 
 // 获取左侧筛选数据
 const menuId = ref('')
@@ -990,7 +992,7 @@ const clickMutexType = (item: IHome.MenuRow) => {
   if (isSame) return // 相同的选项不做处理
   mutexSelected.value = item
   const val = mutexSelected.value.config.techniqueId ?? ''
-  const cur = TECHNIQUE_OPTIONS.find(item => item.value === val)
+  const cur = techniqueMenu.children.find(item => item.config.code === val)
   if (cur) techniqueSelected.value = cur
   routerJump(true)
 }
@@ -1158,137 +1160,44 @@ const getColorStyle = (colorStr: string) => {
   }
 }
 
-// 筛选可选项
-const SORT_OPTIONS = [
-  {label: 'Sort By Desc', value: '0'},
-  {label: 'Sort By Asc', value: '1'},
-]
 const sortType = ref<"PRICE_SORT" | "SALES_SORT" | "TECHNIQUE_SORT" | null>(null) // 移动端中SORT类型中筛选的类型
-const priceMenu = {
-  id: '9999',
-  parentId: '0',
-  name: 'Price Sort',
-  config: {type: 'SORT'},
-  children: [
-    {
-      id: '9998',
-      parentId: '9999',
-      name: 'Sort By Desc',
-      config: {type: 'SORT', code: '0'},
-      children: []
-    },
-    {
-      id: '9997',
-      parentId: '9999',
-      name: 'Sort By Asc',
-      config: {type: 'SORT', code: '1'},
-      children: []
-    }
-  ]
-} as IHome.MenuRow // 移动端中Popup模拟价格排序的菜单数据
-const salesMenu = {
-  id: '8888',
-  parentId: '0',
-  name: 'Sales Sort',
-  config: {type: 'SORT'},
-  children: [
-    {
-      id: '8887',
-      parentId: '8888',
-      name: 'Sort By Desc',
-      config: {type: 'SORT', code: '0'},
-      children: []
-    },
-    {
-      id: '8886',
-      parentId: '8888',
-      name: 'Sort By Asc',
-      config: {type: 'SORT', code: '1'},
-      children: []
-    }
-  ]
-} as IHome.MenuRow // 移动端中Popup模拟销量排序的菜单数据
 
 const pricePopoverRef = ref<InstanceType<typeof ElPopover>>()
 const salesPopoverRef = ref<InstanceType<typeof ElPopover>>()
 const techniquePopoverRef = ref<InstanceType<typeof ElPopover>>()
 
-const priceSort = ref<null | string>(null) // 价格排序
-const salesSort = ref<null | string>(null) // 销量排序
+const priceSortSelected = ref({} as IHome.MenuRow) // 价格排序
+const salesSortSelected = ref({} as IHome.MenuRow) // 销量排序
 
 // 点击排序
-const handleSort = (type: 'PRICE_SORT' | 'SALES_SORT', value: null | string) => {
+const handleSort = (type: 'PRICE_SORT' | 'SALES_SORT', menu: IHome.MenuRow) => {
   if (type == 'PRICE_SORT') {
-    if (priceSort.value === value) return
-    priceSort.value = value
+    if (priceSortSelected.value?.id === menu?.id) return
+    priceSortSelected.value = menu
     pricePopoverRef.value?.hide()
   }
   if (type == 'SALES_SORT') {
-    if (salesSort.value === value) return
-    salesSort.value = value
+    if (salesSortSelected.value?.id === menu?.id) return
+    salesSortSelected.value = menu
     salesPopoverRef.value?.hide()
   }
-  getProductBest()
+  routerJump(true)
 }
 
-interface OptionType {
-  label?: string;
-  value?: string;
-}
-
-const techniqueMenu = {
-  id: '7777',
-  parentId: '0',
-  name: 'Technique',
-  config: {type: 'SORT'},
-  children: [
-    {
-      id: '7776',
-      parentId: '7777',
-      name: 'Hand-painted oil painting',
-      config: {type: 'SORT', code: '3000012'},
-      children: []
-    },
-    {
-      id: '7775',
-      parentId: '7777',
-      name: 'Print painting',
-      config: {type: 'SORT', code: '3000013'},
-      children: []
-    },
-    {
-      id: '7774',
-      parentId: '7777',
-      name: 'Relief painting',
-      config: {type: 'SORT', code: '3000014'},
-      children: []
-    },
-    {
-      id: '7773',
-      parentId: '7777',
-      name: 'Originals paintings',
-      config: {type: 'SORT', code: '3000015'},
-      children: []
-    }
-  ]
-} as IHome.MenuRow // 移动端中Popup模拟销量排序的菜单数据
 const hasTechniqueFilter = ref(false) // 是否有工艺筛选
-const techniqueSelected = ref({} as OptionType) // 选中的工艺类型
+const techniqueSelected = ref({} as IHome.MenuRow) // 选中的工艺类型
 
 // 点击工艺
-const handleTechnique = (id: string) => {
-  if (id === techniqueSelected.value.value) return
-  const cur = TECHNIQUE_OPTIONS.find(item => item.value === id)
-  if (cur) {
-    techniqueSelected.value = cur
-    techniquePopoverRef.value?.hide()
-    routerJump(true)
-  }
+const handleTechnique = (menu: IHome.MenuRow) => {
+  if (techniqueSelected.value.id === menu?.id) return
+  techniqueSelected.value = menu
+  techniquePopoverRef.value?.hide()
+  routerJump(true)
 }
 
 // 重置
 const reset = () => {
-  techniqueSelected.value = {} as OptionType
+  techniqueSelected.value = {} as IHome.MenuRow
 
   mutexSelected.value = {} as IHome.MenuRow
 
@@ -1308,9 +1217,6 @@ const reset = () => {
 
   colorSelected.value = []
 
-  // priceSort.value = null
-  // salesSort.value = null
-
   artistSelected.value = {} as IHome.MenuRow
 
   routerJump(false)
@@ -1326,7 +1232,7 @@ const getProductBest = async () => {
   const mutex = mutexSelected.value
 
   // 工艺编号
-  const techniqueId = techniqueSelected.value.value || null
+  const techniqueId = techniqueSelected.value.config?.code || null
 
   // GROUP
   const group = Array.from(groupSelected.value.values())
@@ -1386,8 +1292,8 @@ const getProductBest = async () => {
   const {data} = await getProductBestApi({
     categoryIds,
     attributeValueIds: attributeSelected.value.map(item => item.id),
-    priceSort: priceSort.value,
-    salesSort: salesSort.value,
+    priceSort: priceSortSelected.value?.config?.code ?? null,
+    salesSort: salesSortSelected.value?.config?.code ?? null,
     startPrice: start,
     endPrice: end,
     creatorId: artistSelected.value.config?.referenceId || artistSelected.value.id || null,
@@ -1510,10 +1416,22 @@ const routerJump = (partial = false) => {
 
   const params: any = {MENU_ID: menuId.value}
 
+  // PRICE_SORT
+  const priceSort = priceSortSelected.value
+  if (Object.keys(priceSort).length) {
+    Object.assign(params, gen_path_obj(priceSort, 'PRICE_SORT'))
+  }
+
+  // SALES_SORT
+  const salesSort = salesSortSelected.value
+  if (Object.keys(salesSort).length) {
+    Object.assign(params, gen_path_obj(salesSort, 'SALES_SORT'))
+  }
+
   // TECHNIQUE
   const technique = techniqueSelected.value
   if (Object.keys(technique).length) {
-    params['TECHNIQUE'] = technique.value
+    Object.assign(params, gen_path_obj(technique, 'TECHNIQUE'))
   }
 
   // MUTEX
@@ -1609,39 +1527,53 @@ const paramsWatch = async () => {
     CHECKBOX,
     COLOR,
     ARTIST,
+    PRICE_SORT,
+    SALES_SORT,
   } = routerParams.value
 
   await getProductGroup()
+
+  // PRICE_SORT
+  if (PRICE_SORT) {
+    priceSortSelected.value = process_SORT([priceMenu], PRICE_SORT)
+  } else {
+    priceSortSelected.value = {} as IHome.MenuRow
+  }
+
+  // SALES_SORT
+  if (SALES_SORT) {
+    salesSortSelected.value = process_SORT([salesMenu], SALES_SORT)
+  } else {
+    salesSortSelected.value = {} as IHome.MenuRow
+  }
 
   // 是否有工艺筛选
   hasTechniqueFilter.value = !!(MENU_ID && MENU_ID !== '1000002');
 
   // TECHNIQUE
   if (TECHNIQUE) {
-    const val = TECHNIQUE
-    const cur = TECHNIQUE_OPTIONS.find(item => item.value === val)
-    if (cur) techniqueSelected.value = cur
+    techniqueSelected.value = process_SORT([techniqueMenu], TECHNIQUE)
   } else {
-    techniqueSelected.value = {} as OptionType
+    techniqueSelected.value = {} as IHome.MenuRow
   }
 
   // MUTEX类型的值
   if (MUTEX) {
-    mutexSelected.value = gen_MUTEX(groupList.value, MUTEX)!
+    mutexSelected.value = process_MUTEX(groupList.value, MUTEX)!
   } else {
     mutexSelected.value = {} as IHome.MenuRow
   }
 
   // GROUP类型的值
   if (GROUP) {
-    groupSelected.value = gen_GROUP_RADIO(groupList.value, GROUP)
+    groupSelected.value = process_GROUP_RADIO(groupList.value, GROUP)
   } else {
     groupSelected.value.clear()
   }
 
   // PRICE类型的值（固定区间）
   if (PRICE) {
-    priceSelected.value = gen_PRICE(groupList.value, PRICE)!
+    priceSelected.value = process_PRICE(groupList.value, PRICE)!
     if (appStore.device === 'app') {
       isSliderPrice.value = true
       priceRange.value[0] = Number(priceSelected.value.config.startPrice)
@@ -1663,28 +1595,28 @@ const paramsWatch = async () => {
 
   // RADIO类型的值
   if (RADIO) {
-    radioSelected.value = gen_GROUP_RADIO(groupList.value, RADIO)
+    radioSelected.value = process_GROUP_RADIO(groupList.value, RADIO)
   } else {
     radioSelected.value.clear()
   }
 
   // CHECKBOX类型的值
   if (CHECKBOX) {
-    checkboxSelected.value = gen_CHECKBOX(groupList.value, CHECKBOX)
+    checkboxSelected.value = process_CHECKBOX(groupList.value, CHECKBOX)
   } else {
     checkboxSelected.value.clear()
   }
 
   // COLOR类型的值
   if (COLOR) {
-    colorSelected.value = gen_COLOR(groupList.value, COLOR)
+    colorSelected.value = process_COLOR(groupList.value, COLOR)
   } else {
     colorSelected.value = []
   }
 
   // ARTIST类型的值
   if (ARTIST) {
-    artistSelected.value = gen_ARTIST(groupList.value, ARTIST)
+    artistSelected.value = process_ARTIST(groupList.value, ARTIST)
   } else {
     artistSelected.value = {} as IHome.MenuRow
   }

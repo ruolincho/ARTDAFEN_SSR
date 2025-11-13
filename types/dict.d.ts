@@ -3,8 +3,8 @@ declare namespace Dict {
     type GenderStatus = '0' | '1'
     /*角色类型, 0: 管理员, 1: 普通用户, 2: 艺术家, 3: 创作运营, 4: 分销商, 5: 企业,*/
     type RoleStatus = Array<'0' | '1' | '2' | '3' | '4' | '5'>
-    /*登录渠道, 0: 密码登录, 1: 验证码登录, 2: 谷歌授权登录*/
-    type LoginChannel = '0' | '1' | '2'
+    /*登录渠道, 0: 密码登录, 1: 验证码登录, 2: 谷歌授权登录, 3: 谷歌新版 GIS One Tap 授权登录*/
+    type LoginChannel = '0' | '1' | '2' | '3'
     /*重置渠道, 0: 登录密码*/
     type ResetChannel = '0'
     /*配送类型, 0: 快递发货, 1: 同城配送(暂未开放), 2: 上门自提*/

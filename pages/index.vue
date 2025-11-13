@@ -14,8 +14,8 @@
           <div @click="jumpToUrl(item.url)" class="cursor-pointer">
             <!-- 图片 -->
             <template v-if="item.type === '0'">
-              <img class="banner-img" :src="imagePrefix(item.img)" alt="" v-show="appStore.device === 'pc'">
-              <img class="banner-img" :src="imagePrefix(item.mobileImg)" alt="" v-show="appStore.device === 'app'">
+              <img class="banner-img" :src="imagePrefix(item.img)" alt="banner" v-show="appStore.device === 'pc'">
+              <img class="banner-img" :src="imagePrefix(item.mobileImg)" alt="banner" v-show="appStore.device === 'app'">
             </template>
             <!-- 视频 -->
             <template v-if="item.type === '1'">
@@ -55,7 +55,7 @@
           >
             <div class="cursor-pointer" @click="jumpToUrl(item.url)">
               <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" alt=""/>
+                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name"/>
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
                 <p class="line1 text-28 f-bold">{{ item.name }}</p>
@@ -78,7 +78,7 @@
           <p class="text-60 f-bold my-20">Photo To Art</p>
           <p class="text-22">Easily Transform Life's Real Moments Into A <br> Masterpiece — Made Just For You.</p>
         </div>
-        <img class="cover cursor-pointer" :src="imagePrefix('/static/artdafen/make.webp')" alt=""
+        <img class="cover cursor-pointer" :src="imagePrefix('/static/artdafen/make.webp')" alt="make"
              @click="goCustomPaint">
       </div>
       <div class="bespoke-wrapper" v-aos="'fade-up'">
@@ -150,7 +150,7 @@
   <section class="sec-welcome">
     <div class="container">
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
-        <h1 class="text-50">LIFESTYLE SPACE</h1>
+        <h2 class="text-50">LIFESTYLE SPACE</h2>
         <p class="mt-20 text-gray-600 text-16 f-bold-500" style="max-width: 608px; margin: auto">
           Art That Lights Up Life
         </p>
@@ -174,7 +174,7 @@
           >
             <div class="cursor-pointer" @click="jumpToUrl(item.url)">
               <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" alt=""/>
+                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name"/>
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
                 <p class="line1 text-28 f-bold">{{ item.name }}</p>
@@ -192,7 +192,7 @@
   <section class="sec-explore">
     <div class="container">
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
-        <h1 class="text-50">THE 100 MOST POPULAR WORKS OF ART</h1>
+        <h2 class="text-50">THE 100 MOST POPULAR WORKS OF ART</h2>
       </div>
       <el-skeleton :loading="isSkeleton2Explore" animated>
         <template #template>
@@ -220,13 +220,13 @@
                 @click="jumpToProduct(item)"
               >
                 <div class="img-wrapper bg-gray-100">
-                  <img :src="imagePrefix(item.img)" alt=""/>
+                  <img :src="imagePrefix(item.img)" :alt="item.title"/>
                 </div>
-                <h1 class="mt-15 line1 px-10">
+                <h2 class="mt-15 line1 px-10">
                   <span class="text-16 f-bold-500 text-underline"
                         @click.stop="handleClickArtist(item.creator)">{{ item.creator?.name }}</span>
                   <span class="iconfont icon-right text-16"></span>
-                </h1>
+                </h2>
                 <p class="line1 text-14 my-15 px-10" style="word-break: break-word">{{ item.title }}</p>
                 <p class="text-16 f-bold px-10 pb-10 line1">{{ currencyStore.formatToCurrency(item.retailPrice) }}</p>
               </div>
@@ -244,7 +244,7 @@
   <section class="sec-elevating">
     <div class="container">
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
-        <h1 class="text-50">ELEVATING YOUR STYLE GAME</h1>
+        <h2 class="text-50">ELEVATING YOUR STYLE GAME</h2>
         <p class="mt-20 text-gray-600 text-16 f-bold-500" style="max-width: 608px; margin: auto">
           Discover the Perfect Blend of Comfort and Trend with Our Exclusive Collection. Explore Deals on print, Trendy
           Play, and More!
@@ -264,7 +264,7 @@
                v-aos="{ name: 'fade-up', delay: index % 3 * 100}">
             <div class="cursor-pointer" @click="jumpToUrl(item?.url)">
               <div class="overflow-hidden">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" alt="">
+                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name">
               </div>
               <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
             </div>
@@ -279,7 +279,7 @@
     <div class="container">
       <div class="artist-wrapper">
         <div class="content" v-aos="'fade-up'">
-          <h1 class="text-50">TOP 50 ARTIST</h1>
+          <h2 class="text-50">TOP 50 ARTIST</h2>
           <el-skeleton :loading="isSkeleton2Artists" animated :count="4" class="my-30">
             <div class="row artist-list">
               <div class="col-sm-4 col-6" v-for="item in artistsData" :key="item.id">
@@ -302,7 +302,7 @@
   <section class="sec-style">
     <div class="container">
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
-        <h1 class="text-50">MORE STYLE</h1>
+        <h2 class="text-50">MORE STYLE</h2>
       </div>
       <el-skeleton :loading="isSkeleton" animated :count="8" class="row gap-row-base">
         <template #template>
@@ -318,7 +318,7 @@
             v-aos="{ name: 'fade-up', delay: index % 4 * 100}"
           >
             <div class="categories-item cursor-pointer overflow-hidden" @click="jumpToUrl(item.url)">
-              <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" alt="">
+              <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.name">
               <p class="categories-text text-26 f-bold text-white text-center">{{ item.name }}</p>
             </div>
           </div>
@@ -333,8 +333,8 @@
       <div class="contact-container">
         <div class="contact-bg" :style="{ backgroundImage: `url(${contactImage})` }"></div>
         <div class="contact-wrapper text-center">
-          <h1 class="text-46 f-bold-500 mb-20">Keep up with the latest at ArtDaFen.com.<br/>Sign up now & get 15% off*
-            your purchase of $99 or more!</h1>
+          <h2 class="text-46 f-bold-500 mb-20">Keep up with the latest at ArtDaFen.com.<br/>Sign up now & get 15% off*
+            your purchase of $99 or more!</h2>
           <div class="contact-buttons acea-row row-column gap-row-base">
             <el-button size="large" type="primary" @click="handleSubscribe">
               <template v-if="userStore.isLogin">
@@ -355,7 +355,7 @@
   <!--WHAT CUSTOMERS SAY-->
   <section class="sec-review">
     <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
-      <h1 class="text-50">WHAT CUSTOMERS SAY</h1>
+      <h2 class="text-50">WHAT CUSTOMERS SAY</h2>
     </div>
 
     <el-skeleton :loading="isSkeletonComment" animated :count="4" class="review-skeleton">
@@ -422,7 +422,7 @@ import {subscribeForRealName, getLatestComment} from "~/api/modules/message/mess
 import {useCustomStore} from "~/stores/modules/custom";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
-import {ArtCode} from "~/types/enumeration.d";
+import {ArtCodeEnum} from "~/types/enumeration";
 import {useUserStore} from "~/stores/modules/user";
 import LoginWindow from "~/components/LoginWindow.vue";
 import PromoCode from "~/components/PromoCode.vue";
@@ -451,7 +451,7 @@ const userStore = useUserStore()
 const modules = [Autoplay, Pagination, Navigation]
 const isSkeleton2Explore = ref(true)
 
-useHead(pageMeta[route.path] ?? pageMeta["/"]);
+useHead(pageMeta["/"] ?? {});
 
 // 点击艺术家
 const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
@@ -508,7 +508,7 @@ const handleSubscribe = async () => {
 
 const goCustomPaint = () => {
   customStore.clearCache()
-  router.push(`/custom-paint/${ArtCode.Painting}`)
+  router.push(`/custom-paint/${ArtCodeEnum.Painting}`)
 }
 
 const loginWindowRef = ref<InstanceType<typeof LoginWindow>>()

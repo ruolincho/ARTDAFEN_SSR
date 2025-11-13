@@ -51,7 +51,7 @@
 
         <div class="room-box flex-1 overflow-hidden">
           <div class="preview-box" ref="previewBox">
-            <img class="pictures" :src="bgSrc" alt="">
+            <img class="pictures" :src="bgSrc" alt="Scene Graph">
             <div
               class="drag-box"
               ref="dragBox"
@@ -59,7 +59,7 @@
               @mousedown.stop.prevent="onDragStart"
               @touchstart.stop.prevent="onDragStart"
             >
-              <img :src="wallImage" alt="">
+              <img :src="wallImage" alt="Scene Graph">
               <div
                 class="resize-handle iconfont icon-suofang"
                 @mousedown.stop.prevent="onResizeStart"
@@ -79,7 +79,7 @@
             >
               <swiper-slide v-for="(photo, index) in roomPhotos" :key="index">
                 <div class="slide acea-row row-center-wrapper bg-gray-200 cursor-pointer" @click="choosePhoto(photo)">
-                  <img class="w-full h-full fit-contain" :src="imagePrefix(photo)" alt="">
+                  <img class="w-full h-full fit-contain" :src="imagePrefix(photo)" alt="Scene Graph">
                 </div>
               </swiper-slide>
             </swiper>

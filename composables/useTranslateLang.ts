@@ -1,4 +1,5 @@
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, computed} from 'vue'
+import type {Language} from "element-plus/es/locale";
 
 // i18n-jsautotranslate 所支持的语言数据
 const LANGUAGE_JSON = [
@@ -692,8 +693,9 @@ const TRANSLATE_LANG_LIST = [
     "chinese_traditional",
 ]
 
-const currentLang = ref('')
-const currentElementPlusLocale = ref(null)
+const currentServiceId = ref('') // en / zh-TW
+const currentLang = ref('') // English / 中文（繁体）
+const currentElementPlusLocale = ref<Language>()
 const elementPlusLocaleMap: Record<string, () => Promise<any>> = {
     en: () => import('element-plus/es/locale/lang/en'),
     fr: () => import('element-plus/es/locale/lang/fr'),
@@ -802,7 +804,8 @@ export function useTranslateLang() {
         const localeImport = elementPlusLocaleMap[serviceId] ?? elementPlusLocaleMap.en!;
         const { default: locale } = await localeImport();
         currentElementPlusLocale.value = locale;
+        currentServiceId.value = serviceId;
     };
 
-    return {currentLang, languageData, switchLanguage, currentElementPlusLocale}
+    return {currentLang, languageData, switchLanguage, currentElementPlusLocale, currentServiceId}
 }

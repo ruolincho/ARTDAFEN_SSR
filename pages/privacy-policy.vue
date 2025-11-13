@@ -325,17 +325,15 @@
         advertisements for goods and services.
       </p>
       <p class="text-14 text1">
-        To find out more about the cookies that we serve and how to manage your cookie opt-outs, click <a href=""
-                                                                                                          class="text-secondary text-underline">here</a>.
+        To find out more about the cookies that we serve and how to manage your cookie opt-outs, click <a href="/cookies-policy" class="text-secondary text-underline">here</a>.
       </p>
       <p class="text-14 text1 mb-15">
         We use third parties to improve our ability to identify visitors to our website. As part of this service, we may
         make available identifiers to these third parties including our visitors' IP addresses, cookies, and hashed
         versions of email addresses captured from your visit. We, and third parties, use this data to obtain more
         information about our visitors and reach out to them through other channels, such as email and/or direct mail.
-        You have the right to opt-out of this activity. To opt-out, please follow the instructions in <a href=""
-                                                                                                         class="text-secondary text-underline">Your
-        data protection rights & choices</a>
+        You have the right to opt-out of this activity. To opt-out, please follow the instructions in
+        <a href="/cookies-policy" class="text-secondary text-underline">Your data protection rights & choices</a>
       </p>
       <h2 class="text-18 f-bold title1">
         International data transfers
@@ -427,7 +425,7 @@
         personal information to the following categories of third parties:
       </p>
       <p class="text-14 text1 mb-15">
-        Categories of Personal Information Sold or SharedCategories of Third-Party ReceipientIdentifiersService
+        Categories of Personal Information Sold or Shared Categories of Third-Party Recipient Identifiers Service
         providers (such as advertising networks, marketplace sellers, analytics providers, etc.)Device Information and
         Online ActivityBusiness partners that receive data for their own independent use and not to provide services to
         a Trends International entityDemographic InformationBusiness partners that receive data for their own
@@ -554,6 +552,13 @@
         We may provide you with links to other online services (such as social media platforms) and may include third-party features such as apps, tools, widgets, and plug ins. We may not own or control these linked online services or third-party features, and we are not responsible for the information practices of the third parties that have ownership or control over them. In some cases, these third parties operate independently from us, which means their privacy practices are not covered in this Notice. We recommend that you review their privacy statements to learn about these third parties' privacy practices, including details on the information they may collect about you.
       </p>
       <h2 class="text-18 f-bold title1">
+        Microsoft
+      </h2>
+      <p class="text-14 text1 mb-15">
+        We partner with Microsoft Clarity and Microsoft Advertising to capture how you use and interact with our website through behavioral metrics, heatmaps, and session replay to improve and market our products/services. Website usage data is captured using first and third-party cookies and other tracking technologies to determine the popularity of products/services and online activity. Additionally, we use this information for site optimization, fraud/security purposes, and advertising. For more information about how Microsoft collects and uses your data, visit the Microsoft Privacy
+        <a href="https://www.microsoft.com/zh-cn/privacy/privacystatement" target="_blank" class="text-secondary text-underline">Statement</a>.
+      </p>
+      <h2 class="text-18 f-bold title1">
         Data retention
       </h2>
       <p class="text-14 text1 mb-15">
@@ -595,8 +600,7 @@
 import {CONTACT_EMAIL} from "~/config";
 import {pageMeta} from "~/config/pageMeta";
 
-const route = useRouter();
-useHead(pageMeta[route.path] ?? pageMeta["/privacy-policy"]);
+useHead(pageMeta["/privacy-policy"] ?? {});
 
 defineOptions({
   name: 'PrivacyPolicy'

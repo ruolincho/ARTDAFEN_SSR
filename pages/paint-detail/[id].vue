@@ -88,9 +88,9 @@
                   <p class="text-22 f-bold-500 cursor-pointer text-underline" @click="handleClickArtist">
                     by:{{ goodsDetail.creator?.name }}</p>
                   <p class="text-18 text-gray-600 mt-10">
-                    <span v-if="goodsDetail.techniqueId === '3000012'">Hand-painted oil painting</span>
-                    <span v-if="goodsDetail.techniqueId === '3000013'">Print painting</span>
-                    <span v-if="goodsDetail.techniqueId === '3000014'">Relief painting</span>
+                    <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Painting">Hand-painted oil painting</span>
+                    <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Prints">Print painting</span>
+                    <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Relief">Relief painting</span>
                   </p>
                 </div>
                 <div>
@@ -270,7 +270,7 @@
                       >
                         <div class="frame-box">
                           <div class="frame-img aspect-ratio">
-                            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" alt="">
+                            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
                           </div>
                           <p class="line2 mt-10 frame-name">{{ item.name }}</p>
                           <p class="f-bold-500 frame-money">
@@ -404,7 +404,7 @@
       <div class="quality-list">
         <div class="quality-item acea-row gap-base">
           <div class="p-img">
-            <img class="w-full" src="~/assets/images/quality1.png" alt="">
+            <img class="w-full" src="~/assets/images/quality1.png" alt="quality">
           </div>
           <div class="info flex-1">
             <p class="text-20 f-bold-500">High-Quality Framed Art Prints</p>
@@ -420,7 +420,7 @@
 
         <div class="quality-item acea-row gap-base">
           <div class="p-img">
-            <img class="w-full" src="~/assets/images/quality2.png" alt="">
+            <img class="w-full" src="~/assets/images/quality2.png" alt="quality">
           </div>
           <div class="info flex-1">
             <p class="text-20 f-bold-500">Professionally Crafted Framed Wall Art</p>
@@ -436,7 +436,7 @@
 
         <div class="quality-item acea-row gap-base">
           <div class="p-img">
-            <img class="w-full" src="~/assets/images/quality3.png" alt="">
+            <img class="w-full" src="~/assets/images/quality3.png" alt="quality">
           </div>
           <div class="info flex-1">
             <p class="text-20 f-bold-500">Easy-to-Hang & Ready-to-Display Artwork</p>
@@ -476,7 +476,7 @@
             <swiper-slide v-for="item in relatedList" :key="item.id">
               <div class="explore-item cursor-pointer" @click="jumpToProduct(item)">
                 <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" alt=""/>
+                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p class="text-12 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice || 0) }}</p>
@@ -504,8 +504,8 @@
           Brand Home
           <span class="iconfont icon-right-arrow text-28 ml-xs-60 ml-30"></span>
         </button>
-        <img class="w-full pc" :src="imagePrefix(goodsDetail?.brand?.background)" alt="">
-        <img class="w-full app" :src="imagePrefix(goodsDetail?.brand?.img)" alt="">
+        <img class="w-full pc" :src="imagePrefix(goodsDetail?.brand?.background)" alt="brand">
+        <img class="w-full app" :src="imagePrefix(goodsDetail?.brand?.img)" alt="brand">
       </div>
       <ClientOnly>
         <div class="recommend-swiper">
@@ -527,7 +527,7 @@
             <swiper-slide v-for="item in brandRecList" :key="item.id">
               <div class="explore-item cursor-pointer" @click="jumpToProduct(item)">
                 <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" alt=""/>
+                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p class="text-12 f-bold">{{ item.retailPrice }}</p>
@@ -683,6 +683,7 @@ import type {IMessage} from "~/api/interface/message/message";
 import {getCommentList} from "~/api/modules/message/message";
 import ProInfinite from "~/components/ProInfinite.vue";
 import {formatTimestamp} from "~/utils/format";
+import {TechniqueCodeEnum} from "../../types/enumeration";
 
 defineOptions({
   name: 'PaintDetail'
@@ -760,7 +761,7 @@ useHead({
 const { injectProductJsonLd, jsonLd } = useCustomProductJsonLd(goodsDetail.value, {})
 injectProductJsonLd()
 
-console.log('injectProductJsonLd=>', jsonLd.value)
+console.log(' =>', jsonLd.value)
 
 // 获取SKu
 const specsCombination = ref<ISpecs.Row[]>([])

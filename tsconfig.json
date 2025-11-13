@@ -4,7 +4,8 @@
     "types": [
       "element-plus/global",
       "@types/node",
-      "@nuxt/types"
+      "@nuxt/types",
+      "@types/google.accounts"
     ],
     "baseUrl": ".",
     "paths": {

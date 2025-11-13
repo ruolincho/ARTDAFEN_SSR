@@ -12,10 +12,10 @@ import {useUserStore} from "~/stores/modules/user";
 import {useTranslateLang} from '~/composables/useTranslateLang'
 
 const {currentElementPlusLocale} = useTranslateLang();
-const userStore = useUserStore();
+const {checkTokenStatus} = useUserStore();
 
 onMounted(() => {
-  userStore.checkTokenStatus()
+  checkTokenStatus()
 })
 </script>
 

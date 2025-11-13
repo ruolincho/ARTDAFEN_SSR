@@ -65,8 +65,7 @@
 <script setup lang="ts">
 import {pageMeta} from "~/config/pageMeta";
 
-const route = useRoute()
-useHead(pageMeta[route.path] ?? pageMeta["/cookies-policy"]);
+useHead(pageMeta["/cookies-policy"] ?? {});
 
 defineOptions({
   name: 'PrivacyPolicy'

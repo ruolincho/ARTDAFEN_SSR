@@ -5,11 +5,20 @@
         <p class="text-16 mb-20">You have {{ cartStore.subtotalQuantity }} items in your cart</p>
         <div class="shopping-bag-scroll scroll-y scroll-hide">
           <div class="shopping-bag-list">
-            <div class="shopping-bag-item acea-row row-middle pb-20  border-b-sm border-gray-200"
-                 v-for="(item, index) in cartStore.carts">
-              <div class="p-img mr-10 border-sm" :class="{ disabled: item.disable }">
-                <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" alt="">
-                <p class="tip text-14 py-3 text-center">sell out</p>
+            <div
+              class="shopping-bag-item acea-row row-middle pb-20  border-b-sm border-gray-200"
+              :class="{ disabled: item.disable || Number(item.retailStock) <= 0 }"
+               v-for="(item, index) in cartStore.carts"
+               :key="item.productId"
+            >
+              <div
+                class="p-img mr-10 border-sm cursor-pointer"
+                @click="jumpToProduct(item)"
+              >
+                <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" :alt="item.title">
+                <p class="tip text-14 py-3 text-center">
+                  {{ item.disable ? 'Temporarily unavailable' : Number(item.retailStock) <= 0 ? 'Out of stock' : '' }}
+                </p>
               </div>
               <div class="flex-1 text-16 overflow-hidden">
                 <p class="line1">{{ item.title }}</p>
@@ -38,7 +47,7 @@
 
 <script setup lang="ts">
 import {useCartStore} from "~/stores/modules/cart";
-import {formatAttr, imagePrefix} from "~/utils";
+import {formatAttr, imagePrefix, jumpToProduct} from "~/utils";
 import {PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 
@@ -68,17 +77,18 @@ const currencyStore = useCurrencyStore();
           color: #fff;
           display: none;
         }
+      }
 
-        &.disabled {
-          img {
-            cursor: not-allowed;
-            pointer-events: none;
-            opacity: .5;
-          }
+      &.disabled .p-img{
+        cursor: not-allowed;
+        pointer-events: none;
 
-          .tip {
-            display: block;
-          }
+        img {
+          opacity: .5;
+        }
+
+        .tip {
+          display: block;
         }
       }
     }

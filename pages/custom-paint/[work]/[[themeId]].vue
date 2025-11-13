@@ -4,15 +4,17 @@
     <div class="container">
       <div class="my-md-50 my-25 portrait-wrapper acea-row row-center-wrapper gap-column-md gap-row-sm">
         <img src="~/assets/images/logo-portrait.png" alt="logo-portrait">
-        <span
-          class="text-20">Your exclusive art customization service is now available. Discover timeless creations.</span>
+        <h1
+          class="text-20">
+          Your exclusive art customization service is now available. Discover timeless creations.
+        </h1>
       </div>
     </div>
 
     <!-- 主题 -->
     <div class="container" v-show="currentView === 'theme'">
       <div class="text-center py-lg-40 py-30">
-        <h1 class="text-50">TRANSFORM YOUR PHOTOS INTO STUNNING ARTWORKS</h1>
+        <h2 class="text-50">TRANSFORM YOUR PHOTOS INTO STUNNING ARTWORKS</h2>
         <p class="mt-20 text-gray-600 text-20 f-bold-500">
           With Our Artists' Creation, Any Photo Can Be Turned Into An Elaborately Crafted Artwork. Choose From A Variety
           Of Unique Styles You Desire, And You'll Get Professional-Grade Results.
@@ -30,7 +32,7 @@
       </div>
 
       <div class="text-center py-lg-40 py-30">
-        <h1 class="text-50">MORE CASE STUDIES</h1>
+        <h2 class="text-50">MORE CASE STUDIES</h2>
       </div>
 
       <div class="case-list">
@@ -58,7 +60,7 @@
     <!-- 风格 -->
     <div class="container" v-show="currentView === 'style'">
       <div class="text-center py-lg-40 py-30">
-        <h1 class="text-50">CHOOSE YOUR FAVORITE STYLE</h1>
+        <h2 class="text-50">CHOOSE YOUR FAVORITE STYLE</h2>
         <p class="mt-20 text-gray-600 text-20 f-bold-500">
           From Classic Oil Paintings, Artist Styles, Disney Magic, Modern Anime Aesthetics, Vibrant Anime Styles, Dreamy
           Ghibli Styles, Big-Eye Portrait Styles To Modern Retro Styles, Browse Our Rich Collection Of Styles. Each
@@ -140,7 +142,7 @@
           <ClientOnly>
             <!--示例图-->
             <div class="example-preview sticky-column" v-if="!imageUrl">
-              <template v-if="route.params.work === ArtCode.Painting && lastThemeObj">
+              <template v-if="route.params.work === ArtCodeEnum.Painting && lastThemeObj">
                 <div class="p-md-20 p-15 border-sm acea-row row-center-wrapper">
                   <div class="favorite-list" style="max-width: 450px">
                     <div class="favorite-item">
@@ -151,7 +153,7 @@
                 </div>
               </template>
               <template v-else>
-                <div class="example-preview-box row" v-for="(example, index) in TECHNIQUE_EXAMPLE[route.params.work as CodeType]"
+                <div class="example-preview-box row" v-for="(example, index) in TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType]"
                      :key="index">
                   <div class="col-6">
                     <img :src="imagePrefix(example.photo)" alt="">
@@ -312,7 +314,7 @@
             <!--有上传图片-->
             <template v-else>
               <!--工艺/规格选择-->
-              <template v-if="route.params.work === ArtCode.Painting">
+<!--              <template v-if="route.params.work === ArtCodeEnum.Painting">
                 <div class="acea-row row-between-wrapper p-md-20 p-15">
                   <div class="acea-row row-middle flex-1 mr-10">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
@@ -341,7 +343,7 @@
                     </div>
                   </div>
                 </div>
-              </template>
+              </template>-->
 
               <!--尺寸选择-->
               <div class="acea-row row-between-wrapper p-md-20 p-15">
@@ -384,7 +386,7 @@
               </div>
 
               <!--复杂层度选择-->
-              <template v-if="route.params.work === ArtCode.Painting && !isPrint">
+              <template v-if="route.params.work === ArtCodeEnum.Painting && !isPrint">
                 <div class="acea-row row-between-wrapper p-20">
                   <div class="acea-row row-middle">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
@@ -639,7 +641,7 @@
     <div
       class="foot-wrapper"
       :style="{ position: currentView === 'custom' ? 'relative' : 'sticky' }"
-      v-if="route.params.work === ArtCode.Painting && currentView !== 'theme'"
+      v-if="route.params.work === ArtCodeEnum.Painting && currentView !== 'theme'"
     >
       <div class="container">
         <div class="foot-inner py-20">
@@ -693,7 +695,7 @@
     <!-- 图片查看器 -->
     <el-image-viewer
       v-if="exampleViewVisible"
-      :url-list="[imagePrefix(TECHNIQUE_EXAMPLE[route.params.work as CodeType][exampleArrIndex].paint)]"
+      :url-list="[imagePrefix(TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType][exampleArrIndex].paint)]"
       @close="exampleViewVisible = false"
     />
   </ClientOnly>
@@ -742,9 +744,9 @@ import {useUserStore} from "~/stores/modules/user";
 import {CONTACT_EMAIL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {findClosestMatch} from "~/utils/calculateShape";
-import {ArtCode, type CodeType} from "~/types/enumeration.d";
+import {ArtCodeEnum, type ArtCodeType} from "~/types/enumeration";
 import {rangeVerify} from "~/utils/matchingInterval";
-import {pageMeta} from "~/config/pageMeta";
+import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import { useIndexedDBBase64 } from '~/composables/useIndexedDBBase64'
 import {TECHNIQUE_EXAMPLE} from "~/constant";
 
@@ -767,7 +769,7 @@ onMounted(() => {
 
   // 在手绘工艺下，默认选中主题
   const {work, themeId} = route.params
-  if (work === ArtCode.Painting && themeId) {
+  if (work === ArtCodeEnum.Painting && themeId) {
     getTheme(themeId)
     currentView.value = 'style'
     viewHistory.value = ['theme']
@@ -784,22 +786,19 @@ const moreInfoVisible = ref([false, false, false, false])
 const currentView = ref('custom')
 const contentNumber = ref(1)
 
-const HEAD = pageMeta["/custom-paint"][route.params.work] || {}
 const origin = useRequestURL().origin
 
-useHead({
-  title: HEAD?.title || '',
-  meta: [
-    ...(HEAD?.meta ?? []),
-    { name: 'robots', content: route.params.themeId ? 'noindex, follow' : 'index, follow' }
-  ],
-  link: [
-    {
-      rel: 'canonical',
-      href: `${origin}/custom-paint/${route.params.work}`
-    }
-  ]
-});
+useHead(mergeHeadWithLodash(
+  pageMeta["/custom-paint"][route.params.work] ?? {},
+  {
+    link: [
+      { rel: 'canonical', href: `${origin}/custom-paint/${route.params.work}` }
+    ],
+    meta: [
+      { name: 'robots', content: route.params.themeId ? 'noindex, follow' : 'index, follow' }
+    ]
+  }
+))
 
 const reReckon = ref(false) // 重新识别
 const handleImageChange = () => {
@@ -1210,7 +1209,7 @@ const reset = () => {
   contentNumber.value = 1
   isPrint.value = false
 
-  if (route.params.work !== ArtCode.Painting) {
+  if (route.params.work !== ArtCodeEnum.Painting) {
     currentView.value = 'custom'
   } else {
     currentView.value = customStore.currentView || 'theme'
@@ -1239,7 +1238,7 @@ const specs = computed(() => {
     specs['Mat Color'] = currentMaterialOption.value?.name // 卡纸颜色
     specs['Mat Width'] = currentMaterialWidth.value + '″' // 卡纸宽度
   }
-  if (route.params.work === ArtCode.Painting && lastThemeObj.value) {
+  if (route.params.work === ArtCodeEnum.Painting && lastThemeObj.value) {
     specs['Style'] = lastThemeObj.value.name
   }
   return specs
@@ -1277,8 +1276,8 @@ const lastThemeObj = computed(() => {
 // 最终提交到后台的Code
 const finalCode = computed(() => {
   const {work} = route.params;
-  const isPainting = work === ArtCode.Painting;
-  if (isPainting && isPrint.value) return ArtCode.Prints;
+  const isPainting = work === ArtCodeEnum.Painting;
+  if (isPainting && isPrint.value) return ArtCodeEnum.Prints;
   if (isPainting && getFavoriteReference.value) return getFavoriteReference.value.code;
   return work;
 })

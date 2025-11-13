@@ -9,7 +9,7 @@ interface PathParams {
 /**
  * 处理 MUTEX类型 参数
  */
-export const gen_MUTEX = (groupList: IHome.MenuRow[], query: string) => {
+export const process_MUTEX = (groupList: IHome.MenuRow[], query: string) => {
     let MAP = {} as IHome.MenuRow
     try {
         const {parentId, id: childId} = JSON.parse(query) as PathParams;
@@ -38,7 +38,7 @@ export const gen_MUTEX = (groupList: IHome.MenuRow[], query: string) => {
  * @param groupList
  * @param query
  */
-export const gen_GROUP_RADIO = (groupList: IHome.MenuRow[], query: string) => {
+export const process_GROUP_RADIO = (groupList: IHome.MenuRow[], query: string) => {
     const MAP = new Map<string, IHome.MenuRow>()
     try {
         const array = JSON.parse(query);
@@ -67,7 +67,7 @@ export const gen_GROUP_RADIO = (groupList: IHome.MenuRow[], query: string) => {
  * @param groupList
  * @param query
  */
-export const gen_PRICE = (groupList: IHome.MenuRow[], query: string) => {
+export const process_PRICE = (groupList: IHome.MenuRow[], query: string) => {
     try {
         const {parentId, id: childId} = JSON.parse(query) as PathParams;
         const parentItem = groupList.find(({id}) => id === parentId);
@@ -86,7 +86,7 @@ export const gen_PRICE = (groupList: IHome.MenuRow[], query: string) => {
  * @param groupList
  * @param query
  */
-export const gen_CHECKBOX = (groupList: IHome.MenuRow[], query: string) => {
+export const process_CHECKBOX = (groupList: IHome.MenuRow[], query: string) => {
     const MAP = new Map<string, IHome.MenuRow[]>()
     try {
         const array = JSON.parse(query) as PathParams[];
@@ -121,7 +121,7 @@ export const gen_CHECKBOX = (groupList: IHome.MenuRow[], query: string) => {
  * @param groupList
  * @param query
  */
-export const gen_COLOR = (groupList: IHome.MenuRow[], query: string) => {
+export const process_COLOR = (groupList: IHome.MenuRow[], query: string) => {
     let MAP = [] as IHome.MenuRow[]
     try {
         const array = JSON.parse(query) as PathParams[];
@@ -144,7 +144,7 @@ export const gen_COLOR = (groupList: IHome.MenuRow[], query: string) => {
  * @param groupList
  * @param query
  */
-export const gen_ARTIST = (groupList: IHome.MenuRow[], query: string) => {
+export const process_ARTIST = (groupList: IHome.MenuRow[], query: string) => {
 
     let MAP = {} as IHome.MenuRow
     try {
@@ -174,12 +174,40 @@ export const gen_ARTIST = (groupList: IHome.MenuRow[], query: string) => {
  * 处理 BRAND类型 参数
  * @param query
  */
-export const gen_BRAND = (query: string) => {
+export const process_BRAND = (query: string) => {
     let MAP = {} as IHome.MenuRow
     try {
         MAP = JSON.parse(query) as IHome.MenuRow
     } catch (error) {
         console.error('Error parsing BRAND parameters:', error);
+    }
+    return MAP
+}
+
+/**
+ * 处理 SORT类型 参数
+ * @param groupList
+ * @param query
+ */
+export const process_SORT = (groupList: IHome.MenuRow[], query: string) => {
+    let MAP = {} as IHome.MenuRow
+    try {
+        const {parentId, id: childId} = JSON.parse(query) as PathParams;
+        // 根据 parentId 查找对应的分组
+        const parentItem = groupList.find(({id}) => id === parentId);
+
+        if (!parentItem) {
+            return MAP
+        }
+
+        // 在 children 数组中查找 id 为 childId 的项
+        const childItem = parentItem.children?.find(({id}) => id === childId);
+        if (!childItem) return MAP
+
+        MAP = childItem
+
+    } catch (error) {
+        console.error('Error parsing SORT parameters:', error);
     }
     return MAP
 }

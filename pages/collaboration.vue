@@ -29,7 +29,7 @@
       <div class="row benefits-list mt-30">
         <div class="col-xs-6 col-12" v-aos="{ name: 'fade-up', delay: 0}">
           <div class="benefits-item bg-gray-200">
-            <img class="icon" src="~/assets/images/collaboration-icon1.png" alt="">
+            <img class="icon" src="~/assets/images/collaboration-icon1.png" alt="icon">
             <div class="content">
               <h2 class="text-24 f-bold-500">Global Reach</h2>
               <p class="text-22 text-gray-600 ">Showcase your work through exhibitions, digital platforms, and global
@@ -39,7 +39,7 @@
         </div>
         <div class="col-xs-6 col-12" v-aos="{ name: 'fade-up', delay: 100}">
           <div class="benefits-item bg-gray-200">
-            <img class="icon" src="~/assets/images/collaboration-icon2.png" alt="">
+            <img class="icon" src="~/assets/images/collaboration-icon2.png" alt="icon">
             <div class="content">
               <h2 class="text-24 f-bold-500">Cultural Exchange</h2>
               <p class="text-22 text-gray-600 ">Collaborate with artists and designers from around the world to inspire
@@ -49,7 +49,7 @@
         </div>
         <div class="col-xs-6 col-12" v-aos="{ name: 'fade-up', delay: 200}">
           <div class="benefits-item bg-gray-200">
-            <img class="icon" src="~/assets/images/collaboration-icon3.png" alt="">
+            <img class="icon" src="~/assets/images/collaboration-icon3.png" alt="icon">
             <div class="content">
               <h2 class="text-24 f-bold-500">Creative Support</h2>
               <p class="text-22 text-gray-600 ">Access resources and a dedicated team that values both creativity and
@@ -59,7 +59,7 @@
         </div>
         <div class="col-xs-6 col-12" v-aos="{ name: 'fade-up', delay: 300}">
           <div class="benefits-item bg-gray-200">
-            <img class="icon" src="~/assets/images/collaboration-icon4.png" alt="">
+            <img class="icon" src="~/assets/images/collaboration-icon4.png" alt="icon">
             <div class="content">
               <h2 class="text-24 f-bold-500">Sustainable Growth</h2>
               <p class="text-22 text-gray-600 ">Transform your art into lifestyle products that expand your audience and
@@ -202,8 +202,7 @@ import {sendConsulting} from "~/api/modules/message/message";
 import {imagePrefix} from "~/utils";
 import {pageMeta} from "~/config/pageMeta";
 
-const route = useRoute()
-useHead(pageMeta[route.path] ?? pageMeta["/collaboration"]);
+useHead(pageMeta["/collaboration"] ?? {});
 
 
 const messageForm = ref({

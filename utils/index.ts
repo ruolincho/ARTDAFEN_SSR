@@ -1,5 +1,6 @@
 import type {UploadFile} from "element-plus";
 import type {General} from "~/types/global";
+import {TechniqueCodeEnum} from "~/types/enumeration";
 
 /**
  * 图片添加服务器前缀
@@ -59,8 +60,9 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
  */
 export const jumpNewWindow = (urls: string) => {
     const router = useRouter()
-    const routePath = router.resolve(urls);
-    window.open(routePath.href, '_blank');
+    // const routePath = router.resolve(urls);
+    // window.open(routePath.href, '_blank');
+    router.push(urls)
 }
 
 /**
@@ -81,13 +83,7 @@ export const jumpToUrl = (urls: string) => {
  * @param item
  */
 export const jumpToProduct = (item: General.GoodsItem) => {
-    if (['3000012', '3000013', '3000014'].includes(item.techniqueId)) {
-        jumpNewWindow(`/paint-detail/${item.id}`)
-    } else if (['3000015'].includes(item.techniqueId)) {
-        jumpNewWindow(`/original-detail/${item.id}`)
-    } else {
-        jumpNewWindow(`/spot-detail/${item.id}`)
-    }
+    jumpNewWindow(productLink(item))
 }
 
 /**
@@ -95,12 +91,18 @@ export const jumpToProduct = (item: General.GoodsItem) => {
  * @param item
  */
 export const productLink = (item: General.GoodsItem) => {
-    if (['3000012', '3000013', '3000014'].includes(item.techniqueId)) {
-        return `/paint-detail/${item.id}`
-    } else if (['3000015'].includes(item.techniqueId)) {
-        return `/original-detail/${item.id}`
+    const T1 = [TechniqueCodeEnum.Painting, TechniqueCodeEnum.Prints, TechniqueCodeEnum.Relief]
+    const T2 = [TechniqueCodeEnum.Originals]
+    const T3 = [TechniqueCodeEnum.Spot]
+    const pid = item.id ?? item.productId
+    if (T1.includes(item.techniqueId)) {
+        return `/paint-detail/${pid}`
+    } else if (T2.includes(item.techniqueId)) {
+        return `/original-detail/${pid}`
+    } else if (T3.includes(item.techniqueId)) {
+        return `/spot-detail/${pid}`
     } else {
-        return `/spot-detail/${item.id}`
+        return '/'
     }
 }
 

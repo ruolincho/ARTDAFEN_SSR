@@ -122,7 +122,7 @@ const route = useRoute()
 const searchRef = ref()
 const keyword = ref('')
 
-useHead(pageMeta[route.path] ?? pageMeta["/search"]);
+useHead(pageMeta["/search"] ?? {});
 
 
 // 获取历史搜索

@@ -10,7 +10,6 @@ export default defineNuxtConfig({
             obsUrl: process.env.NUXT_PUBLIC_OBS_URL,
             paypalClientId: process.env.NUXT_PUBLIC_PAYPAL_CLIENT_ID,
             httpTimeout: process.env.NUXT_PUBLIC_HTTP_TIMEOUT,
-            gtmId: process.env.NUXT_PUBLIC_GTM_ID,
         },
     },
     elementPlus: {
@@ -24,7 +23,7 @@ export default defineNuxtConfig({
     sitemap: {
         // @ts-ignore
         hostname: process.env.NUXT_PUBLIC_SITE_URL,
-        exclude: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register'],
+        exclude: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register', '/checkout'],
         cacheTime: 0,  // 调试时关缓存，避免看到旧的 XML
         // 动态生成条目
         routes: () => {
@@ -102,6 +101,6 @@ export default defineNuxtConfig({
         }
     },
     nitro: {
-        compatibilityDate: '2025-10-29',
+        compatibilityDate: '2025-11-11',
     }
 })

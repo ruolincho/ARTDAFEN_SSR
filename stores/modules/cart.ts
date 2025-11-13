@@ -4,6 +4,7 @@ import piniaPersistConfig from "../helper/persist";
 import type {IShopping} from "~/api/interface/shopping/shopping";
 import {shoppingPreCheckApi} from "~/api/modules/shopping/shopping";
 import {isEqual} from "lodash-es";
+import Decimal from 'decimal.js';
 
 export const useCartStore = defineStore(
     'cart',
@@ -46,11 +47,10 @@ export const useCartStore = defineStore(
         // 计算总价
         const subtotal = computed(() => {
             return carts.value.reduce((acc, cur) => {
-                // 将价格转换为分进行计算，避免浮点误差
-                const priceCents = Math.round(Number(cur.retailPrice) * 100);
-                const quantity = Number(cur.quantity);
-                return acc + (priceCents * quantity);
-            }, 0) / 100; // 最后再转换回元
+                const price = new Decimal(cur.retailPrice || 0)
+                const quantity = new Decimal(cur.quantity || 0)
+                return acc.plus(price.mul(quantity))
+            }, new Decimal(0)).toNumber()
         })
 
         // 计算总数量

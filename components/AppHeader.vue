@@ -157,7 +157,7 @@
     <!--头部-->
     <div class="navbar-app">
       <NuxtLink class="logo" to="/">
-        <img src="~/assets/images/logo.png"/>
+        <img src="~/assets/images/logo.png" alt="ART DAFEN"/>
       </NuxtLink>
       <div class="operating-area">
         <span class="iconfont icon-search" @click="router.push('/search')"></span>
@@ -285,14 +285,14 @@ import {useAppStore} from "~/stores/modules/app";
 import {BEST_URL, PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useCartStore} from "~/stores/modules/cart";
-import {ARTIST_MENU_NAME, BEST_MENU_NAME, CUSTOM_MENU_NAME, TECHNIQUE_OPTIONS} from "~/constant";
+import {ARTIST_MENU_NAME, BEST_MENU_NAME, CUSTOM_MENU_NAME, techniqueMenu} from "~/constant";
 import {throttle} from "lodash-es";
 import {useCustomStore} from "~/stores/modules/custom";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {packQuery, unpackQuery} from "~/composables/useQueryShort";
 import { useTranslateLang } from '~/composables/useTranslateLang'
-import {ArtCode} from "~/types/enumeration.d";
+import {ArtCodeEnum} from "~/types/enumeration";
 import {useLockScroll} from "~/composables/useLockScroll";
 
 const { currentLang, languageData, switchLanguage } = useTranslateLang()
@@ -372,7 +372,7 @@ const { data: headerList } = await useAsyncData('header-menu', async () => {
       item.path = [`${PRODUCT_URL}_${item.id}`, '/artists-brief', '/artists-all', '/artists-top']
     }
     if (item.config.type === 'CUSTOM') {
-      item.path = [`/custom-paint/${ArtCode.Painting}`, `/custom-paint/${ArtCode.Prints}`, `/custom-paint/${ArtCode.Certificates}`]
+      item.path = [`/custom-paint/${ArtCodeEnum.Painting}`, `/custom-paint/${ArtCodeEnum.Prints}`, `/custom-paint/${ArtCodeEnum.Certificates}`]
     }
   })
   return data
@@ -445,7 +445,7 @@ const clickNavFirst = (firstMenu: IHome.MenuRow, index: number) => {
   }
 
   if (firstMenu.name === CUSTOM_MENU_NAME) {
-    router.push(`/custom-paint/${ArtCode.Painting}`)
+    router.push(`/custom-paint/${ArtCodeEnum.Painting}`)
     hideDropdown()
     customStore.clearCache()
     return
@@ -503,8 +503,8 @@ const clickNavThird = (thirdMenu: IHome.MenuRow, subType: Dict.CategoryType, fir
 
   if (subType === 'MUTEX') {
     const val = thirdMenu.config.techniqueId ?? ''
-    const cur = TECHNIQUE_OPTIONS.find(item => item.value === val)
-    if (cur) params['TECHNIQUE'] = cur.value
+    const cur = techniqueMenu.children.find(item => item.config.code === val)
+    if (cur) Object.assign(params, gen_path_obj(cur, 'TECHNIQUE'))
   }
 
   hideDropdown()

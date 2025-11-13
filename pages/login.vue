@@ -41,9 +41,12 @@
       <NuxtLink to="/register" class="text-secondary ml-6 cursor-pointer">Create account</NuxtLink>
     </div>
     <el-divider><span class="text-gray-600 text-14">or</span></el-divider>
-    <div class="other-login text-14 text-gray-600 border-sm border-gray-600 text-center cursor-pointer" @click="toGoogleAuth">
+    <div v-if="isDev" class="other-login text-14 text-gray-600 border-sm border-gray-600 text-center cursor-pointer" @click="toGoogleAuth">
       <img class="icon" src="~/assets/images/google.png" alt="google">
       Login with Google
+    </div>
+    <div class="acea-row row-center-wrapper" v-else>
+      <div :id="BUTTON_ID"></div>
     </div>
   </div>
 </template>
@@ -55,6 +58,7 @@ import type {ElForm} from "element-plus";
 import { useAuth } from "~/composables/useAuth";
 import {emailReg} from "~/regular";
 import {HOME_URL, STORAGE_BACK_URL} from "~/config";
+import { useGoogleAuth } from "~/composables/useGoogleAuth";
 
 defineOptions({
   name: 'Login'
@@ -62,8 +66,12 @@ defineOptions({
 
 onMounted(() => {
   reloadCaptcha()
+  renderButton(BUTTON_ID, false)
 })
 
+const isDev = import.meta.env.MODE !== 'production'
+const BUTTON_ID = 'google-login-button'
+const { renderButton } = useGoogleAuth()
 const { loginFn } = useAuth()
 const ruleForm = ref({
   username: '',

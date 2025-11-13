@@ -47,7 +47,7 @@ onMounted(() => {
 const router = useRouter()
 const route = useRoute()
 
-useHead(pageMeta[route.path] ?? pageMeta["/artists-top"]);
+useHead(pageMeta["/artists-top"]?? {});
 
 
 // 获取Top50艺术家
