@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     sitemap: {
         // @ts-ignore
         hostname: process.env.NUXT_PUBLIC_SITE_URL,
-        exclude: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register', '/checkout'],
+        exclude: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register', '/checkout', '/search'],
         cacheTime: 0,  // 调试时关缓存，避免看到旧的 XML
         // 动态生成条目
         routes: () => {

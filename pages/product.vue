@@ -998,11 +998,11 @@ const origin = useRequestURL().origin
 useHead(mergeHeadWithLodash(
   pageMeta["/product"] ?? {},
   {
-    link: [
-      { rel: 'canonical', href: `${origin}/product` }
-    ],
     meta: [
       { name: 'robots', content: route.query.q ? 'noindex, follow' : 'index, follow' }
+    ],
+    link: [
+      { rel: 'canonical', href: route.query.q ? `${origin}/product?q=${route.query.q}` : `${origin}/product` }
     ]
   }
 ))

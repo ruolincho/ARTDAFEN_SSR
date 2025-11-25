@@ -1,63 +1,63 @@
 <template>
   <!--规格选择-->
   <section>
-    <!-- 移动兼容 -->
-    <div class="app-preview aspect-ratio" v-if="!appStore.isPc">
-      <div class="img-wrapper acea-row row-center-wrapper flex-1 scroll-y">
-        <ClientOnly>
-          <ImageGenerator
-            v-if="goodsDetail.id"
-            v-model="generatorImg"
-            v-model:pixel="pixel"
-            :shape="goodsDetail.shape"
-            :core-image="imagePrefix(goodsDetail.img)"
-            :has-mat="hasFrame && matVisible && !!currentMaterialId"
-            :mat-thickness="currentMaterialWidth.toString()"
-            :mat-color="currentMaterialOption?.config?.matColor || ''"
-            :has-frame="hasFrame"
-            :inner-frame="isInnerFrame"
-            :embedded-frame="!currentFrameOption?.config?.matSupport!"
-            :frame-cm="currentFrameOption?.config?.thickness!"
-            :size-cm="{
+    <div class="container">
+      <!-- 移动兼容 -->
+      <div class="app-preview aspect-ratio" v-if="!appStore.isPc">
+        <div class="img-wrapper acea-row row-center-wrapper flex-1 scroll-y">
+          <ClientOnly>
+            <ImageGenerator
+                v-if="goodsDetail.id"
+                v-model="generatorImg"
+                v-model:pixel="pixel"
+                :shape="goodsDetail.shape"
+                :core-image="imagePrefix(goodsDetail.img)"
+                :has-mat="hasFrame && matVisible && !!currentMaterialId"
+                :mat-thickness="currentMaterialWidth.toString()"
+                :mat-color="currentMaterialOption?.config?.matColor || ''"
+                :has-frame="hasFrame"
+                :inner-frame="isInnerFrame"
+                :embedded-frame="!currentFrameOption?.config?.matSupport!"
+                :frame-cm="currentFrameOption?.config?.thickness!"
+                :size-cm="{
                     width: Number(currentSizeOption?.widthInCm!),
                     length: Number(currentSizeOption?.lengthInCm!),
                   }"
-            :frame-corner-images="[
+                :frame-corner-images="[
                     imagePrefix(currentFrameOption?.config?.lt!),
                     imagePrefix(currentFrameOption?.config?.rt!),
                     imagePrefix(currentFrameOption?.config?.lb!),
                     imagePrefix(currentFrameOption?.config?.rb!),
                   ]"
-            :frame-side-images="[
+                :frame-side-images="[
                     imagePrefix(currentFrameOption?.config?.ct!),
                     imagePrefix(currentFrameOption?.config?.cb!),
                     imagePrefix(currentFrameOption?.config?.cl!),
                     imagePrefix(currentFrameOption?.config?.cr!),
                   ]"
-            @change="handleImageChange"
-          />
-        </ClientOnly>
-      </div>
-      <div class="acea-row row-evenly py-20">
-        <div class="acea-row row-middle cursor-pointer" @click="openWallColor">
-          <span class="iconfont icon-user-defined text-20"></span>
-          <span class="text-14 ml-10">SELECT WALL COLOR</span>
+                @change="handleImageChange"
+            />
+          </ClientOnly>
         </div>
-        <div class="acea-row row-middle cursor-pointer" @click="openRoom">
-          <span class="iconfont icon-pictures text-20"></span>
-          <span class="text-14 ml-10">VIEW PAINTING IN A ROOM</span>
+        <div class="acea-row row-evenly py-20">
+          <div class="acea-row row-middle cursor-pointer" @click="openWallColor">
+            <span class="iconfont icon-user-defined text-20"></span>
+            <span class="text-14 ml-10">SELECT WALL COLOR</span>
+          </div>
+          <div class="acea-row row-middle cursor-pointer" @click="openRoom">
+            <span class="iconfont icon-pictures text-20"></span>
+            <span class="text-14 ml-10">VIEW PAINTING IN A ROOM</span>
+          </div>
         </div>
+        <div class="btn" @click="imgViewVisible = true">PREVIEW</div>
       </div>
-      <div class="btn" @click="imgViewVisible = true">PREVIEW</div>
-    </div>
-    <div class="app-title px-20 pt-20 acea-row row-between-wrapper" v-if="!appStore.isPc">
-      <p style="font-size: 20px;" class="f-bold-500 flex-1 mr-10">{{ goodsDetail.title }}</p>
-      <span class="iconfont icon-follow text-40 mr-10 cursor-pointer" v-show="!isThumbs" @click="productThumbs"/>
-      <span class="iconfont icon-follow-fill text-40 mr-10 cursor-pointer text-error" v-show="isThumbs"
-            @click="productThumbs"/>
-    </div>
+      <div class="app-title pt-20 acea-row row-between-wrapper" v-if="!appStore.isPc">
+        <p style="font-size: 20px;" class="f-bold-500 flex-1 mr-10">{{ goodsDetail.title }}</p>
+        <span class="iconfont icon-follow text-40 mr-10 cursor-pointer" v-show="!isThumbs" @click="productThumbs"/>
+        <span class="iconfont icon-follow-fill text-40 mr-10 cursor-pointer text-error" v-show="isThumbs"
+              @click="productThumbs"/>
+      </div>
 
-    <div class="container">
       <div class="spu-wrapper row pt-md-50 pt-20">
         <div class="col-sm-7" v-if="appStore.isPc">
           <el-skeleton :loading="isSkeleton" animated>
@@ -577,8 +577,8 @@
               <img class="w-full" :src="imagePrefix(item.img)" :alt="item.name">
               <div class="p-content border-sm">
                 <div class="p-10">
-                  <p class="text-18 f-bold-500">{{ item.name }}</p>
-                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>
+                  <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
+<!--                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
                   <el-rate
                     v-model="item.rating"
                     disabled
@@ -683,7 +683,7 @@ import type {IMessage} from "~/api/interface/message/message";
 import {getCommentList} from "~/api/modules/message/message";
 import ProInfinite from "~/components/ProInfinite.vue";
 import {formatTimestamp} from "~/utils/format";
-import {TechniqueCodeEnum} from "../../types/enumeration";
+import {TechniqueCodeEnum} from "~/types/enumeration";
 
 defineOptions({
   name: 'PaintDetail'

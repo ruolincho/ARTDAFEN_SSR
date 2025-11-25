@@ -10,6 +10,7 @@ export function useGoogleAuth() {
     const {currentServiceId} = useTranslateLang()
     const route = useRoute()
     let timeoutId: any = null
+    const isOneTapInitialized = ref(false)
 
     // 等待 Google SDK 加载完成
     const waitForGoogleSDK = () => {
@@ -27,20 +28,44 @@ export function useGoogleAuth() {
     /**
      * 登录响应处理
      * @param response Google 登录响应
-     * @param needRedirect 是否需要跳转登录页
+     * @param noNeedRedirect 不需要重定向
      * @param callback 登录成功回调
      */
-    const handleCredentialResponse = (response: google.accounts.id.CredentialResponse, needRedirect: boolean, callback?: () => void) => {
+    const handleCredentialResponse = (response: google.accounts.id.CredentialResponse, noNeedRedirect: boolean, callback?: () => void) => {
         credential.value = response.credential
-        console.log('Google 登录模式：', needRedirect ? '按钮登录' : 'One Tap')
+        console.log('Google 登录模式：', noNeedRedirect ? '按钮登录' : 'One Tap')
         console.log('credential', response.credential)
         loginFn({
             channel: '3',
             captcha: response.credential, // 将 token 发送给后端验证登录
-            component: needRedirect,
+            component: noNeedRedirect,
         })
         .then(() => {
+            if (noNeedRedirect) {
+                window.location.reload() // 刷新页面，避免 One Tap 登录后刷新导致的循环登录问题
+            } else {
+                safeCancelGoogleOneTap() // 取消 One Tap 登录
+            }
             callback && callback()
+        })
+    }
+
+    /**
+     * 安全取消 Google One Tap 登录
+     */
+    const safeCancelGoogleOneTap = () => {
+        if (typeof window === 'undefined') return
+        console.log('safeCancelGoogleOneTap')
+        return new Promise<void>((resolve) => {
+            try {
+                const cancelFn = window.google?.accounts?.id?.cancel
+                if (typeof cancelFn === 'function') {
+                    cancelFn()
+                }
+                resolve()
+            } catch (err) {
+                console.warn('[Google One Tap] cancel failed:', err)
+            }
         })
     }
 
@@ -49,6 +74,7 @@ export function useGoogleAuth() {
      */
     const initOneTap = async () => {
         if (typeof window === 'undefined') return
+        if (isOneTapInitialized.value) return
 
         await waitForGoogleSDK()
 
@@ -62,7 +88,7 @@ export function useGoogleAuth() {
             cancel_on_tap_outside: false, // 点击外部是否关闭弹窗
             context: 'signin'
         })
-
+        isOneTapInitialized.value = true
         window.google.accounts.id.prompt()
     }
 
@@ -77,8 +103,6 @@ export function useGoogleAuth() {
 
         await waitForGoogleSDK()
 
-        window.google.accounts.id.cancel()
-
         // 每次渲染按钮都重新初始化，绑定新的回调（避免闭包固定）
         window.google.accounts.id.initialize({
             client_id: clientId,
@@ -87,7 +111,6 @@ export function useGoogleAuth() {
 
         const el = document.getElementById(elementId)
         if (!el) return
-
 
         window.google.accounts.id.renderButton(el, {
                 type: 'icon',
@@ -100,5 +123,5 @@ export function useGoogleAuth() {
         )
     }
 
-    return {initOneTap, credential, renderButton}
+    return {initOneTap, credential, renderButton, safeCancelGoogleOneTap}
 }

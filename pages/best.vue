@@ -934,7 +934,7 @@ useHead(mergeHeadWithLodash(
       { name: 'robots', content: route.query.q ? 'noindex, follow' : 'index, follow' }
     ],
     link: [
-      { rel: 'canonical', href: `${origin}/best` }
+      { rel: 'canonical', href: route.query.q ? `${origin}/best?q=${route.query.q}` : `${origin}/best` }
     ]
   }
 ));

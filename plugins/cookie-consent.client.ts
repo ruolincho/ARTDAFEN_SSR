@@ -29,7 +29,7 @@ export default defineNuxtPlugin(() => {
                         title: 'Cookie Statement',
                         description: `
                         <p>
-                            Cookie NoticeThis website uses cookies and other tracking technologies to enhance user experience and to analyze performance and traffic on our website. We also share information about your use of our site with our social media, advertising and analytics partners. If a Do Not Sell or Share My Personal Information preference is detected it will be honored. Further information is available in our 
+                            We use cookies to improve your experience and analyze site traffic. We will honor any Do Not Sell or Share My Personal Information preference. See
                             <a href="/cookies-policy" target="_self">Cookies Policy</a> 
                             and 
                             <a href="/privacy-policy" target="_self">Privacy Notice</a> .

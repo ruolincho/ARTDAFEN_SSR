@@ -14,7 +14,7 @@ import {useUserStore} from "~/stores/modules/user";
 import {useTawk} from "~/composables/useTawk";
 
 export const useAuth = () => {
-    const { $encrypt, $bus } = useNuxtApp()
+    const { $encrypt } = useNuxtApp()
 
     const userStore = useUserStore()
     const customStore = useCustomStore()
@@ -54,6 +54,7 @@ export const useAuth = () => {
 
     // 登录成功和注册成功回调
     const successFn = async (res: IOauth.LoginRow, type: 'login' | 'register', component?: boolean) => {
+        const { $bus } = useNuxtApp()
         userStore.setToken(res.token)
         await userStore.getUserInfo()
         const userinfo = userStore.userInfo

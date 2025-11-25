@@ -1,7 +1,7 @@
 <template>
   <!--规格选择-->
   <section>
-    <div class="container">
+    <div class="container" v-show="!(currentView === 'custom' && !appStore.isPc)">
       <div class="my-md-50 my-25 portrait-wrapper acea-row row-center-wrapper gap-column-md gap-row-sm">
         <img src="~/assets/images/logo-portrait.png" alt="logo-portrait">
         <h1
@@ -10,6 +10,8 @@
         </h1>
       </div>
     </div>
+
+    <div class="pt-15" v-show="(currentView === 'custom' && !appStore.isPc)"></div>
 
     <!-- 主题 -->
     <div class="container" v-show="currentView === 'theme'">
@@ -69,73 +71,85 @@
           Photos.
         </p>
       </div>
-      <div class="row favorite-list gap-row-base" v-show="currentThemeOption">
-        <div class="col-lg-3 col-sm-4 col-6" v-for="item in currentThemeOption?.children" :key="item.id">
-          <div class="favorite-item" :class="{ 'on': themeIdMap[1] === item.id }" @click="chooseStyle(item.id)">
-            <img class="w-full aspect-ratio" :src="imagePrefix(item.img)" alt="">
-            <p class="p-text text-28 line1 p-sm-20 p-15">{{ item.name }}</p>
-            <div class="p-content">
-              <p class="text-24 line5">{{ item.intro }}</p>
+      <div style="min-height: 450px" v-loading="themeLoading">
+        <div class="row favorite-list gap-row-base" v-show="currentThemeOption?.children?.length">
+          <div class="col-lg-3 col-sm-4 col-6" v-for="item in currentThemeOption?.children" :key="item.id">
+            <div class="favorite-item" :class="{ 'on': themeIdMap[1] === item.id }" @click="chooseStyle(item.id)">
+              <img class="w-full aspect-ratio" :src="imagePrefix(item.img)" alt="">
+              <p class="p-text text-28 line1 p-sm-20 p-15">{{ item.name }}</p>
+              <div class="p-content">
+                <p class="text-24 line5">{{ item.intro }}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="text-center py-60" v-show="!currentThemeOption">
-        <span class="iconfont icon-empty text-50"></span>
-        <p class="text-20 f-bold mt-20">No Data</p>
-        <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+        <div class="text-center py-60" v-show="!themeLoading && !currentThemeOption?.children?.length">
+          <span class="iconfont icon-empty text-50"></span>
+          <p class="text-20 f-bold mt-20">No Data</p>
+          <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+        </div>
       </div>
     </div>
 
     <!-- 自定义 -->
     <div class="container" v-show="currentView === 'custom'">
-      <ClientOnly>
-        <!--移动端-->
-        <div class="app-preview aspect-ratio" style="" v-if="!appStore.isPc && imageUrl">
-          <div class="img-wrapper acea-row row-center-wrapper flex-1 scroll-y">
+      <!--移动端-->
+      <div class="app-preview aspect-ratio" style="" v-if="!appStore.isPc && imageUrl">
+        <div class="img-wrapper acea-row row-center-wrapper flex-1 scroll-y">
+          <ClientOnly>
             <ImageGenerator
-              v-model="generatorImg"
-              v-model:pixel="pixel"
-              :shape="shapeStr"
-              :core-image="imageUrl"
-              :has-mat="hasFrame && matVisible && !!currentMaterialId"
-              :mat-thickness="currentMaterialWidth.toString()"
-              :mat-color="currentMaterialOption?.config?.matColor || ''"
-              :has-frame="hasFrame"
-              :inner-frame="isInnerFrame"
-              :embedded-frame="!currentFrameOption?.config?.matSupport!"
-              :frame-cm="currentFrameOption?.config?.thickness!"
-              :size-cm="{
-                  width: Number(currentSizeOption?.widthInCm!),
-                  length: Number(currentSizeOption?.lengthInCm!),
-                }"
-              :frame-corner-images="[
-                imagePrefix(currentFrameOption?.config?.lt!),
-                imagePrefix(currentFrameOption?.config?.rt!),
-                imagePrefix(currentFrameOption?.config?.lb!),
-                imagePrefix(currentFrameOption?.config?.rb!),
-              ]"
-              :frame-side-images="[
-                imagePrefix(currentFrameOption?.config?.ct!),
-                imagePrefix(currentFrameOption?.config?.cb!),
-                imagePrefix(currentFrameOption?.config?.cl!),
-                imagePrefix(currentFrameOption?.config?.cr!),
-              ]"
-              @change="handleImageChange"
+                v-model="generatorImg"
+                v-model:pixel="pixel"
+                :shape="shapeStr"
+                :core-image="imageUrl"
+                :has-mat="hasFrame && matVisible && !!currentMaterialId"
+                :mat-thickness="currentMaterialWidth.toString()"
+                :mat-color="currentMaterialOption?.config?.matColor || ''"
+                :has-frame="hasFrame"
+                :inner-frame="isInnerFrame"
+                :embedded-frame="!currentFrameOption?.config?.matSupport!"
+                :frame-cm="currentFrameOption?.config?.thickness!"
+                :size-cm="{
+                width: Number(currentSizeOption?.widthInCm!),
+                length: Number(currentSizeOption?.lengthInCm!),
+              }"
+                :frame-corner-images="[
+              imagePrefix(currentFrameOption?.config?.lt!),
+              imagePrefix(currentFrameOption?.config?.rt!),
+              imagePrefix(currentFrameOption?.config?.lb!),
+              imagePrefix(currentFrameOption?.config?.rb!),
+            ]"
+                :frame-side-images="[
+              imagePrefix(currentFrameOption?.config?.ct!),
+              imagePrefix(currentFrameOption?.config?.cb!),
+              imagePrefix(currentFrameOption?.config?.cl!),
+              imagePrefix(currentFrameOption?.config?.cr!),
+            ]"
+                @change="handleImageChange"
             />
-          </div>
-          <el-upload
-            class="upload-box"
-            :accept="fileType.join(',')"
-            :before-upload="beforeUpload"
-            :on-change="uploadChange"
-            :auto-upload="false"
-            :show-file-list="false"
-          >
-            <div class="btn">Re-upload the image</div>
-          </el-upload>
+          </ClientOnly>
         </div>
-      </ClientOnly>
+        <div class="acea-row row-evenly py-20">
+          <div class="acea-row row-middle cursor-pointer" @click="openWallColor">
+            <span class="iconfont icon-user-defined text-20"></span>
+            <span class="text-14 ml-10">SELECT WALL COLOR</span>
+          </div>
+          <div class="acea-row row-middle cursor-pointer" @click="openRoom">
+            <span class="iconfont icon-pictures text-20"></span>
+            <span class="text-14 ml-10">VIEW PAINTING IN A ROOM</span>
+          </div>
+        </div>
+        <el-upload
+          class="upload-box"
+          :accept="fileType.join(',')"
+          :before-upload="beforeUpload"
+          :on-change="uploadChange"
+          :auto-upload="false"
+          :show-file-list="false"
+        >
+          <div class="btn">Re-upload the image</div>
+        </el-upload>
+      </div>
 
       <div class="spu-wrapper row">
         <div class="col-sm-7">
@@ -390,7 +404,7 @@
                 <div class="acea-row row-between-wrapper p-20">
                   <div class="acea-row row-middle">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                    <span class="text-26">Number of {{ currentThemeOption?.name }} in Your Photo</span>
+                    <span class="text-26">Count of {{ currentThemeOption?.name }}</span>
                     <span
                       class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
                       @click="openInfo(1)"
@@ -408,8 +422,9 @@
                     as one figure. Houses, cars, boats and travel scenery would each count as one figure.
                   </p>
                 </div>
-                <div class="p-20">
-                  <div class="width-list row">
+
+                <div class="p-20" v-if="appStore.isPc">
+                  <div class="width-list row" >
                     <div
                       class="col-xl-average col-md-3 col-xs-4 col-6"
                       v-for="(item, index) in 10"
@@ -425,6 +440,14 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="px-20 acea-row row-between-wrapper gap-base" v-else>
+                  <div class="flex-1">
+                    <el-slider :show-tooltip="false"  v-model="contentNumberSet" :step="1" :max="10" :min="1" show-stops @change="(val) => chooseNumber(val as number)" />
+                  </div>
+                  <div class="flex-auto font-bold">{{ contentNumber }}</div>
+                </div>
+
               </template>
 
               <!--备注-->
@@ -453,7 +476,7 @@
                   type="textarea"
                   v-model="remark"
                   placeholder="Please enter any additional instructions"
-                  :rows="8"
+                  :rows="appStore.isPc ? 8 : 3"
                 />
               </div>
 
@@ -649,7 +672,7 @@
             <span class="iconfont icon-left text-20"></span>
             <span class="text-20 f-bold">Back</span>
           </div>
-          <span class="text-20 f-bold">Online proofing | Unlimited revisions | 100% satisfaction before painting</span>
+          <span class="text-20 f-bold text-center">Online proofing | Unlimited revisions | 100% satisfaction before painting</span>
           <el-button
             type="primary"
             size="large"
@@ -658,6 +681,7 @@
           >
             Continue
           </el-button>
+          <div v-else style="height: 20px"></div>
         </div>
       </div>
     </div>
@@ -785,6 +809,13 @@ const moreInfoVisible = ref([false, false, false, false])
 
 const currentView = ref('custom')
 const contentNumber = ref(1)
+
+const contentNumberSet = computed({
+  get: () => contentNumber.value,
+  set: (val: number) => {
+    chooseNumber(val)
+  }
+})
 
 const origin = useRequestURL().origin
 
@@ -1083,9 +1114,12 @@ const switchStep = (targetView: string) => {
 }
 
 // 获取主题
+const themeLoading = ref(false)
 const themeOptions = ref<IPaint.ThemeRow[]>([])
 const getTheme = async (id: string) => {
+  themeLoading.value = true
   const {data} = await getThemeApi(id)
+  themeLoading.value = false
   if (id === '0') {
     themeOptions.value = data
   } else {

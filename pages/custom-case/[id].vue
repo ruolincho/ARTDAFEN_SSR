@@ -11,20 +11,21 @@
         </p>
       </div>
 
-      <div class="case-waterfall" v-if="caseContrastData.length">
-        <div class="item cursor-pointer overflow-hidden" v-for="(sample, index) in caseContrastData" :key="sample.id"
-             @click="showCaseContrast(index)">
-          <img class="w-full img-hover " :src="imagePrefix(sample.paintImg)" alt="">
+      <div style="min-height: 450px" v-loading="themeLoading">
+        <div class="case-waterfall" v-if="caseContrastData.length">
+          <div class="item cursor-pointer overflow-hidden" v-for="(sample, index) in caseContrastData" :key="sample.id"
+               @click="showCaseContrast(index)">
+            <img class="w-full img-hover " :src="imagePrefix(sample.paintImg)" alt="">
+          </div>
         </div>
-      </div>
-
-      <div class="text-center py-60" v-else>
-        <span class="iconfont icon-empty text-50"></span>
-        <p class="text-20 f-bold mt-20">No Data</p>
-        <p class="text-14 my-20">No data found, please check the query or try again later.</p>
-        <el-button size="large" type="primary" @click="seeMoreSample()">
-          TRY AGAIN
-        </el-button>
+        <div class="text-center py-60" v-else-if="!themeLoading">
+          <span class="iconfont icon-empty text-50"></span>
+          <p class="text-20 f-bold mt-20">No Data</p>
+          <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+          <el-button size="large" type="primary" @click="seeMoreSample()">
+            TRY AGAIN
+          </el-button>
+        </div>
       </div>
     </div>
   </section>
@@ -72,10 +73,13 @@ const route = useRoute()
 const router = useRouter()
 
 // 获取喜欢的风格预览图
+const themeLoading = ref(false)
 const caseContrastData = ref<IPaint.SampleRow[]>([])
 const seeMoreSample = async () => {
+  themeLoading.value = true
   const {data} = await getSampleApi(route.params.id as string)
   caseContrastData.value = data
+  themeLoading.value = false
 }
 
 const caseIndex = ref(-1)

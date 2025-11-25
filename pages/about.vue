@@ -11,7 +11,7 @@
               Since 1989 · <br/>
               Reimagined 2020<br/>
               Classic × Original<br/>
-              Art That Lights Up Life<br/>
+              Oil Painting Art Village<br/>
             </p>
           </div>
         </div>

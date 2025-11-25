@@ -16,9 +16,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     document.head.appendChild(script)
 
     const {initOneTap} = useGoogleAuth()
-    const {isLogin} = useUserStore();
 
     nuxtApp.hook('page:finish', () => {
+        const {isLogin} = useUserStore();
         if(isLogin) return
         nextTick(() => initOneTap())
     })

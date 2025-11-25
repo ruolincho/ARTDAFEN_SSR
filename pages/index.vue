@@ -72,14 +72,13 @@
   <!-- PHOTO TO ART -->
   <section class="sec-art">
     <div class="container">
-      <div class="make-wrapper" v-aos="'fade-up'">
+      <div class="make-wrapper cursor-pointer" v-aos="'fade-up'" @click="goCustomPaint">
         <div class="make-box flex-1 bg-gray-100 p-md-40 p-20">
           <p class="text-18 f-bold">MAKE YOUR MEMORIES LAST</p>
           <p class="text-60 f-bold my-20">Photo To Art</p>
           <p class="text-22">Easily Transform Life's Real Moments Into A <br> Masterpiece — Made Just For You.</p>
         </div>
-        <img class="cover cursor-pointer" :src="imagePrefix('/static/artdafen/make.webp')" alt="make"
-             @click="goCustomPaint">
+        <img class="cover" :src="imagePrefix('/static/artdafen/make.webp')" alt="make" />
       </div>
       <div class="bespoke-wrapper" v-aos="'fade-up'">
         <img class="cover" :src="imagePrefix('/static/artdafen/bespoke.webp')" alt="bespoke">
@@ -152,7 +151,7 @@
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
         <h2 class="text-50">LIFESTYLE SPACE</h2>
         <p class="mt-20 text-gray-600 text-16 f-bold-500" style="max-width: 608px; margin: auto">
-          Art That Lights Up Life
+          Oil Painting Art Village
         </p>
       </div>
       <el-skeleton :loading="isSkeleton" animated :count="4" class="row gap-row-base">
@@ -377,8 +376,8 @@
             <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.name">
             <div class="p-content acea-row row-column nowrap p-20">
               <div class="flex-1">
-                <p class="text-18 f-bold-500">{{ item.name }}</p>
-                <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>
+                <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
+<!--                <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
                 <el-rate
                   v-model="item.rating"
                   disabled

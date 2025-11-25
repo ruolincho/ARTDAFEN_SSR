@@ -16,8 +16,8 @@
               <img class="w-full" :src="imagePrefix(item.img)" :alt="item.name">
               <div class="p-content border-sm">
                 <div class="p-10">
-                  <p class="text-18 f-bold-500">{{ item.name }}</p>
-                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>
+                  <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
+<!--                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
                   <el-rate
                     v-model="item.rating"
                     disabled
