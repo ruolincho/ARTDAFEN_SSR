@@ -22,6 +22,7 @@ export const useList = (
     loadingTime?: number,
     requestSuccess?: (data: any) => void,
     scrollAuto?: boolean,
+    customizeCurrentChange?: (val: number) => void, // 分页组件当前页码改变监听（没有就使用默认的） ==> 非必传
 ) => {
     const state = reactive<ProList.StateProps>({
         // 表格数据
@@ -95,10 +96,11 @@ export const useList = (
 
     /**
      * @description 表格数据查询
+     * @param {Boolean} initPage 是否初始化分页参数 (非必传，默认为true)
      * @return void
      * */
-    const search = () => {
-        state.pageable.pageNum = 1;
+    const search = (initPage: boolean = true) => {
+        if (initPage) state.pageable.pageNum = 1;
         getTableList();
     };
 
@@ -131,7 +133,14 @@ export const useList = (
      * @param {Number} val 当前页
      * @return void
      * */
-    const handleCurrentChange = (val: number) => {
+    const handleCurrentChange = customizeCurrentChange
+    ? (val: number) => {
+        customizeCurrentChange(val);   // 直接使用外部传入的方法
+        if (scrollAuto) {
+            scrollTo(0, 100)
+        }
+    }
+    : (val: number) => {
         state.pageable.pageNum = val;
         if (scrollAuto) {
             scrollTo(0, 100)

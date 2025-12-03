@@ -1219,6 +1219,9 @@ const reset = () => {
 
   artistSelected.value = {} as IHome.MenuRow
 
+  priceSortSelected.value = {} as IHome.MenuRow
+  salesSortSelected.value = {} as IHome.MenuRow
+
   routerJump(false)
 }
 

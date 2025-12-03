@@ -28,3 +28,5 @@ export const GTM_ID: string = 'GTM-PWBGFBBV'
 export const TAWK_PROPERTY_ID: string = '68f9a9b103c0d7194f5d0e4d'
 // Tawk Widget Id 客服组件ID
 export const TAWK_WIDGET_ID: string = '1j87jtnt0'
+// YouTube 视频代理地址
+export const YOUTUBE_PROXY_URL: string = 'https://proxy-youtube.artdafenpay.workers.dev/youtube'

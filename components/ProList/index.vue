@@ -72,6 +72,7 @@ const {
   props.loadingTime,
   props.requestSuccess,
   props.scrollAuto,
+  props.handleCurrentChange
 );
 
 // 处理表格数据

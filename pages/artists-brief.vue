@@ -30,7 +30,7 @@
   </section>
 
   <!--列表-->
-  <div class="sec-list">
+  <div class="sec-list ignore">
     <div class="container">
       <div class="row artist-list my-20 gap-row-md">
         <div class="col-lg-3 col-sm-4 col-6" v-for="(val, key) in artistsList" :key="key">

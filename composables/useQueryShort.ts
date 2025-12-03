@@ -17,6 +17,7 @@ export type QueryParams = {
     END_PRICE?: string
     PRICE_SORT?: string
     SALES_SORT?: string
+    PAGE?: string
 }
 
 // 将原有的key映射到新的key
@@ -37,6 +38,7 @@ const KMAP: Record<string, string> = {
     END_PRICE: 'q',
     PRICE_SORT: 'r',
     SALES_SORT: 's',
+    PAGE: 't',
 /*------------------------------------------------------------------------------------------------*/
     parentId: 'x',
     id: 'y',

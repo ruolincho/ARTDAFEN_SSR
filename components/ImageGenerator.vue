@@ -406,9 +406,13 @@ const shapeStyle = computed(() => {
       }
       break;
     case "portrait":
-    case "slim":
       style = {
         maxWidth: `50%!important`,
+      }
+      break;
+    case "slim":
+      style = {
+        maxWidth: `40%!important`,
       }
       break;
     default:

@@ -558,6 +558,7 @@
               :request-api="getProductList"
               :init-param="initParam"
               :request-auto="false"
+              :handle-current-change="handleCurrentChange"
             >
               <template #default="scope">
                 <div class="row product-list gap-row-base">
@@ -973,7 +974,6 @@ import {techniqueMenu, priceMenu, salesMenu} from "~/constant";
 import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {unpackQuery, packQuery, type QueryParams} from '~/composables/useQueryShort'
 import {TechniqueCodeEnum} from "~/types/enumeration";
-import type {General} from "~/types/global";
 
 defineOptions({
   name: 'ProductList'
@@ -1007,6 +1007,7 @@ useHead(mergeHeadWithLodash(
   }
 ))
 
+const initPage = ref(true)
 const proListRef = ref<InstanceType<typeof ProList>>();
 const getProductList = (params: IProduct.ListQuery) => getProductListApi(params)
 const initParam = reactive<any>({
@@ -1023,6 +1024,9 @@ const initParam = reactive<any>({
   techniqueId: null,
   searchType: null,
 })
+
+// 当前页码
+const pageSelected = ref<number | null>(null)
 
 // 获取大家都在搜索
 const everyoneList = ref<ISearch.CompletionRow[]>([])
@@ -1332,6 +1336,11 @@ const reset = () => {
 
   artistSelected.value = {} as IHome.MenuRow
 
+  priceSortSelected.value = {} as IHome.MenuRow
+  salesSortSelected.value = {} as IHome.MenuRow
+
+  pageSelected.value = null
+
   routerJump(false)
 }
 
@@ -1388,6 +1397,9 @@ const getProductBest = async () => {
   const color = colorSelected.value
   colorSubmitted.value = [...color]
 
+  // PAGE
+  const page = pageSelected.value
+
   initParam.categoryIds = [
     ...group.map(item => item.id), // Group类型的选项
     ...radio.map(item => item.id), // Radio类型的选项
@@ -1407,7 +1419,8 @@ const getProductBest = async () => {
   initParam.keyword = keyword.value || null
   initParam.techniqueId = techniqueId
   initParam.searchType = searchType.value || null
-  proListRef.value?.search();
+  initParam.page = page || 1
+  proListRef.value?.search(initPage.value);
   isPopup.value = false
 }
 
@@ -1517,8 +1530,9 @@ const showLoginWindow = () => {
 /**
  * 路由跳转
  * @param partial (用于局部更新，只会传递提交过的数据,主要用于关闭tag的时候使用)
+ * @param initPage (是否初始化页码为1)
  */
-const routerJump = (partial = false) => {
+const routerJump = (partial = false, initPage = true) => {
   const {START_PRICE, END_PRICE, PRICE} = routerParams.value
 
   const params: any = {MENU_ID: menuId.value}
@@ -1629,8 +1643,20 @@ const routerJump = (partial = false) => {
     params['SEARCH_TYPE'] = searchType.value
   }
 
+  if (initPage) {
+    params['PAGE'] = 1
+  } else if (pageSelected.value) {
+    params['PAGE'] = pageSelected.value
+  }
+
   const q = packQuery(params)
   router.replace({query: {q}})
+}
+
+// 自定义分页页码监听
+const handleCurrentChange = (val: number) => {
+  pageSelected.value = val
+  routerJump(false, false)
 }
 
 const routerParams = ref({} as QueryParams)
@@ -1657,9 +1683,16 @@ const paramsWatch = async () => {
     SEARCH_TYPE,
     PRICE_SORT,
     SALES_SORT,
+    PAGE
   } = routerParams.value
 
   await getProductGroup()
+
+  // PAGE
+  if (PAGE) {
+    pageSelected.value = Number(PAGE)
+    initPage.value = false
+  }
 
   // PRICE_SORT
   if (PRICE_SORT) {

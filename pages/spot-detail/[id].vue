@@ -166,7 +166,7 @@
   <!--创作者-->
   <section class="mt-lg-60 mt-sm-20" v-if="goodsDetail.creator">
     <div class="container-middle">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">About the Artist</h1>
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">About the Artist</h1>
       <div class="artist-box acea-row gap-base">
         <div class="avatar" v-if="goodsDetail.creator?.portrait">
           <img class="w-full" :src="imagePrefix(goodsDetail.creator?.portrait)" alt="avatar">
@@ -178,14 +178,13 @@
           <p class="text-18">{{ goodsDetail.creator?.intro }}</p>
         </div>
       </div>
-
     </div>
   </section>
 
   <!--产品详情-->
   <section class="sec-desc mt-lg-60 mt-sm-20" :class="{ open: isOpenDesc }" v-if="goodsDetail?.details?.length">
     <div class="container-middle">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">Product Description</h1>
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Description</h1>
       <div class="img-box">
         <img v-for="item in goodsDetail.details" :key="item" class="w-full" :src="imagePrefix(item)" alt="detail">
       </div>
@@ -201,7 +200,7 @@
   <!-- 相关推荐-->
   <section class="mt-lg-60 mt-sm-20" v-if="relatedList.length">
     <div class="container-middle">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">Product Related</h1>
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Related</h1>
       <ClientOnly>
         <div class="recommend-swiper">
           <swiper
@@ -291,7 +290,7 @@
   <!-- FQ4-->
   <section class="mt-lg-60 mt-sm-20">
     <div class="container-middle">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">Frequently Asked Questions</h1>
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Frequently Asked Questions</h1>
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item v-for="subItem in shoppingFaq" :title="subItem.title" :name="subItem.name"
                           :key="subItem.name">
@@ -779,12 +778,16 @@ useHead({
 
 .sec-desc {
   .img-box {
-    max-height: 500px;
+    max-width: 1000px;
+    max-height: 562px;
     overflow: hidden;
+    margin: 0 auto;
   }
 
   .btn-box {
     position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
 
     &::after {
       position: absolute;

@@ -9,4 +9,5 @@ export interface ProListProps {
     loadingTime?: number; // 表格数据加载时间 ==> 非必传（默认为200）
     pagination?: boolean; // 是否需要分页组件 ==> 非必传（默认为true）
     scrollAuto?: boolean; // 是否需要加载完成后自动滚动到顶部 ==> 非必传（默认为true）
+    handleCurrentChange?: (val: number) => void; // 分页组件当前页码改变监听（没有就使用默认的） ==> 非必传
 }

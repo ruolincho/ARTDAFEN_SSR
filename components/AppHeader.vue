@@ -150,7 +150,6 @@
            v-show="isDropdownVisible"/>
     </div>
   </header>
-  <div :style="{ height: pcPlaceHeight + 'px', transition: 'height 0.3s ease' }" v-show="appStore.isPc"/>
 
   <!--app-导航-->
   <header class="header-app app" :class="{'open-menu': openMenu}">
@@ -257,7 +256,8 @@
       </ul>
     </div>
   </header>
-  <div :style="{ height: 50 + 'px' }" v-show="!appStore.isPc"/>
+
+  <div id="header-placeholder" :style="{ height: placeHeight + 'px', transition: 'height 0.3s ease' }" />
 
   <!--pc购物车弹窗-->
   <el-popover
@@ -330,11 +330,14 @@ if (import.meta.client) {
 
 const pcHeaderRef = ref()
 const pcPlaceHeight = ref(218)
+const appPlaceHeight = ref(50)
 const handlePageSize = throttle(() => {
   if (pcHeaderRef.value && appStore.isPc) {
     pcPlaceHeight.value = pcHeaderRef.value.offsetHeight
   }
 }, 300)
+
+const placeHeight = computed(() => appStore.isPc ? pcPlaceHeight.value : appPlaceHeight.value)
 
 const jumpOperation = (path: string) => {
   openMenu.value = false

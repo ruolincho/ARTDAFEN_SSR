@@ -1,7 +1,7 @@
 // @ts-ignore
 export default defineNuxtConfig({
     ssr: process.env.NUXT_PUBLIC_ENABLE_SSR === 'true',
-    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots'],
+    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/google-fonts'],
     runtimeConfig: {
         public: {
             siteName: process.env.NUXT_PUBLIC_SITE_NAME,
@@ -74,13 +74,18 @@ export default defineNuxtConfig({
                 {property: 'og:url', content: process.env.NUXT_PUBLIC_SITE_URL},
             ],
             link: [
-                {
-                    rel: 'stylesheet',
-                    href: 'https://fonts.font.im/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i'
-                },
                 {rel: 'icon', type: 'image/svg+xml', href: '/favicon.ico'}
             ]
         }
+    },
+    googleFonts: {
+        families: {
+            Roboto: [100, 300, 400, 500, 700, 900],
+        },
+        display: 'swap',  // 自动添加 font-display
+        preconnect: true,
+        preload: true,
+        download: true,   // 建议开启，将字体下载到本地避免 CDN 限制
     },
     devServer: {
         host: '0.0.0.0',

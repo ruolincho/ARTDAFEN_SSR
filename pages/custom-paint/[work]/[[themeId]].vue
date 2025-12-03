@@ -4,8 +4,7 @@
     <div class="container" v-show="!(currentView === 'custom' && !appStore.isPc)">
       <div class="my-md-50 my-25 portrait-wrapper acea-row row-center-wrapper gap-column-md gap-row-sm">
         <img src="~/assets/images/logo-portrait.png" alt="logo-portrait">
-        <h1
-          class="text-20">
+        <h1 class="text-20 text-center" v-if="appStore.isPc">
           Your exclusive art customization service is now available. Discover timeless creations.
         </h1>
       </div>
@@ -15,7 +14,7 @@
 
     <!-- 主题 -->
     <div class="container" v-show="currentView === 'theme'">
-      <div class="text-center py-lg-40 py-30">
+      <div class="text-center my-lg-40 my-30">
         <h2 class="text-50">TRANSFORM YOUR PHOTOS INTO STUNNING ARTWORKS</h2>
         <p class="mt-20 text-gray-600 text-20 f-bold-500">
           With Our Artists' Creation, Any Photo Can Be Turned Into An Elaborately Crafted Artwork. Choose From A Variety
@@ -33,7 +32,7 @@
         </div>
       </div>
 
-      <div class="text-center py-lg-40 py-30">
+      <div class="text-center my-lg-40 my-30">
         <h2 class="text-50">MORE CASE STUDIES</h2>
       </div>
 
@@ -61,7 +60,7 @@
 
     <!-- 风格 -->
     <div class="container" v-show="currentView === 'style'">
-      <div class="text-center py-lg-40 py-30">
+      <div class="text-center my-lg-40 my-30">
         <h2 class="text-50">CHOOSE YOUR FAVORITE STYLE</h2>
         <p class="mt-20 text-gray-600 text-20 f-bold-500">
           From Classic Oil Paintings, Artist Styles, Disney Magic, Modern Anime Aesthetics, Vibrant Anime Styles, Dreamy
@@ -71,14 +70,17 @@
           Photos.
         </p>
       </div>
-      <div style="min-height: 450px" v-loading="themeLoading">
+      <div ref="favoriteMainRef" style="min-height: 450px" v-loading="themeLoading">
         <div class="row favorite-list gap-row-base" v-show="currentThemeOption?.children?.length">
           <div class="col-lg-3 col-sm-4 col-6" v-for="item in currentThemeOption?.children" :key="item.id">
-            <div class="favorite-item" :class="{ 'on': themeIdMap[1] === item.id }" @click="chooseStyle(item.id)">
+            <div class="favorite-item cursor-pointer" :class="{ 'on': themeIdMap[1] === item.id }"
+                 @click="chooseStyle(item.id)">
               <img class="w-full aspect-ratio" :src="imagePrefix(item.img)" alt="">
-              <p class="p-text text-28 line1 p-sm-20 p-15">{{ item.name }}</p>
               <div class="p-content">
-                <p class="text-24 line5">{{ item.intro }}</p>
+                <div class="p-desc px-sm-20 px-15">
+                  <p class="text-24 line5">{{ item.intro }}</p>
+                </div>
+                <p class="p-text text-28 line1 p-sm-15 p-md-20 p-10">{{ item.name }}</p>
               </div>
             </div>
           </div>
@@ -140,12 +142,12 @@
           </div>
         </div>
         <el-upload
-          class="upload-box"
-          :accept="fileType.join(',')"
-          :before-upload="beforeUpload"
-          :on-change="uploadChange"
-          :auto-upload="false"
-          :show-file-list="false"
+            class="upload-box"
+            :accept="fileType.join(',')"
+            :before-upload="beforeUpload"
+            :on-change="uploadChange"
+            :auto-upload="false"
+            :show-file-list="false"
         >
           <div class="btn">Re-upload the image</div>
         </el-upload>
@@ -161,13 +163,19 @@
                   <div class="favorite-list" style="max-width: 450px">
                     <div class="favorite-item">
                       <img class="w-full aspect-ratio" :src="imagePrefix(lastThemeObj.img)" alt="">
-                      <p class="p-text text-28 line1 p-sm-20 p-15">{{ lastThemeObj.name }}</p>
+                      <div class="p-content">
+                        <div class="p-desc px-sm-20 px-15">
+                          <p class="text-24 line5"></p>
+                        </div>
+                        <p class="p-text text-28 line1 p-sm-15 p-md-20 p-10">{{ lastThemeObj.name }}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </template>
               <template v-else>
-                <div class="example-preview-box row" v-for="(example, index) in TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType]"
+                <div class="example-preview-box row"
+                     v-for="(example, index) in TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType]"
                      :key="index">
                   <div class="col-6">
                     <img :src="imagePrefix(example.photo)" alt="">
@@ -187,7 +195,7 @@
             <!--预览图-->
             <template v-else>
               <div class="spu-preview border-sm sticky-column" v-if="appStore.isPc">
-                <div class="p-md-20 p-15 border-b-sm">
+                <div class="m-md-20 m-15 border-b-sm">
                   <p class="text-22 f-bold-500">Photos to Paintings</p>
                   <p class="mt-10 text-18">Commission a museum quality hand-painted oil painting from your family
                     photo!</p>
@@ -195,34 +203,34 @@
                 <div class="preview-box">
                   <ClientOnly>
                     <ImageGenerator
-                      v-model="generatorImg"
-                      v-model:pixel="pixel"
-                      :shape="shapeStr"
-                      :core-image="imageUrl"
-                      :has-mat="hasFrame && matVisible && !!currentMaterialId"
-                      :mat-thickness="currentMaterialWidth.toString()"
-                      :mat-color="currentMaterialOption?.config?.matColor || ''"
-                      :has-frame="hasFrame"
-                      :inner-frame="isInnerFrame"
-                      :embedded-frame="!currentFrameOption?.config?.matSupport!"
-                      :frame-cm="currentFrameOption?.config?.thickness!"
-                      :size-cm="{
+                        v-model="generatorImg"
+                        v-model:pixel="pixel"
+                        :shape="shapeStr"
+                        :core-image="imageUrl"
+                        :has-mat="hasFrame && matVisible && !!currentMaterialId"
+                        :mat-thickness="currentMaterialWidth.toString()"
+                        :mat-color="currentMaterialOption?.config?.matColor || ''"
+                        :has-frame="hasFrame"
+                        :inner-frame="isInnerFrame"
+                        :embedded-frame="!currentFrameOption?.config?.matSupport!"
+                        :frame-cm="currentFrameOption?.config?.thickness!"
+                        :size-cm="{
                     width: Number(currentSizeOption?.widthInCm!),
                     length: Number(currentSizeOption?.lengthInCm!),
                   }"
-                      :frame-corner-images="[
+                        :frame-corner-images="[
                   imagePrefix(currentFrameOption?.config?.lt!),
                   imagePrefix(currentFrameOption?.config?.rt!),
                   imagePrefix(currentFrameOption?.config?.lb!),
                   imagePrefix(currentFrameOption?.config?.rb!),
                 ]"
-                      :frame-side-images="[
+                        :frame-side-images="[
                   imagePrefix(currentFrameOption?.config?.ct!),
                   imagePrefix(currentFrameOption?.config?.cb!),
                   imagePrefix(currentFrameOption?.config?.cl!),
                   imagePrefix(currentFrameOption?.config?.cr!),
                 ]"
-                      @change="handleImageChange"
+                        @change="handleImageChange"
                     />
                   </ClientOnly>
                 </div>
@@ -236,14 +244,14 @@
                     <span class="text-14 ml-10">VIEW PAINTING IN A ROOM</span>
                   </div>
                 </div>
-                <div class="p-md-20 p-15">
+                <div class="m-md-20 m-15">
                   <el-upload
-                    class="upload-box"
-                    :accept="fileType.join(',')"
-                    :before-upload="beforeUpload"
-                    :on-change="uploadChange"
-                    :auto-upload="false"
-                    :show-file-list="false"
+                      class="upload-box"
+                      :accept="fileType.join(',')"
+                      :before-upload="beforeUpload"
+                      :on-change="uploadChange"
+                      :auto-upload="false"
+                      :show-file-list="false"
                   >
                     <el-button class="w-full" size="large" type="primary">Re-upload the image</el-button>
                   </el-upload>
@@ -257,7 +265,7 @@
             <!--没有上传图片-->
             <template v-if="!imageUrl">
               <!--上传图片-->
-              <div class="acea-row row-between-wrapper p-md-20 p-15">
+              <div class="acea-row row-between-wrapper m-md-20 m-15">
                 <div class="acea-row row-middle">
                   <span class="text-30 f-bold mr-md-20 mr-10 step-index">STEP 1:</span>
                   <span class="text-26">Upload Your Photo</span>
@@ -269,7 +277,7 @@
                 </div>
                 <div class="text-20 f-bold"></div>
               </div>
-              <div class="mx-20 text-16 info-box" :style="{ maxHeight: moreInfoVisible[3] ? '1000px' : '0px' }">
+              <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[3]">
                 <p class="p-15 bg-gray-200">
                   The most convenient method in sending us your photo is to upload the photo from a picture file on your
                   computer. You can easily upload a scanned or digital photo stored on your computer by simply clicking
@@ -278,30 +286,31 @@
                   Double click on the file name for your photo and then the photo name will be displayed.
                 </p>
               </div>
-              <div class="p-md-20 p-15">
+              <div class="m-md-20 m-15">
                 <!--v-if="userStore.isLogin"-->
                 <el-upload
-                  class="upload-box"
-                  :accept="fileType.join(',')"
-                  :before-upload="beforeUpload"
-                  :on-change="uploadChange"
-                  :auto-upload="false"
-                  :show-file-list="false"
+                    class="upload-box"
+                    :accept="fileType.join(',')"
+                    :before-upload="beforeUpload"
+                    :on-change="uploadChange"
+                    :auto-upload="false"
+                    :show-file-list="false"
                 >
                   <el-button class="w-full" size="large" type="primary">Choose File</el-button>
                   <template #tip>
                     <div class="mt-10">{{ fileType.join(' , ') }} files with a size less than {{ fileSize }}MB.</div>
                   </template>
                 </el-upload>
-<!--                <el-button v-else class="w-full" size="large" type="primary" @click="showLoginWindow">-->
-<!--                  Choose File-->
-<!--                </el-button>-->
+                <!--                <el-button v-else class="w-full" size="large" type="primary" @click="showLoginWindow">-->
+                <!--                  Choose File-->
+                <!--                </el-button>-->
               </div>
 
               <!--说明-->
-              <div class="p-md-20 p-15 text-16 text-gray-600">
+              <div class="m-md-20 m-15 text-16 text-gray-600">
                 You may also send us your photo(s) by attaching them to an email and sending it to: <a
-                :href="`mailto:${CONTACT_EMAIL}`" class="text-underline text-secondary">{{ CONTACT_EMAIL }}</a>. Please
+                  :href="`mailto:${CONTACT_EMAIL}`" class="text-underline text-secondary">{{ CONTACT_EMAIL }}</a>.
+                Please
                 include your full name and phone number in the email. We will contact you promptly if we have any
                 questions regarding your custom oil painting.
               </div>
@@ -328,59 +337,59 @@
             <!--有上传图片-->
             <template v-else>
               <!--工艺/规格选择-->
-<!--              <template v-if="route.params.work === ArtCodeEnum.Painting">
-                <div class="acea-row row-between-wrapper p-md-20 p-15">
-                  <div class="acea-row row-middle flex-1 mr-10">
-                    <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                    <span class="text-26">Choose a Craft</span>
-                  </div>
-                </div>
-                <div class="p-md-20 p-15">
-                  <div class="width-list row">
-                    <div class="col-6">
-                      <div
-                        class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                        :class="{'border-gray-700': !isPrint}"
-                        @click="chooseTechnique(false)"
-                      >
-                        <pre>Hand-painted oil painting</pre>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div
-                        class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                        :class="{'border-gray-700': isPrint}"
-                        @click="chooseTechnique(true)"
-                      >
-                        <pre>Print painting</pre>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>-->
+              <!--              <template v-if="route.params.work === ArtCodeEnum.Painting">
+                              <div class="acea-row row-between-wrapper m-md-20 m-15">
+                                <div class="acea-row row-middle flex-1 mr-10">
+                                  <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                                  <span class="text-26">Choose a Craft</span>
+                                </div>
+                              </div>
+                              <div class="m-md-20 m-15">
+                                <div class="width-list row">
+                                  <div class="col-6">
+                                    <div
+                                      class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
+                                      :class="{'border-gray-700': !isPrint}"
+                                      @click="chooseTechnique(false)"
+                                    >
+                                      <pre>Hand-painted oil painting</pre>
+                                    </div>
+                                  </div>
+                                  <div class="col-6">
+                                    <div
+                                      class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
+                                      :class="{'border-gray-700': isPrint}"
+                                      @click="chooseTechnique(true)"
+                                    >
+                                      <pre>Print painting</pre>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </template>-->
 
               <!--尺寸选择-->
-              <div class="acea-row row-between-wrapper p-md-20 p-15">
+              <div class="acea-row row-between-wrapper m-md-20 m-15">
                 <div class="acea-row row-middle">
                   <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                   <span class="text-26">Choose a Size</span>
-                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>
+<!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
                 </div>
                 <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(currentSizeOption?.price || 0) }}</div>
               </div>
-              <div class="p-md-20 p-15">
+              <div class="m-md-20 m-15">
                 <el-select
-                  class="custom-select"
-                  v-model="currentSizeId"
-                  placeholder="Please Select Size"
-                  size="large"
-                  @change="chooseSize"
+                    class="custom-select"
+                    v-model="currentSizeId"
+                    placeholder="Please Select Size"
+                    size="large"
+                    @change="chooseSize"
                 >
                   <el-option
-                    v-for="item in sizeOptions"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
+                      v-for="item in sizeOptions"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
                   >
                     <div class="option-item acea-row row-between-wrapper">
                       <span>{{ item.name }}</span>
@@ -392,7 +401,7 @@
                   </template>
                 </el-select>
               </div>
-              <div class="px-md-20 px-15 py-10 text-20">
+              <div class="m-md-20 m-15 text-20">
                 <span class="iconfont icon-info-fill text-20 mr-6"></span>
                 <span class="f-bold">Note:</span>
                 To order a custom size, <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click
@@ -401,13 +410,13 @@
 
               <!--复杂层度选择-->
               <template v-if="route.params.work === ArtCodeEnum.Painting && !isPrint">
-                <div class="acea-row row-between-wrapper p-20">
+                <div class="acea-row row-between-wrapper m-md-20 m-15">
                   <div class="acea-row row-middle">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                     <span class="text-26">Count of {{ currentThemeOption?.name }}</span>
                     <span
-                      class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
-                      @click="openInfo(1)"
+                        class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
+                        @click="openInfo(1)"
                     >
                   <span class="pc">{{ moreInfoVisible[1] ? 'LESS INFO' : 'MORE INFO' }}</span>
                     <span class="iconfont icon-down"></span>
@@ -415,7 +424,7 @@
                   </div>
                   <div class="text-20 f-bold"></div>
                 </div>
-                <div class="mx-20 text-16 info-box" :style="{ maxHeight: moreInfoVisible[1] ? '1000px' : '0px' }">
+                <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[1]">
                   <p class="p-15 bg-gray-200">
                     Please select the number of figures in your photo. Each person or pet/animal in a photo would be
                     counted
@@ -423,17 +432,18 @@
                   </p>
                 </div>
 
-                <div class="p-20" v-if="appStore.isPc">
-                  <div class="width-list row" >
+                <!-- Pc端复杂程度选择 -->
+                <div class="m-md-20 m-15" v-if="appStore.isPc">
+                  <div class="width-list row">
                     <div
-                      class="col-xl-average col-md-3 col-xs-4 col-6"
-                      v-for="(item, index) in 10"
-                      :key="index"
+                        class="col-xl-average col-md-3 col-xs-4 col-6"
+                        v-for="(item, index) in maxNumber"
+                        :key="index"
                     >
                       <div
-                        class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-20"
-                        :class="{'border-gray-700': contentNumber === item}"
-                        @click="chooseNumber(item)"
+                          class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-20"
+                          :class="{'border-gray-700': contentNumber === item}"
+                          @click="chooseNumber(item)"
                       >
                         <pre>{{ item }}</pre>
                       </div>
@@ -441,9 +451,17 @@
                   </div>
                 </div>
 
+                <!-- 移动端复杂程度选择 -->
                 <div class="px-20 acea-row row-between-wrapper gap-base" v-else>
                   <div class="flex-1">
-                    <el-slider :show-tooltip="false"  v-model="contentNumberSet" :step="1" :max="10" :min="1" show-stops @change="(val) => chooseNumber(val as number)" />
+                    <el-slider
+                        :show-tooltip="false"
+                        v-model="contentNumberSet"
+                        :step="1"
+                        :max="maxNumber"
+                        :min="1"
+                        show-stops
+                    />
                   </div>
                   <div class="flex-auto font-bold">{{ contentNumber }}</div>
                 </div>
@@ -451,7 +469,7 @@
               </template>
 
               <!--备注-->
-              <div class="acea-row row-between-wrapper p-md-20 p-15">
+              <div class="acea-row row-between-wrapper m-md-20 m-15">
                 <div class="acea-row row-middle">
                   <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                   <span class="text-26">Additional Notes</span>
@@ -464,49 +482,48 @@
                 </div>
                 <div class="text-20 f-bold"></div>
               </div>
-              <div class="mx-20 text-16 info-box" :style="{ maxHeight: moreInfoVisible[2] ? '1000px' : '0px' }">
+              <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[2]">
                 <p class="p-15 bg-gray-200">
                   Here is where you can convey any special requests to the artist, such as removing certain aspects in
                   the
                   photo or specific color and background preferences.
                 </p>
               </div>
-              <div class="p-md-20 p-15">
+              <div class="m-md-20 m-15">
                 <el-input
-                  type="textarea"
-                  v-model="remark"
-                  placeholder="Please enter any additional instructions"
-                  :rows="appStore.isPc ? 8 : 3"
+                    type="textarea"
+                    v-model="remark"
+                    placeholder="Please enter any additional instructions"
+                    :rows="appStore.isPc ? 8 : 3"
                 />
               </div>
 
-              <!--画框-->
-              <div class="acea-row row-between-wrapper p-md-20 p-15">
+              <!--画框选择-->
+              <div class="acea-row row-between-wrapper m-md-20 m-15">
                 <div class="acea-row row-middle">
                   <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                   <span class="text-26">Choose a Frame</span>
-                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>
+<!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
                 </div>
                 <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
               </div>
-              <div class="p-md-20 p-15">
-                <div class="frame-scroll scroll-y border-sm p-10">
-                  <div class="frame-list row">
-                    <div class="col-2xl-2 col-xl-average col-md-3 col-xs-3 col-4"
-                         v-for="(item, index) in frameOptions" :key="item.id">
-                      <div
+              <div class="m-md-20 m-15">
+                <div class="frame-scroll border-sm p-10">
+                  <div class="frame-list">
+                    <div
+                        v-for="(item, index) in frameOptions" :key="item.id"
                         class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
                         :class="{ on: currentFrameId === item.id }"
                         @click="chooseFrame(item)"
-                      >
-                        <div class="frame-box">
-                          <div class="frame-img aspect-ratio">
-                            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" alt="">
-                          </div>
-                          <p class="line2 mt-10 frame-name">{{ item.name }}</p>
-                          <p class="f-bold-500 frame-money">
-                            {{ currencyStore.formatToCurrency(Number(item.price) + Number(item.surcharge) || 0) }}</p>
+                    >
+                      <div class="frame-box">
+                        <div class="frame-img aspect-ratio">
+                          <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
                         </div>
+                        <p class="line2 mt-10 frame-name">{{ item.name }}</p>
+                        <p class="f-bold-500 frame-money">
+                          {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -515,7 +532,7 @@
 
               <!--卡纸选择（选择画框并且画框支持和有卡纸选项才有）-->
               <template v-if="hasFrame && matVisible">
-                <div class="acea-row row-between-wrapper p-md-20 p-15">
+                <div class="acea-row row-between-wrapper m-md-20 m-15">
                   <div class="acea-row row-middle">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                     <span class="text-26">Choose a Canvas material</span>
@@ -525,20 +542,20 @@
                   </div>
                 </div>
 
-                <div class="p-md-20 p-15">
-                  <div class="material-wrapper border-sm p-md-20 p-15">
+                <div class="m-md-20 m-15">
+                  <div class="material-wrapper border-sm m-md-20 m-15">
                     <div class="acea-row row-middle text-20 f-bold-500">
                       <p class="mr-xl-40 mr-20">Mat Color</p>
                       <p class="flex-1 line1">Crisp Bright White</p>
                     </div>
                     <div class="color-list my-md-20 my-15">
                       <div
-                        class="color-item rounded-full cursor-pointer"
-                        :class="{on: currentMaterialId === item.id}"
-                        :style="{background: item.config?.matColor}"
-                        v-for="(item, index) in materialOptions"
-                        :key="index"
-                        @click="chooseMatColor(item)"
+                          class="color-item rounded-full cursor-pointer"
+                          :class="{on: currentMaterialId === item.id}"
+                          :style="{background: item.config?.matColor}"
+                          v-for="(item, index) in materialOptions"
+                          :key="index"
+                          @click="chooseMatColor(item)"
                       >
                         <span v-if="item.id === ''" class="iconfont icon-close"></span>
                       </div>
@@ -550,14 +567,14 @@
                       </div>
                       <div class="width-list row mt-md-20 mt-15">
                         <div
-                          class="col-average"
-                          v-for="(item, index) in currentMaterialWidthOption"
-                          :key="index"
+                            class="col-average"
+                            v-for="(item, index) in currentMaterialWidthOption"
+                            :key="index"
                         >
                           <div
-                            class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                            :class="{'border-gray-700': currentMaterialWidth === item.matWidth}"
-                            @click="chooseMatWidth(item.matWidth!)"
+                              class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
+                              :class="{'border-gray-700': currentMaterialWidth === item.matWidth}"
+                              @click="chooseMatWidth(item.matWidth!)"
                           >
                             {{ item.matWidth }}″
                           </div>
@@ -567,15 +584,14 @@
                   </div>
                 </div>
               </template>
-
-              <div class="acea-row row-middle px-md-20 px-15 py-10">
-                <span class="iconfont icon-info-fill text-20"></span>
-                <span class="ml-6 text-20 text-underline cursor-pointer flex-1 line1"
-                      @click="centerDialogVisible = true">
-              <span class="f-bold">Click here:</span>
-              Summary of differences.
-            </span>
-              </div>
+<!--              <div class="acea-row row-middle px-md-20 px-15 py-10">
+                <span class="iconfont icon-info-fill text-20" />
+                <p class="ml-6 text-20 flex-1 line1">
+                  <span class="cursor-pointer text-underline" @click="centerDialogVisible = true">
+                    <b class="f-bold">Click here:</b>Summary of differences.
+                  </span>
+                </p>
+              </div>-->
               <div class="p-md-20 p-15 f-bold-500 text-16 border-t-sm">
                 <p>Product Parameter</p>
                 <p class="mt-10" v-for="(val, key) in specs">{{ key }}: {{ val }}</p>
@@ -588,17 +604,18 @@
                 <p class="f-bold-500">
                   Price Details
                   <span
-                    class="text-underline cursor-pointer"
-                    ref="checkButtonRef"
-                    v-click-outside="onClickOutside"
+                      class="text-underline cursor-pointer"
+                      ref="checkButtonRef"
+                      v-click-outside="onClickOutside"
                   >
                 Check
               </span>
                 </p>
                 <p class="f-bold">Total：<span
-                  class="text-26 text-error">{{ currencyStore.formatToCurrency(totalPrice || 0) }}</span></p>
+                    class="text-26 text-error">{{ currencyStore.formatToCurrency(totalPrice || 0) }}</span></p>
               </div>
-              <el-button class="w-full add-cart__button" size="large" type="danger" @click="addToCart">Add To Cart</el-button>
+              <el-button class="w-full add-cart__button" size="large" type="danger" @click="addToCart">Add To Cart
+              </el-button>
             </template>
           </div>
         </div>
@@ -662,9 +679,9 @@
 
     <!-- 底部按钮 -->
     <div
-      class="foot-wrapper"
-      :style="{ position: currentView === 'custom' ? 'relative' : 'sticky' }"
-      v-if="route.params.work === ArtCodeEnum.Painting && currentView !== 'theme'"
+        class="foot-wrapper"
+        :style="{ position: currentView === 'custom' ? 'relative' : 'sticky' }"
+        v-if="route.params.work === ArtCodeEnum.Painting && currentView !== 'theme'"
     >
       <div class="container">
         <div class="foot-inner py-20">
@@ -674,10 +691,10 @@
           </div>
           <span class="text-20 f-bold text-center">Online proofing | Unlimited revisions | 100% satisfaction before painting</span>
           <el-button
-            type="primary"
-            size="large"
-            @click="handleContinue"
-            v-if="currentView !== 'custom'"
+              type="primary"
+              size="large"
+              @click="handleContinue"
+              v-if="currentView !== 'custom'"
           >
             Continue
           </el-button>
@@ -688,7 +705,7 @@
   </section>
 
   <ClientOnly>
-    <CasePreview v-model="isShowCaseContrast" :items="caseContrastData" :index="caseIndex" />
+    <CasePreview v-model="isShowCaseContrast" :items="caseContrastData" :index="caseIndex"/>
   </ClientOnly>
 
   <el-dialog v-model="centerDialogVisible" title="Summary of Differences" width="720" center>
@@ -718,22 +735,22 @@
   <ClientOnly>
     <!-- 图片查看器 -->
     <el-image-viewer
-      v-if="exampleViewVisible"
-      :url-list="[imagePrefix(TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType][exampleArrIndex].paint)]"
-      @close="exampleViewVisible = false"
+        v-if="exampleViewVisible"
+        :url-list="[imagePrefix(TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType][exampleArrIndex].paint)]"
+        @close="exampleViewVisible = false"
     />
   </ClientOnly>
 
   <!--价格详情弹窗-->
   <el-popover
-    ref="checkPopoverRef"
-    trigger="click"
-    width="50vw"
-    placement="top"
-    title="Price Details"
-    :virtual-ref="checkButtonRef"
-    :popper-style="{ padding: '20px', 'padding-bottom': '10px'}"
-    virtual-triggering
+      ref="checkPopoverRef"
+      trigger="click"
+      width="50vw"
+      placement="top"
+      title="Price Details"
+      :virtual-ref="checkButtonRef"
+      :popper-style="{ padding: '20px', 'padding-bottom': '10px'}"
+      virtual-triggering
   >
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20">
       <span class="f-bold text-18 flex-1 line1 mr-10">Painting Size Price</span>
@@ -756,10 +773,10 @@
 import {getCombinationApi, getThemeApi} from "~/api/modules/paint/paint";
 import type {IPaint} from "~/api/interface/paint/paint";
 import type {UploadFile, UploadProps} from "element-plus";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import WallColor from '~/components/WallColor.vue'
 import Room from '~/components/Room.vue'
-import {calculateShape, cm2inch, flattenTree, getImageSize, imagePrefix} from "~/utils";
+import {calculateShape, cm2inch, flattenTree, getImageSize, imagePrefix, debounce} from "~/utils";
 import type {ICustom} from "~/api/interface/custom/custom";
 import {useCustomStore} from "~/stores/modules/custom";
 import {useAppStore} from "~/stores/modules/app";
@@ -771,7 +788,7 @@ import {findClosestMatch} from "~/utils/calculateShape";
 import {ArtCodeEnum, type ArtCodeType} from "~/types/enumeration";
 import {rangeVerify} from "~/utils/matchingInterval";
 import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
-import { useIndexedDBBase64 } from '~/composables/useIndexedDBBase64'
+import {useIndexedDBBase64} from '~/composables/useIndexedDBBase64'
 import {TECHNIQUE_EXAMPLE} from "~/constant";
 
 defineOptions({
@@ -785,7 +802,7 @@ const customStore = useCustomStore()
 const route = useRoute()
 const router = useRouter()
 const currencyStore = useCurrencyStore();
-const { saveBase64 } = useIndexedDBBase64()
+const {saveBase64} = useIndexedDBBase64()
 
 onMounted(() => {
   $bus.off('continueCustomPaint') // 防止重复注册
@@ -808,27 +825,19 @@ onMounted(() => {
 const moreInfoVisible = ref([false, false, false, false])
 
 const currentView = ref('custom')
-const contentNumber = ref(1)
-
-const contentNumberSet = computed({
-  get: () => contentNumber.value,
-  set: (val: number) => {
-    chooseNumber(val)
-  }
-})
 
 const origin = useRequestURL().origin
 
 useHead(mergeHeadWithLodash(
-  pageMeta["/custom-paint"][route.params.work] ?? {},
-  {
-    link: [
-      { rel: 'canonical', href: `${origin}/custom-paint/${route.params.work}` }
-    ],
-    meta: [
-      { name: 'robots', content: route.params.themeId ? 'noindex, follow' : 'index, follow' }
-    ]
-  }
+    pageMeta["/custom-paint"][route.params.work] ?? {},
+    {
+      link: [
+        {rel: 'canonical', href: `${origin}/custom-paint/${route.params.work}`}
+      ],
+      meta: [
+        {name: 'robots', content: route.params.themeId ? 'noindex, follow' : 'index, follow'}
+      ]
+    }
 ))
 
 const reReckon = ref(false) // 重新识别
@@ -1114,6 +1123,7 @@ const switchStep = (targetView: string) => {
 }
 
 // 获取主题
+const favoriteMainRef = ref<HTMLDivElement>()
 const themeLoading = ref(false)
 const themeOptions = ref<IPaint.ThemeRow[]>([])
 const getTheme = async (id: string) => {
@@ -1185,6 +1195,15 @@ const showCaseContrast = (item: IPaint.SampleRow[], index: number) => {
   caseIndex.value = index
 }
 
+// 复杂程度选择
+const maxNumber = 10
+const contentNumber = ref(1)
+const contentNumberSet = computed({
+  get: () => contentNumber.value,
+  set: debounce((val: number) => {
+    chooseNumber(val)
+  }, 150)
+})
 const chooseNumber = (num: number) => {
   const preCode = finalCode.value
   contentNumber.value = num
@@ -1197,7 +1216,19 @@ const chooseNumber = (num: number) => {
 const handleContinue = () => {
   if (currentView.value === 'style') {
     if (!themeIdMap.value[1]) {
-      ElMessage.warning('Please choose your favorite style!')
+
+      ElMessageBox.alert('Please choose a style you love before moving to the next step!', 'Style Required', {
+        callback: () => {
+          const offset = document.getElementById('header-placeholder').getBoundingClientRect().height
+          const top = favoriteMainRef.value?.getBoundingClientRect().top + window.scrollY - offset
+
+          window.scrollTo({
+            top,
+            behavior: 'smooth'
+          })
+
+        }
+      })
       return
     } else {
       switchStep('custom')
@@ -1356,9 +1387,9 @@ const showLoginWindow = () => {
 }
 
 watch(() => route.fullPath,
-  () => {
-    reset()
-  }, {immediate: true}
+    () => {
+      reset()
+    }, {immediate: true}
 )
 
 watch(() => currentView.value, () => {
@@ -1421,23 +1452,17 @@ watch(() => currentView.value, () => {
   .spu-spec {
     overflow: hidden;
 
-    .info-box {
-      overflow: hidden;
-      height: auto;
-      max-height: 0;
-      transition: max-height 0.3s ease-in-out;
-    }
-
     .frame-scroll {
       max-height: 427px;
-
+      overflow: auto;
       .frame-list {
-        row-gap: var(--gutter-base);
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-gap: 10px;
 
         .frame-item {
           position: relative;
           background: var(--color-gray-100);
-          height: 100%;
 
           .frame-box {
             padding-bottom: 25px;
@@ -1624,52 +1649,73 @@ watch(() => currentView.value, () => {
 .favorite-list {
   .favorite-item {
     position: relative;
-    cursor: pointer;
     overflow: hidden;
-
-    .p-text {
-      position: absolute;
-      z-index: 2;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      text-align: center;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.30);
-      font-weight: bold;
-      text-decoration: underline;
-    }
 
     .p-content {
       position: absolute;
       left: 0;
-      top: 100%;
+      right: 0;
+      top: 0;
+      bottom: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.60);
-      padding: 25% 20px 0;
-      text-align: center;
-      color: #fff;
-      transition: all 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
 
-      p {
-        opacity: 0;
-        transform: translateY(10px);
-        transition: all 0.3s ease-in-out 0.2s;
+      .p-desc {
+        position: relative;
+        z-index: 2;
+        flex: 1;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        p {
+          opacity: 0;
+          transform: translateY(10px);
+          transition: all 0.3s ease-in-out 0.2s;
+        }
+      }
+
+      .p-text {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.30);
+        font-weight: bold;
+        text-decoration: underline;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        transition: all 0.3s ease-in-out;
       }
     }
 
     &.on {
-      .p-text {
-        background: transparent;
-      }
-
       .p-content {
-        top: 0;
+        .p-desc {
+          p {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-        p {
-          opacity: 1;
-          transform: translateY(0);
+        .p-text {
+          background: unset;
+        }
+
+        &::after {
+          top: 0;
         }
       }
     }
@@ -1709,10 +1755,24 @@ watch(() => currentView.value, () => {
   }
 }
 
+@media (max-width: 1460px) {
+  .spu-wrapper .spu-spec {
+    .frame-scroll {
+      .frame-list {
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 5px;
+      }
+    }
+  }
+}
+
 @media (max-width: 1260px) {
   .spu-wrapper .spu-spec {
     .frame-scroll {
-      max-height: 400px;
+      max-height: 350px;
+      .frame-list {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
 
     .color-list {
@@ -1733,10 +1793,6 @@ watch(() => currentView.value, () => {
       --gutter: var(--gutter-sm);
     }
   }
-
-  .favorite-list .favorite-item .p-content {
-    padding-top: 15%;
-  }
 }
 
 @media (max-width: 991px) {
@@ -1746,6 +1802,23 @@ watch(() => currentView.value, () => {
 }
 
 @media (max-width: 768px) {
+  .spu-wrapper .spu-spec {
+    .frame-scroll {
+      max-height: unset;
+      .frame-list {
+        display: flex;
+        grid-template-columns: unset;
+        flex-wrap: nowrap;
+
+        .frame-item {
+          width: 65px;
+          flex-shrink: 0;
+        }
+
+      }
+    }
+  }
+
   .foot-wrapper .foot-inner {
     flex-direction: column;
     gap: 20px;

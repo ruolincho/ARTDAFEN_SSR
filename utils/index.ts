@@ -1,6 +1,7 @@
 import type {UploadFile} from "element-plus";
 import type {General} from "~/types/global";
 import {TechniqueCodeEnum} from "~/types/enumeration";
+import {YOUTUBE_PROXY_URL} from "~/config";
 
 /**
  * 图片添加服务器前缀
@@ -22,6 +23,14 @@ export function imagePrefix(path: string, defaultImage = false) {
 export function imageUnPrefix(path: string = '') {
     const config = useRuntimeConfig()
     return path.replace(config.public.obsUrl, '')
+}
+
+/**
+ * YouTube 视频添加服务器前缀（代理）
+ * @param embedId
+ */
+export function youtubeProxyPrefix(embedId: string) {
+    return YOUTUBE_PROXY_URL + '/' +embedId
 }
 
 /**

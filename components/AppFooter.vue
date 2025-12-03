@@ -31,6 +31,9 @@
         <a href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">
           <span class="iconfont icon-instagram text-30"></span>
         </a>
+        <a href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
+          <span class="iconfont icon-douyinjumuguanli text-30"></span>
+        </a>
         <a href="https://x.com/artdafen" target="_blank" title="x">
           <span class="iconfont icon-tuite text-30"></span>
         </a>
@@ -122,6 +125,23 @@
       </div>
     </div>
     <div class="footer-bot">
+      <div class="partner">
+        <p class="mb-10">Follow Us</p>
+        <div class="social-icon acea-row gap-sm">
+          <a href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
+            <span class="iconfont icon-Youtube"></span>
+          </a>
+          <a href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">
+            <span class="iconfont icon-instagram"></span>
+          </a>
+          <a href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
+            <span class="iconfont icon-douyinjumuguanli"></span>
+          </a>
+          <a href="https://x.com/artdafen" target="_blank" title="x">
+            <span class="iconfont icon-tuite"></span>
+          </a>
+        </div>
+      </div>
       <div class="partner">
         <p class="mb-10">Cooperative Partner</p>
         <div class="imgs acea-row gap-sm">
@@ -479,6 +499,14 @@ const getNoticeBto = async () => {
         img {
           height: 30px;
           background: #fff;
+        }
+      }
+
+      .social-icon {
+        color: #fff;
+
+        .iconfont {
+          font-size: 30px;
         }
       }
     }

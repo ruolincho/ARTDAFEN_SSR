@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4853487 */
-  src: url('//at.alicdn.com/t/c/font_4853487_k798v6kqbqr.woff2?t=1758869267185') format('woff2'),
-  url('//at.alicdn.com/t/c/font_4853487_k798v6kqbqr.woff?t=1758869267185') format('woff'),
-  url('//at.alicdn.com/t/c/font_4853487_k798v6kqbqr.ttf?t=1758869267185') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_4853487_3j2vsxaevi5.woff2?t=1764734258633') format('woff2'),
+  url('//at.alicdn.com/t/c/font_4853487_3j2vsxaevi5.woff?t=1764734258633') format('woff'),
+  url('//at.alicdn.com/t/c/font_4853487_3j2vsxaevi5.ttf?t=1764734258633') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tuite:before {
+  content: "\e744";
+}
+
+.icon-douyinjumuguanli:before {
+  content: "\e67c";
 }
 
 .icon-top:before {
@@ -75,10 +83,6 @@
 
 .icon-editor-right-alignment:before {
   content: "\e832";
-}
-
-.icon-tuite:before {
-  content: "\e79c";
 }
 
 .icon-change:before {

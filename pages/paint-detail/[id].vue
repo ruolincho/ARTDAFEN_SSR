@@ -184,13 +184,13 @@
 
               <!--工艺/规格选择-->
               <template v-if="specsCombination.length > 1">
-                <div class="acea-row row-between-wrapper p-md-20 p-15">
+                <div class="acea-row row-between-wrapper m-md-20 m-15">
                   <div class="acea-row row-middle flex-1 mr-10">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                     <span class="text-26">Choose a Craft</span>
                   </div>
                 </div>
-                <div class="p-md-20 p-15">
+                <div class="m-md-20 m-15">
                   <div class="width-list row">
                     <div
                       class="col-6"
@@ -210,15 +210,15 @@
               </template>
 
               <!--尺寸选择-->
-              <div class="acea-row row-between-wrapper p-md-20 p-15">
+              <div class="acea-row row-between-wrapper m-md-20 m-15">
                 <div class="acea-row row-middle flex-1 mr-10">
                   <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                   <span class="text-26">Choose a Size</span>
-                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>
+<!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
                 </div>
                 <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(currentSizeOption?.price || 0) }}</div>
               </div>
-              <div class="p-md-20 p-15">
+              <div class="m-md-20 m-15">
                 <el-select
                   class="custom-select"
                   v-model="currentSizeId"
@@ -242,7 +242,7 @@
                   </template>
                 </el-select>
               </div>
-              <div class="px-md-20 px-15 py-10 text-20">
+              <div class="m-md-20 m-15 text-20">
                 <span class="iconfont icon-info-fill text-20 mr-6"></span>
                 <span class="f-bold">Note:</span>
                 To order a custom size, <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click
@@ -250,33 +250,31 @@
               </div>
 
               <!--画框选择-->
-              <div class="acea-row row-between-wrapper p-md-20 p-15">
+              <div class="acea-row row-between-wrapper m-md-20 m-15">
                 <div class="acea-row row-middle flex-1 mr-10">
                   <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                   <span class="text-26">Choose a Frame</span>
-                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>
+<!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
                 </div>
                 <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
               </div>
-              <div class="p-md-20 p-15">
-                <div class="frame-scroll scroll-y border-sm p-10">
-                  <div class="frame-list row">
-                    <div class="col-2xl-2 col-xl-average col-md-3 col-sm-4 col-xs-3 col-4"
-                         v-for="(item, index) in frameOptions" :key="item.id">
-                      <div
+              <div class="m-md-20 m-15">
+                <div class="frame-scroll border-sm p-10">
+                  <div class="frame-list">
+                    <div
+                        v-for="(item, index) in frameOptions" :key="item.id"
                         class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
                         :class="{ on: currentFrameId === item.id }"
                         @click="chooseFrame(item)"
-                      >
-                        <div class="frame-box">
-                          <div class="frame-img aspect-ratio">
-                            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
-                          </div>
-                          <p class="line2 mt-10 frame-name">{{ item.name }}</p>
-                          <p class="f-bold-500 frame-money">
-                            {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
-                          </p>
+                    >
+                      <div class="frame-box">
+                        <div class="frame-img aspect-ratio">
+                          <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
                         </div>
+                        <p class="line2 mt-10 frame-name">{{ item.name }}</p>
+                        <p class="f-bold-500 frame-money">
+                          {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -285,7 +283,7 @@
 
               <!--卡纸选择（选择画框并且画框支持和有卡纸选项才有）-->
               <template v-if="hasFrame && matVisible">
-                <div class="acea-row row-between-wrapper p-md-20 p-15">
+                <div class="acea-row row-between-wrapper m-md-20 m-15">
                   <div class="acea-row row-middle flex-1 mr-10">
                     <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
                     <span class="text-26">Choose a Canvas material</span>
@@ -294,8 +292,8 @@
                     {{ currencyStore.formatToCurrency(currentMaterialOption?.price || 0) }}
                   </div>
                 </div>
-                <div class="p-md-20 p-15">
-                  <div class="material-wrapper border-sm p-md-20 p-15">
+                <div class="m-md-20 m-15">
+                  <div class="material-wrapper border-sm m-md-20 m-15">
                     <div class="acea-row row-middle text-20 f-bold-500">
                       <p class="mr-xl-40 mr-20">Mat Color</p>
                       <p class="flex-1 line1">Crisp Bright White</p>
@@ -336,15 +334,14 @@
                   </div>
                 </div>
               </template>
-
-              <div class="acea-row row-middle px-md-20 px-15 py-10">
-                <span class="iconfont icon-info-fill text-20"></span>
-                <span class="ml-6 text-20 text-underline cursor-pointer flex-1 line1"
-                      @click="centerDialogVisible = true">
-              <span class="f-bold">Click here:</span>
-              Summary of differences.
-            </span>
-              </div>
+<!--              <div class="acea-row row-middle px-md-20 px-15 py-10">
+                <span class="iconfont icon-info-fill text-20" />
+                <p class="ml-6 text-20 flex-1 line1">
+                  <span class="cursor-pointer text-underline" @click="centerDialogVisible = true">
+                    <b class="f-bold">Click here:</b>Summary of differences.
+                  </span>
+                </p>
+              </div>-->
               <div class="p-md-20 p-15 f-bold-500 text-16 border-t-sm">
                 <p>Product Parameter</p>
                 <p class="mt-10" v-for="(val, key) in specs">{{ key }}: {{ val }}</p>
@@ -380,7 +377,7 @@
   <!--创作者-->
   <section class="mt-lg-60 mt-sm-20" v-if="goodsDetail.creator">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">About the Artist</h1>
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">About the Artist</h1>
 
       <div class="artist-box acea-row gap-base">
         <div class="avatar" v-if="goodsDetail.creator?.portrait">
@@ -397,23 +394,53 @@
     </div>
   </section>
 
+  <!--产品详情-->
+  <section class="sec-desc mt-lg-60 mt-sm-20" :class="{ open: isOpenDesc }" v-if="goodsDetail?.details?.length">
+    <div class="container">
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Description</h1>
+      <div class="img-box">
+        <div v-for="item in goodsDetail.details" :key="item">
+          <ClientOnly v-if="!item.includes('/')">
+            <div class="youtube-cover" v-if="!playYoutube">
+              <img :src="`https://img.youtube.com/vi/${item}/maxresdefault.jpg`" alt="">
+              <svg @click="playYoutube = true" t="1764235842389" class="icon cursor-pointer" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2875" width="80" height="80"><path d="M1013.76 307.264s-9.984-70.570667-40.704-101.632c-38.933333-40.789333-82.56-41.002667-102.592-43.392C727.168 151.893333 512.213333 151.893333 512.213333 151.893333h-0.426666s-214.954667 0-358.250667 10.346667c-20.010667 2.389333-63.658667 2.602667-102.613333 43.392C20.245333 236.693333 10.24 307.264 10.24 307.264S0 390.122667 0 473.002667v77.674666c0 82.858667 10.24 165.738667 10.24 165.738667s9.984 70.570667 40.704 101.632c38.933333 40.789333 90.112 39.509333 112.896 43.776 81.92 7.850667 348.16 10.282667 348.16 10.282667s215.168-0.32 358.464-10.666667c20.010667-2.410667 63.658667-2.602667 102.613333-43.392 30.698667-31.061333 40.704-101.632 40.704-101.632S1024 633.536 1024 550.677333v-77.674666c0-82.88-10.24-165.738667-10.24-165.738667z" fill="#DC2217" p-id="2876"></path><path d="M406.293333 644.821333l-0.064-287.722666 276.693334 144.362666-276.629334 143.36z" fill="#FFFFFF" p-id="2877"></path></svg>
+            </div>
+            <iframe
+                v-else
+                width="100%"
+                height="562"
+                type="text/html"
+                :src="youtubeProxyPrefix(item)"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+            ></iframe>
+          </ClientOnly>
+          <img v-else class="w-full" :src="imagePrefix(item)" alt="">
+        </div>
+      </div>
+      <div class="btn-box">
+        <el-button class="w-full mt-20" plain size="large" @click="isOpenDesc = !isOpenDesc">
+          {{ isOpenDesc ? 'Hide Product Details' : 'View More Product Details' }}
+          <span class="iconfont ml-20" :class="isOpenDesc ? 'icon-up' : 'icon-down'"></span>
+        </el-button>
+      </div>
+    </div>
+  </section>
+
   <!-- 质量介绍-->
   <section class="mt-lg-60 mt-sm-20">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">Commitment to Quality</h1>
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Commitment to Quality</h1>
       <div class="quality-list">
         <div class="quality-item acea-row gap-base">
           <div class="p-img">
             <img class="w-full" src="~/assets/images/quality1.png" alt="quality">
           </div>
           <div class="info flex-1">
-            <p class="text-20 f-bold-500">High-Quality Framed Art Prints</p>
+            <p class="text-20 f-bold-500">Premium Hand-Painted Oil Paintings (Framed)</p>
             <p class="mt-10 text-16 text-gray-600">
-              Our high-end framed wall art is printed on premium paper using non-toxic, archival inks that protect
-              against
-              UV light to resist fading. Experience unmatched quality and style as you choose from a wide range of
-              designs
-              to enhance your room décor.
+              Discover the beauty of 100% hand-painted art. Each piece is crafted on high-quality canvas using eco-friendly, fade-resistant oil paints, ensuring your artwork remains vibrant for years. Our framed collections feature distinct textures and artistic details that printing simply cannot replicate. Explore our diverse selection of styles to find the perfect centerpiece for your home.
             </p>
           </div>
         </div>
@@ -455,7 +482,7 @@
   <!-- 相关推荐-->
   <section class="mt-lg-60 mt-sm-20" v-if="relatedList.length">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">Product Related</h1>
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Related</h1>
       <ClientOnly>
         <div class="recommend-swiper">
           <swiper
@@ -545,7 +572,7 @@
   <!-- FQ4-->
   <section class="mt-lg-60 mt-sm-20">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-xl border-gray-700 mb-20">Frequently Asked Questions</h1>
+      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Frequently Asked Questions</h1>
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item v-for="subItem in shoppingFaq" :title="subItem.title" :name="subItem.name"
                           :key="subItem.name">
@@ -661,7 +688,7 @@ import type {IPaint} from "~/api/interface/paint/paint";
 import type {IProduct} from "~/api/interface/product/product";
 import WallColor from '~/components/WallColor.vue'
 import Room from '~/components/Room.vue'
-import {cm2inch, debounce, imagePrefix, jumpToProduct} from "~/utils";
+import {cm2inch, debounce, imagePrefix, jumpToProduct, youtubeProxyPrefix} from "~/utils";
 import {useCartStore} from '~/stores/modules/cart'
 import type {IShopping} from "~/api/interface/shopping/shopping";
 import {getSpecsListApi} from "~/api/modules/specs/specs";
@@ -737,6 +764,9 @@ const handleImageChange = () => {
     reReckon.value = true
   })
 }
+
+const playYoutube = ref(false)
+const isOpenDesc = ref(true) // 是否展开产品详情
 
 // 获取详情
 const config = useRuntimeConfig()
@@ -1148,14 +1178,15 @@ const commentTotal = computed(() => {
 
     .frame-scroll {
       max-height: 427px;
-
+      overflow: auto;
       .frame-list {
-        row-gap: var(--gutter-base);
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-gap: 10px;
 
         .frame-item {
           position: relative;
           background: var(--color-gray-100);
-          height: 100%;
 
           .frame-box {
             padding-bottom: 25px;
@@ -1291,6 +1322,52 @@ const commentTotal = computed(() => {
   width: 13.15%;
 }
 
+.sec-desc {
+  .img-box {
+    max-width: 1000px;
+    max-height: 562px;
+    overflow: hidden;
+    margin: 0 auto;
+
+    .youtube-cover {
+      position: relative;
+      min-height: 200px;
+      svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .btn-box {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+
+    &::after {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 100%;
+      height: 160px;
+      background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%);
+      content: "";
+    }
+  }
+
+  &.open {
+    .img-box {
+      max-height: unset;
+    }
+
+    .btn-box::after {
+      display: none;
+    }
+  }
+}
+
 .quality-list {
   .quality-item {
     align-items: center;
@@ -1334,10 +1411,24 @@ const commentTotal = computed(() => {
   display: flex !important;
 }
 
+@media (max-width: 1460px) {
+  .spu-wrapper .spu-spec {
+    .frame-scroll {
+      .frame-list {
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 5px;
+      }
+    }
+  }
+}
+
 @media (max-width: 1260px) {
   .spu-wrapper .spu-spec {
     .frame-scroll {
-      max-height: 400px;
+      max-height: 350px;
+      .frame-list {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
 
     .color-list {
@@ -1434,8 +1525,42 @@ const commentTotal = computed(() => {
 }
 
 @media (max-width: 768px) {
+  .spu-wrapper .spu-spec {
+    .frame-scroll {
+      max-height: unset;
+      .frame-list {
+        display: flex;
+        grid-template-columns: unset;
+        flex-wrap: nowrap;
+
+        .frame-item {
+          width: 65px;
+          flex-shrink: 0;
+        }
+
+      }
+    }
+  }
+
   .quality-list .quality-item {
     align-items: flex-start;
+  }
+
+  .sec-desc {
+    .img-box {
+
+      .youtube-cover {
+        min-height: unset;
+
+        svg {
+          width: 50px;
+        }
+      }
+
+      iframe {
+        height: 450px;
+      }
+    }
   }
 }
 
@@ -1449,6 +1574,15 @@ const commentTotal = computed(() => {
     .caption-btn {
       left: 20px;
       bottom: 20px;
+    }
+  }
+
+  .sec-desc {
+    .img-box {
+
+      iframe {
+        height: 300px;
+      }
     }
   }
 }

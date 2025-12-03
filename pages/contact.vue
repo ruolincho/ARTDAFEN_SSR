@@ -62,9 +62,11 @@
               <p class="text-18 f-bold-600">Call us now</p>
               <p class="text-14 text-gray-600 mt-8 mb-12 desc">{{ item.detail }}</p>
               <p class="text-24 mb-24">{{ item.email }}</p>
-              <el-button type="primary" size="large">
-                CALL NOW
-                <span class="iconfont icon-right ml-10"></span>
+              <el-button type="primary" size="large" :disabled="!item.tel">
+                <a :href="item.tel ? `tel:${item.tel}` : 'void:0'">
+                  CALL NOW
+                  <span class="iconfont icon-right ml-10"></span>
+                </a>
               </el-button>
             </div>
           </div>

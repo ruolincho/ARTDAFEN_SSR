@@ -100,6 +100,7 @@
       <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="visible = false">
         <span class="iconfont icon-close"></span>
       </div>
+      <div class="mask" v-if="isOpenMenu" @click="isOpenMenu = false"></div>
     </div>
   </div>
 </template>
@@ -377,8 +378,10 @@ defineExpose({
     .app-menu-box {
       height: 39px;
       position: relative;
+      z-index: 100;
       font-size: 14px;
       display: none;
+      background: #fff;
 
       .drop-list {
         position: absolute;
@@ -491,11 +494,27 @@ defineExpose({
 
     .close-box {
       position: absolute;
+      z-index: 100;
       right: 0;
       top: 0;
       width: 39px;
       height: 39px;
       font-size: 12px;
+    }
+
+    .mask{
+      position: fixed;
+      z-index: 2;
+      inset: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px); /* 兼容移动端浏览器 */
+      touch-action: none; /* 阻止触摸滚动穿透 */
+      -webkit-overflow-scrolling: touch; /* 启用iOS弹性滚动 */
     }
   }
 }
