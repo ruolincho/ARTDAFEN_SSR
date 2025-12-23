@@ -96,6 +96,14 @@ export const jumpToProduct = (item: General.GoodsItem) => {
 }
 
 /**
+ * 获取产品跳转链接
+ * @param item
+ */
+export const getProductLink = (item: General.GoodsItem) => {
+    return productLink(item)
+}
+
+/**
  * 产品跳转链接
  * @param item
  */

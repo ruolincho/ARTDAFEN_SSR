@@ -197,7 +197,7 @@
         </div>
 
         <!-- 右侧主要区域 -->
-        <div class="main-wrapper flex-1 pt-sm-24 overflow-hidden">
+        <div class="main-wrapper flex-1">
           <!-- 属性 -->
           <div class="border-sm border-gray-700 acea-row row-between" v-if="attributeList.length">
             <div class="nav-list acea-row flex-1">
@@ -215,8 +215,9 @@
 
           <!--按钮组 Pc端-->
           <div
-            class="my-md-30 my-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
+            class="buttons-wrapper py-md-30 py-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
             v-show="appStore.device === 'pc'"
+            :style="{ top: appStore.headerHeight + 'px' }"
           >
             <!--价格排序-->
             <el-popover ref="pricePopoverRef" trigger="hover" placement="bottom-start" width="200"
@@ -300,7 +301,7 @@
               size="large"
               type="primary" round effect="dark"
               class="cursor-pointer"
-              :closable="false"
+              :closable="true"
               @close="closeMutexTag"
             >
               {{ mutexSelected.name }}
@@ -379,9 +380,10 @@
 
           <!--筛选区域 App端-->
           <div
-            class="my-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
+            class="buttons-wrapper p-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
             v-show="appStore.device === 'app'"
             ref="appFilterRef"
+            :style="{ top: appStore.headerHeight + 'px', margin: '0 -15px' }"
           >
             <!--价格排序-->
             <el-tag
@@ -509,44 +511,18 @@
           </div>
 
           <!--商品数据-->
-          <div style="min-height: 50vh" v-loading="loading">
+          <div style="min-height: 30vh; position: relative" v-loading="loading">
             <div class="row product-list gap-row-base" v-if="productList.length">
               <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="(item, index) in productList" :key="item.id">
-                <div class="product-item cursor-pointer" @click="jumpToProduct(item)">
-                  <div class="img-wrapper bg-gray-100">
-                    <img v-lazy="imagePrefix(item.img)" :alt="item.title">
-                    <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === TechniqueCodeEnum.Originals">
-                      <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
-                      <div class="p-tag bg-error" v-if="item.status === '-1'">Sale Out</div>
-                    </div>
-                    <div class="operation rounded-full p-5">
-                  <span class="iconfont icon-follow text-24 text-primary" v-show="!item.like"
-                        @click.stop="productThumbs(item)"></span>
-                      <span class="iconfont icon-follow-fill text-24 text-error" v-show="item.like"
-                            @click.stop="productThumbs(item)"></span>
-                    </div>
-                    <div class="num acea-row row-center-wrapper text-20">{{ index + 1 }}</div>
-                  </div>
-                  <div class="content-wrapper">
-                    <p class="my-8 line1">
-                  <span class="text-16 f-bold" @click.stop="handleClickArtist(item.creator)">{{
-                      item.creator?.name
-                    }}</span>
-                      <span class="iconfont icon-right text-16"></span>
-                    </p>
-                    <p class="line2 text-14">{{ item.title }}</p>
-                    <p class="text-16 f-bold my-8">{{ currencyStore.formatToCurrency(item.retailPrice) }}</p>
-                    <div class="acea-row gap-xs">
-                      <div class="p-tag bg-gray-400" v-for="label in item.labels" :key="label">{{ label }}</div>
-                    </div>
-                  </div>
-                </div>
+                <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="handleClickArtist" :index="index + 1" />
               </div>
             </div>
-            <div class="text-center py-60" v-if="!loading && !productList.length">
-              <span class="iconfont icon-empty text-50"></span>
-              <p class="text-20 f-bold mt-20">No Data</p>
-              <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+            <div class="empty-wrapper" v-else-if="requestFinished">
+              <div class="text-center py-60">
+                <span class="iconfont icon-empty text-50"></span>
+                <p class="text-20 f-bold mt-20">No Data</p>
+                <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -788,7 +764,7 @@
             size="large"
             type="primary" round effect="dark"
             class="cursor-pointer"
-            :closable="false"
+            :closable="true"
             @close="closeMutexTag"
           >
             {{ mutexSelected.name }}
@@ -881,7 +857,7 @@
 import {getProductAttributeApi, getProductBestApi, getProductGroupApi} from "~/api/modules/product/product";
 import type {IHome} from "~/api/interface/home/home";
 import type {IProduct} from "~/api/interface/product/product";
-import {debounce, imagePrefix, jumpToProduct} from "~/utils";
+import {debounce} from "~/utils";
 import {useAppStore} from "~/stores/modules/app";
 import {ElMessage, type ElPopover} from "element-plus";
 import {
@@ -901,14 +877,17 @@ import LoginWindow from "~/components/LoginWindow.vue";
 import {formatInteger} from "~/utils/format";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {cloneDeep} from "lodash-es";
-import {techniqueMenu, priceMenu, salesMenu} from "~/constant";
+import {techniqueMenu, priceMenu, salesMenu, SPOT_MENU_ID} from "~/constant";
 import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {unpackQuery, packQuery, type QueryParams} from '~/composables/useQueryShort'
-import {TechniqueCodeEnum} from "~/types/enumeration";
-import type {General} from "~/types/global";
+import type {General, ObjectNode} from "~/types/global";
 
 defineOptions({
   name: 'Best'
+})
+
+definePageMeta({
+  isShowActivity: true
 })
 
 onMounted(() => {
@@ -1228,7 +1207,8 @@ const reset = () => {
 /**
  * 获取Best列表
  */
-const loading = ref(true)
+const loading = ref(false)
+const requestFinished = ref(false)
 const productList = ref<General.GoodsItem[]>([])
 const getProductBest = async () => {
   // MUTEX
@@ -1292,19 +1272,24 @@ const getProductBest = async () => {
   }
 
   loading.value = true
-  const {data} = await getProductBestApi({
-    categoryIds,
-    attributeValueIds: attributeSelected.value.map(item => item.id),
-    priceSort: priceSortSelected.value?.config?.code ?? null,
-    salesSort: salesSortSelected.value?.config?.code ?? null,
-    startPrice: start,
-    endPrice: end,
-    creatorId: artistSelected.value.config?.referenceId || artistSelected.value.id || null,
-    techniqueId
-  })
-  productList.value = data
-  isPopup.value = false
-  loading.value = false
+  requestFinished.value = false
+  try {
+    const {data} = await getProductBestApi({
+      categoryIds,
+      attributeValueIds: attributeSelected.value.map(item => item.id),
+      priceSort: priceSortSelected.value?.config?.code ?? null,
+      salesSort: salesSortSelected.value?.config?.code ?? null,
+      startPrice: start,
+      endPrice: end,
+      creatorId: artistSelected.value.config?.referenceId || artistSelected.value.id || null,
+      techniqueId
+    })
+    productList.value = data
+  } finally {
+    isPopup.value = false
+    loading.value = false
+    requestFinished.value = true
+  }
 }
 
 // 移动端价格滑块
@@ -1551,7 +1536,7 @@ const paramsWatch = async () => {
   }
 
   // 是否有工艺筛选
-  hasTechniqueFilter.value = !!(MENU_ID && MENU_ID !== '1000002');
+  hasTechniqueFilter.value = !!(MENU_ID && MENU_ID !== SPOT_MENU_ID);
 
   // TECHNIQUE
   if (TECHNIQUE) {
@@ -1643,7 +1628,6 @@ if (import.meta.client) {
     {immediate: true}
   )
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -1672,6 +1656,14 @@ if (import.meta.client) {
   }
 
   .main-wrapper {
+    width: 100%;
+
+    .buttons-wrapper {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #fff;
+    }
 
     .nav-list {
 
@@ -1694,54 +1686,6 @@ if (import.meta.client) {
           background: var(--color-gray-400);
         }
 
-      }
-    }
-
-    .product-list {
-
-      .product-item {
-        .img-wrapper {
-          position: relative;
-          aspect-ratio: 1 / 1;
-
-          img {
-            max-width: 95%;
-            max-height: 95%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-          }
-
-          .tags-wrapper {
-            position: absolute;
-            left: 10px;
-            bottom: 10px;
-          }
-
-          .operation {
-            position: absolute;
-            right: 10px;
-            bottom: 10px;
-            background: #fff;
-          }
-
-          .num {
-            position: absolute;
-            top: 0;
-            left: 0;
-            color: #fff;
-            background: var(--color-primary);
-            width: 42px;
-            height: 42px;
-          }
-        }
-
-        .p-tag {
-          padding: 4px;
-          font-size: 10px;
-          color: #fff;
-        }
       }
     }
   }
@@ -1776,11 +1720,11 @@ if (import.meta.client) {
   font-size: 20px;
 }
 
-@media (max-width: 414px) {
-  .filter-wrapper .main-wrapper .product-list .product-item .img-wrapper .num {
-    width: 30px;
-    height: 30px;
-  }
+.empty-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 @keyframes animation-my5jl {

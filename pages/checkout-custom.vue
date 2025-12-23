@@ -170,7 +170,8 @@ defineOptions({
 })
 
 definePageMeta({
-  auth: false
+  auth: false,
+  isShowActivity: true
 })
 
 const previewImg = ref<string | null>('')

@@ -2,6 +2,8 @@ export namespace IOauth {
     export interface CaptchaRow {
         imgStream: string
         uuid: string
+        // ISO 8601 时间段
+        duration: string
     }
 
     /*登录参数*/

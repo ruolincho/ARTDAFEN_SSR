@@ -15,29 +15,32 @@
 
 <script setup lang="ts">
 import {onMounted, onUnmounted, ref} from 'vue'
-import {CONTACT_EMAIL} from '../config';
 
 const showBackTop = ref(false)
 
+if (import.meta.client) {
+  onMounted(() => {
+    window.addEventListener('scroll', handleScroll)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll)
+  })
+}
+
 const handleScroll = () => {
+  if (process.server) return
   // 滚动超过 300px 才显示回到顶部
   showBackTop.value = window.scrollY > 300
 }
 
 const scrollToTop = () => {
+  if (process.server) return
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   })
 }
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 </script>
 
 <style scoped lang="scss">

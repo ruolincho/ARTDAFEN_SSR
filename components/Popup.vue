@@ -105,7 +105,7 @@ useLockScroll(toRef(props, 'modelValue'))
 <style scoped lang="scss">
 .popup-overlay {
   position: fixed;
-  z-index: 3;
+  z-index: 122;
   top: 0;
   left: 0;
   width: 100%;

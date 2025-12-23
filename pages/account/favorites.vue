@@ -12,10 +12,15 @@
               <div class="favorites-item cursor-pointer border-sm border-gray-200 p-10" @click.stop="jumpToProduct(item)">
                 <div class="aspect-ratio relative">
                   <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
-                  <span class="iconfont icon-delete text-20" @click.stop="cancelThumbs(item.id)"></span>
+                  <div class="operation rounded-full p-5">
+                    <span class="iconfont icon-delete text-18" @click.stop="cancelThumbs(item.id)"></span>
+                  </div>
                 </div>
                 <p class="line1 text-12 my-8">{{ item.title }}</p>
-                <p class="text-12 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice || 0)}}</p>
+                <p>
+                  <span class="text-14 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice) }}</span>
+                  <span class="text-gray-400 text-through ml-5 text-12">{{ currencyStore.formatToCurrency(item.marketPrice) }}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -71,10 +76,14 @@ const cancelThumbs = async (id: string) => {
 
 <style scoped lang="scss">
 .favorites-container {
-  .favorites-list .favorites-item .iconfont {
-    position: absolute;
-    right: 10px;
-    top: 10px;
+  .favorites-list .favorites-item {
+    position: relative;
+    .operation {
+      position: absolute;
+        right: 10px;
+        top: 10px;
+      background: #fff;
+    }
   }
 }
 </style>

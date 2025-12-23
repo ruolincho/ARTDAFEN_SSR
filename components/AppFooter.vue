@@ -16,26 +16,26 @@
             <span class="iconfont icon-right ml-10"></span>
           </a>
         </el-button>
-        <el-button type="primary" size="large">
-          <a href="https://www.trustpilot.com/review/artdafen.com" target="_blank" rel="noopener">
-            <span class="iconfont icon-favorites-fill"></span>
-            Check our reviews on Trustpilot
-            <span class="iconfont icon-right ml-10"></span>
-          </a>
-        </el-button>
+<!--        <el-button type="primary" size="large">-->
+<!--          <a href="https://www.trustpilot.com/review/artdafen.com" target="_blank" rel="noopener">-->
+<!--            <span class="iconfont icon-favorites-fill"></span>-->
+<!--            Check our reviews on Trustpilot-->
+<!--            <span class="iconfont icon-right ml-10"></span>-->
+<!--          </a>-->
+<!--        </el-button>-->
       </div>
       <div class="social-icon acea-row gap-base">
-        <a href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
-          <span class="iconfont icon-Youtube text-30"></span>
+        <a class="social-item" href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
+          <span class="iconfont icon-Youtube"></span>
         </a>
-        <a href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">
-          <span class="iconfont icon-instagram text-30"></span>
+        <a class="social-item" href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">
+          <span class="iconfont icon-instagram"></span>
         </a>
-        <a href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
-          <span class="iconfont icon-douyinjumuguanli text-30"></span>
+        <a class="social-item" href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
+          <span class="iconfont icon-douyinjumuguanli"></span>
         </a>
-        <a href="https://x.com/artdafen" target="_blank" title="x">
-          <span class="iconfont icon-tuite text-30"></span>
+        <a class="social-item" href="https://x.com/artdafen" target="_blank" title="x">
+          <span class="iconfont icon-tuite "></span>
         </a>
       </div>
     </div>
@@ -65,11 +65,14 @@
         <a href="https://www.ups.com" target="_blank">
           <img src="~/assets/images/delivery-methods1.png" alt="UPS">
         </a>
-        <a href="https://subang.chemanman.com" target="_blank">
-          <img src="~/assets/images/delivery-methods3.png" alt="SuBang">
-        </a>
+        <!--<a href="https://subang.chemanman.com" target="_blank">-->
+        <!--  <img src="~/assets/images/delivery-methods3.png" alt="SuBang">-->
+        <!--</a>-->
         <a href="https://www.fedex.com" target="_blank">
           <img src="~/assets/images/delivery-methods2.png" alt="FedEx">
+        </a>
+        <a href="https://www.dhl.com" target="_blank">
+          <img src="~/assets/images/delivery-methods4.png" alt="DHL">
         </a>
         <a href="https://portraitpainting.com" target="_blank">
           <img src="~/assets/images/logo-portrait.png" alt="Portrait">
@@ -80,12 +83,12 @@
       </NuxtLink>
     </div>
     <div class="foot-information">
-      <div class="friends-link acea-row row-middle">
-        <NuxtLink to="/privacy-policy" class="friends-item">Privacy Policy</NuxtLink>
-        <NuxtLink to="/terms-and-conditions" class="friends-item">Terms of Condition</NuxtLink>
-        <NuxtLink to="/cookies-policy" class="friends-item">Cookies Policy</NuxtLink>
-        <NuxtLink to="/our-return-policy" class="friends-item">Our Return Policy</NuxtLink>
-      </div>
+<!--      <div class="friends-link acea-row row-middle">-->
+<!--        <NuxtLink to="/privacy-policy" class="friends-item">Privacy Policy</NuxtLink>-->
+<!--        <NuxtLink to="/terms-and-conditions" class="friends-item">Terms of Condition</NuxtLink>-->
+<!--        <NuxtLink to="/cookies-policy" class="friends-item">Cookies Policy</NuxtLink>-->
+<!--        <NuxtLink to="/our-return-policy" class="friends-item">Our Return Policy</NuxtLink>-->
+<!--      </div>-->
       <div class="text-gray-600 mt-10">
         Business Address: Kam Sheung Road, Yuen Long, Hong Kong DD106 Lot 1479C Lot
       </div>
@@ -93,16 +96,20 @@
         Email: <a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a>
       </div>
     </div>
+    <div class="copyright mt-10 text-gray-600" style="line-height: 1.7">
+      © 1989-{{ new Date().getFullYear() }} ARTDAFEN.COM - Affordable Museum Quality Oil Painting Reproductions for Sale Online. <br>
+      According to the intellectual property rights, we will only sell artworks in the public domain which means the original artists died no less than 70 years. If you find any paintings listed may have copyright problem, please contact us to remove.
+    </div>
   </footer>
   <!--app-底部-->
   <footer class="foot-app app">
     <div class="footer-menu">
-      <div class="footer-link">
-        <NuxtLink to="/privacy-policy">Privacy Policy</NuxtLink>
-        <NuxtLink to="/terms-and-conditions">Terms of Condition</NuxtLink>
-        <NuxtLink to="/cookies-policy">Cookies Policy</NuxtLink>
-        <NuxtLink to="/our-return-policy">Our Return Policy</NuxtLink>
-      </div>
+<!--      <div class="footer-link">-->
+<!--        <NuxtLink to="/privacy-policy">Privacy Policy</NuxtLink>-->
+<!--        <NuxtLink to="/terms-and-conditions">Terms of Condition</NuxtLink>-->
+<!--        <NuxtLink to="/cookies-policy">Cookies Policy</NuxtLink>-->
+<!--        <NuxtLink to="/our-return-policy">Our Return Policy</NuxtLink>-->
+<!--      </div>-->
       <div class="foot-pad">
         <ul class="footer-item P_parent">
           <li
@@ -111,13 +118,11 @@
             v-for="(menu, index) in footerList"
             :key="menu.name"
           >
-            <NuxtLink :to="menu.url" v-if="menu.url">{{ menu.name }}</NuxtLink>
-            <span v-else>{{ menu.name }}</span>
+            <NuxtLink :to="menu.url">{{ menu.name }}</NuxtLink>
             <div class="footer-tig P_tig" @click="toggleMenu(index)"></div>
             <ul class="footer_nav2 footer-cont">
               <li v-for="subMenu in menu.children" :key="subMenu.name">
-                <NuxtLink :to="subMenu.url" v-if="subMenu.url">{{ subMenu.name }}</NuxtLink>
-                <span v-else>{{ subMenu.name }}</span>
+                <NuxtLink :to="subMenu.url">{{ subMenu.name }}</NuxtLink>
               </li>
             </ul>
           </li>
@@ -128,17 +133,17 @@
       <div class="partner">
         <p class="mb-10">Follow Us</p>
         <div class="social-icon acea-row gap-sm">
-          <a href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
-            <span class="iconfont icon-Youtube"></span>
+          <a class="social-item" href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
+            <span class="iconfont icon-Youtube "></span>
           </a>
-          <a href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">
-            <span class="iconfont icon-instagram"></span>
+          <a class="social-item" href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">
+            <span class="iconfont icon-instagram "></span>
           </a>
-          <a href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
-            <span class="iconfont icon-douyinjumuguanli"></span>
+          <a class="social-item" href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
+            <span class="iconfont icon-douyinjumuguanli "></span>
           </a>
-          <a href="https://x.com/artdafen" target="_blank" title="x">
-            <span class="iconfont icon-tuite"></span>
+          <a class="social-item" href="https://x.com/artdafen" target="_blank" title="x">
+            <span class="iconfont icon-tuite "></span>
           </a>
         </div>
       </div>
@@ -151,11 +156,14 @@
           <a href="https://www.ups.com" target="_blank">
             <img src="~/assets/images/delivery-methods1.png" alt="UPS">
           </a>
-          <a href="https://subang.chemanman.com" target="_blank">
-            <img src="~/assets/images/delivery-methods3.png" alt="SuBang">
-          </a>
+          <!--<a href="https://subang.chemanman.com" target="_blank">-->
+          <!--  <img src="~/assets/images/delivery-methods3.png" alt="SuBang">-->
+          <!--</a>-->
           <a href="https://www.fedex.com" target="_blank">
             <img src="~/assets/images/delivery-methods2.png" alt="FedEx">
+          </a>
+          <a href="https://www.dhl.com" target="_blank">
+            <img src="~/assets/images/delivery-methods4.png" alt="FedEx">
           </a>
           <a href="https://portraitpainting.com" target="_blank">
             <img src="~/assets/images/logo-portrait.png" alt="Portrait">
@@ -167,7 +175,6 @@
         refer to the specific content on each product page.</p>
     </div>
   </footer>
-
 </template>
 
 <script setup lang="ts">
@@ -175,14 +182,27 @@ import {onMounted, ref} from "vue";
 import {getNoticeBtoApi} from "~/api/modules/notice/notice";
 import type {INotice} from "~/api/interface/notice/notice";
 import {CONTACT_EMAIL} from "~/config";
+import {getFaqByQuote} from "~/config/faq";
 
 onMounted(() => {
   getNoticeBto()
 })
 
 const router = useRouter()
-
+const faqList = getFaqByQuote('footer')
 const footerList = ref([
+  {
+    name: 'Agreement',
+    url: 'javascript:void(0)',
+    auth: false,
+    children: [
+      {name: 'Privacy Policy', url: 'privacy-policy'},
+      {name: 'Terms of Condition', url: '/terms-and-conditions'},
+      // {name: 'Cookies Policy', url: '/cookies-policy'},
+      {name: 'Our Return Policy', url: '/our-return-policy'},
+      {name: 'Shipping & Delivery', url: '/shipping-and-delivery'},
+    ]
+  },
   {
     name: 'ABOUT US',
     url: '/about',
@@ -209,10 +229,7 @@ const footerList = ref([
     url: '/faq',
     auth: false,
     children: [
-      {name: 'Has My Order Been Shipped Yet?', url: '/faq?name=2-1'},
-      {name: 'How Do I Return An Item?', url: '/faq?name=4-1'},
-      {name: 'Can I Return A Personalized Item?', url: '/faq?name=4-2'},
-      {name: 'I Entered the Wrong Shipping Address – What Should I Do?', url: '/faq?name=3-2'},
+      ...faqList.map(item => ({name: item.title, url: item.url}))
     ]
   }
 ])
@@ -307,6 +324,24 @@ const getNoticeBto = async () => {
           background: var(--color-primary);
         }
       }
+    }
+
+  }
+}
+
+.social-icon {
+  .social-item {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+
+    .iconfont {
+      font-size: 20px;
     }
 
   }
@@ -503,10 +538,9 @@ const getNoticeBto = async () => {
       }
 
       .social-icon {
-        color: #fff;
 
-        .iconfont {
-          font-size: 30px;
+        .social-item {
+          background: #303033;
         }
       }
     }

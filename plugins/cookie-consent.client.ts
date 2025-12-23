@@ -3,6 +3,7 @@ import * as CookieConsent from 'vanilla-cookieconsent';
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
 
 export default defineNuxtPlugin(() => {
+    return; // 暂时不执行，需要开启就删除本行
     if (!process.client) return;
 
     // 你原文件里的默认配置大致结构（可按需细化）

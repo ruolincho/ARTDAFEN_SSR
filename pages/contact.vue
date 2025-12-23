@@ -1,56 +1,61 @@
 <template>
   <section class="contact-section">
-    <div class="container">
-      <h1 class="text-26 f-bold pt-lg-50 pt-30">Contact Us</h1>
-      <p class="text-16 text-gray-600 my-20">
-        ARTDAFEN is a curated online platform for art transactions, introducing a wide range of domestic and
-        international brands. If you are interested in having your brand listed on our platform, working with us as a
-        partner, or inquiring about bulk purchases or consulting, please fill out the appropriate form for each case.
+    <div class="container" style="line-height: 2">
+      <h1 class="text-30 f-bold pt-lg-50 py-30">Contact Us</h1>
+      <p class="text-16 text-gray-600">
+        <span class="text-gray-700 f-bold">Your Vision, Our Masterpiece — Any Medium, Any Size.</span> <br/>
+        At <span class="text-gray-700 f-bold">ARTDAFEN</span>, we bridge the gap between imagination and reality.
+        Whether you are sourcing for a boutique hotel or
+        curating a private collection, we provide a one-stop solution for high-end art. <br/>
       </p>
-      <h2 class="text-20 f-bold-500 my-20">Brand Entry Procedure</h2>
-      <ul class="list-ul decimal my-20">
-        <li class="text-16 text-gray-600 mb-10">Submit an entry application.</li>
-        <li class="text-16 text-gray-600 mb-10">Our team will review your application. (If your brand/category fits our
-          direction, we will contact you via
-          phone or email.)
+      <p class="text-16 text-gray-600">
+        <span class="text-gray-700 f-bold">Custom Oil Paintings</span> Can't find what you're looking for? Send us a
+        request.
+      </p>
+      <ul class="list-ul disc">
+        <li class="text-16 text-gray-600">
+          <span class="text-gray-700 f-bold">Unlisted Works:</span> We recreate museum-quality reproductions of any
+          artwork in history.
         </li>
-        <li class="text-16 text-gray-600 mb-10">Proceed with the agreement process once all entry conditions are
-          confirmed.
-        </li>
-      </ul>
-      <h2 class="text-20 f-bold-500 my-20">※ Important Notes on Brand Entry</h2>
-      <ul class="list-ul decimal my-20">
-        <li class="text-16 text-gray-600 mb-10">ARTDAFEN only accepts brands that align with our business direction and
-          sales strategy.
-        </li>
-        <li class="text-16 text-gray-600 mb-10">Only after reviewing your application can we determine whether a brand
-          is eligible to enter and proceed with the agreement. Inquiries via individual emails or mail are not accept.
-        </li>
-        <li class="text-16 text-gray-600 mb-10">Brands involved in categories such as agency distribution, home goods,
-          wholesale, and private labels that do not align with ARTDAFEN’s business direction will not be accepted. (For
-          imported goods, import declaration and certification must be available.)
-        </li>
-        <li class="text-16 text-gray-600 mb-10">If your team cannot handle key operational tasks (such as product
-          registration, delivery, and CS) or assign a dedicated manager, your application may be declined.
+        <li class="text-16 text-gray-600">
+          <span class="text-gray-700 f-bold">Photo to Painting:</span> Turn your cherished memories—portraits, pets, or
+          landscapes—into handmade oil paintings.
         </li>
       </ul>
-      <h2 class="text-20 f-bold-500 my-20">※ For bulk purchase inquiries, please include [brand/product introduction],
-        intended items, quantity, and preferred delivery date.</h2>
-      <ul class="list-ul my-20">
-        <li class="text-16 text-gray-600 mb-10">We appreciate your interest in ARTDAFEN and value your proposal.</li>
-        <li class="text-16 text-gray-600 mb-10">Our team will review your proposal in the order received.</li>
-        <li class="text-16 text-gray-600 mb-10">If we determine that there is potential for collaboration, we will
-          contact you within a week. If progress is difficult at this time, we may not be able to respond
-          individually—we thank you for your understanding.
+      <p class="text-16 text-gray-600">
+        <span class="text-gray-700 f-bold">Mixed Media & Textural Art</span> Beyond canvas. We push the boundaries of
+        traditional art by combining diverse materials — <span class="text-gray-700 f-bold">metal, resin, wood, fabric, and acrylics</span>.
+      </p>
+      <ul class="list-ul disc">
+        <li class="text-16 text-gray-600">
+          <span class="text-gray-700 f-bold">Rich Textures:</span> Create depth and character with 3D relief art and
+          heavy-texture abstracts.
+        </li>
+        <li class="text-16 text-gray-600">
+          <span class="text-gray-700 f-bold">Modern Aesthetics:</span> Perfect for contemporary luxury interiors that
+          demand a unique tactile experience.
         </li>
       </ul>
-      <div class="text-60 text-center f-bold-500 border-t-xl border-gray-700 py-lg-40 py-20">
-        <p class="my-lg-60 my-30">info@artdafen.com</p>
+      <p class="text-16 text-gray-600">
+        <span class="text-gray-700 f-bold">Bespoke Sculptures</span> Looking for something dimensional? We specialize in
+        high-fidelity sculpture reproductions. From classic statues to modern designs, we craft works in any size, from
+        tabletop decor to large-scale outdoor installations.
+      </p>
+      <p class="text-16 text-gray-600">
+        <span class="text-gray-700 f-bold">Wholesale & Bulk Orders</span> Ready to scale? We support bulk purchasing
+        with consistent quality across all categories. Please send us your project details (Brand Intro, Quantity,
+        Deadline), and let’s create something extraordinary together.
+      </p>
+      <p class="text-16 text-gray-600">
+        <span class="text-gray-700 f-bold">Get Your Custom Quote</span>
+      </p>
+      <div class="text-60 text-center f-bold-500 border-t-xl border-gray-700 mt-lg-40 mt-20">
+        <p class="my-lg-60 my-30">{{ CONTACT_EMAIL }}</p>
       </div>
     </div>
   </section>
 
-  <div class="info-section">
+  <section class="info-section">
     <div class="container">
       <div class="info-list row">
         <div class="col-sm-6" v-for="(item, index) in pointList" :key="index">
@@ -73,40 +78,41 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
 import {pageMeta} from "~/config/pageMeta";
+import {CONTACT_EMAIL} from "~/config";
 
 useHead(pageMeta["/contact"] ?? {});
 
 const pointList = ref([
   {
     detail: 'Kam Sheung Road, Yuen Long, Hong Kong DD106 Lot 1479C Lot',
-    tel: '',
+    tel: '+1 603 631 6753',
     email: 'info@artdafen.com',
   },
-  {
-    detail: '103, 1st Floor, Dafen Oil Painting Trading Plaza, Buji Street, Longgang District, Shenzhen',
-    tel: '',
-    email: 'infocn@artdafen.com',
-  },
-  {
-    detail: '111 Morgan Street, Room 323, Stamford CT 06905',
-    tel: '',
-    email: 'infous@artdafen.com',
-  },
-  {
-    detail: '23 Rue du Bois Joli,44200 Nantes',
-    tel: '(213)656-3859',
-    email: 'infofr@artdafen.com',
-  },
-  {
-    detail: 'unit 5-6, Wellington house, Camden street, Brighton, East Sussex BN41 1DU, UK',
-    tel: '',
-    email: 'infouk@artdafen.com',
-  }
+  // {
+  //   detail: '103, 1st Floor, Dafen Oil Painting Trading Plaza, Buji Street, Longgang District, Shenzhen',
+  //   tel: '',
+  //   email: 'infocn@artdafen.com',
+  // },
+  // {
+  //   detail: '111 Morgan Street, Room 323, Stamford CT 06905',
+  //   tel: '',
+  //   email: 'infous@artdafen.com',
+  // },
+  // {
+  //   detail: '23 Rue du Bois Joli,44200 Nantes',
+  //   tel: '(213)656-3859',
+  //   email: 'infofr@artdafen.com',
+  // },
+  // {
+  //   detail: 'unit 5-6, Wellington house, Camden street, Brighton, East Sussex BN41 1DU, UK',
+  //   tel: '',
+  //   email: 'infouk@artdafen.com',
+  // }
 ])
 </script>
 

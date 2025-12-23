@@ -114,6 +114,8 @@ declare namespace General {
         cover?: string
         /*起始价*/
         retailPrice: string
+        /*市场价*/
+        marketPrice: string
         /*兑换积分*/
         redeemPoints: string
         /*总销售量*/

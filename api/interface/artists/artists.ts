@@ -17,6 +17,8 @@ export namespace IArtists {
         id: string;
         /*真实姓名 */
         name: string;
+        /*肖像 */
+        portrait: string;
     }
 
     /*艺术家列表查询结果*/

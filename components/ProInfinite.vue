@@ -16,7 +16,7 @@
       </div>
     </template>
     <!-- 空数据 -->
-    <slot name="empty" v-else>
+    <slot name="empty" v-else-if="requestFinished">
       <div class="text-center py-60">
         <span class="iconfont icon-empty text-50"></span>
         <p class="text-20 f-bold mt-20">No Data</p>
@@ -72,7 +72,8 @@ const {
   stopObserver,
   loading,
   loaded,
-  clear
+  clear,
+  requestFinished
 } = useInfinite(
   props.requestApi,
   props.initParam,

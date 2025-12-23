@@ -14,6 +14,7 @@ export namespace ProList {
       [key: string]: any;
     };
     loading: boolean;
+    requestFinished: boolean;
   }
 }
 
@@ -34,6 +35,7 @@ export namespace ProInfinite {
     };
     loading: boolean;
     loaded: boolean;
+    requestFinished: boolean;
   }
 }
 

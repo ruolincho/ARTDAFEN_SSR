@@ -38,6 +38,7 @@ export const useInfinite = (
         totalParam: {},
         loading: false,
         loaded: false,
+        requestFinished: false,
     });
 
     let observer: IntersectionObserver | null = null;
@@ -65,6 +66,7 @@ export const useInfinite = (
 
         if (!api || state.loading || state.loaded) return;
         state.loading = true;
+        state.requestFinished = false;
         try {
             await delayLoading(loadingTime);
             // 先把初始化参数和分页参数放到总参数里面
@@ -99,11 +101,13 @@ export const useInfinite = (
             }
 
             requestSuccess && requestSuccess(data);
-            state.loading = false;
             updatePageable({ pageNum: pageNum + 1, pageSize, total });
         } catch (error) {
-            state.loading = false;
             requestError && requestError(error);
+        }
+        finally {
+            state.loading = false;
+            state.requestFinished = true;
         }
     };
 

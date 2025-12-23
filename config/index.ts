@@ -11,9 +11,9 @@ export const PRODUCT_URL: string = '/product';
 // Top100检索地址
 export const BEST_URL: string = '/best';
 // 客服国际区号
-export const COUNTRY_CODE: string = '+86';
+export const COUNTRY_CODE: string = '+1';
 // 客服电话
-export const CUSTOMER_SERVICE: string = '13760436780';
+export const CUSTOMER_SERVICE: string = '603 631 6753 ';
 // 联系邮箱
 export const CONTACT_EMAIL: string  = 'info@artdafen.com';
 // Google Analytics Id
@@ -30,3 +30,5 @@ export const TAWK_PROPERTY_ID: string = '68f9a9b103c0d7194f5d0e4d'
 export const TAWK_WIDGET_ID: string = '1j87jtnt0'
 // YouTube 视频代理地址
 export const YOUTUBE_PROXY_URL: string = 'https://proxy-youtube.artdafenpay.workers.dev/youtube'
+// 活动弹窗存储Key名
+export const ACTIVITY_WINDOW_CLOSED: string = 'activity_window_closed'

@@ -1,24 +1,9 @@
 <template>
   <div class="room-layout" v-show="visible" @click="visible = false">
     <div class="layout-container" @click.stop>
-      <div class="app-menu-box acea-row row-center-wrapper">
-        <div class="acea-row row-center-wrapper" @click="isOpenMenu = !isOpenMenu">
-          <span class="mr-10">{{ list[roomIndex].name }}</span>
-          <span class="iconfont" :class="[isOpenMenu ? 'icon-up' : 'icon-down']"></span>
-        </div>
 
-        <ul class="drop-list" :class="{ on: isOpenMenu }">
-          <li
-            class="cursor-pointer py-10"
-            v-for="(room, index) in list"
-            :key="index"
-            @click="chooseRoom(index)"
-          >
-            {{ room.name }}
-          </li>
-        </ul>
-      </div>
       <div class="acea-row">
+        <!-- PC端房型列表 -->
         <div class="menu-box text-center">
           <ul class="menu-list text-16 ">
             <li
@@ -49,6 +34,7 @@
 
         </div>
 
+        <!-- PC端和移动端预览区域 -->
         <div class="room-box flex-1 overflow-hidden">
           <div class="preview-box" ref="previewBox">
             <img class="pictures" :src="bgSrc" alt="Scene Graph">
@@ -86,21 +72,47 @@
           </div>
         </div>
       </div>
-      <el-upload
-        v-show="!appStore.isPc"
-        class="acea-row row-center-wrapper mt-20"
-        :accept="fileType.join(',')"
-        :before-upload="beforeUpload"
-        :on-change="uploadChange"
-        :auto-upload="false"
-        :show-file-list="false"
-      >
-        <span class="text-underline">Upload A Photo Of Your Own Room</span>
-      </el-upload>
+
+      <!-- 移动端房型名称 -->
+      <div class="app-menu-box">{{ roomName }}</div>
+
+      <!-- 移动端房型列表 -->
+      <div class="app-footer-box" :style="{ background: `url(${bgSrc}) no-repeat center center / cover` }">
+        <div class="app-footer-inner acea-row row-between-wrapper py-15">
+          <el-upload
+              v-show="!appStore.isPc"
+              :accept="fileType.join(',')"
+              :before-upload="beforeUpload"
+              :on-change="uploadChange"
+              :auto-upload="false"
+              :show-file-list="false"
+          >
+            <div class="acea-row row-column row-middle px-15">
+              <div class="bg-white rounded-full p-10 shadow-md">
+                <span class="iconfont icon-camera-switching" style="font-size: 25px;"/>
+              </div>
+              <p class="mt-10 f-bold">Upload Photo</p>
+            </div>
+          </el-upload>
+          <div class="flex-1 overflow-hidden">
+            <div class="app-room-list acea-row nowrap scroll-x scroll-hide py-10">
+              <div
+                  class="item shadow-md"
+                  v-for="(item, index) in room" :key="item.name + index"
+                  @click="chooseRoom(index)"
+              >
+                <img :src="imagePrefix(item.photos[0]!)" alt="">
+                <p class="line1">{{ item.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 关闭按钮 -->
       <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="visible = false">
         <span class="iconfont icon-close"></span>
       </div>
-      <div class="mask" v-if="isOpenMenu" @click="isOpenMenu = false"></div>
     </div>
   </div>
 </template>
@@ -117,6 +129,7 @@ import type {PixelType} from "./interface";
 import list from '~/config/room'
 import {useAppStore} from "~/stores/modules/app";
 import {useLockScroll} from "~/composables/useLockScroll";
+import room from "~/config/room";
 
 defineOptions({
   name: 'Room',
@@ -133,23 +146,17 @@ const props = defineProps<Props>();
 const appStore = useAppStore()
 const modules = [Navigation]
 const roomIndex = ref(0)
-const roomPhotos = computed(() => list[roomIndex.value].photos)
-const bgSrc = ref(imagePrefix('/static/room/Bathroom/01.webp'))
+const roomPhotos = computed(() => list[roomIndex.value]?.photos || [])
+const roomName = computed(() => list[roomIndex.value]?.name || '')
+const bgSrc = ref(imagePrefix(roomPhotos.value[0] || ''))
 const chooseRoom = (index: number) => {
   roomIndex.value = index
-  bgSrc.value = imagePrefix(roomPhotos.value[0])
-
-
-  if (!appStore.isPc) {
-    isOpenMenu.value = false
-  }
-
+  bgSrc.value = imagePrefix(roomPhotos.value[0] || '')
 }
 const choosePhoto = (photo: string) => {
   bgSrc.value = imagePrefix(photo)
 }
 
-const isOpenMenu = ref(false)
 const visible = ref(false)
 
 const previewBox = ref<HTMLDivElement | null>(null);
@@ -178,9 +185,12 @@ const dragBoxStyle = computed(() => ({
   width: `${size.value.width}px`,
   height: `${size.value.height}px`,
   transition: isMoving.value ? 'none' : 'all 0.2s ease',
-  boxShadow: `-${Math.round(size.value.width / (defaultWidth / 10))}px
-              ${Math.round(size.value.width / (defaultWidth / 10))}px
-              ${Math.round(size.value.width / (defaultWidth / 6))}px 0 #0000004D`
+  filter:  `drop-shadow(
+  -${Math.round(size.value.width / (defaultWidth / 10))}px
+  ${Math.round(size.value.width / (defaultWidth / 10))}px
+  ${Math.round(size.value.width / (defaultWidth / 6))}px #0000004D)`,
+  transform: 'translate3d(0, 0, 0)',
+  'will-change': 'filter',
 }));
 
 interface Point {
@@ -371,38 +381,60 @@ defineExpose({
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-width: 1100px;
-    width: 100%;
+    width: 980px;
     background: #fff;
 
     .app-menu-box {
-      height: 39px;
-      position: relative;
+      position: absolute;
       z-index: 100;
-      font-size: 14px;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 5px 20px;
       display: none;
-      background: #fff;
+    }
 
-      .drop-list {
-        position: absolute;
-        z-index: 11;
+    .app-footer-box {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      display: none;
+
+      .app-footer-inner {
         width: 100%;
-        left: 0;
-        top: 100%;
-        background: #ffffff;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.25s linear;
+        backdrop-filter: blur(20px);
 
-        li {
-          text-align: center;
-          padding: 6px 0;
-        }
+        .app-room-list {
+          .item {
+            width: 100px;
+            margin-right: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+            backdrop-filter: blur(15px);
+            background: rgba(255,255,255,0.8);
+            padding: 10px 5px;
 
-        &.on {
-          max-height: 500px;
+            img {
+              width: 100%;
+              height: 75px;
+              object-fit: cover;
+            }
+
+            p {
+              text-align: center;
+              font-size: 12px;
+              margin-top: 10px;
+            }
+          }
         }
       }
+
     }
 
     .menu-box {
@@ -433,7 +465,7 @@ defineExpose({
         .pictures {
           height: 100%;
           width: 100%;
-          object-fit: contain;
+          object-fit: cover;
           pointer-events: none; /* 禁止干扰拖拽 */
         }
 
@@ -500,21 +532,7 @@ defineExpose({
       width: 39px;
       height: 39px;
       font-size: 12px;
-    }
-
-    .mask{
-      position: fixed;
-      z-index: 2;
-      inset: 0;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px); /* 兼容移动端浏览器 */
-      touch-action: none; /* 阻止触摸滚动穿透 */
-      -webkit-overflow-scrolling: touch; /* 启用iOS弹性滚动 */
+      background: #fff;
     }
   }
 }
@@ -524,8 +542,13 @@ defineExpose({
     .layout-container {
       margin: auto;
       height: 100%;
+      width: 100%;
 
       .app-menu-box {
+        display: block;
+      }
+
+      .app-footer-box {
         display: flex;
       }
 
@@ -536,9 +559,11 @@ defineExpose({
       .room-box {
 
         .preview-box {
-          aspect-ratio: 1 / 1;
+          //aspect-ratio: 1 / 1;
           width: 100%;
           height: auto;
+          max-height: 74.57vw;
+          overflow: hidden;
 
           .drag-box .resize-handle {
             display: block;
@@ -551,6 +576,20 @@ defineExpose({
             width: 100%;
             height: auto;
           }
+        }
+      }
+
+      .close-box {
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        backdrop-filter: blur(10px);
+        width: 30px;
+        height: 30px;
+        right: 10px;
+        top: 10px;
+
+        .iconfont {
+          font-size: 14px;
         }
       }
     }

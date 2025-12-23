@@ -1,287 +1,207 @@
 <template>
   <section>
-    <div class="container-middle">
-      <h1 class="text-30 f-bold title1">Terms and Conditions</h1>
-      <p class="text-14 text1 mb-15">
-        Welcome to Dafen.com! Our services and products are provided subject to the following terms and conditions. By
-        using the website, you agree to be bound by these terms and conditions. Please read them carefully, as they
-        contain important provisions relating to your use of the site, including an agreement to engage in binding
-        arbitration to resolve any disputes between us. The website is owned and operated by Dafen.com, Inc. ("Dafen.com").
-      </p>
-
-      <h2 class="text-18 f-bold title1">
-        I. Privacy
+    <div class="container-middle text-14" style="line-height: 2">
+      <h1 class="text-30 f-bold pt-lg-50 py-30">Terms and Conditions</h1>
+      <h2 class="text-18 f-bold my-15">
+        Overview
       </h2>
-      <p class="text-14 text1 mb-15">You should review our <a href="/privacy-policy" class="text-secondary text-underline">Privacy Policy</a> to understand our privacy practices.</p>
-
-      <h2 class="text-18 f-bold title1">
-        II. Terms of Use<br>
-        License and Website Access
+      <p>
+        This website/application is operated by <span class="text-secondary"><span class="text-secondary">artdafen.com</span></span> team. Throughout the website/application, the terms “we”, “us” and “our” refer to <span class="text-secondary">artdafen.com</span> team. <span class="text-secondary">artdafen.com</span> offers this website/application, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.
+      </p>
+      <p>
+        By visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be bound by the following terms and conditions (“TERMS AND CONDITIONS”, “Terms”), including those additional terms, conditions and policies referenced herein and/or available by hyperlink. These TERMS AND CONDITIONS apply to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content.
+      </p>
+      <p>
+        Please read these TERMS AND CONDITIONS carefully before accessing or using our website/application. By accessing or using any part of the site, you agree to be bound by these TERMS AND CONDITIONS. If you do not agree to all the terms and conditions of this agreement, then you may not access the website/application or use any services. If these TERMS AND CONDITIONS are considered an offer, acceptance is expressly limited to these TERMS AND CONDITIONS.
+      </p>
+      <p>
+        Any new features or tools which are added to the current store shall also be subject to the TERMS AND CONDITIONS. You can review the most current version of the TERMS AND CONDITIONS at any time on this page. We reserve the right to update, change or replace any part of these TERMS AND CONDITIONS by posting updates and/or changes to our website/application. It is your responsibility to check this page periodically for changes. Your continued use of or access to the website/application following the posting of any changes constitutes acceptance of those changes.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 1 - Online Store Terms
       </h2>
-      <p class="text-14 text1">We grant you a limited, revocable license to access and make personal use of the
-        website as our customer. However, you are not permitted to:</p>
-      <ul class="text-14 text1 list-ul disc">
-        <li>reproduce, duplicate, copy, sell or otherwise exploit the website or any product image, product listing,
-          product description, price, page layout, page design, trade dress, trademark, logo or other content ("Website
-          Content") for any commercial purpose, except as expressly provided;
-        </li>
-        <li>use a robot, spider or data mining or extraction tool or process to monitor, extract or copy Website Content
-          (except in the operation or use of internet "search engines," hit counters or similar technology);
-        </li>
-        <li>use any meta tags, search terms, key terms, or the like that contain the website’s name or trademarks used
-          on the website;
-        </li>
-        <li>engage in any activity that interferes with the website or another user’s ability to use the website;</li>
-        <li>modify, create derivative works from, reverse engineer, decompile or disassemble any technology used to
-          provide the website and the services offered on the website; or
-        </li>
-        <li>assist or encourage any third party in engaging in any activity prohibited by these Terms of Use.</li>
-      </ul>
-      <p class="text-14 text1 mb-15">Any use of the website or Website Content that is not expressly authorized herein
-        is prohibited and immediately terminates the license granted herein.</p>
-
-      <h2 class="text-18 f-bold title1">
-        Electronic Communications
+      <p>
+        By agreeing to these TERMS AND CONDITIONS,you may not use our products for any illegal or unauthorized purpose nor may you, in the use of the Service, violate any laws in your jurisdiction (including but not limited to copyright laws).
+      </p>
+      <p>
+        You must not transmit any worms or viruses or any code of a destructive nature.
+      </p>
+      <p>
+        A breach or violation of any of the Terms will result in an immediate termination of your Services.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 2 - General Conditions
       </h2>
-      <p class="text-14 text1">You consent to receive communications from us by e-mail. You agree that all agreements,
-        notices, disclosures and other communications that we provide to you by e-mail satisfy any legal requirement
-        that such communications be in writing.</p>
-      <p class="text-14 text1 mb-15">If you opt in to receive SMS (text messages) from Dafen.com (as/when available), or
-        use a mobile application, the following additional terms and conditions ("Mobile Terms") also apply to you. Your
-        access to the Sites via your mobile device or use of a mobile application confirms your agreement to these
-        Mobile Terms, as well as the rest of the Terms and Conditions.</p>
-      <p class="text-14 text1 mb-15">By opting in, you agree to receive promotional SMS text messages on your mobile
-        device. Your consent is not required as a condition of purchasing any goods or services from Dafen.com. By
-        agreeing to receive SMS messages from Dafen.com, you certify that you are over 18 years of age and (a) you are the
-        mobile account holder or (b) you have the account holder’s permission to enroll the designated mobile phone
-        number and can incur any mobile message or data charges. You agree that you are solely responsible for all
-        message and data charges that apply to use of your mobile device to access the Sites or use of a mobile
-        application. All such charges are billed by and payable to your mobile service provider. Please contact your
-        participating mobile service provider for pricing plans, participation status and details. You understand that
-        wireless through Wi-Fi or a participating mobile service provider may not be available in all areas at all times
-        and may be affected by product, software, coverage or other service changes made by your mobile service provider
-        or otherwise. Additional terms and conditions may apply to your use of a mobile application, based on the type
-        of mobile device on which you install and use the mobile application. You can opt out of receiving SMS messages
-        at any time.</p>
-
-      <h2 class="text-18 f-bold title1">
-        Your Account
+      <p>
+        We reserve the right to refuse service to anyone for any reason at any time. You understand that your content (not including credit card information), may be transferred unencrypted and involve (a) transmissions over various networks; and (b) changes to conform and adapt to technical requirements of connecting networks or devices. Credit card information is always encrypted during transfer over networks.
+      </p>
+      <p>
+        You agree not to reproduce, duplicate, copy, sell, resell or exploit any portion of the Service, use of the Service, or access to the Service or any contact on the website/application through which the service is provided, without express written permission by us.
+      </p>
+      <p>
+        The headings used in this agreement are included for convenience only and will not limit or otherwise affect these Terms.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 3 - Accuracy, Completeness And Timeliness Of Information
       </h2>
-      <p class="text-14 text1 mb-15">If you use the website, you are responsible for maintaining the confidentiality of
-        your account and password and for restricting access to your computer, and you agree to accept responsibility
-        for all activities that occur under your account or password. We reserve the right to refuse service, terminate
-        accounts, remove or edit content, or cancel orders at our sole discretion.
+      <p>
+        The material on this site is provided for general information only and should not be relied upon or used as the sole basis for making decisions without consulting primary, more accurate, more complete or more timely sources of information. Any reliance on the material on this site is at your own risk.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Copyright
+      <p>
+        This site may contain certain historical information. Historical information, necessarily, is not current and is provided for your reference only. We reserve the right to modify the contents of this site at any time, but we have no obligation to update any information on our site. You agree that it is your responsibility to monitor changes to our site.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 4 - Modifications To The Service And Prices
       </h2>
-      <p class="text-14 text1 mb-15">All Website Content is our property or the property of our content suppliers and is
-        protected by international copyright laws. The purchase of any product does not provide the purchaser with any
-        copyright interest or other intellectual property right in the product. All Website Content that is not our
-        property is used with permission. The arrangement and compilation of all Website Content is our exclusive
-        property and is protected by international copyright laws. All software used on the website is our property or
-        the property of our software suppliers and is protected by international copyright laws.</p>
-
-      <h2 class="text-18 f-bold title1">
-        Trademarks
+      <p>
+        Prices for our products are subject to change without notice.
+      </p>
+      <p>
+        We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 5 - Products Or Services (if Applicable)
       </h2>
-      <p class="text-14 text1 mb-15">Certain graphics, logos, page headers, button icons, scripts, and service names are
-        trademarks, service marks, or trade dress of our company or our affiliated companies. Our trademarks and trade
-        dress may not be used for any commercial or other purposes without our prior written consent. All other
-        trademarks and service marks not owned by Dafen.com or our affiliated companies that appear on the website are the
-        property of their respective owners and may or may not be used without their prior written consent.</p>
-
-      <h2 class="text-18 f-bold title1">
-        Copyright & Trademark Compliance; Complaints
+      <p>
+        Certain products or services may be available exclusively online through the website/application. These products or services may have limited quantities and are subject to return or exchange only according to our Return Policy.
+      </p>
+      <p>
+        We have made every effort to display as accurately as possible the colors and images of our products that appear at the store. We cannot guarantee that your computer monitor's display of any color will be accurate.
+      </p>
+      <p>
+        We reserve the right, but are not obligated, to limit the sales of our products or Services to any person, geographic region or jurisdiction. We may exercise this right on a case-by-case basis. We reserve the right to limit the quantities of any products or services that we offer. We reserve the right to discontinue any product at any time. Any offer for any product or service made on this site is void where prohibited.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 6 - Accuracy Of Billing And Account Information
       </h2>
-      <p class="text-14 text1 mb-15">
-        We honor the intellectual property rights of others. If you believe that your work has been copied or used on
-        the website in a way that constitutes copyright or trademark infringement, please notify us by following the
-        procedure set forth in the immediately following paragraph. Except in limited instances under authorized
-        agreements, we do not reproduce or manufacture the products offered on our site, but rather we purchase or
-        license products from third-party suppliers that represent to us that they have sufficient rights to allow us to
-        display and sell the products on the website. Upon receipt of any bona fide claim of infringement, or upon
-        becoming aware of any actual or alleged infringement by any other means, we will remove such actual or alleged
-        infringing product(s) from the website and/or cease sales of the product(s) pending our investigation.
+      <p>
+        We reserve the right to refuse any order you place with us. We may, in our sole discretion, limit or cancel quantities purchased per person, per household or per order. These restrictions may include orders placed by or under the same customer account, the same credit card, and/or orders that use the same billing and/or shipping address. In the event that we make a change to or cancel an order, we may attempt to notify you by contacting the e-mail and/or billing address/phone number provided at the time the order was made. We reserve the right to limit or prohibit orders that, in our sole judgment, appear to be placed by dealers, resellers or distributors.
       </p>
-
-      <p class="text-14 text1 mb-15">
-        Notice and Procedure for Making Claims of Copyright / Trademark Infringement
+      <p>
+        You agree to provide current, complete and accurate purchase and account information for all purchases made at our store. You agree to promptly update your account and other information, including your email address and credit card numbers and expiration dates, so that we can complete your transactions and contact you as needed.
       </p>
-      <p class="text-14 text1 mb-15">
-        If you believe that your work has been copied, distributed or used on the website in a way that constitutes
-        copyright or trademark infringement, please fill out the
-        <a href="" class="text-secondary text-underline">Notice of Claimed Infringement form</a> sign the form where
-        indicated and email to <a :href="`mailto:${CONTACT_EMAIL}`" class="text-secondary text-underline">{{ CONTACT_EMAIL }}</a> or submit it to:
+      <p>
+        For more details, please review our Return Policy.
       </p>
-
-      <p class="text-14 text1">
-        Dafen.com
-      </p>
-      <p class="text-14 text1">
-        Attention: Legal Department
-      </p>
-      <p class="text-14 text1">
-        5188 West 74th Street
-      </p>
-      <p class="text-14 text1 mb-15">
-        Indianapolis, IN 46268
-      </p>
-
-      <h2 class="text-18 f-bold title1">
-        Statement on Human Trafficking and Slavery
+      <h2 class="text-18 f-bold my-15">
+        Section 7 - Optional Tools
       </h2>
-      <p class="text-14 text1 mb-15">
-        We are part of a global community and supply chain. We are selective of our vendors and make efforts to ensure that the workers in this country and abroad who make up our supply chain are protected. We will not tolerate the involvement of our suppliers in human trafficking and slavery, including sweatshops and forced or child labor. We obtain contractual representations from our vendors of their compliance with such laws and have the discretion to, with or without notice, inquire on their practices.
+      <p>
+        We may provide you with access to third-party tools over which we neither monitor nor have any control nor input.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Notice to California Residents
+      <p>
+        You acknowledge and agree that we provide access to such tools ”as is” and “as available” without any warranties, representations or conditions of any kind and without any endorsement. We shall have no liability whatsoever arising from or relating to your use of optional third-party tools.
+      </p>
+      <p>
+        Any use by you of optional tools offered through the site is entirely at your own risk and discretion and you should ensure that you are familiar with and approve of the terms on which tools are provided by the relevant third-party provider(s). We may also, in the future, offer new services and/or features through the website/application (including, the release of new tools and resources). Such new features and/or services shall also be subject to these TERMS AND CONDITIONS.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 8 - Third-party Links
       </h2>
-      <p class="text-14 text1 mb-15">
-        Some of our products, such as our wood mounts and SwitchArt™ products, are made with composite wood products such as particleboard and medium-density fiberboard (MDF). These wood components are tested for safety in accordance with the California Composite Wood Products Airborne Toxic Control Measure (ATCM). Our products comply with applicable Phase 2 formaldehyde emission standards.
+      <p>
+        Certain content, products and services available via our Service may include materials from third-parties.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Reviews, Comments, Communications and Other Content
+      <p>
+        Third-party links on this site may direct you to third-party websites that are not affiliated with us. We are not responsible for examining or evaluating the content or accuracy and we do not warrant and will not have any liability or responsibility for any third-party materials or websites, or for any other materials, products, or services of third-parties.
+      </p>
+      <p>
+        We are not liable for any harm or damages related to the purchase or use of goods, services, resources, content, or any other transactions made in connection with any third-party websites. Please review carefully the third-party's policies and practices and make sure you understand them before you engage in any transaction. Complaints, claims, concerns, or questions regarding third-party products should be directed to the third-party.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 9 - User Comments, Feedback And Other Submissions
       </h2>
-      <p class="text-14 text1 mb-15">
-        Visitors may post or submit reviews, comments, suggestions, communications and other information via our website, by email or through one of our website operation partners, or social media channels. You agree not to submit, transmit, or otherwise make available in any manner any content (i) that is unlawful, harmful, obscene, hateful, threatening, abusive, defamatory, harassing, libelous, invasive of another's privacy, or is otherwise objectionable, (ii) that infringes the intellectual property rights of any party or (iii) which contains a chain letter or constitutes any form of commercial solicitation, political campaign, mass mailing, "spam" or software virus. You may not use a false e-mail address or otherwise provide information that would be misleading as to the origin of such content. Although we do not regularly review content you submit, we reserve the right to edit or remove any content that we find objectionable for any reason. You represent and warrant that you possess all necessary rights to use the content that you submit and that use of such content does not violate generally accepted standards of decency. You agree to defend, indemnify, and hold us harmless from and against any and all claims arising out of or relating to any content that you submit. By submitting content, you automatically grant to us, or warrant that the owner of such content has expressly granted to us, a royalty-free, perpetual, irrevocable, worldwide, unlimited, nonexclusive right and license to use, reproduce, create derivative works from, modify, publish, edit, translate, distribute, perform and display your user name or the content in any media, form, format, manner or forum now known or hereafter developed without compensation to you. We take no responsibility and assume no liability for any content posted by visitors to our website.
+      <p>
+        If, at our request, you send certain specific submissions (for example contest entries) or without a request from us you send creative ideas, suggestions, proposals, plans, or other materials, whether online, by email, by postal mail, or otherwise (collectively, 'comments'), you agree that we may, at any time, without restriction, edit, copy, publish, distribute, translate and otherwise use in any medium any comments that you forward to us. We are and shall be under no obligation (1) to maintain any comments in confidence; (2) to pay compensation for any comments; or (3) to respond to any comments.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Photos to Art Terms of Use
+      <p>
+        We may, but have no obligation to, monitor, edit or remove content that we determine in our sole discretion are unlawful, offensive, threatening, libelous, defamatory, pornographic, obscene or otherwise objectionable or violates any party’s intellectual property or these TERMS AND CONDITIONS.
+      </p>
+      <p>
+        You agree that your comments will not violate any right of any third-party, including copyright, trademark, privacy, personality or other personal or proprietary right. You further agree that your comments will not contain libelous or otherwise unlawful, abusive or obscene material, or contain any computer virus or other malware that could in any way affect the operation of the Service or any related website/application. You may not use a false e-mail address, pretend to be someone other than yourself, or otherwise mislead us or third-parties as to the origin of any comments. You are solely responsible for any comments you make and their accuracy. We take no responsibility and assume no liability for any comments posted by you or any third-party.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 10 - Personal Information
       </h2>
-      <p class="text-14 text1 mb-15">
-        Users of our Photos to Art service must review and understand our Photos to Art <a href="" class="text-secondary text-underline">Terms of Use</a>
+      <p>
+        Your submission of personal information through the store is governed by our Privacy Policy.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Use of My Gallery
+      <h2 class="text-18 f-bold my-15">
+        Section 11 - Errors, Inaccuracies And Omissions
       </h2>
-      <p class="text-14 text1 mb-15">By default, any products, including images uploaded by you via photos to art, that you add to My Gallery will be accessible to view and purchase by any third party who has access to your email address. You may change the settings on your gallery or galleries to private at any time by clicking "Edit Settings" within a specific gallery.</p>
-
-      <h2 class="text-18 f-bold title1">
-        Suggestions and Ideas
+      <p>
+        Occasionally there may be information on our site or in the Service that contains typographical errors, inaccuracies or omissions that may relate to product descriptions, pricing, promotions, offers, product shipping charges, transit times and availability. We reserve the right to correct any errors, inaccuracies or omissions, and to change or update information or cancel orders if any information in the Service or on any related website/application is inaccurate at any time without prior notice (including after you have submitted your order).
+      </p>
+      <p>
+        We undertake no obligation to update, amend or clarify information in the Service or on any related website/application, including without limitation, pricing information, except as required by law. No specified update or refresh date applied in the Service or on any related website/application, should be taken to indicate that all information in the Service or on any related website/application has been modified or updated.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 12 - Prohibited Uses
       </h2>
-      <p class="text-14 text1 mb-15">
-        Visitors may submit suggestions, ideas or questions to <a :href="`mailto:${CONTACT_EMAIL}`" class="text-secondary text-underline">{{ CONTACT_EMAIL }}</a>. By doing so, you acknowledge that we will be free to use, disclose, reproduce, modify, license, transfer and exploit any suggestions or ideas in any manner.
+      <p>
+        In addition to other prohibitions as set forth in the TERMS AND CONDITIONS, you are prohibited from using the site or its content: (a) for any unlawful purpose; (b) to solicit others to perform or participate in any unlawful acts; (c) to violate any international or HK’s regulations, rules, laws, or local ordinances; (d) to infringe upon or violate our intellectual property rights or the intellectual property rights of others; (e) to harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate based on gender, sexual orientation, religion, ethnicity, race, age, national origin, or disability; (f) to submit false or misleading information; (g) to upload or transmit viruses or any other type of malicious code that will or may be used in any way that will affect the functionality or operation of the Service or of any related website/application, other websites, or the Internet; (h) to collect or track the personal information of others; (i) to spam, phish, pharm, pretext, spider, crawl, or scrape; (j) for any obscene or immoral purpose; or (k) to interfere with or circumvent the security features of the Service or any related website/application, other websites, or the Internet. We reserve the right to terminate your use of the Service or any related website/application for violating any of the prohibited uses.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Third-Party Links and/or Services
+      <h2 class="text-18 f-bold my-15">
+        Section 13 - Disclaimer Of Warranties; Limitation Of Liability
       </h2>
-      <p class="text-14 text1 mb-15">
-        The website may contain links to or services offered by third parties that are not under the control of Dafen.com (“Third Party Services”). Any such Third Party Services are provided for your convenience only and you access them at your own risk. Any concerns regarding such Third Party Service should be directed to the particular outside service.
+      <p>
+        You agree that from time to time we may remove the service for indefinite periods of time or cancel the service at any time, without notice to you.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Limitation of Liability
+      <p>
+        You expressly agree that your use of, or inability to use, the service is at your sole risk. The service and all products and services delivered to you through the service are (except as expressly stated by us) provided 'as is' and 'as available' for your use, without any representation, warranties or conditions of any kind, either express or implied, including all implied warranties or conditions of merchantability, merchantable quality, fitness for a particular purpose, durability, title, and non-infringement.
+      </p>
+      <p>
+        In no case shall we, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings, loss of data, replacement costs, or any similar damages, whether based in contract, tort (including negligence), strict liability or otherwise, arising from your use of any of the service or any products procured using the service, or for any other claim related in any way to your use of the service or any product, including, but not limited to, any errors or omissions in any content, or any loss or damage of any kind incurred as a result of the use of the service or any content (or product) posted, transmitted, or otherwise made available via the service, even if advised of their possibility. Because some states or jurisdictions do not allow the exclusion or the limitation of liability for consequential or incidental damages, in such states or jurisdictions, our liability shall be limited to the maximum extent permitted by law.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 14 - Indemnification
       </h2>
-      <p class="text-14 text1 mb-15">
-        We do not accept responsibility that the website, its servers, or e-mail sent from the website are free of viruses or other harmful components. We will not be liable for any damages of any kind arising from the use of the website, including, but not limited to direct, indirect, incidental, punitive or consequential damages. Certain laws do not allow limitations as contained in this clause. If these laws apply, some or all of the above limitations may not apply to you and you might have additional rights.
+      <p>
+        You agree to indemnify, defend and hold harmless us and our parent, subsidiaries, affiliates, partners, officers, directors, agents, contractors, licensors, service providers, subcontractors, suppliers, interns and employees, harmless from any claim or demand, including reasonable attorneys’ fees, made by any third-party due to or arising out of your breach of these TERMS AND CONDITIONS or the documents they incorporate by reference, or your violation of any law or the rights of a third-party.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        III. Terms of Sale
+      <h2 class="text-18 f-bold my-15">
+        Section 15 - Severability
       </h2>
-      <p class="text-14 text1 mb-15">
-        These Terms of Sale apply to all offers made by Dafen.com Inc., all purchases and orders placed by you and all agreements concluded between us in relation to the products and services offered on this website.
+      <p>
+        In the event that any provision of these TERMS AND CONDITIONS is determined to be unlawful, void or unenforceable, such provision shall nonetheless be enforceable to the fullest extent permitted by applicable law, and the unenforceable portion shall be deemed to be severed from these TERMS AND CONDITIONS, such determination shall not affect the validity and enforceability of any other remaining provisions.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Return Rights
+      <h2 class="text-18 f-bold my-15">
+        Section 16 - Termination
       </h2>
-      <p class="text-14 text1">
-        We are committed to quality products.
+      <p>
+      The obligations and liabilities of the parties incurred prior to the termination date shall survive the termination of this agreement for all purposes.
       </p>
-      <p class="text-14 text1 mb-15">
-        Within 45 days of receiving your order, you can return any art purchased on AllPosters for a full refund. We will cover all shipping and handling costs for valid returns of art that, in our sole discretion, are damaged, defective, or otherwise non-conforming upon delivery to you. You will be responsible for all shipping and handling costs for returns of art that are not, in our sole discretion, defective, damaged, or otherwise non-conforming. Your refund will be credited back to the original payment method you used to purchase your art. We will not refund you for returns received by us after 45 days from receipt of purchase. Any returns received by us outside of such 45-day window will be considered an “invalid return”. We may, in our sole discretion, re-deliver (at your sole cost and expense) or dispose of the art subject to an invalid return if not reclaimed by you within thirty (30) days from your invalid return.
+      <p>
+      These TERMS AND CONDITIONS are effective unless and until terminated by either you or us. You may terminate these TERMS AND CONDITIONS at any time by notifying us that you no longer wish to use our Services, or when you cease using our site.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Pricing
+      <p>
+      If in our sole judgment you fail, or we suspect that you have failed, to comply with any term or provision of these TERMS AND CONDITIONS, we also may terminate this agreement at any time without notice and you will remain liable for all amounts due up to and including the date of termination; and/or accordingly may deny you access to our Services (or any part thereof).
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 17 - Entire Agreement
       </h2>
-      <p class="text-14 text1 mb-15">
-        Notwithstanding the product prices shown on the website, we cannot confirm the price of an item until you order. Despite our best efforts, a small number of the items shown on the website may be mispriced as a result of price changes that are implemented at or about the time of your visit to the website. However, we do NOT charge your credit card until after your order has entered the shipping process. If an item’s correct price is higher than our stated price, your sole recourse is cancellation of your order.
+      <p>
+      The failure of us to exercise or enforce any right or provision of these TERMS AND CONDITIONS shall not constitute a waiver of such right or provision.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Promotion Exclusions
+      <p>
+      These TERMS AND CONDITIONS and any policies or operating rules posted by us on this site or in respect to The Service constitutes the entire agreement and understanding between you and us and govern your use of the Service, superseding any prior or contemporaneous agreements, communications and proposals, whether oral or written, between you and us (including, but not limited to, any prior versions of the TERMS AND CONDITIONS).
+      </p>
+      <p>
+      Any ambiguities in the interpretation of these TERMS AND CONDITIONS shall not be construed against the drafting party.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Section 18 - Changes To Terms And Conditions
       </h2>
-      <p class="text-14 text1 mb-15">
-        *Promotion applies to order total before shipping, taxes, and duties. Promotions that involve a price reduction may take a variety of forms, including strikethrough prices or a discount code (e.g., percent-off or dollar-off discount code) that is applied by the customer at checkout (collectively "Product Discounts"). Promotional offers may be used one time only per household. Only one discount or promotional offer may be used per item. "Bonus Discounts" that are automatically applied to your order total may not be combined with one-time use discount codes or gift codes. Discounts will not be applied to (a) previous or existing orders, (b) gift cards.
+      <p>
+        You can review the most current version of the TERMS AND CONDITIONS at any time at this page.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        Acceptance of Order
-      </h2>
-      <p class="text-14 text1 mb-15">
-        We reserve the right to refuse or cancel any order. In such event your sole recourse shall be the return of amounts paid by you related to such order (if any).
-      </p>
-
-      <h2 class="text-18 f-bold title1">
-        Sales Tax
-      </h2>
-      <p class="text-14 text1 mb-15">
-        Items shipped to destinations in the states of Alabama, California, Colorado, Connecticut, Hawaii, Illinois, Indiana, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, New York, North Carolina, North Dakota, Oklahoma, Pennsylvania, Rhode Island, South Dakota, Tennessee, Vermont, Washington, Wisconsin, and Ohio are subject to tax. No sales tax is charged when purchasing gift certificates; however, purchases paid for with gift certificates may be subject to tax.
-      </p>
-
-      <h2 class="text-18 f-bold title1">
-        Product Descriptions
-      </h2>
-      <p class="text-14 text1 mb-15">
-        We attempt to describe our products offered as accurately as possible. However, we do not warrant that product descriptions or other content of the website are 100% accurate, complete, reliable, current or error-free. If a product offered by us and purchased by you is not as described, your sole remedy is to return it in unused condition for a conforming replacement, refund or credit.
-      </p>
-
-      <h2 class="text-18 f-bold title1">
-        Disclaimer
-      </h2>
-      <p class="text-14 text1 mb-15">
-        We are not liable for any financial damage (including but not limited to the cost of any replacement purchase) that may occur because of non-timely arrival or any lack of availability or conformity of the product.
-      </p>
-
-
-      <h2 class="text-18 f-bold title1">
-        IV. Disputes
-      </h2>
-      <p class="text-14 text1 mb-15">
-        Any dispute or claim relating in any way to your use of Dafen.com, to purchases from Dafen.com, or to the sale of any products or services sold or distributed by Dafen.com will be resolved by binding arbitration, rather than in court, except that you may assert claims in small claims court if your claims qualify. The Federal Arbitration Act and federal arbitration law apply to this agreement.
-      </p>
-
-      <p class="text-14 text1 mb-15">
-        There is no judge or jury in arbitration, and court review of an arbitration award is limited. However, an arbitrator can award on an individual basis the same damages and relief as a court (including injunctive and declaratory relief or statutory damages), and must follow the terms of these Terms of Sale as a court would.
-      </p>
-
-      <p class="text-14 text1 mb-15">
-        To begin an arbitration proceeding, you must send a letter requesting arbitration and describing your claim to Dafen.com’s Registered Agent/Legal Department, located at 5188 W. 74th Street, Indianapolis, IN 46268. The arbitration will be conducted by the American Arbitration Association (AAA) under its rules, including the AAA's Consumer Arbitration Rules. The AAA's rules are available at www.adr.org or by calling 1-800-778-7879. Payment of all filing, administration and arbitrator fees will be governed by the AAA's rules. We will reimburse those fees for claims totaling less than $10,000 unless the arbitrator determines the claims are frivolous. Likewise, Dafen.com and Allposters.com will not seek attorneys' fees and costs in arbitration unless the arbitrator determines the claims are frivolous. You may choose to have the arbitration conducted by telephone, based on written submissions, or in person in the county where you live or at another mutually agreed location.
-      </p>
-
-      <p class="text-14 text1 mb-15">
-        We each agree that any dispute resolution proceedings will be conducted only on an individual basis and not in a class, consolidated or representative action. If for any reason a claim proceeds in court rather than in arbitration we each waive any right to a jury trial. We also both agree that you or we may bring suit in court to enjoin infringement or other misuse of intellectual property rights.
-      </p>
-
-      <h2 class="text-18 f-bold title1">
-        Applicable Law
-      </h2>
-      <p class="text-14 text1 mb-15">
-        By placing an order with Dafen.com, you agree that the Federal Arbitration Act, applicable federal law, and the laws of the state of California, without regard to principles of conflict of laws, will govern these Terms and Conditions and any dispute of any sort that might arise between you and Dafen.com.
-      </p>
-
-
-      <h2 class="text-18 f-bold title1">
-        Severability
-      </h2>
-      <p class="text-14 text1 mb-15">
-        If any of the terms or conditions herein shall be deemed invalid, void, or for any reason unenforceable, that term or condition shall be deemed severable and shall not affect the validity and enforceability of any remaining term or condition.
+      <p>
+        We reserve the right, at our sole discretion, to update, change or replace any part of these TERMS AND CONDITIONS by posting updates and changes to our website/application. It is your responsibility to check our website/application periodically for changes. Your continued use of or access to our website/application or the Service following the posting of any changes to these TERMS AND CONDITIONS constitutes acceptance of those changes.
       </p>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import {CONTACT_EMAIL} from "@/config";
 import {pageMeta} from "~/config/pageMeta";
 
 useHead(pageMeta["/terms-and-conditions"] ?? {});
@@ -292,29 +212,4 @@ defineOptions({
 </script>
 
 <style scoped lang="scss">
-.title1 {
-  line-height: 35px;
-  margin-bottom: 15px;
-}
-
-.text1 {
-  line-height: 25px;
-  text-align: justify;
-}
-
-.list-ul {
-  padding-left: 1.5rem; /* 视情况添加 */
-  &.disc li {
-    list-style-type: disc !important;
-  }
-
-  &.decimal li {
-    list-style-type: decimal !important;
-  }
-
-  li {
-    list-style-position: outside !important; /* 或 inside，根据你设计需求 */
-  }
-}
-
 </style>

@@ -79,7 +79,7 @@ defineExpose({
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-width: 1100px;
+    max-width: 980px;
     width: 100%;
     background: #fff;
 
@@ -116,6 +116,7 @@ defineExpose({
       width: 39px;
       height: 39px;
       font-size: 12px;
+      background: #fff;
     }
   }
 }
@@ -136,8 +137,21 @@ defineExpose({
       .swatches-box {
         grid-template-columns: repeat(7, 1fr);
       }
-    }
 
+      .close-box {
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        backdrop-filter: blur(10px);
+        width: 30px;
+        height: 30px;
+        right: 10px;
+        top: 10px;
+
+        .iconfont {
+          font-size: 14px;
+        }
+      }
+    }
   }
 }
 </style>

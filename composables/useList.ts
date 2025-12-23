@@ -38,7 +38,8 @@ export const useList = (
         },
         // 总参数(包含分页和查询参数)
         totalParam: {},
-        loading: false
+        loading: false,
+        requestFinished: false
     });
 
     /**
@@ -63,6 +64,7 @@ export const useList = (
     const getTableList = async () => {
         if (!api) return;
         state.loading = true;
+        state.requestFinished = false;
         try {
             await delayLoading(loadingTime);
             // 先把初始化参数和分页参数放到总参数里面
@@ -74,14 +76,16 @@ export const useList = (
             } else {
                 state.tableData = isPageable ? data.records : data;
             }
-            requestSuccess && requestSuccess(data);
-            state.loading = false;
             // 解构后台返回的分页数据
             const { current: pageNum, size: pageSize, total } = data;
             updatePageable({ pageNum, pageSize, total });
+            requestSuccess && requestSuccess(data);
         } catch (error) {
-            state.loading = false;
             requestError && requestError(error);
+        }
+        finally {
+            state.loading = false;
+            state.requestFinished = true;
         }
     };
 

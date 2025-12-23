@@ -2,7 +2,7 @@
   <!-- Topic -->
   <section class="swiper-section">
     <div class="container">
-      <h1 class="my-md-40 my-20 py-20 border-b-xl border-gray-700 text-26 font-bold">Latest post</h1>
+      <h1 class="my-md-40 my-20 py-20 border-b-xl border-gray-700 text-26 f-bold">Latest post</h1>
       <el-skeleton :loading="isTopicSkeleton" animated>
         <template #template>
           <el-skeleton-item variant="image" style="width: 100%; height: 44vw"/>

@@ -13,7 +13,7 @@
   <!-- 推荐新闻 -->
   <section class="news-more" v-if="newsDetail.id">
     <div class="container-small">
-      <h1 class="my-md-40 my-20 py-20 border-b-xl border-gray-700 text-26 font-bold">RECOMMEND</h1>
+      <h1 class="my-md-40 my-20 py-20 border-b-xl border-gray-700 text-26 f-bold">RECOMMEND</h1>
       <ClientOnly>
         <ProInfinite
           ref="proInfiniteRef"

@@ -5,49 +5,57 @@
 .shadow-xl { box-shadow: var(--shadow-xl); }
 .shadow-none { box-shadow: none; }
 
-/* 全局边框 */
+/* 全局边框 (All sides) */
 .border-sm { border: var(--border-width-sm) solid var(--border-color); }
 .border-md { border: var(--border-width-md) solid var(--border-color); }
 .border-lg { border: var(--border-width-lg) solid var(--border-color); }
 
-/* 上边框 */
-.border-t-sm { border-top: var(--border-width-sm) solid var(--border-color); }
-.border-t-md { border-top: var(--border-width-md) solid var(--border-color); }
-.border-t-lg { border-top: var(--border-width-lg) solid var(--border-color); }
-.border-t-xl { border-top: var(--border-width-xl) solid var(--border-color); }
+/* === 上边框 (Top) === */
+.border-t-sm { border-top-width: var(--border-width-sm); border-top-style: solid; border-top-color: var(--border-color); }
+.border-t-md { border-top-width: var(--border-width-md); border-top-style: solid; border-top-color: var(--border-color); }
+.border-t-lg { border-top-width: var(--border-width-lg); border-top-style: solid; border-top-color: var(--border-color); }
+.border-t-xl { border-top-width: var(--border-width-xl); border-top-style: solid; border-top-color: var(--border-color); }
 
-/* 右边框 */
-.border-r-sm { border-right: var(--border-width-sm) solid var(--border-color); }
-.border-r-md { border-right: var(--border-width-md) solid var(--border-color); }
-.border-r-lg { border-right: var(--border-width-lg) solid var(--border-color); }
-.border-r-xl { border-right: var(--border-width-xl) solid var(--border-color); }
+/* === 右边框 (Right) === */
+.border-r-sm { border-right-width: var(--border-width-sm); border-right-style: solid; border-right-color: var(--border-color); }
+.border-r-md { border-right-width: var(--border-width-md); border-right-style: solid; border-right-color: var(--border-color); }
+.border-r-lg { border-right-width: var(--border-width-lg); border-right-style: solid; border-right-color: var(--border-color); }
+.border-r-xl { border-right-width: var(--border-width-xl); border-right-style: solid; border-right-color: var(--border-color); }
 
-/* 下边框 */
-.border-b-sm { border-bottom: var(--border-width-sm) solid var(--border-color); }
-.border-b-md { border-bottom: var(--border-width-md) solid var(--border-color); }
-.border-b-lg { border-bottom: var(--border-width-lg) solid var(--border-color); }
-.border-b-xl { border-bottom: var(--border-width-xl) solid var(--border-color); }
+/* === 下边框 (Bottom) === */
+.border-b-sm { border-bottom-width: var(--border-width-sm); border-bottom-style: solid;  border-bottom-color: var(--border-color); }
+.border-b-md { border-bottom-width: var(--border-width-md); border-bottom-style: solid; border-bottom-color: var(--border-color); }
+.border-b-lg { border-bottom-width: var(--border-width-lg); border-bottom-style: solid; border-bottom-color: var(--border-color); }
+.border-b-xl { border-bottom-width: var(--border-width-xl); border-bottom-style: solid; border-bottom-color: var(--border-color); }
 
-/* 左边框 */
-.border-l-sm { border-left: var(--border-width-sm) solid var(--border-color); }
-.border-l-md { border-left: var(--border-width-md) solid var(--border-color); }
-.border-l-lg { border-left: var(--border-width-lg) solid var(--border-color); }
-.border-l-xl { border-left: var(--border-width-xl) solid var(--border-color); }
+/* === 左边框 (Left) === */
+.border-l-sm { border-left-width: var(--border-width-sm); border-left-style: solid; border-left-color: var(--border-color); }
+.border-l-md { border-left-width: var(--border-width-md); border-left-style: solid; border-left-color: var(--border-color); }
+.border-l-lg { border-left-width: var(--border-width-lg); border-left-style: solid; border-left-color: var(--border-color); }
+.border-l-xl { border-left-width: var(--border-width-xl); border-left-style: solid; border-left-color: var(--border-color); }
 
-/* 实线 */
-.border-solid { border-style: solid; }
+/* 全局样式覆盖 */
+.border-solid  { border-style: solid !important; }
+.border-dashed { border-style: dashed !important; }
+.border-dotted { border-style: dotted !important; }
+.border-none   { border: none !important; }
 
-/* 虚线 */
-.border-dashed { border-style: dashed; }
+.border-t-dashed { border-top-style: dashed !important; }
+.border-r-dashed { border-right-style: dashed !important; }
+.border-b-dashed { border-bottom-style: dashed !important; }
+.border-l-dashed { border-left-style: dashed !important; }
 
-/* 无边框 */
-.border-none { border: none; }
+.border-t-dotted { border-top-style: dotted !important; }
+.border-r-dotted { border-right-style: dotted !important; }
+.border-b-dotted { border-bottom-style: dotted !important; }
+.border-l-dotted { border-left-style: dotted !important; }
 
 /* 圆角系统 */
 .rounded-sm { border-radius: var(--rounded-sm); }
 .rounded-lg { border-radius: var(--rounded-lg); }
 .rounded-xl { border-radius: var(--rounded-xl); }
 .rounded-full { border-radius: var(--rounded-full); }
+.rounded-none { border-radius: 0 !important; }
 
 /* 间距系统 */
 @for $i from 0 through 85 {
@@ -185,6 +193,7 @@
 .overflow-hidden { overflow: hidden; }
 
 .rotate-45 { transform: rotate(45deg); }
+.rotate-180 { transform: rotate(180deg); }
 
 /* 图片悬浮效果 */
 .img-hover{

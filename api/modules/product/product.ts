@@ -47,6 +47,15 @@ export const getProductListApi = (params: IProduct.ListQuery) => {
     return $http().post<IPage<General.GoodsItem[]>>(TRADE_MODULE + `/product/search`, params)
 }
 
+
+/**
+ * 商品列表检索
+ * @param params
+ */
+export const getProductRecommendedListApi = (params: IProduct.ListQuery) => {
+    return $http().post<IPage<General.GoodsItem[]>>(TRADE_MODULE + `/product/recommended`, params)
+}
+
 /**
  * 获取相关推荐
  * @param params
@@ -79,4 +88,21 @@ export const getArtworksApi = (params: IProduct.ArtworksQuery) => {
  */
 export const checkoutLinkApi = (params: IProduct.CheckoutLinkQuery) => {
     return $http().post<IProduct.CheckoutLinkRow>(TRADE_MODULE + `/product/checkout/link`, params)
+}
+
+/**
+ * 商品专区查询
+ * @returns {*}
+ * @param id
+ */
+export const getProductZoneApi = (id: string) => {
+    return $http().get<IProduct.ZoneRow>(TRADE_MODULE + `/product/zone/detail/${id}`)
+}
+
+/**
+ * 商品专区列表检索
+ * @param params
+ */
+export const getZoneCollectApi = (params: IProduct.zoneCollectQuery) => {
+    return $http().post<IPage<General.GoodsItem[]>>(TRADE_MODULE + `/product/zone/collect`, params)
 }

@@ -8,11 +8,17 @@ import {checkToken} from "~/api/modules/oauth/oauth";
 import {computed, ref} from 'vue';
 import {LOGIN_URL} from "~/config";
 
+const defaultInfo = () => {
+    return {
+        subscribe: "1"
+    } as IMine.UserInfoRow
+}
+
 export const useUserStore = defineStore(
     'user',
     () => {
         const token = ref('');
-        const userInfo = ref({} as IMine.UserInfoRow);
+        const userInfo = ref<IMine.UserInfoRow>(defaultInfo());
         const isLogin = computed(() => !!token.value)
 
         const setToken = (tokenStr: string) => {
@@ -50,7 +56,7 @@ export const useUserStore = defineStore(
             token.value = '';
             const tokenCookie = useCookie('auth_token', { path: '/' })
             tokenCookie.value = ''
-            userInfo.value = {} as IMine.UserInfoRow;
+            userInfo.value = defaultInfo();
             jump && router.replace(LOGIN_URL)
         }
 

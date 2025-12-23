@@ -1,56 +1,122 @@
 <template>
   <section>
-    <div class="container-middle">
-      <h1 class="text-30 f-bold title1">Our Return Policy</h1>
-      <p class="text-14 text1 mb-15">
-        Thank you for shopping with ARTDAFEN.
-        We take pride in the quality of our art pieces and want you to be fully satisfied with your purchase. Please read our return and exchange policy carefully.
+    <div class="container-middle text-14" style="line-height: 2">
+      <h1 class="text-30 f-bold pt-lg-50 py-30">Our Return Policy</h1>
+      <h2 class="text-18 f-bold my-15">
+        Returns & Exchanges
+      </h2>
+      <p>
+        <span class="f-bold">ARTDAFEN</span> is dedicated to a seamless art-buying experience. To help you collect with
+        confidence, we uphold a clear and simple return and exchange policy that prioritizes your satisfaction and makes
+        bringing art into your home worry-free.
       </p>
-
-      <h2 class="text-18 f-bold title1">
-        1. Returns
+      <h2 class="text-18 f-bold my-15">
+        ARTDAFEN Quality Commitment
       </h2>
-      <p class="text-14 text1 mb-15">You may request a return within 14 days of receiving your artwork.</p>
-      <p class="text-14 text1 mb-15">To be eligible for a return, items must be unused, in the original packaging, and in the same condition as when you received them.</p>
-      <p class="text-14 text1 mb-15">Custom or commissioned artwork is not eligible for return, unless it arrives damaged or defective.</p>
-
-      <h2 class="text-18 f-bold title1">
-        2. Exchanges
+      <p>
+        At <span class="f-bold">ARTDAFEN</span> we are dedicated to the mastery of museum-quality reproductions. Every
+        single piece is 100% hand-painted on canvas by professional artists, strictly rejecting machine printing. While
+        we faithfully adhere to the reference imagery, the organic nature of true craftsmanship means that subtle
+        nuances in brushwork and color blending are inevitable—these are the very hallmarks of an authentic,
+        hand-created work. We uphold a rigorous approval process: our artists will refine the details based on your
+        feedback until it meets your standards. We stand firmly behind our work—if the delivered artwork deviates from
+        the final image we mutually confirmed, you are guaranteed a full refund.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Shipping Damage Protection
       </h2>
-      <p class="text-14 text1 mb-15">If your artwork arrives damaged or defective, we will gladly offer an exchange for the same item or a replacement of equal value.</p>
-      <p class="text-14 text1 mb-15">To request an exchange, please contact us at <a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a> within 7 days of delivery, including a photo of the item and its packaging.</p>
-
-      <h2 class="text-18 f-bold title1">
-        3. Refunds
+      <p>
+        In the rare case your painting arrives damaged, we will arrange a complimentary replacement or provide a full
+        refund.
+      </p>
+      <p>
+        Please share photos of the damage and packaging so we can assist promptly.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Custom Artwork Policy
       </h2>
-      <p class="text-14 text1 mb-15">Once your return is received and inspected, we will notify you of the approval or rejection of your refund.</p>
-      <p class="text-14 text1 mb-15">Approved refunds will be processed within 7–10 business days to your original payment method.</p>
-      <p class="text-14 text1 mb-15">Shipping costs are non-refundable, except when the return is due to our error (e.g., wrong or damaged item).</p>
-
-      <h2 class="text-18 f-bold title1">
-        4. Shipping for Returns
+      <ul class="list-ul disc">
+        <li>
+          Custom colors or sizes are non-returnable after delivery.
+        </li>
+      </ul>
+      <p>
+        Each custom piece is made exclusively for you. As these works cannot be resold, we appreciate your
+        understanding.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        30-Day Return Guarantee
       </h2>
-      <p class="text-14 text1 mb-15">Customers are responsible for return shipping, unless the item is defective or incorrect.</p>
-      <p class="text-14 text1 mb-15">We recommend using a trackable shipping service; we cannot guarantee that we will receive your returned item otherwise.</p>
-
-      <h2 class="text-18 f-bold title1">
-        5. Damaged or Lost Items
+      <p>
+        You may request a return within 30 days of delivery, for any reason.
+      </p>
+      <p>
+        We will assist in arranging return shipping. The shipping cost will be your responsibility.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Important Return Conditions
       </h2>
-      <p class="text-14 text1 mb-15">Please inspect your order upon reception and contact us immediately if the item is defective, damaged, or if you receive the wrong item.</p>
-      <p class="text-14 text1 mb-15">We are not responsible for items damaged or lost during return shipping.</p>
-
-      <h2 class="text-18 f-bold title1">
-        6. Contact Us
+      <ul class="list-ul disc">
+        <li>
+          Return requests must be submitted within <span class="f-bold">30 days</span> of delivery.
+        </li>
+        <li>
+          Once approved, you have <span class="f-bold">14 days</span> to return the artwork.
+        </li>
+        <li>
+          The artwork must be in <span class="f-bold">original condition</span> and securely packaged, ideally in its
+          original box.
+        </li>
+      </ul>
+      <h2 class="text-18 f-bold my-15">
+        Changed Your Mind?
       </h2>
-      <p class="text-14 text1 mb-15">For questions regarding returns or exchanges, please email us at <a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a>.</p>
-      <p class="text-14 text1 mb-15">Our support team will respond within 1–2 business days.</p>
+      <p>
+        We understand a piece may not always suit your space, style, or scale.
+      </p>
+      <p>
+        You may return your artwork within 30 days of delivery, with return shipping costs covered by you.
+      </p>
+      <p>
+        Once received in its original condition, a full refund will be promptly issued.
+      </p>
+      <p>
+        Tip: Package the artwork with care to ensure safe transit back to us.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Need Assistance?
+      </h2>
+      <p>
+        Our dedicated team is here to support you with any questions regarding returns, exchanges, shipping, or your
+        order status.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Contact Us
+      </h2>
+      <ul class="list-ul disc">
+        <li>
+          <span class="f-bold">Email:</span> <a class="text-secondary"
+                                                :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a>
+        </li>
+        <li>
+          <span class="f-bold">Phone:</span> <a class="text-secondary" :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{
+            COUNTRY_CODE
+          }} {{ CUSTOMER_SERVICE }}</a> (Available Mon-Fri, 9:00 AM - 6:00 PM HKT)
+        </li>
+      </ul>
+      <p>
+        <span class="f-bold">Quick Tip:</span>
+        When emailing us regarding an existing purchase, please include your <span class="f-bold">Order Number</span>
+        (e.g.,
+        2511065885200f3adm5vhknb4) in the subject line. This helps us locate your details and serve you faster.
+      </p>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import {CONTACT_EMAIL} from "@/config";
 import {pageMeta} from "~/config/pageMeta";
+import {COUNTRY_CODE, CUSTOMER_SERVICE, CONTACT_EMAIL} from "~/config";
 
 useHead(pageMeta["/our-return-policy"] ?? {});
 
@@ -60,16 +126,6 @@ defineOptions({
 </script>
 
 <style scoped lang="scss">
-.title1 {
-  line-height: 35px;
-  margin-bottom: 15px;
-}
-
-.text1 {
-  line-height: 25px;
-  text-align: justify;
-}
-
 .list-ul {
   padding-left: 1.5rem; /* 视情况添加 */
   &.disc li {
@@ -84,5 +140,4 @@ defineOptions({
     list-style-position: outside !important; /* 或 inside，根据你设计需求 */
   }
 }
-
 </style>

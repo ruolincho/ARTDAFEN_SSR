@@ -2,6 +2,7 @@ export default [
     {
         name: 'Living room',
         photos: [
+            '/static/room/Living room/01.webp',
             '/static/room/Living room/02.webp',
             '/static/room/Living room/03.webp',
             '/static/room/Living room/04.webp',
@@ -11,30 +12,6 @@ export default [
             '/static/room/Living room/08.webp',
             '/static/room/Living room/09.webp',
             '/static/room/Living room/10.webp',
-            '/static/room/Living room/11.webp',
-            '/static/room/Living room/12.webp',
-            '/static/room/Living room/13.webp',
-            '/static/room/Living room/14.webp',
-            '/static/room/Living room/15.webp',
-            '/static/room/Living room/16.webp',
-            '/static/room/Living room/17.webp',
-            '/static/room/Living room/18.webp',
-            '/static/room/Living room/19.webp',
-            '/static/room/Living room/20.webp',
-            '/static/room/Living room/21.webp',
-            '/static/room/Living room/22.webp',
-            '/static/room/Living room/23.webp',
-            '/static/room/Living room/24.webp',
-            '/static/room/Living room/25.webp',
-            '/static/room/Living room/26.webp',
-            '/static/room/Living room/27.webp',
-            '/static/room/Living room/28.webp',
-            '/static/room/Living room/29.webp',
-            '/static/room/Living room/30.webp',
-            '/static/room/Living room/31.webp',
-            '/static/room/Living room/32.webp',
-            '/static/room/Living room/33.webp',
-            '/static/room/Living room/34.webp',
         ]
     },
     {
@@ -45,14 +22,11 @@ export default [
             '/static/room/Bathroom/03.webp',
             '/static/room/Bathroom/04.webp',
             '/static/room/Bathroom/05.webp',
-            '/static/room/Bathroom/06.webp',
-
         ]
     },
     {
         name: 'Bedroom',
         photos: [
-            '/static/room/Living room/01.webp',
             '/static/room/Bedroom/01.webp',
             '/static/room/Bedroom/02.webp',
             '/static/room/Bedroom/03.webp',
@@ -64,28 +38,6 @@ export default [
             '/static/room/Bedroom/09.webp',
             '/static/room/Bedroom/10.webp',
             '/static/room/Bedroom/11.webp',
-            '/static/room/Bedroom/12.webp',
-            '/static/room/Bedroom/13.webp',
-            '/static/room/Bedroom/14.webp',
-            '/static/room/Bedroom/15.webp',
-            '/static/room/Bedroom/16.webp',
-            '/static/room/Bedroom/17.webp',
-            '/static/room/Bedroom/18.webp',
-            '/static/room/Bedroom/19.webp',
-            '/static/room/Bedroom/20.webp',
-            '/static/room/Bedroom/21.webp',
-            '/static/room/Bedroom/22.webp',
-            '/static/room/Bedroom/23.webp',
-            '/static/room/Bedroom/24.webp',
-            '/static/room/Bedroom/25.webp',
-            '/static/room/Bedroom/26.webp',
-            '/static/room/Bedroom/27.webp',
-            '/static/room/Bedroom/28.webp',
-            '/static/room/Bedroom/29.webp',
-            '/static/room/Bedroom/30.webp',
-            '/static/room/Bedroom/31.webp',
-            '/static/room/Bedroom/32.webp',
-            '/static/room/Bedroom/33.webp',
         ]
     },
     {
@@ -96,6 +48,7 @@ export default [
             '/static/room/Gallery/03.webp',
             '/static/room/Gallery/04.webp',
             '/static/room/Gallery/05.webp',
+            '/static/room/Gallery/06.webp',
         ]
     },
     {
@@ -105,7 +58,6 @@ export default [
             '/static/room/Kids room/02.webp',
             '/static/room/Kids room/03.webp',
             '/static/room/Kids room/04.webp',
-            '/static/room/Kids room/05.webp',
         ]
     },
     {
@@ -117,7 +69,6 @@ export default [
             '/static/room/Kitchen/04.webp',
             '/static/room/Kitchen/05.webp',
             '/static/room/Kitchen/06.webp',
-            '/static/room/Kitchen/07.webp',
         ]
     },
     {
@@ -128,19 +79,6 @@ export default [
             '/static/room/Mansion/03.webp',
             '/static/room/Mansion/04.webp',
             '/static/room/Mansion/05.webp',
-            '/static/room/Mansion/06.webp',
-            '/static/room/Mansion/07.webp',
-            '/static/room/Mansion/08.webp',
-            '/static/room/Mansion/09.webp',
-            '/static/room/Mansion/10.webp',
-            '/static/room/Mansion/11.webp',
-            '/static/room/Mansion/12.webp',
-            '/static/room/Mansion/13.webp',
-            '/static/room/Mansion/14.webp',
-            '/static/room/Mansion/15.webp',
-            '/static/room/Mansion/16.webp',
-            '/static/room/Mansion/17.webp',
-            '/static/room/Mansion/18.webp',
         ]
     },
     {
@@ -163,15 +101,4 @@ export default [
             '/static/room/Outdoor/04.webp',
         ]
     },
-    {
-        name: 'Private art museum',
-        photos: [
-            '/static/room/Private art museum/01.webp',
-            '/static/room/Private art museum/02.webp',
-            '/static/room/Private art museum/03.webp',
-            // '/static/room/Private art museum/04.webp',
-            '/static/room/Private art museum/05.webp',
-            '/static/room/Private art museum/06.webp',
-        ]
-    }
 ]

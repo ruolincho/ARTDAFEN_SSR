@@ -33,7 +33,7 @@
 
   <section class="sec-rec" v-if="blogDetail?.products.length">
     <div class="container-small">
-      <h1 class="my-20 py-20 border-b-xl border-gray-700 text-26 font-bold">RELATED PRODUCTS</h1>
+      <h1 class="my-20 py-20 border-b-xl border-gray-700 text-26 f-bold">RELATED PRODUCTS</h1>
       <div class="row product-list gap-row-base">
         <div class="col-sm-3 col-6" v-for="item in blogDetail?.products" :key="item.id">
           <NuxtLink :to="productLink(item)" target="_blank" class="product-item">
@@ -64,7 +64,7 @@ import {Navigation, Pagination} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import {imagePrefix, jumpToProduct, productLink} from "~/utils";
+import {imagePrefix, productLink} from "~/utils";
 import {useCurrencyStore} from "~/stores/modules/currency";
 
 const currencyStore = useCurrencyStore()

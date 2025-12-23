@@ -1,7 +1,38 @@
 <template>
+  <!--移动端功能区域-->
+  <div
+      ref="functionalRef"
+      class="functional-area"
+      v-if="!appStore.isPc && imageUrl"
+      :style="{
+      top: functionalTop + 'px',
+      transition: enableTransition ? 'top 0.25s cubic-bezier(.25,.8,.25,1)' : 'none'
+    }"
+      @touchstart="onTouchStart"
+      @touchmove.prevent="onTouchMove"
+      @touchend="onTouchEnd"
+      @click.stop
+  >
+    <span class="iconfont icon-user-defined" @click="openWallColor"></span>
+    <span class="split"></span>
+    <span class="iconfont icon-pictures" @click="openRoom"></span>
+    <span class="split"></span>
+    <el-upload
+        class="upload-box"
+        :accept="fileType.join(',')"
+        :before-upload="beforeUpload"
+        :on-change="uploadChange"
+        :auto-upload="false"
+        :show-file-list="false"
+    >
+      <span class="iconfont icon-upload-pictures"></span>
+    </el-upload>
+  </div>
+
   <!--规格选择-->
   <section>
-    <div class="container" v-show="!(currentView === 'custom' && !appStore.isPc)">
+    <!--portrait-->
+    <div class="container" v-show="!(currentView === 'custom')">
       <div class="my-md-50 my-25 portrait-wrapper acea-row row-center-wrapper gap-column-md gap-row-sm">
         <img src="~/assets/images/logo-portrait.png" alt="logo-portrait">
         <h1 class="text-20 text-center" v-if="appStore.isPc">
@@ -9,8 +40,6 @@
         </h1>
       </div>
     </div>
-
-    <div class="pt-15" v-show="(currentView === 'custom' && !appStore.isPc)"></div>
 
     <!-- 主题 -->
     <div class="container" v-show="currentView === 'theme'">
@@ -36,7 +65,7 @@
         <h2 class="text-50">MORE CASE STUDIES</h2>
       </div>
 
-      <div class="case-list">
+      <div class="case-list" v-if="appStore.isPc">
         <div class="case-item" v-for="item in themeOptions" :key="item.id">
           <div class="acea-row row-between-wrapper f-bold-500 py-20">
             <span class="text-uppercase text-26">{{ item.name }}</span>
@@ -56,6 +85,39 @@
           </el-button>
         </div>
       </div>
+
+      <swiper
+          v-else
+          :modules="modules"
+          :autoplay="{ delay: 2500, disableOnInteraction: false }"
+          :pagination="{ clickable: true }"
+          style="padding-bottom: 40px;"
+      >
+        <swiper-slide v-for="item in themeOptions" :key="item.id">
+          <div class="case-list">
+            <div class="case-item">
+              <div class="acea-row row-between-wrapper f-bold-500 py-20">
+                <span class="text-uppercase text-26">{{ item.name }}</span>
+                <span class="text-uppercase text-underline text-20 text-gray-600 cursor-pointer"
+                      @click="seeMoreSample(item.id)">see more</span>
+              </div>
+              <div class="case-content">
+                <div class="item" v-for="(sample, index) in item.samples" :key="sample.id"
+                     @click="showCaseContrast(item.samples, index)">
+                  <img class="w-full h-full fit-cover img-hover"
+                       :src="imagePrefix(sample.compareImg)"
+                       :alt="item.name + '_sample'"
+                  />
+                </div>
+              </div>
+              <el-button class="w-full mt-15" type="primary" size="large" @click="chooseTheme(item.id)">Customize Now
+              </el-button>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+
+
     </div>
 
     <!-- 风格 -->
@@ -63,24 +125,25 @@
       <div class="text-center my-lg-40 my-30">
         <h2 class="text-50">CHOOSE YOUR FAVORITE STYLE</h2>
         <p class="mt-20 text-gray-600 text-20 f-bold-500">
-          From Classic Oil Paintings, Artist Styles, Disney Magic, Modern Anime Aesthetics, Vibrant Anime Styles, Dreamy
-          Ghibli Styles, Big-Eye Portrait Styles To Modern Retro Styles, Browse Our Rich Collection Of Styles. Each
-          Effect Is Carefully Designed And Created To Endow Your Photos With A Unique Texture — Whether You're Pursuing
-          A Soft Aesthetic Vibe Or A Dramatic Fantasy Feel. Find The Perfect Transformation And Creation Method For Your
-          Photos.
+          Discover the perfect look for every moment. From soft aesthetics to dramatic fantasy, transform your photos
+          with unique textures designed to inspire.
         </p>
       </div>
       <div ref="favoriteMainRef" style="min-height: 450px" v-loading="themeLoading">
         <div class="row favorite-list gap-row-base" v-show="currentThemeOption?.children?.length">
           <div class="col-lg-3 col-sm-4 col-6" v-for="item in currentThemeOption?.children" :key="item.id">
-            <div class="favorite-item cursor-pointer" :class="{ 'on': themeIdMap[1] === item.id }"
-                 @click="chooseStyle(item.id)">
+            <div
+                class="favorite-item cursor-pointer" :class="{ 'on': themeIdMap[1] === item.id }"
+                @click="chooseStyle(item.id)"
+            >
               <img class="w-full aspect-ratio" :src="imagePrefix(item.img)" alt="">
-              <div class="p-content">
-                <div class="p-desc px-sm-20 px-15">
-                  <p class="text-24 line5">{{ item.intro }}</p>
+              <p class="p-title text-28 line1 p-sm-15 p-10">{{ item.name }}</p>
+              <div class="p-content p-sm-15 p-10">
+                <p class="p-text text-22 line1">{{ item.name }}</p>
+                <div class="p-desc">
+                  <p class="text-20 line5">{{ item.intro }}</p>
                 </div>
-                <p class="p-text text-28 line1 p-sm-15 p-md-20 p-10">{{ item.name }}</p>
+                <div class="text-14 p-btn py-sm-10 px-sm-20 py-5 px-10">CUSTOMIZE NOW</div>
               </div>
             </div>
           </div>
@@ -95,12 +158,14 @@
 
     <!-- 自定义 -->
     <div class="container" v-show="currentView === 'custom'">
-      <!--移动端-->
-      <div class="app-preview aspect-ratio" style="" v-if="!appStore.isPc && imageUrl">
-        <div class="img-wrapper acea-row row-center-wrapper flex-1 scroll-y">
+      <!--移动端兼容视图-->
+      <div class="app-preview" style="margin-left: -15px; margin-right: -15px; height: 300px"
+           v-if="!appStore.isPc && imageUrl">
+        <div class="img-wrapper acea-row row-center-wrapper flex-1 overflow-hidden">
           <ClientOnly>
             <ImageGenerator
                 v-model="generatorImg"
+                v-model:squareImage="squareImageUrl"
                 v-model:pixel="pixel"
                 :shape="shapeStr"
                 :core-image="imageUrl"
@@ -128,32 +193,14 @@
               imagePrefix(currentFrameOption?.config?.cr!),
             ]"
                 @change="handleImageChange"
+                @touch-screen="handleTouchScreen"
             />
           </ClientOnly>
         </div>
-        <div class="acea-row row-evenly py-20">
-          <div class="acea-row row-middle cursor-pointer" @click="openWallColor">
-            <span class="iconfont icon-user-defined text-20"></span>
-            <span class="text-14 ml-10">SELECT WALL COLOR</span>
-          </div>
-          <div class="acea-row row-middle cursor-pointer" @click="openRoom">
-            <span class="iconfont icon-pictures text-20"></span>
-            <span class="text-14 ml-10">VIEW PAINTING IN A ROOM</span>
-          </div>
-        </div>
-        <el-upload
-            class="upload-box"
-            :accept="fileType.join(',')"
-            :before-upload="beforeUpload"
-            :on-change="uploadChange"
-            :auto-upload="false"
-            :show-file-list="false"
-        >
-          <div class="btn">Re-upload the image</div>
-        </el-upload>
       </div>
 
-      <div class="spu-wrapper row">
+      <div class="spu-wrapper row mt-lg-40 mt-md-30 mt-15">
+        <!--预览图栅格-->
         <div class="col-sm-7">
           <ClientOnly>
             <!--示例图-->
@@ -163,12 +210,8 @@
                   <div class="favorite-list" style="max-width: 450px">
                     <div class="favorite-item">
                       <img class="w-full aspect-ratio" :src="imagePrefix(lastThemeObj.img)" alt="">
-                      <div class="p-content">
-                        <div class="p-desc px-sm-20 px-15">
-                          <p class="text-24 line5"></p>
-                        </div>
-                        <p class="p-text text-28 line1 p-sm-15 p-md-20 p-10">{{ lastThemeObj.name }}</p>
-                      </div>
+                      <p class="p-title text-28 line1 p-sm-15 p-10">{{ lastThemeObj.name }}</p>
+                      <div class="tips text-20 p-8 f-bold">EXAMPLE IMAGE</div>
                     </div>
                   </div>
                 </div>
@@ -195,7 +238,7 @@
             <!--预览图-->
             <template v-else>
               <div class="spu-preview border-sm sticky-column" v-if="appStore.isPc">
-                <div class="m-md-20 m-15 border-b-sm">
+                <div class="p-md-20 p-15 border-b-sm">
                   <p class="text-22 f-bold-500">Photos to Paintings</p>
                   <p class="mt-10 text-18">Commission a museum quality hand-painted oil painting from your family
                     photo!</p>
@@ -204,6 +247,7 @@
                   <ClientOnly>
                     <ImageGenerator
                         v-model="generatorImg"
+                        v-model:squareImage="squareImageUrl"
                         v-model:pixel="pixel"
                         :shape="shapeStr"
                         :core-image="imageUrl"
@@ -215,22 +259,23 @@
                         :embedded-frame="!currentFrameOption?.config?.matSupport!"
                         :frame-cm="currentFrameOption?.config?.thickness!"
                         :size-cm="{
-                    width: Number(currentSizeOption?.widthInCm!),
-                    length: Number(currentSizeOption?.lengthInCm!),
-                  }"
+                          width: Number(currentSizeOption?.widthInCm!),
+                          length: Number(currentSizeOption?.lengthInCm!),
+                        }"
                         :frame-corner-images="[
-                  imagePrefix(currentFrameOption?.config?.lt!),
-                  imagePrefix(currentFrameOption?.config?.rt!),
-                  imagePrefix(currentFrameOption?.config?.lb!),
-                  imagePrefix(currentFrameOption?.config?.rb!),
-                ]"
+                        imagePrefix(currentFrameOption?.config?.lt!),
+                        imagePrefix(currentFrameOption?.config?.rt!),
+                        imagePrefix(currentFrameOption?.config?.lb!),
+                        imagePrefix(currentFrameOption?.config?.rb!),
+                      ]"
                         :frame-side-images="[
-                  imagePrefix(currentFrameOption?.config?.ct!),
-                  imagePrefix(currentFrameOption?.config?.cb!),
-                  imagePrefix(currentFrameOption?.config?.cl!),
-                  imagePrefix(currentFrameOption?.config?.cr!),
-                ]"
+                        imagePrefix(currentFrameOption?.config?.ct!),
+                        imagePrefix(currentFrameOption?.config?.cb!),
+                        imagePrefix(currentFrameOption?.config?.cl!),
+                        imagePrefix(currentFrameOption?.config?.cr!),
+                      ]"
                         @change="handleImageChange"
+                        @touch-screen="handleTouchScreen"
                     />
                   </ClientOnly>
                 </div>
@@ -260,6 +305,7 @@
             </template>
           </ClientOnly>
         </div>
+        <!--规格选择栅格-->
         <div class="col-sm-5">
           <div class="spu-spec border-sm">
             <!--没有上传图片-->
@@ -272,7 +318,7 @@
                   <span class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
                         @click="openInfo(3)">
                  <span class="pc">{{ moreInfoVisible[3] ? 'LESS INFO' : 'MORE INFO' }}</span>
-                <span class="iconfont icon-down"></span>
+                <span class="iconfont icon-down" :class="{'rotate-180': moreInfoVisible[3]}"></span>
               </span>
                 </div>
                 <div class="text-20 f-bold"></div>
@@ -287,7 +333,6 @@
                 </p>
               </div>
               <div class="m-md-20 m-15">
-                <!--v-if="userStore.isLogin"-->
                 <el-upload
                     class="upload-box"
                     :accept="fileType.join(',')"
@@ -336,286 +381,343 @@
 
             <!--有上传图片-->
             <template v-else>
-              <!--工艺/规格选择-->
-              <!--              <template v-if="route.params.work === ArtCodeEnum.Painting">
-                              <div class="acea-row row-between-wrapper m-md-20 m-15">
-                                <div class="acea-row row-middle flex-1 mr-10">
-                                  <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                                  <span class="text-26">Choose a Craft</span>
-                                </div>
-                              </div>
-                              <div class="m-md-20 m-15">
-                                <div class="width-list row">
-                                  <div class="col-6">
-                                    <div
-                                      class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                                      :class="{'border-gray-700': !isPrint}"
-                                      @click="chooseTechnique(false)"
-                                    >
-                                      <pre>Hand-painted oil painting</pre>
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div
-                                      class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                                      :class="{'border-gray-700': isPrint}"
-                                      @click="chooseTechnique(true)"
-                                    >
-                                      <pre>Print painting</pre>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </template>-->
-
-              <!--尺寸选择-->
-              <div class="acea-row row-between-wrapper m-md-20 m-15">
-                <div class="acea-row row-middle">
-                  <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                  <span class="text-26">Choose a Size</span>
-<!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
-                </div>
-                <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(currentSizeOption?.price || 0) }}</div>
-              </div>
-              <div class="m-md-20 m-15">
-                <el-select
-                    class="custom-select"
-                    v-model="currentSizeId"
-                    placeholder="Please Select Size"
-                    size="large"
-                    @change="chooseSize"
-                >
-                  <el-option
-                      v-for="item in sizeOptions"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id"
-                  >
-                    <div class="option-item acea-row row-between-wrapper">
-                      <span>{{ item.name }}</span>
-                      <span>{{ currencyStore.formatToCurrency(item.price || 0) }}</span>
-                    </div>
-                  </el-option>
-                  <template #prefix>
-                    <div class="size-prefix"></div>
-                  </template>
-                </el-select>
-              </div>
-              <div class="m-md-20 m-15 text-20">
-                <span class="iconfont icon-info-fill text-20 mr-6"></span>
-                <span class="f-bold">Note:</span>
-                To order a custom size, <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click
-                here</a>. Our artists will create a painting in any size you require.
-              </div>
-
-              <!--复杂层度选择-->
-              <template v-if="route.params.work === ArtCodeEnum.Painting && !isPrint">
-                <div class="acea-row row-between-wrapper m-md-20 m-15">
-                  <div class="acea-row row-middle">
-                    <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                    <span class="text-26">Count of {{ currentThemeOption?.name }}</span>
-                    <span
-                        class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
-                        @click="openInfo(1)"
-                    >
-                  <span class="pc">{{ moreInfoVisible[1] ? 'LESS INFO' : 'MORE INFO' }}</span>
-                    <span class="iconfont icon-down"></span>
-                  </span>
+              <el-skeleton :loading="loadingCombo && !firstLoadCombo" animated>
+                <template #template>
+                  <div class="m-md-20 m-15">
+                    <el-skeleton-item variant="h1" style="width: 100%;"/>
                   </div>
-                  <div class="text-20 f-bold"></div>
-                </div>
-                <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[1]">
-                  <p class="p-15 bg-gray-200">
-                    Please select the number of figures in your photo. Each person or pet/animal in a photo would be
-                    counted
-                    as one figure. Houses, cars, boats and travel scenery would each count as one figure.
-                  </p>
-                </div>
-
-                <!-- Pc端复杂程度选择 -->
-                <div class="m-md-20 m-15" v-if="appStore.isPc">
-                  <div class="width-list row">
-                    <div
-                        class="col-xl-average col-md-3 col-xs-4 col-6"
-                        v-for="(item, index) in maxNumber"
-                        :key="index"
-                    >
-                      <div
-                          class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-20"
-                          :class="{'border-gray-700': contentNumber === item}"
-                          @click="chooseNumber(item)"
-                      >
-                        <pre>{{ item }}</pre>
+                  <div class="m-md-20 m-15">
+                    <el-skeleton-item variant="p" style="width: 100%; height: 45px"/>
+                  </div>
+                  <div class="m-md-20 m-15">
+                    <el-skeleton-item variant="h1" style="width: 100%;"/>
+                  </div>
+                  <div class="m-md-20 m-15 row">
+                    <div class="col-3" v-for="item in 4" :key="item">
+                      <el-skeleton-item variant="image" :style="{width: '100%', height: appStore.isPc ? '5vw' : '15vw'}"/>
+                      <div class="py-5">
+                        <el-skeleton-item variant="h1"/>
+                        <el-skeleton-item variant="p" class="mt-5" style="width: 50%"/>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <!-- 移动端复杂程度选择 -->
-                <div class="px-20 acea-row row-between-wrapper gap-base" v-else>
-                  <div class="flex-1">
-                    <el-slider
-                        :show-tooltip="false"
-                        v-model="contentNumberSet"
-                        :step="1"
-                        :max="maxNumber"
-                        :min="1"
-                        show-stops
-                    />
+                  <div class="m-md-20 m-15">
+                    <el-skeleton-item variant="p" style="width: 100%;"/>
+                    <el-skeleton-item variant="p" style="width: 100%;"/>
+                    <el-skeleton-item variant="p" style="width: 100%;"/>
                   </div>
-                  <div class="flex-auto font-bold">{{ contentNumber }}</div>
-                </div>
+                  <div class="acea-row row-right m-md-20 m-15">
+                    <el-skeleton-item variant="p" style="width: 30%;"/>
+                  </div>
+                  <div class="m-md-20 m-15">
+                    <el-skeleton-item variant="p" style="width: 100%;"/>
+                    <el-skeleton-item variant="p" style="width: 100%;"/>
+                  </div>
+                  <div class="m-md-20 m-15">
+                    <el-skeleton-item variant="button" style="width: 100%; height: 40px;"/>
+                  </div>
+                </template>
+                <div>
 
-              </template>
-
-              <!--备注-->
-              <div class="acea-row row-between-wrapper m-md-20 m-15">
-                <div class="acea-row row-middle">
-                  <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                  <span class="text-26">Additional Notes</span>
-                  <span class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
-                        @click="openInfo(2)"
-                  >
-                <span class="pc">{{ moreInfoVisible[2] ? 'LESS INFO' : 'MORE INFO' }}</span>
-                <span class="iconfont icon-down"></span>
-              </span>
-                </div>
-                <div class="text-20 f-bold"></div>
-              </div>
-              <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[2]">
-                <p class="p-15 bg-gray-200">
-                  Here is where you can convey any special requests to the artist, such as removing certain aspects in
-                  the
-                  photo or specific color and background preferences.
-                </p>
-              </div>
-              <div class="m-md-20 m-15">
-                <el-input
-                    type="textarea"
-                    v-model="remark"
-                    placeholder="Please enter any additional instructions"
-                    :rows="appStore.isPc ? 8 : 3"
-                />
-              </div>
-
-              <!--画框选择-->
-              <div class="acea-row row-between-wrapper m-md-20 m-15">
-                <div class="acea-row row-middle">
-                  <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                  <span class="text-26">Choose a Frame</span>
-<!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
-                </div>
-                <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
-              </div>
-              <div class="m-md-20 m-15">
-                <div class="frame-scroll border-sm p-10">
-                  <div class="frame-list">
-                    <div
-                        v-for="(item, index) in frameOptions" :key="item.id"
-                        class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
-                        :class="{ on: currentFrameId === item.id }"
-                        @click="chooseFrame(item)"
-                    >
-                      <div class="frame-box">
-                        <div class="frame-img aspect-ratio">
-                          <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
-                        </div>
-                        <p class="line2 mt-10 frame-name">{{ item.name }}</p>
-                        <p class="f-bold-500 frame-money">
-                          {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
-                        </p>
+                  <!--工艺/规格选择-->
+                  <!--<template v-if="route.params.work === ArtCodeEnum.Painting">
+                    <div class="acea-row row-between-wrapper m-md-20 m-15">
+                      <div class="acea-row row-middle flex-1 mr-10">
+                        <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                        <span class="text-26">Choose a Craft</span>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <!--卡纸选择（选择画框并且画框支持和有卡纸选项才有）-->
-              <template v-if="hasFrame && matVisible">
-                <div class="acea-row row-between-wrapper m-md-20 m-15">
-                  <div class="acea-row row-middle">
-                    <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                    <span class="text-26">Choose a Canvas material</span>
-                  </div>
-                  <div class="text-20 f-bold">
-                    {{ currencyStore.formatToCurrency(currentMaterialOption?.price || 0) }}
-                  </div>
-                </div>
-
-                <div class="m-md-20 m-15">
-                  <div class="material-wrapper border-sm m-md-20 m-15">
-                    <div class="acea-row row-middle text-20 f-bold-500">
-                      <p class="mr-xl-40 mr-20">Mat Color</p>
-                      <p class="flex-1 line1">Crisp Bright White</p>
-                    </div>
-                    <div class="color-list my-md-20 my-15">
-                      <div
-                          class="color-item rounded-full cursor-pointer"
-                          :class="{on: currentMaterialId === item.id}"
-                          :style="{background: item.config?.matColor}"
-                          v-for="(item, index) in materialOptions"
-                          :key="index"
-                          @click="chooseMatColor(item)"
-                      >
-                        <span v-if="item.id === ''" class="iconfont icon-close"></span>
-                      </div>
-                    </div>
-                    <template v-if="currentMaterialWidthOption.length">
-                      <div class="acea-row row-middle text-20 f-bold-500">
-                        <p class="mr-xl-40 mr-20">Mat Width</p>
-                        <p class="flex-1 line1">Increasing the mat width mayaffectthe frame price.</p>
-                      </div>
-                      <div class="width-list row mt-md-20 mt-15">
-                        <div
-                            class="col-average"
-                            v-for="(item, index) in currentMaterialWidthOption"
-                            :key="index"
-                        >
+                    <div class="m-md-20 m-15">
+                      <div class="width-list row">
+                        <div class="col-6">
                           <div
-                              class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                              :class="{'border-gray-700': currentMaterialWidth === item.matWidth}"
-                              @click="chooseMatWidth(item.matWidth!)"
+                            class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
+                            :class="{'border-gray-700': !isPrint}"
+                            @click="chooseTechnique(false)"
                           >
-                            {{ item.matWidth }}″
+                            <pre>Hand-painted oil painting</pre>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div
+                            class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
+                            :class="{'border-gray-700': isPrint}"
+                            @click="chooseTechnique(true)"
+                          >
+                            <pre>Print painting</pre>
                           </div>
                         </div>
                       </div>
-                    </template>
+                    </div>
+                  </template>-->
+
+                  <!--尺寸选择-->
+                  <div class="acea-row row-between-wrapper m-md-20 m-15">
+                    <div class="acea-row row-middle">
+                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                      <span class="text-26">Choose a Size</span>
+                      <span
+                          class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
+                          @click="openInfo(0)"
+                      >
+                      <span class="pc">{{ moreInfoVisible[0] ? 'LESS INFO' : 'MORE INFO' }}</span>
+                      <span class="iconfont icon-down" :class="{'rotate-180': moreInfoVisible[0]}"></span>
+                    </span>
+                      <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
+                    </div>
+                    <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(currentSizeOption?.price || 0) }}</div>
                   </div>
-                </div>
-              </template>
-<!--              <div class="acea-row row-middle px-md-20 px-15 py-10">
-                <span class="iconfont icon-info-fill text-20" />
-                <p class="ml-6 text-20 flex-1 line1">
-                  <span class="cursor-pointer text-underline" @click="centerDialogVisible = true">
-                    <b class="f-bold">Click here:</b>Summary of differences.
-                  </span>
-                </p>
-              </div>-->
-              <div class="p-md-20 p-15 f-bold-500 text-16 border-t-sm">
-                <p>Product Parameter</p>
-                <p class="mt-10" v-for="(val, key) in specs">{{ key }}: {{ val }}</p>
-              </div>
-              <div class="border-t-sm p-md-20 p-15 text-16 f-bold-500">
-                All framing includes free canvas stretching, mounting & wall hooks.Your framed
-                oil painting will arrive to your door ready to hang on your wall.
-              </div>
-              <div class="p-md-20 p-15 acea-row row-between-wrapper text-20 bg-gray-100">
-                <p class="f-bold-500">
-                  Price Details
-                  <span
-                      class="text-underline cursor-pointer"
-                      ref="checkButtonRef"
-                      v-click-outside="onClickOutside"
-                  >
-                Check
+                  <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[0]">
+                    <p class="p-15 bg-gray-200">
+                      To order a custom size,
+                      <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click here</a>.
+                      Our artists will create a painting in any size you require.
+                    </p>
+                  </div>
+                  <div class="m-md-20 m-15">
+                    <el-select
+                        class="custom-select"
+                        v-model="currentSizeId"
+                        placeholder="Please Select Size"
+                        size="large"
+                        @change="chooseSize"
+                    >
+                      <el-option
+                          v-for="item in sizeOptions"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                      >
+                        <div class="option-item acea-row row-between-wrapper">
+                          <span>{{ item.name }}</span>
+                          <span>{{ currencyStore.formatToCurrency(item.price || 0) }}</span>
+                        </div>
+                      </el-option>
+                      <template #prefix>
+                        <div class="size-prefix"></div>
+                      </template>
+                    </el-select>
+                  </div>
+
+                  <!--复杂层度选择-->
+                  <template v-if="route.params.work === ArtCodeEnum.Painting && !isPrint">
+                    <div class="acea-row row-between-wrapper m-md-20 m-15">
+                      <div class="acea-row row-middle">
+                        <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                        <span class="text-26">Count of {{ currentThemeOption?.name }}</span>
+                        <span
+                            class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
+                            @click="openInfo(1)"
+                        >
+                      <span class="pc">{{ moreInfoVisible[1] ? 'LESS INFO' : 'MORE INFO' }}</span>
+                      <span class="iconfont icon-down" :class="{'rotate-180': moreInfoVisible[1]}"></span>
+                    </span>
+                      </div>
+                      <div class="text-20 f-bold"></div>
+                    </div>
+                    <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[1]">
+                      <p class="p-15 bg-gray-200">
+                        Please select the number of figures in your photo. Each person or pet/animal in a photo would be
+                        counted
+                        as one figure. Houses, cars, boats and travel scenery would each count as one figure.
+                      </p>
+                    </div>
+
+                    <!-- Pc端复杂程度选择 -->
+                    <div class="m-md-20 m-15" v-if="appStore.isPc">
+                      <div class="width-list row">
+                        <div
+                            class="col-xl-average col-md-3 col-xs-4 col-6"
+                            v-for="(item, index) in maxNumber"
+                            :key="index"
+                        >
+                          <div
+                              class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-20"
+                              :class="{'border-gray-700': contentNumber === item}"
+                              @click="chooseNumber(item)"
+                          >
+                            <pre>{{ item }}</pre>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 移动端复杂程度选择 -->
+                    <div class="px-20 acea-row row-between-wrapper gap-base" v-else>
+                      <div class="flex-1">
+                        <el-slider
+                            :show-tooltip="false"
+                            v-model="contentNumberSet"
+                            :step="1"
+                            :max="maxNumber"
+                            :min="1"
+                            show-stops
+                        />
+                      </div>
+                      <div class="flex-auto f-bold">{{ contentNumber }}</div>
+                    </div>
+
+                  </template>
+
+                  <!--画框选择-->
+                  <div class="acea-row row-between-wrapper m-md-20 m-15">
+                    <div class="acea-row row-middle">
+                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                      <span class="text-26">Choose a Frame</span>
+                      <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
+                    </div>
+                    <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
+                  </div>
+                  <div class="m-md-20 m-15">
+                    <div class="frame-scroll border-sm p-10">
+                      <div class="frame-list">
+                        <div
+                            v-for="(item, index) in frameOptions" :key="item.id"
+                            class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
+                            :class="{ on: currentFrameId === item.id }"
+                            @click="chooseFrame(item)"
+                        >
+                          <div class="frame-box">
+                            <div class="frame-img aspect-ratio">
+                              <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
+                            </div>
+                            <p class="line2 mt-10 frame-name">{{ item.name }}</p>
+                            <p class="f-bold-500 frame-money">
+                              {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--卡纸选择（选择画框并且画框支持和有卡纸选项才有）-->
+                  <template v-if="hasFrame && matVisible">
+                    <div class="acea-row row-between-wrapper m-md-20 m-15">
+                      <div class="acea-row row-middle">
+                        <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                        <span class="text-26">Choose a Canvas material</span>
+                      </div>
+                      <div class="text-20 f-bold">
+                        {{ currencyStore.formatToCurrency(currentMaterialOption?.price || 0) }}
+                      </div>
+                    </div>
+
+                    <div class="m-md-20 m-15">
+                      <div class="material-wrapper border-sm m-md-20 m-15">
+                        <div class="acea-row row-middle text-20 f-bold-500">
+                          <p class="mr-xl-40 mr-20">Mat Color</p>
+                          <p class="flex-1 line1">Crisp Bright White</p>
+                        </div>
+                        <div class="color-list my-md-20 my-15">
+                          <div
+                              class="color-item rounded-full cursor-pointer"
+                              :class="{on: currentMaterialId === item.id}"
+                              :style="{background: item.config?.matColor}"
+                              v-for="(item, index) in materialOptions"
+                              :key="index"
+                              @click="chooseMatColor(item)"
+                          >
+                            <span v-if="item.id === ''" class="iconfont icon-close"></span>
+                          </div>
+                        </div>
+                        <template v-if="currentMaterialWidthOption.length">
+                          <div class="acea-row row-middle text-20 f-bold-500">
+                            <p class="mr-xl-40 mr-20">Mat Width</p>
+                            <p class="flex-1 line1">Increasing the mat width mayaffectthe frame price.</p>
+                          </div>
+                          <div class="width-list row mt-md-20 mt-15">
+                            <div
+                                class="col-average"
+                                v-for="(item, index) in currentMaterialWidthOption"
+                                :key="index"
+                            >
+                              <div
+                                  class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
+                                  :class="{'border-gray-700': currentMaterialWidth === item.matWidth}"
+                                  @click="chooseMatWidth(item.matWidth!)"
+                              >
+                                {{ item.matWidth }}″
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </template>
+
+                  <!--备注-->
+                  <div class="acea-row row-between-wrapper m-md-20 m-15">
+                    <div class="acea-row row-middle">
+                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                      <span class="text-26">Additional Notes</span>
+                      <span class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
+                            @click="openInfo(2)"
+                      >
+                <span class="pc">{{ moreInfoVisible[2] ? 'LESS INFO' : 'MORE INFO' }}</span>
+                <span class="iconfont icon-down" :class="{'rotate-180': moreInfoVisible[2]}"></span>
               </span>
-                </p>
-                <p class="f-bold">Total：<span
-                    class="text-26 text-error">{{ currencyStore.formatToCurrency(totalPrice || 0) }}</span></p>
-              </div>
-              <el-button class="w-full add-cart__button" size="large" type="danger" @click="addToCart">Add To Cart
-              </el-button>
+                    </div>
+                    <div class="text-20 f-bold"></div>
+                  </div>
+                  <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[2]">
+                    <p class="p-15 bg-gray-200">
+                      Here is where you can convey any special requests to the artist, such as removing certain aspects in
+                      the
+                      photo or specific color and background preferences.
+                    </p>
+                  </div>
+                  <div class="m-md-20 m-15">
+                    <el-input
+                        type="textarea"
+                        v-model="remark"
+                        placeholder="Please enter any additional instructions"
+                        :rows="appStore.isPc ? 8 : 3"
+                    />
+                  </div>
+
+                  <!--Summary-->
+                  <!--<div class="acea-row row-middle px-md-20 px-15 py-10">
+                    <span class="iconfont icon-info-fill text-20" />
+                    <p class="ml-6 text-20 flex-1 line1">
+                      <span class="cursor-pointer text-underline" @click="centerDialogVisible = true">
+                        <b class="f-bold">Click here:</b>Summary of differences.
+                      </span>
+                    </p>
+                  </div>-->
+
+                  <div class="p-md-20 p-15 f-bold-500 text-16 border-t-sm">
+                    <p>Product Parameter</p>
+                    <p class="mt-10" v-for="(val, key) in specs">{{ key }}: {{ val }}</p>
+                  </div>
+                  <div class="border-t-sm p-md-20 p-15 text-16 f-bold-500">
+                    All framing includes free canvas stretching, mounting & wall hooks.Your framed
+                    oil painting will arrive to your door ready to hang on your wall.
+                  </div>
+                  <div class="p-md-20 p-15 acea-row row-between-wrapper text-20 bg-gray-100">
+                    <p class="f-bold-500">
+                      Price Details
+                      <span
+                          class="text-underline cursor-pointer"
+                          ref="checkButtonRef"
+                          v-click-outside="onClickOutside"
+                      >Check</span>
+                    </p>
+                    <p class="f-bold">
+                      Total：
+                      <span class="text-26 text-error">{{ currencyStore.formatToCurrency(totalPrice || 0) }}</span>
+                    </p>
+                  </div>
+                  <el-button
+                      class="w-full add-cart__button rounded-none"
+                      size="large"
+                      type="danger"
+                      @click="addToCart"
+                  >
+                    Add To Cart
+                  </el-button>
+                </div>
+              </el-skeleton>
             </template>
           </div>
         </div>
@@ -625,83 +727,61 @@
     <!-- How it Works -->
     <div class="container" v-show="currentView !== 'custom'">
       <p class="text-60 f-bold-500 text-center my-md-50 my-25">How it Works:</p>
-      <div class="row works-list gap-row-base  my-md-50 my-25">
-        <div class="col-lg-3 col-md-6">
-          <div>
-            <p class="acea-row row-between-wrapper">
-              <span class="text-26 f-bold">Choose Subject</span>
-              <span class="iconfont icon-album text-50"/>
-            </p>
-            <p class="text-20 mt-20">
-              Pick your most cherished Subject(s). For best quality, choose an image that is clear, in focus,
-              and large enough to see the details.
-            </p>
+      <div class="my-md-50 my-25">
+        <div class="row works-list gap-row-base" v-if="appStore.isPc">
+          <div class="col-lg-3 col-sm-6" v-for="item in HOW_IT_WORKS" :key="item.title">
+            <div class="works-item">
+              <p class="acea-row row-between-wrapper">
+                <span class="text-26 f-bold">{{ item.title }}</span>
+                <span class="iconfont text-50" :class="item.icon"/>
+              </p>
+              <p class="text-20 mt-20">{{ item.desc }}</p>
+            </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6">
-          <div>
-            <p class="acea-row row-between-wrapper">
-              <span class="text-26 f-bold">Choose Style</span>
-              <span class="iconfont icon-magic-pen text-50"/>
-            </p>
-            <p class="text-20 mt-20">
-              Pick the medium for your artist to use when creating your portrait, from charcoal to oils. Then choose
-              your desired background.
-            </p>
+        <swiper
+            v-else
+            slides-per-view="auto"
+            :space-between="15"
+            :centered-slides="true"
+            :loop="true"
+        >
+          <swiper-slide v-for="(item, index) in HOW_IT_WORKS" :key="item.title" style="width: 80%;">
+            <div class="works-item text-center relative bg-gray-100 p-10 rounded-md">
+              <span class="iconfont" :class="item.icon" style="font-size: 40px;"/>
+              <p class="text-26 f-bold my-20">{{ item.title }}</p>
+              <p class="text-20">{{ item.desc }}</p>
+              <div class="serial">{{ index + 1 }}</div>
+            </div>
+          </swiper-slide>
+        </swiper>
+      </div>
+    </div>
+
+    <!-- 底部按钮 -->
+    <!--:style="{ position: currentView === 'custom' ? 'relative' : 'sticky' }"-->
+    <div
+        class="foot-wrapper py-20"
+        v-if="route.params.work === ArtCodeEnum.Painting && currentView !== 'theme'"
+        :class="{ 'has-continue': currentView !== 'custom' }"
+    >
+      <div class="container">
+        <div class="foot-inner">
+          <div class="back-btn acea-row row-middle cursor-pointer" @click="handleBack">
+            <span class="iconfont icon-left text-20"></span>
+            <span class="text-20 f-bold">Back</span>
           </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div>
-            <p class="acea-row row-between-wrapper">
-              <span class="text-26 f-bold">Upload Photos</span>
-              <span class="iconfont icon-upload-pictures text-50"/>
-            </p>
-            <p class="text-20 mt-20">
-              Upload your photos when you place your order or send them to us by email. You can even request to
-              combine multiple images into one.
-            </p>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div>
-            <p class="acea-row row-between-wrapper">
-              <span class="text-26 f-bold">Place Order</span>
-              <span class="iconfont icon-color-palette text-50"/>
-            </p>
-            <p class="text-20 mt-20">
-              After checkout, you will receive an order number and a detailed email with what to expect next. Time to
-              get excited about your custom portrait!
-            </p>
+          <div class="foot-center">
+            <div class="foot-text text-20 f-bold text-center line1">Physically Hand-painted by Artists (Zero Printing)
+            </div>
+            <el-button class="foot-btn" type="primary" size="large" @click="handleContinue"
+                       v-if="currentView !== 'custom'">Continue
+            </el-button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 底部按钮 -->
-    <div
-        class="foot-wrapper"
-        :style="{ position: currentView === 'custom' ? 'relative' : 'sticky' }"
-        v-if="route.params.work === ArtCodeEnum.Painting && currentView !== 'theme'"
-    >
-      <div class="container">
-        <div class="foot-inner py-20">
-          <div class="back-btn acea-row row-middle cursor-pointer" @click="handleBack" v-show="currentView !== 'theme'">
-            <span class="iconfont icon-left text-20"></span>
-            <span class="text-20 f-bold">Back</span>
-          </div>
-          <span class="text-20 f-bold text-center">Online proofing | Unlimited revisions | 100% satisfaction before painting</span>
-          <el-button
-              type="primary"
-              size="large"
-              @click="handleContinue"
-              v-if="currentView !== 'custom'"
-          >
-            Continue
-          </el-button>
-          <div v-else style="height: 20px"></div>
-        </div>
-      </div>
-    </div>
   </section>
 
   <ClientOnly>
@@ -736,7 +816,7 @@
     <!-- 图片查看器 -->
     <el-image-viewer
         v-if="exampleViewVisible"
-        :url-list="[imagePrefix(TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType][exampleArrIndex].paint)]"
+        :url-list="[imagePrefix(TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType]![exampleArrIndex]!.paint)]"
         @close="exampleViewVisible = false"
     />
   </ClientOnly>
@@ -789,10 +869,19 @@ import {ArtCodeEnum, type ArtCodeType} from "~/types/enumeration";
 import {rangeVerify} from "~/utils/matchingInterval";
 import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {useIndexedDBBase64} from '~/composables/useIndexedDBBase64'
-import {TECHNIQUE_EXAMPLE} from "~/constant";
+import {TECHNIQUE_EXAMPLE, HOW_IT_WORKS} from "~/constant";
+import {Swiper, SwiperSlide} from 'swiper/vue'
+import {Autoplay, Pagination} from 'swiper'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import {useVerticalDrag} from '~/composables/useVerticalDrag'
 
 defineOptions({
   name: 'CustomPaint'
+})
+
+definePageMeta({
+  isShowActivity: true
 })
 
 const {$bus} = useNuxtApp()
@@ -803,6 +892,15 @@ const route = useRoute()
 const router = useRouter()
 const currencyStore = useCurrencyStore();
 const {saveBase64} = useIndexedDBBase64()
+const modules = [Autoplay, Pagination]
+const functionalRef = ref<HTMLElement | null>(null)
+const {
+  top: functionalTop,
+  enableTransition,
+  onTouchStart,
+  onTouchMove,
+  onTouchEnd
+} = useVerticalDrag(functionalRef, {initialTop: 100})
 
 onMounted(() => {
   $bus.off('continueCustomPaint') // 防止重复注册
@@ -823,9 +921,7 @@ onMounted(() => {
 })
 
 const moreInfoVisible = ref([false, false, false, false])
-
 const currentView = ref('custom')
-
 const origin = useRequestURL().origin
 
 useHead(mergeHeadWithLodash(
@@ -848,6 +944,7 @@ const handleImageChange = () => {
   })
 }
 
+const squareImageUrl = ref('') // 1:1图片
 const generatorImg = ref('') // 最终图片
 const pixel = ref({width: 0, height: 0}) // 最终尺寸
 const imgViewVisible = ref(false)
@@ -863,12 +960,15 @@ const openInfo = (index: number) => {
   moreInfoVisible.value[index] = !moreInfoVisible.value[index]
 }
 
-let loaded = false
+let firstLoadCombo = false
+const loadingCombo = ref(false) // 组合加载中
+
 /**
  * 获取组合
  * @param senior - 开启高级比较
  */
 const getCombination = async (senior = false) => {
+  loadingCombo.value = true
   const {data} = await getCombinationApi({
     code: finalCode.value,
     ratio: ratio.value,
@@ -904,7 +1004,7 @@ const getCombination = async (senior = false) => {
   }
 
   // 第一次加载默认选中
-  if (!loaded) {
+  if (!firstLoadCombo) {
     selectSize()
 
     // const innerFrameId = innerFrame.value.id || '' // 拿到内框ID
@@ -945,7 +1045,8 @@ const getCombination = async (senior = false) => {
     }
   }
 
-  loaded = true
+  firstLoadCombo = true
+  loadingCombo.value = false
   generateStepIndex()
 }
 
@@ -1063,7 +1164,7 @@ const uploadChange = async (file: UploadFile) => {
     imageUrl.value = reader.result as string;
   };
   reader.readAsDataURL(file.raw as Blob); // 把 File 转成 base64
-  loaded = false
+  firstLoadCombo = false
   await getCombination()
 }
 // 是否有卡纸选项（多了个画框配置中是否支持卡纸）
@@ -1219,7 +1320,7 @@ const handleContinue = () => {
 
       ElMessageBox.alert('Please choose a style you love before moving to the next step!', 'Style Required', {
         callback: () => {
-          const offset = document.getElementById('header-placeholder').getBoundingClientRect().height
+          const offset = document.getElementById('header-placeholder')!.getBoundingClientRect().height
           const top = favoriteMainRef.value?.getBoundingClientRect().top + window.scrollY - offset
 
           window.scrollTo({
@@ -1260,7 +1361,7 @@ const handleBack = () => {
 
 // 重置
 const reset = () => {
-  loaded = false
+  firstLoadCombo = false
   imageUrl.value = ''
   generatorImg.value = ''
   currentSizeId.value = ''
@@ -1386,6 +1487,10 @@ const showLoginWindow = () => {
   loginWindowRef.value?.open()
 }
 
+const handleTouchScreen = (img: string) => {
+  imgViewVisible.value = true
+}
+
 watch(() => route.fullPath,
     () => {
       reset()
@@ -1393,7 +1498,7 @@ watch(() => route.fullPath,
 )
 
 watch(() => currentView.value, () => {
-  if (!import.meta.client) return
+  if (process.server) return
   window.scrollTo({
     top: 0,
     behavior: 'instant'
@@ -1403,493 +1508,628 @@ watch(() => currentView.value, () => {
 </script>
 
 <style scoped lang="scss">
-/*移动端视图*/
-.app-preview {
-  display: flex;
-  flex-direction: column;
-  position: sticky;
-  top: 50px;
-  background: #fff;
-  z-index: 119;
-
-  .btn {
-    width: 100%;
-    height: 37px;
-    background: var(--color-primary);
-    color: #fff;
-    text-align: center;
-    line-height: 37px;
-  }
-}
-
-.portrait-wrapper {
-  img {
-    height: 60px;
-  }
-}
-
-.spu-wrapper {
-  position: relative;
-  row-gap: var(--gutter-base);
-
-  .sticky-column {
+  /*移动端视图*/
+  .app-preview {
+    display: flex;
+    flex-direction: column;
     position: sticky;
-    top: 150px;
-    z-index: 10;
-  }
+    top: 50px;
+    background: #fff;
+    z-index: 119;
 
-  .spu-preview {
-    .preview-box {
-      position: relative;
+    .btn {
       width: 100%;
-      //height: 790px;
-      min-height: 26vw;
-      //aspect-ratio: 75 / 79;
-      padding: 5% 0;
+      height: 37px;
+      background: var(--color-primary);
+      color: #fff;
+      text-align: center;
+      line-height: 37px;
     }
   }
 
-  .spu-spec {
-    overflow: hidden;
+  .portrait-wrapper {
+    img {
+      height: 60px;
+    }
+  }
 
-    .frame-scroll {
-      max-height: 427px;
-      overflow: auto;
-      .frame-list {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        grid-gap: 10px;
+  .spu-wrapper {
+    position: relative;
+    row-gap: var(--gutter-base);
 
-        .frame-item {
-          position: relative;
-          background: var(--color-gray-100);
+    .sticky-column {
+      position: sticky;
+      top: 150px;
+      z-index: 10;
+    }
 
-          .frame-box {
-            padding-bottom: 25px;
+    .spu-preview {
+      .preview-box {
+        position: relative;
+        width: 100%;
+        height: 26vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
 
-            .frame-money {
-              position: absolute;
-              left: 5px;
-              bottom: 5px;
+    .spu-spec {
+      overflow: hidden;
+
+      .frame-scroll {
+        max-height: 427px;
+        overflow: auto;
+
+        .frame-list {
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
+          grid-gap: 10px;
+
+          .frame-item {
+            position: relative;
+            background: var(--color-gray-100);
+
+            .frame-box {
+              padding-bottom: 25px;
+
+              .frame-money {
+                position: absolute;
+                left: 5px;
+                bottom: 5px;
+              }
             }
+
+            &.on {
+              background: var(--color-gray-700);
+              color: #fff;
+            }
+          }
+        }
+      }
+
+      .color-list {
+        display: grid;
+        grid-template-columns: repeat(8, 34px);
+        row-gap: 20px;
+        width: 100%;
+        justify-content: space-between;
+
+        .color-item {
+          width: 34px;
+          height: 34px;
+          color: var(--color-gray-400);
+          border: var(--border-width-md) solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .iconfont {
+            font-size: 28px;
           }
 
           &.on {
-            background: var(--color-gray-700);
-            color: #fff;
+            border-color: var(--color-gray-700);
+            color: var(--color-gray-700);
           }
         }
       }
-    }
 
-    .color-list {
-      display: grid;
-      grid-template-columns: repeat(8, 34px);
-      row-gap: 20px;
-      width: 100%;
-      justify-content: space-between;
+      .width-list {
+        --gutter: var(--gutter-base);
+        row-gap: var(--gutter);
 
-      .color-item {
-        width: 34px;
-        height: 34px;
-        color: var(--color-gray-400);
-        border: var(--border-width-md) solid var(--border-color);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .iconfont {
-          font-size: 28px;
+        .width-item {
+          width: 100%;
         }
-
-        &.on {
-          border-color: var(--color-gray-700);
-          color: var(--color-gray-700);
-        }
-      }
-    }
-
-    .width-list {
-      --gutter: var(--gutter-base);
-      row-gap: var(--gutter);
-
-      .width-item {
-        width: 100%;
       }
     }
   }
-}
 
-.upload-box :deep(.el-upload) {
-  width: 100%;
-}
+  .upload-box :deep(.el-upload) {
+    width: 100%;
 
-.works-list {
-  --gutter: var(--gutter-xl);
-}
+    &:focus,
+    &:active {
+      color: unset !important;
+    }
+  }
 
-.style-list {
-  .style-item {
+  .works-list {
+    --gutter: var(--gutter-xl);
+  }
+
+  .works-item {
     position: relative;
     overflow: hidden;
-    cursor: pointer;
 
-    .p-img {
-      width: 100%;
-      transition: all 0.3s ease-in-out;
-    }
-
-    .p-text {
+    .serial {
       position: absolute;
-      z-index: 3;
-      left: 0;
-      top: 32%;
-      width: 100%;
-      text-align: center;
-      color: #fff;
-      font-weight: 500;
-    }
-
-    .p-btn {
-      position: absolute;
-      z-index: 3;
+      //z-index: -1;
+      font-size: 100px;
       left: 50%;
-      bottom: 8.57%;
-      transform: translateX(-50%);
-      color: #fff;
-      font-weight: 500;
-      padding: 3.43%;
-      white-space: nowrap;
+      top: 50%;
+      color: rgba(0, 0, 0, 0.2);
+      transform: translate(-50%, -50%);
+      font-weight: bold;
     }
+  }
 
-    &::before {
-      content: "";
-      position: absolute;
-      z-index: 2;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, .3);
-    }
+  .style-list {
+    .style-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
 
-    &:hover {
       .p-img {
-        transform: scale(1.1);
-      }
-    }
-  }
-}
-
-.case-list {
-  .case-item {
-    .case-content {
-      display: grid;
-      grid-column-gap: 15px;
-      grid-row-gap: 15px;
-      grid-template-rows: repeat(2, 1fr);
-      grid-template-columns: repeat(5, 1fr);
-      width: 100%;
-      height: 31.04vw;
-
-      .item {
-        border-radius: 1px;
-        overflow: hidden;
-        cursor: pointer;
-      }
-
-      .item:nth-child(1) {
-        grid-area: 1 / 1 / 3 / 3;
-      }
-
-      .item:nth-child(2) {
-        grid-area: 1 / 3 / 2 / 5;
-      }
-
-      .item:nth-child(3) {
-        grid-area: 1 / 5 / 2 / 6;
-      }
-
-      .item:nth-child(4) {
-        grid-area: 2 / 3 / 3 / 4;
-      }
-
-      .item:nth-child(5) {
-        grid-area: 2 / 4 / 3 / 6;
-      }
-    }
-  }
-
-  .case-item:nth-child(even) {
-    .case-content {
-
-      .item:nth-child(1) {
-        grid-area: 1 / 1 / 2 / 3;
-      }
-
-      .item:nth-child(2) {
-        grid-area: 1 / 3 / 2 / 4;
-      }
-
-      .item:nth-child(3) {
-        grid-area: 2 / 1 / 3 / 2;
-      }
-
-      .item:nth-child(4) {
-        grid-area: 2 / 2 / 3 / 4;
-      }
-
-      .item:nth-child(5) {
-        grid-area: 1 / 4 / 3 / 6
-      }
-    }
-  }
-}
-
-.favorite-list {
-  .favorite-item {
-    position: relative;
-    overflow: hidden;
-
-    .p-content {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-
-      .p-desc {
-        position: relative;
-        z-index: 2;
-        flex: 1;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        p {
-          opacity: 0;
-          transform: translateY(10px);
-          transition: all 0.3s ease-in-out 0.2s;
-        }
+        width: 100%;
+        transition: all 0.3s ease-in-out;
       }
 
       .p-text {
-        position: relative;
+        position: absolute;
+        z-index: 3;
+        left: 0;
+        top: 32%;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+        font-weight: 500;
+      }
+
+      .p-btn {
+        position: absolute;
+        z-index: 3;
+        left: 50%;
+        bottom: 8.57%;
+        transform: translateX(-50%);
+        color: #fff;
+        font-weight: 500;
+        padding: 3.43%;
+        white-space: nowrap;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
         z-index: 2;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, .3);
+      }
+
+      &:hover {
+        .p-img {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  .case-list {
+    .case-item {
+      .case-content {
+        display: grid;
+        grid-column-gap: 15px;
+        grid-row-gap: 15px;
+        grid-template-rows: repeat(2, 1fr);
+        grid-template-columns: repeat(5, 1fr);
+        width: 100%;
+        height: 31.04vw;
+
+        .item {
+          border-radius: 1px;
+          overflow: hidden;
+          cursor: pointer;
+        }
+
+        .item:nth-child(1) {
+          grid-area: 1 / 1 / 3 / 3;
+        }
+
+        .item:nth-child(2) {
+          grid-area: 1 / 3 / 2 / 5;
+        }
+
+        .item:nth-child(3) {
+          grid-area: 1 / 5 / 2 / 6;
+        }
+
+        .item:nth-child(4) {
+          grid-area: 2 / 3 / 3 / 4;
+        }
+
+        .item:nth-child(5) {
+          grid-area: 2 / 4 / 3 / 6;
+        }
+      }
+    }
+
+    .case-item:nth-child(even) {
+      .case-content {
+
+        .item:nth-child(1) {
+          grid-area: 1 / 1 / 2 / 3;
+        }
+
+        .item:nth-child(2) {
+          grid-area: 1 / 3 / 2 / 4;
+        }
+
+        .item:nth-child(3) {
+          grid-area: 2 / 1 / 3 / 2;
+        }
+
+        .item:nth-child(4) {
+          grid-area: 2 / 2 / 3 / 4;
+        }
+
+        .item:nth-child(5) {
+          grid-area: 1 / 4 / 3 / 6
+        }
+      }
+    }
+  }
+
+  .favorite-list {
+    .favorite-item {
+      position: relative;
+      overflow: hidden;
+
+      .p-title {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
         width: 100%;
         text-align: center;
         color: #fff;
         background: rgba(0, 0, 0, 0.30);
         font-weight: bold;
-        text-decoration: underline;
       }
 
-      &::after {
-        content: '';
+      .p-content {
         position: absolute;
         left: 0;
         right: 0;
         top: 100%;
         bottom: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
         background: rgba(0, 0, 0, 0.6);
-        transition: all 0.3s ease-in-out;
-      }
-    }
+        transition: all ease-in-out 0.3s;
 
-    &.on {
-      .p-content {
+        .p-text {
+          width: 100%;
+          text-align: center;
+          color: #fff;
+          font-weight: bold;
+          opacity: 0;
+          transform: translateY(10px);
+          transition: all 0.5s ease-in-out 0.3s;
+        }
+
         .p-desc {
+          flex: 1;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
           p {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease-in-out 0.3s;
+            word-break: break-all;
+          }
+        }
+
+        .p-btn {
+          display: inline-block;
+          margin: auto;
+          color: #fff;
+          border: 1px solid #fff;
+          opacity: 0;
+          transform: translateY(10px);
+          transition: all 0.5s ease-in-out 0.3s;
+        }
+      }
+
+      .tips {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(15px);
+
+        //left: 50%;
+        //top: 50%;
+        //transform: translate(-50%, -50%) rotate(-45deg);
+        //color: rgba(255, 255, 255, 0.6);
+        //text-shadow: -2px 2px 3px rgba(90, 85, 85, 0.6);
+      }
+
+      &.on {
+
+        .p-title {
+          display: none;
+        }
+
+        .p-content {
+          top: 0;
+
+          .p-text {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          .p-desc {
+            p {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .p-btn {
             opacity: 1;
             transform: translateY(0);
           }
         }
-
-        .p-text {
-          background: unset;
-        }
-
-        &::after {
-          top: 0;
-        }
       }
     }
   }
-}
 
-.foot-wrapper {
-  z-index: 5;
-  bottom: 0;
-  left: 0;
-  background: #fff;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
-
-  .foot-inner {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 60px;
-  }
-
-  .back-btn {
-    position: absolute;
+  .foot-wrapper {
+    position: sticky;
+    z-index: 22;
+    bottom: 0;
     left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-}
+    background: #fff;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
 
-.case-waterfall {
-  column-count: 3;
-  column-gap: 15px;
+    .foot-inner {
+      position: relative;
 
-  .item {
-    break-inside: avoid; /* 防止内容被分割到不同列 */
-    margin-bottom: 15px;
-  }
-}
-
-@media (max-width: 1460px) {
-  .spu-wrapper .spu-spec {
-    .frame-scroll {
-      .frame-list {
-        grid-template-columns: repeat(5, 1fr);
-        grid-gap: 5px;
+      .back-btn {
+        position: absolute;
+        left: 0;
+        top: 0;
       }
-    }
-  }
-}
 
-@media (max-width: 1260px) {
-  .spu-wrapper .spu-spec {
-    .frame-scroll {
-      max-height: 350px;
-      .frame-list {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    .color-list {
-      grid-template-columns: repeat(6, 25px);
-      row-gap: var(--gutter-sm);;
-
-      .color-item {
-        width: 25px;
-        height: 25px;
-
-        .iconfont {
-          font-size: 16px;
-        }
-      }
-    }
-
-    .width-list {
-      --gutter: var(--gutter-sm);
-    }
-  }
-}
-
-@media (max-width: 991px) {
-  .works-list {
-    --gutter: var(--gutter-base);
-  }
-}
-
-@media (max-width: 768px) {
-  .spu-wrapper .spu-spec {
-    .frame-scroll {
-      max-height: unset;
-      .frame-list {
+      .foot-center {
+        width: 100%;
         display: flex;
-        grid-template-columns: unset;
-        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
 
-        .frame-item {
-          width: 65px;
-          flex-shrink: 0;
+        .foot-text {
+          padding: 0 60px;
+          max-width: 600px;
         }
-
-      }
-    }
-  }
-
-  .foot-wrapper .foot-inner {
-    flex-direction: column;
-    gap: 20px;
-
-    .f-bold {
-      order: 1;
-    }
-
-    .back-btn {
-      top: 30px;
-      transform: unset;
-    }
-
-  }
-
-  .case-list .case-item {
-    .case-content {
-      grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: repeat(5, 1fr);
-      height: 150.4vw;
-      grid-column-gap: 8px;
-      grid-row-gap: 8px;
-
-      .item:nth-child(1) {
-        grid-area: 1 / 1 / 4 / 7;
-      }
-
-      .item:nth-child(2) {
-        grid-area: 4 / 1 / 5 / 5;
-      }
-
-      .item:nth-child(3) {
-        grid-area: 4 / 5 / 5 / 7;
-      }
-
-      .item:nth-child(4) {
-        grid-area: 5 / 1 / 6 / 3;
-      }
-
-      .item:nth-child(5) {
-        grid-area: 5 / 3 / 6 / 7;
       }
     }
 
-    &:nth-child(even) .case-content {
+    &.has-continue {
+      .foot-inner {
 
-      .item:nth-child(1) {
-        grid-area: 4 / 3 / 5 / 7;
-      }
-
-      .item:nth-child(2) {
-        grid-area: 4 / 1 / 5 / 3;
-      }
-
-      .item:nth-child(3) {
-        grid-area: 5 / 5 / 6 / 7;
-      }
-
-      .item:nth-child(4) {
-        grid-area: 5 / 1 / 6 / 5;
-      }
-
-      .item:nth-child(5) {
-        grid-area: 1 / 1 / 4 / 7;
-
+        .back-btn {
+          top: 50%;
+          transform: translateY(-50%);
+        }
       }
     }
+
+
   }
 
   .case-waterfall {
-    column-count: 2;
+    column-count: 3;
+    column-gap: 15px;
+
+    .item {
+      break-inside: avoid; /* 防止内容被分割到不同列 */
+      margin-bottom: 15px;
+    }
   }
-}
+
+  .functional-area {
+    position: fixed;
+    z-index: 120;
+    top: 100px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 5px;
+    border-radius: 100px;
+    background: var(--color-gray-700);
+    color: var(--color-gray-400);
+    gap: 10px;
+    user-select: none;
+    touch-action: none;
+
+    .iconfont {
+      font-size: 20px;
+    }
+
+    .split {
+      width: 10px;
+      height: 1px;
+      background: var(--color-gray-300);
+      transform: scaleY(0.5);
+      transform-origin: center; /* 确保缩放后仍然居中 */
+    }
+  }
+
+  @media (max-width: 1460px) {
+    .spu-wrapper .spu-spec {
+      .frame-scroll {
+        .frame-list {
+          grid-template-columns: repeat(5, 1fr);
+          grid-gap: 5px;
+        }
+      }
+    }
+
+    .works-list {
+      --gutter: var(--gutter-lg);
+    }
+  }
+
+  @media (max-width: 1260px) {
+    .spu-wrapper .spu-spec {
+      .frame-scroll {
+        max-height: 350px;
+
+        .frame-list {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .color-list {
+        grid-template-columns: repeat(6, 25px);
+        row-gap: var(--gutter-sm);;
+
+        .color-item {
+          width: 25px;
+          height: 25px;
+
+          .iconfont {
+            font-size: 16px;
+          }
+        }
+      }
+
+      .width-list {
+        --gutter: var(--gutter-sm);
+      }
+    }
+
+    .works-list {
+      --gutter: var(--gutter-md);
+    }
+  }
+
+  @media (max-width: 991px) {
+    .works-list {
+      --gutter: var(--gutter-base);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .spu-wrapper .spu-spec {
+      .frame-scroll {
+        max-height: unset;
+
+        .frame-list {
+          display: flex;
+          grid-template-columns: unset;
+          flex-wrap: nowrap;
+
+          .frame-item {
+            width: 65px;
+            flex-shrink: 0;
+          }
+
+        }
+      }
+    }
+
+    .foot-wrapper {
+
+      .foot-inner {
+        .foot-center {
+          flex-direction: column;
+          row-gap: 20px;
+
+          .foot-text {
+            padding: 0 30px;
+            order: 2;
+          }
+
+          .foot-btn {
+            order: 1;
+          }
+        }
+      }
+
+      &.has-continue {
+        .foot-inner {
+          .back-btn {
+            top: 11px;
+            transform: unset;
+          }
+        }
+      }
+    }
+
+    .case-list .case-item {
+      .case-content {
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        height: 150.4vw;
+        grid-column-gap: 8px;
+        grid-row-gap: 8px;
+
+        .item:nth-child(1) {
+          grid-area: 1 / 1 / 4 / 7;
+        }
+
+        .item:nth-child(2) {
+          grid-area: 4 / 1 / 5 / 5;
+        }
+
+        .item:nth-child(3) {
+          grid-area: 4 / 5 / 5 / 7;
+        }
+
+        .item:nth-child(4) {
+          grid-area: 5 / 1 / 6 / 3;
+        }
+
+        .item:nth-child(5) {
+          grid-area: 5 / 3 / 6 / 7;
+        }
+      }
+
+      &:nth-child(even) .case-content {
+
+        .item:nth-child(1) {
+          grid-area: 4 / 3 / 5 / 7;
+        }
+
+        .item:nth-child(2) {
+          grid-area: 4 / 1 / 5 / 3;
+        }
+
+        .item:nth-child(3) {
+          grid-area: 5 / 5 / 6 / 7;
+        }
+
+        .item:nth-child(4) {
+          grid-area: 5 / 1 / 6 / 5;
+        }
+
+        .item:nth-child(5) {
+          grid-area: 1 / 1 / 4 / 7;
+
+        }
+      }
+    }
+
+    .case-waterfall {
+      column-count: 2;
+    }
+  }
+
+  @media (max-width: 414px) {
+    .foot-wrapper .foot-inner .foot-center .foot-text {
+      max-width: 270px;
+      padding: 0 20px;
+    }
+  }
 </style>

@@ -1,6 +1,15 @@
 import type {TechniqueCodeType} from "~/types/enumeration";
+import type {IArtists} from "~/api/interface/artists/artists";
+import type {General} from "~/types/global";
 
 export namespace IHome {
+
+    export interface HomeDataRow {
+        ad: General.MediaItem[]
+        product: General.GoodsItem[]
+        artists: IArtists.Row[]
+    }
+
     /*菜单数据*/
     export interface MenuRow {
         /*分类编号*/
@@ -47,5 +56,4 @@ export namespace IHome {
         /*ISO4217 货币代码 */
         code: string;
     }
-
 }

@@ -6,6 +6,7 @@
     </main>
     <AppFooter />
     <AppPendant/>
+    <DiscountWindow v-if="showDiscountWindow" />
   </div>
 </template>
 
@@ -15,8 +16,9 @@ import {useAppStore} from "~/stores/modules/app";
 import {throttle} from "lodash";
 import { useRequestHeaders } from 'nuxt/app'
 
-const WIDTH = 767
+const WIDTH = 768
 const appStore = useAppStore()
+const route = useRoute()
 
 // SSR 阶段识别
 if (import.meta.server) {
@@ -51,6 +53,10 @@ if (import.meta.client) {
     window.removeEventListener('resize', onResize)
   })
 }
+
+const showDiscountWindow = computed(() => {
+  return route.meta.isShowActivity === true
+})
 </script>
 
 <style scoped lang="scss">

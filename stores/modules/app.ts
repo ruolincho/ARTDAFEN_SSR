@@ -57,6 +57,13 @@ export const useAppStore = defineStore(
 
         const isPc = computed(() => device.value === 'pc')
 
+        const headerHeight =  ref(0) // 用来存储头部高度
+
+        // 设置头部高度的方法
+        const setHeaderHeight = (height: number) => {
+            headerHeight.value = height;
+        }
+
         return {
             codeCountDown,
             startCodeCountDown,
@@ -65,6 +72,8 @@ export const useAppStore = defineStore(
             device,
             toggleDevice,
             isPc,
+            headerHeight,
+            setHeaderHeight
         };
     },
     {

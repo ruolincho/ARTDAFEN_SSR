@@ -2,6 +2,7 @@ import { $http } from '~/api/http'
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import type {IHome} from "~/api/interface/home/home";
 import type {IArtists} from "~/api/interface/artists/artists";
+import type {General} from "~/types/global";
 
 /**
  * 首页菜单
@@ -23,13 +24,6 @@ export const getHomeDataApi = () => {
  */
 export const getHomeMoreApi = () => {
     return $http().get<IHome.MoreRow>(TRADE_MODULE + `/home/more`)
-}
-
-/**
- * 获取首页探索
- */
-export const getHomeExploreApi = () => {
-    return $http().get<General.GoodsItem[]>(TRADE_MODULE + `/home/product`)
 }
 
 /**

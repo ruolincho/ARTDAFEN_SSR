@@ -219,13 +219,16 @@
         }"
           >
             <swiper-slide v-for="item in relatedList" :key="item.id">
-              <div class="explore-item cursor-pointer" @click="jumpToProduct(item)">
+              <NuxtLink class="explore-item block" :to="productLink(item)" target="_blank">
                 <div class="aspect-ratio">
                   <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
-                <p class="text-12 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice || 0) }}</p>
-              </div>
+                <p class="text-12">
+                  <span class="text-16 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice) }}</span>
+                  <span class="text-gray-400 text-through ml-5 text-14">{{ currencyStore.formatToCurrency(item.marketPrice) }}</span>
+                </p>
+              </NuxtLink>
             </swiper-slide>
           </swiper>
           <div class="recommend-button swiper-button-next related-next"></div>
@@ -253,7 +256,7 @@
         <img class="w-full app" :src="imagePrefix(goodsDetail?.brand?.img)" alt="brand">
       </div>
       <ClientOnly>
-        <div class="recommend-swiper">
+        <div class="recommend-swiper" v-if="brandRecList.length">
           <swiper
             :modules="modules"
             :navigation="{ nextEl: '.brand-next', prevEl: '.brand-prev' }"
@@ -270,13 +273,13 @@
         }"
           >
             <swiper-slide v-for="item in brandRecList" :key="item.id">
-              <div class="explore-item cursor-pointer" @click="jumpToProduct(item)">
+              <NuxtLink class="explore-item block" :to="productLink(item)" target="_blank">
                 <div class="aspect-ratio">
                   <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p class="text-12 f-bold">{{ item.retailPrice }}</p>
-              </div>
+              </NuxtLink>
             </swiper-slide>
           </swiper>
           <div class="recommend-button swiper-button-next brand-next"></div>
@@ -292,7 +295,7 @@
     <div class="container-middle">
       <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Frequently Asked Questions</h1>
       <el-collapse v-model="activeName" accordion>
-        <el-collapse-item v-for="subItem in shoppingFaq" :title="subItem.title" :name="subItem.name"
+        <el-collapse-item v-for="subItem in getFaqByQuote('shopping')" :title="subItem.title" :name="subItem.name"
                           :key="subItem.name">
           <template #icon="{ isActive }">
             <p style="margin-left:  auto">
@@ -315,11 +318,10 @@ import {Autoplay, Navigation, Pagination, Thumbs} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import {debounce, imagePrefix, jumpToProduct} from "~/utils";
+import {debounce, imagePrefix, productLink} from "~/utils";
 import type {IProduct} from "~/api/interface/product/product";
 import {getBrandRecommendApi, getRelatedRecommendApi} from "~/api/modules/product/product";
 import type {ISpecs} from "~/api/interface/specs/specs";
-import {getSpecsListApi} from "~/api/modules/specs/specs";
 import type {IShopping} from "~/api/interface/shopping/shopping";
 import {useCartStore} from "~/stores/modules/cart";
 import {ElMessage} from "element-plus";
@@ -328,7 +330,7 @@ import {gen_path_obj} from "~/utils/product";
 import {useUserStore} from "~/stores/modules/user";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {PRODUCT_URL} from "~/config";
-import {shoppingFaq} from "~/config/faq";
+import {getFaqByQuote} from "~/config/faq";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";

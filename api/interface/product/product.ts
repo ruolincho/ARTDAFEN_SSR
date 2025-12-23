@@ -144,4 +144,28 @@ export namespace IProduct {
         /*尺寸编号 */
         dimensionId: string;
     }
+
+    /*购物车链接响应参数*/
+    export interface ZoneRow {
+        /*主键编号 */
+        id: string;
+        /*标题 */
+        title: string;
+        /*副标题 */
+        subTitle: string;
+        /*专区背景图 */
+        background: string;
+    }
+
+    /*品牌相关推荐请求参数*/
+    export interface zoneCollectQuery extends IPageQuery {
+        /*专区编号 */
+        zoneId: string;
+        /*商品工艺编号 */
+        techniqueId?: TechniqueCodeType | null;
+        /*价格排序, null: 重置, 0: 降序, 1: 升序 */
+        priceSort?: string | null;
+        /*销量排序, null: 重置, 0: 降序, 1: 升序 */
+        salesSort?: string | null;
+    }
 }

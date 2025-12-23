@@ -64,6 +64,16 @@ import {sendConsulting} from "~/api/modules/message/message";
 import {emailReg} from "~/regular";
 import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 
+onMounted(() => {
+  // 只有在客户端且 query 存在时才执行
+  if (route.query.name) {
+    // 这里加一个小延时是为了对抗浏览器的“滚动恢复”机制
+    setTimeout(() => {
+      scrollToSection(route.query.name as string);
+    }, 100);
+  }
+})
+
 const route = useRoute()
 
 const origin = useRequestURL().origin
@@ -96,21 +106,44 @@ const sectionRefs = ref<HTMLElement[]>([]);
 const activeName = ref('')
 
 const scrollToSection = async (name: string) => {
-  // 先滚动到目标位置（由于渲染延迟，这里需要两次nextTick）
-  await nextTick();
-  await nextTick();
-  const sectionIndex = faqList.findIndex(item => item.name === name.split('-')[0]);
 
-  if (sectionIndex > -1 && sectionRefs.value[sectionIndex]) {
-    sectionRefs.value[sectionIndex].scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    });
+  if (!name) return;
 
-    // 滚动完成后再展开面板
-    await new Promise(resolve => setTimeout(resolve, 500)); // 等待滚动动画完成
-    activeName.value = name;
-  }
+  // 等待 DOM 更新
+  await nextTick();
+
+  // 提取 target 名称
+  const targetName = name.split('-')[0];
+  const sectionIndex = faqList.findIndex(item => item.name === targetName);
+
+  // 防御性检查：索引无效直接退出
+  if (sectionIndex === -1) return;
+
+  // 获取 DOM 元素的逻辑封装，支持简单的重试
+  const findDomAndScroll = (retryCount = 0) => {
+    const dom = sectionRefs.value[sectionIndex];
+
+    if (dom) {
+      // 找到了 DOM，执行滚动
+      dom.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+      // 延迟展开面板，配合滚动动画
+      setTimeout(() => {
+        activeName.value = name;
+      }, 500);
+    } else {
+      // 没找到 DOM，且重试次数小于 5 次（约 250ms），则重试
+      // 这解决了首次加载时 ref 还没填充完的问题
+      if (retryCount < 5) {
+        setTimeout(() => findDomAndScroll(retryCount + 1), 50);
+      }
+    }
+  };
+
+  findDomAndScroll();
 }
 
 const ruleFormRef = ref<InstanceType<typeof ElForm>>();
@@ -127,8 +160,6 @@ watch(() => route.query.name, (newVal) => {
   if (newVal) {
     scrollToSection(newVal as string);
   }
-}, {
-  immediate: true
 })
 
 </script>

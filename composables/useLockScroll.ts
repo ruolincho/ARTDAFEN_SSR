@@ -1,60 +1,173 @@
 import { watch, onUnmounted, isRef, type Ref } from 'vue'
 
-/**
- * 锁定滚动条（支持多个响应式布尔值）
- * @example
- * useLockScroll(isVisible)
- * useLockScroll([isVisible1, isVisible2])
- * useLockScroll(isVisible1, isVisible2)
- */
 export function useLockScroll(...args: (Ref<boolean> | Ref<boolean>[])[]) {
-    let scrollTop = 0
     let isLocked = false
+    let touchStartX = 0
+    let touchStartY = 0
 
-    // 统一格式 => 所有监听目标变成一个数组
+    const isClient = process.client && typeof window !== 'undefined';
+
     const sources: Ref<boolean>[] = args.flat().filter(isRef)
+    const preventKeys = new Set(['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown', 'Home', 'End'])
+
+    // 1. 辅助：判断是否是可滚动元素 (同时支持 X 和 Y 轴检测)
+    const isElementScrollable = (el: HTMLElement): boolean => {
+        if (!isClient || el === document.body || el === document.documentElement) return false
+
+        const style = window.getComputedStyle(el)
+
+        // 检查垂直滚动
+        const isScrollY = (style.overflowY === 'auto' || style.overflowY === 'scroll') &&
+            el.scrollHeight > el.clientHeight
+
+        // 检查水平滚动 (新增)
+        const isScrollX = (style.overflowX === 'auto' || style.overflowX === 'scroll') &&
+            el.scrollWidth > el.clientWidth
+
+        return isScrollY || isScrollX
+    }
+
+    // 2. 辅助：寻找滚动的父级
+    const findScrollableParent = (target: EventTarget | null): HTMLElement | null => {
+        if (!isClient) return null
+        let el = target as HTMLElement | null
+        while (el && el !== document.body && el !== document.documentElement) {
+            if (isElementScrollable(el)) return el
+            el = el.parentElement
+        }
+        return null
+    }
+
+    // 3. PC端滚轮处理 (区分 X/Y 轴)
+    const handleWheel = (e: WheelEvent) => {
+        if (!isClient) return
+        const scrollEl = findScrollableParent(e.target)
+
+        // A. 背景滚动 -> 拦截
+        if (!scrollEl) {
+            if (e.cancelable) e.preventDefault()
+            return
+        }
+
+        // B. 容器内滚动 -> 判断方向
+        const { scrollTop, scrollHeight, clientHeight, scrollLeft, scrollWidth, clientWidth } = scrollEl
+        const deltaX = e.deltaX
+        const deltaY = e.deltaY
+
+        // 判断主滚动方向：谁的偏移量大，就听谁的
+        const isVertical = Math.abs(deltaY) > Math.abs(deltaX)
+
+        if (isVertical) {
+            // --- 垂直逻辑 ---
+            // 向上滚且到顶 -> 拦截
+            if (deltaY < 0 && scrollTop <= 0) {
+                if (e.cancelable) e.preventDefault()
+            }
+            // 向下滚且到底 -> 拦截
+            else if (deltaY > 0 && scrollTop + clientHeight >= scrollHeight - 1) {
+                if (e.cancelable) e.preventDefault()
+            }
+        } else {
+            // --- 水平逻辑 (新增) ---
+            // 向左滚且到左边 -> 拦截 (防止浏览器后退手势等)
+            if (deltaX < 0 && scrollLeft <= 0) {
+                if (e.cancelable) e.preventDefault()
+            }
+            // 向右滚且到右边 -> 拦截
+            else if (deltaX > 0 && scrollLeft + clientWidth >= scrollWidth - 1) {
+                if (e.cancelable) e.preventDefault()
+            }
+        }
+    }
+
+    // 4. 移动端触摸开始 (记录 X 和 Y)
+    const handleTouchStart = (e: TouchEvent) => {
+        if (!isClient) return
+        touchStartX = e.targetTouches[0].clientX
+        touchStartY = e.targetTouches[0].clientY
+    }
+
+    // 5. 移动端触摸移动 (区分 X/Y 轴)
+    const handleTouchMove = (e: TouchEvent) => {
+        if (!isClient) return
+        const scrollEl = findScrollableParent(e.target)
+
+        if (!scrollEl) {
+            if (e.cancelable) e.preventDefault()
+            return
+        }
+
+        const touchX = e.targetTouches[0].clientX
+        const touchY = e.targetTouches[0].clientY
+
+        // 计算移动距离
+        const deltaX = touchX - touchStartX
+        const deltaY = touchY - touchStartY
+
+        // *注意*: 移动端 delta 与 滚轮 delta 方向相反
+        // 下拉是 deltaY > 0，右滑是 deltaX > 0
+
+        const { scrollTop, scrollHeight, clientHeight, scrollLeft, scrollWidth, clientWidth } = scrollEl
+
+        // 判断手指滑动的主方向
+        const isVertical = Math.abs(deltaY) > Math.abs(deltaX)
+
+        if (isVertical) {
+            // --- 垂直逻辑 ---
+            // 手指下滑 (想看上面) 且 到顶 -> 拦截
+            if (deltaY > 0 && scrollTop <= 0) {
+                if (e.cancelable) e.preventDefault()
+            }
+            // 手指上滑 (想看下面) 且 到底 -> 拦截
+            else if (deltaY < 0 && scrollTop + clientHeight >= scrollHeight - 1) {
+                if (e.cancelable) e.preventDefault()
+            }
+        } else {
+            // --- 水平逻辑 (新增) ---
+            // 手指右滑 (想看左边) 且 到左边 -> 拦截
+            if (deltaX > 0 && scrollLeft <= 0) {
+                if (e.cancelable) e.preventDefault()
+            }
+            // 手指左滑 (想看右边) 且 到右边 -> 拦截
+            else if (deltaX < 0 && scrollLeft + clientWidth >= scrollWidth - 1) {
+                if (e.cancelable) e.preventDefault()
+            }
+        }
+    }
+
+    const handleKeydown = (e: KeyboardEvent) => {
+        if (!isClient) return
+        if (preventKeys.has(e.code)) {
+            const activeTag = document.activeElement?.tagName
+            if (activeTag !== 'INPUT' && activeTag !== 'TEXTAREA') {
+                if (e.cancelable) e.preventDefault()
+            }
+        }
+    }
 
     const lockScroll = () => {
-        if (isLocked) return
+        if (!isClient || isLocked) return
         isLocked = true
-
-        // 1️⃣ 获取滚动条宽度
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-
-        // 2️⃣ 记录当前滚动位置
-        scrollTop = window.scrollY
-
-        // 3️⃣ 锁定滚动但不改变布局宽度
-        document.documentElement.style.overflow = 'hidden'
-        document.documentElement.style.paddingRight = `${scrollbarWidth}px`
-        document.body.style.overflow = 'hidden'
-        document.body.style.paddingRight = `${scrollbarWidth}px`
+        window.addEventListener('wheel', handleWheel, { passive: false })
+        window.addEventListener('touchmove', handleTouchMove, { passive: false })
+        window.addEventListener('touchstart', handleTouchStart, { passive: false })
+        window.addEventListener('keydown', handleKeydown)
     }
 
     const unlockScroll = () => {
-        if (!isLocked) return
+        if (!isClient || !isLocked) return
         isLocked = false
-
-        document.documentElement.style.overflow = ''
-        document.documentElement.style.paddingRight = ''
-        document.body.style.overflow = ''
-        document.body.style.paddingRight = ''
-
-        // 恢复原滚动位置（在 iOS 上没副作用）
-        window.scrollTo(0, scrollTop)
+        window.removeEventListener('wheel', handleWheel)
+        window.removeEventListener('touchmove', handleTouchMove)
+        window.removeEventListener('touchstart', handleTouchStart)
+        window.removeEventListener('keydown', handleKeydown)
     }
 
-    // 独立监听每个 ref
     sources.forEach((src) => {
-        watch(
-            src,
-            () => {
-                const anyVisible = sources.some((r) => r.value)
-                if (anyVisible) lockScroll()
-                else unlockScroll()
-            },
-            { immediate: true }
-        )
+        watch(src, () => {
+            const anyVisible = sources.some(r => r.value)
+            anyVisible ? lockScroll() : unlockScroll()
+        }, { immediate: true })
     })
 
     onUnmounted(() => unlockScroll())

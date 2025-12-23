@@ -164,7 +164,8 @@ defineOptions({
 })
 
 definePageMeta({
-  auth: false
+  auth: false,
+  isShowActivity: true
 })
 
 onMounted(() => {
