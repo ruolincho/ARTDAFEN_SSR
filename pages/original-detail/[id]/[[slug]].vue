@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix, jumpNewWindow, youtubeProxyPrefix} from "~/utils";
+import {imagePrefix, jumpNewWindow, youtubeProxyPrefix, generateTitle2Slug} from "~/utils";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IProduct} from "~/api/interface/product/product";
 import {CONTACT_EMAIL} from "~/config";
@@ -200,8 +200,9 @@ const goArtistDetail = () => {
 }
 
 const goReplicas = (item: ISpecs.Row) => {
-  const {referenceProductId, referenceSpecId} = item.specs
-  jumpNewWindow(`/paint-detail/${referenceProductId}?specId=${referenceSpecId}`)
+  const slug = generateTitle2Slug(goodsDetail.value.title ?? goodsDetail.value.name)
+  const {referenceProductId, referenceSpecsId} = item.specs
+  jumpNewWindow(`/paint-detail/${referenceProductId}/${slug}?specId=${referenceSpecsId}`)
 }
 
 const mailBody = 'I hope this message finds you well.\nI am very interested in your artwork"[Artwork Title]"([attach image or link if possible]) and would like to inquire about its availability and pricing.\nCould you kindly provide the following information: \n1.Selling price (including or excluding framing and shipping)\n2.Dimensions, medium, and year of creation\n3.Whether it comes with the artist\'s signature and a certificate of authenticity\n4.Payment and delivery options\n5.Shipping and insurance arrangements (especially for international delivery)\nMy expected budget range is [USD____ - USD____]. If there are similar works in the same size and style within this range, I would be happy to consider them as well.\nI look forward to your reply and hope to discuss further.'

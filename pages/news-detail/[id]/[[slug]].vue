@@ -22,7 +22,8 @@
         >
           <template #default="scope">
             <div class="news-more-list">
-              <div class="news-more-item acea-row row-between gap-row-base cursor-pointer" v-for="item in scope.rows" :key="item.id" @click="router.replace(`/news-detail/${item.id}`)">
+              <!--@click="router.replace(`/news-detail/${item.id}/${item.slug}`)"-->
+              <NuxtLink class="news-more-item acea-row row-between gap-row-base" :to="`/news-detail/${item.id}/${item.slug}`" v-for="item in scope.rows" :key="item.id">
                 <div class="p-cont">
                   <div>
                     <p class="text-26 line2">{{ item.title }}</p>
@@ -38,7 +39,7 @@
                 <div class="p-img overflow-hidden">
                   <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" :alt="item.title">
                 </div>
-              </div>
+              </NuxtLink>
             </div>
           </template>
         </ProInfinite>
@@ -83,7 +84,7 @@ const getNewsRecommend = (params: INews.RecQuery) => getNewsRecommendApi(params)
 
 watch(() => newsDetail.value, (newVal) => {
   if (newVal) {
-    newVal.content = newVal.content.replace(/(<(img|video)[^>]*src=")(?!http)([^"]+")/gi, (match, p1, p2, p3) => {
+    newVal.content = newVal.content.replace(/(<(img|video|gif)[^>]*src=")(?!http)([^"]+")/gi, (match, p1, p2, p3) => {
       return `${p1}${imagePrefix(p3)}`;
     });
     initParam.id = newVal.id

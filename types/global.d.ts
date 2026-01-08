@@ -106,6 +106,8 @@ declare namespace General {
         productId?: string
         /*标题*/
         title: string
+        /*商品名称*/
+        name: string
         /*商品标签*/
         labels: Dict.AttributeAndLabelsType
         /*图片, 封面*/

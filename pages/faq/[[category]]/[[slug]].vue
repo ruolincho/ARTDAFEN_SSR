@@ -7,14 +7,18 @@
           <el-collapse v-model="activeName" accordion>
             <div
               v-for="(item, index) in faqList"
-              :key="index"
+              :key="item.category"
               :ref="(el) => sectionRefs[index] = el as HTMLElement"
             >
               <div class="text-center my-20 f-bold-500">{{ item.headTitle }}</div>
-              <el-collapse-item v-for="subItem in item.list" :title="subItem.title" :name="subItem.name"
-                                :key="subItem.name">
+              <el-collapse-item
+                  v-for="subItem in item.list"
+                  :title="subItem.title"
+                  :name="subItem.slug"
+                  :key="subItem.slug"
+              >
                 <template #icon="{ isActive }">
-                  <p style="margin-left:  auto">
+                  <p style="margin-left: auto">
                     <span class="iconfont text-20 ml-10" :class="isActive ? 'icon-reduce' : 'icon-add'"></span>
                   </p>
                 </template>
@@ -59,17 +63,22 @@
 
 <script setup lang="ts">
 import {type ElForm, ElMessage} from "element-plus";
-import {faqList} from "~/config/faq";
+import {faqList, generateFAQPageJsonLd} from "~/config/faq";
 import {sendConsulting} from "~/api/modules/message/message";
 import {emailReg} from "~/regular";
 import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 
+defineOptions({
+  name: 'Faq',
+})
+
 onMounted(() => {
-  // 只有在客户端且 query 存在时才执行
-  if (route.query.name) {
+  // 只有在客户端且 params 存在时才执行
+  const {category, slug} = route.params
+  if (category && slug) {
     // 这里加一个小延时是为了对抗浏览器的“滚动恢复”机制
     setTimeout(() => {
-      scrollToSection(route.query.name as string);
+      scrollToSection();
     }, 100);
   }
 })
@@ -82,6 +91,12 @@ useHead(mergeHeadWithLodash(
   {
     link: [
       {rel: 'canonical', href: `${origin}/faq`},
+    ],
+    script: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify(generateFAQPageJsonLd(faqList))
+      }
     ]
   }
 ))
@@ -105,16 +120,17 @@ const sectionRefs = ref<HTMLElement[]>([]);
 
 const activeName = ref('')
 
-const scrollToSection = async (name: string) => {
+const scrollToSection = async () => {
 
-  if (!name) return;
+  const {category, slug} = route.params
+
+  if (!slug || !category) return;
 
   // 等待 DOM 更新
   await nextTick();
 
-  // 提取 target 名称
-  const targetName = name.split('-')[0];
-  const sectionIndex = faqList.findIndex(item => item.name === targetName);
+  // 找到分类对应的索引
+  const sectionIndex = faqList.findIndex(item => item.category === category);
 
   // 防御性检查：索引无效直接退出
   if (sectionIndex === -1) return;
@@ -132,7 +148,7 @@ const scrollToSection = async (name: string) => {
 
       // 延迟展开面板，配合滚动动画
       setTimeout(() => {
-        activeName.value = name;
+        activeName.value = slug;
       }, 500);
     } else {
       // 没找到 DOM，且重试次数小于 5 次（约 250ms），则重试
@@ -156,9 +172,9 @@ const handleSend = () => {
   });
 }
 
-watch(() => route.query.name, (newVal) => {
+watch(() => route.fullPath, (newVal: string) => {
   if (newVal) {
-    scrollToSection(newVal as string);
+    scrollToSection();
   }
 })
 

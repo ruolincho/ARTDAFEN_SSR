@@ -179,6 +179,7 @@ const toGoogleAuth = () => {
   const {$google} = useNuxtApp()
   let path = route.fullPath
   if (path === LOGIN_URL) path = HOME_URL
+  window.localStorage.setItem(STORAGE_BACK_URL, path)
   $google.oAuth()
 }
 

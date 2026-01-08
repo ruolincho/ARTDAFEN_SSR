@@ -1,6 +1,6 @@
 <template>
   <!--pc-导航-->
-  <header ref="pcHeaderRef" class="header-pc pc" :class="{ 'fold': isFold }">
+  <header ref="pcHeaderRef" class="header-pc pc" :class="{ 'fold': appStore.headerState.isFold }">
     <div class="header-wrapper">
       <div class="left">
         <div class="logo-wrapper acea-row row-middle">
@@ -258,7 +258,7 @@
     </div>
   </header>
 
-  <div id="header-placeholder" :style="{ height: appStore.headerHeight + 'px', transition: 'height 0.3s ease' }"/>
+  <div id="header-placeholder" :style="{ height: appStore.headerState.height + 'px', transition: `height ${appStore.headerState.duration}ms ease` }"/>
 
   <!--pc购物车弹窗-->
   <el-popover
@@ -328,36 +328,6 @@ if (import.meta.client) {
   })
 }
 
-const pcHeaderRef = ref<HTMLDivElement | null>(null) // pc 头部元素
-const pcPlaceHeight = ref(218) // pc 头部高度
-const appPlaceHeight = ref(50) // app 头部高度
-const getHeaderHeight = async () => { // 获取头部高度
-  await nextTick()
-  if (pcHeaderRef.value && appStore.isPc) pcPlaceHeight.value = pcHeaderRef.value.offsetHeight
-}
-
-const placeHeight = computed(() => appStore.isPc ? pcPlaceHeight.value : appPlaceHeight.value) // placeHeight 的高度，根据当前设备类型切换
-
-const isFold = ref(false); // 是否折叠
-const checkFolded = () => { // 检测是否折叠
-  if (process.server) return
-  if (appStore.isPc) isFold.value = window.scrollY > 0
-}
-
-const handlePageSize = throttle(() => { // 监听页面大小变化
-  getHeaderHeight()
-}, 300)
-
-const handlePageScroll = throttle(() => { // 监听滚动
-  checkFolded()
-  getHeaderHeight()
-}, 300)
-
-const jumpOperation = (path: string) => {
-  openMenu.value = false
-  router.push(path)
-}
-
 const modules = [Pagination]
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -372,6 +342,11 @@ const openCurrencyApp = ref(false)
 const openLangApp = ref(false)
 const toggleMenu = (index: number) => {
   openIndex.value = openIndex.value === index ? null : index
+}
+
+const jumpOperation = (path: string) => {
+  openMenu.value = false
+  router.push(path)
 }
 
 // 获取菜单数据
@@ -552,8 +527,49 @@ const handleOpenCart = () => {
   cartStore.shoppingPreCheck()
 }
 
-// 监听路由变化，强制重置导航状态
-watch(
+useLockScroll(isDropdownVisible, openMenu)
+
+// =========高度计算逻辑=========
+const pcHeaderRef = ref<HTMLDivElement | null>(null) // pc 头部元素
+const pcPlaceHeight = ref(116) // pc 头部理论高度
+const appPlaceHeight = ref(50) // app 头部理论高度
+const placeHeight = computed(() => appStore.isPc ? pcPlaceHeight.value : appPlaceHeight.value) // placeHeight 的高度，根据当前设备类型切换
+const getHeaderHeight = async () => { // 获取头部实际高度
+  await nextTick()
+  if (pcHeaderRef.value && appStore.isPc) pcPlaceHeight.value = pcHeaderRef.value.offsetHeight
+}
+watch( // 监听计算出的高度变化，同步到 Store
+    () => placeHeight.value,
+    (newHeight: number) => appStore.setHeaderHeight(newHeight),
+    { immediate: true }
+)
+
+// =========折叠检测逻辑=========
+const checkFolded = () => { // 检测是否折叠
+  if (process.server) return
+  if (appStore.isPc) {
+    let shouldFold = true
+    if (!route.meta.notFold) {
+      shouldFold = window.scrollY > 0;
+    } else {
+      shouldFold = true
+    }
+    appStore.setScrollFold(shouldFold)
+  }
+}
+
+// =========事件监听=========
+const handlePageSize = throttle(() => { // 监听页面大小变化
+  getHeaderHeight()
+}, 300)
+
+const handlePageScroll = throttle(() => { // 监听滚动
+  checkFolded()
+  getHeaderHeight()
+}, 300)
+
+// =========状态同步与生命周期=========
+watch( // 监听路由变化，强制重置导航状态
     () => route.path,
     () => {
       checkFolded()
@@ -561,15 +577,14 @@ watch(
     }
 );
 
+// 监听 Store 的锁定状态解除，当外部调用 cancelForceFoldHeader() 解锁时，必须立即根据当前滚动条位置恢复状态
 watch(
-    () => placeHeight.value,
-    (newHeight: number) => {
-      appStore.setHeaderHeight(newHeight)
-    },
-    { immediate: true }
-)
-
-useLockScroll(isDropdownVisible, openMenu)
+    () => appStore.headerState.isLocked,
+    (isLocked) => {
+      checkFolded();    // 立即根据当前 scrollY 修正 isFold
+      getHeaderHeight(); // 重新测量高度
+    }
+);
 </script>
 
 <style scoped lang="scss">

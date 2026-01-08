@@ -6,28 +6,37 @@
         <el-skeleton-item variant="image" style="width: 100%; height: 31vw"/>
       </template>
       <ClientOnly>
-        <swiper
-            :modules="modules"
-            :pagination="{ clickable: true }"
-            :autoplay="{ delay: 2500, disableOnInteraction: false }"
-            :loop="true"
-        >
-          <swiper-slide v-for="item in topicData" :key="item.id">
-            <div @click="jumpToUrl(item.url)" class="cursor-pointer">
+        <div class="banner-swiper">
+          <swiper
+              :modules="modules"
+              :pagination="{ clickable: true }"
+              :autoplay="{ delay: 2500, disableOnInteraction: false }"
+              :loop="true"
+          >
+            <swiper-slide class="cursor-pointer" v-for="item in topicData" :key="item.id" @click="jumpToUrl(item.url)">
               <!-- 图片 -->
               <template v-if="item.type === '0'">
-                <img class="banner-img" :src="imagePrefix(item.img)" alt="banner" v-show="appStore.device === 'pc'">
-                <img class="banner-img" :src="imagePrefix(item.mobileImg)" alt="banner"
-                     v-show="appStore.device === 'app'">
+                <img class="w-full pc fit-cover" :src="imagePrefix(item.img)" alt="banner">
+                <img class="w-full app" :src="imagePrefix(item.mobileImg)" alt="banner">
               </template>
               <!-- 视频 -->
               <template v-if="item.type === '1'">
-                <video :src="imagePrefix(item.media)" :poster="imagePrefix(item.img)" :autoplay="true" :loop="true"
-                       :muted="true" :controls="false"/>
+                <div class="video-box w-full h-full">
+                  <video
+                      class="w-full h-full fit-cover"
+                      :src="imagePrefix(item.media)"
+                      :poster="imagePrefix(item.img)"
+                      :autoplay="true"
+                      :loop="true"
+                      :muted="true"
+                      :controls="false"
+                      playsinline
+                  />
+                </div>
               </template>
-            </div>
-          </swiper-slide>
-        </swiper>
+            </swiper-slide>
+          </swiper>
+        </div>
       </ClientOnly>
     </el-skeleton>
   </section>
@@ -739,9 +748,35 @@ const _getLatestComment = async () => {
   }
 
   .sec-banner {
-    .banner-img {
-      width: 100%;
-      height: 100%;
+    .banner-swiper {
+      position: relative;
+      :deep(.swiper) {
+        .swiper-slide {
+          height: auto;
+
+          .video-box {
+            position: relative;
+            background: red;
+
+            video {
+              position: absolute;
+              top: 0;
+              left: 0;
+            }
+
+            &:after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.5);
+            }
+          }
+
+        }
+      }
     }
   }
 
@@ -1161,4 +1196,17 @@ const _getLatestComment = async () => {
       }
     }
   }
+
+  @media (max-width: 414px) {
+
+    .sec-banner {
+      .banner-swiper {
+        :deep(.swiper) {
+          max-height: unset;
+        }
+
+      }
+    }
+  }
+
 </style>

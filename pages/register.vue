@@ -75,6 +75,10 @@ defineOptions({
   name: 'Register '
 })
 
+useSeoMeta({
+  robots: 'noindex, follow'
+})
+
 const { registerFn } = useAuth()
 const validateAgree = (rule: any, value: any, callback: any) => {
   if (!value) callback(new Error('Please agree to the terms and conditions'))

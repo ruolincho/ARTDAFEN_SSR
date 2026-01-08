@@ -20,33 +20,36 @@ export default defineNuxtConfig({
     },
     // Import our SCSS theme override entry BEFORE any component styles
     css: ['~/assets/styles/index.scss'], // We only introduce one version that we have compiled ourselves
+    site: {
+        url: process.env.NUXT_PUBLIC_SITE_URL,
+        name: process.env.NUXT_PUBLIC_SITE_NAME,
+    },
     sitemap: {
-        // @ts-ignore
-        hostname: process.env.NUXT_PUBLIC_SITE_URL,
-        exclude: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register', '/checkout', '/search'],
-        cacheTime: 0,  // 调试时关缓存，避免看到旧的 XML
-        // 动态生成条目
-        routes: () => {
-            const newsTotalPages = 7
-            const blogTotalPages = 2
-            const urls = [
-                { url: '/custom-paint/HPOP', priority: 0.8 },
-                { url: '/custom-paint/40USD-M2', priority: 0.8 },
-                { url: '/custom-paint/CTS', priority: 0.8 },
-                { url: '/news', changefreq  : 'daily', priority: 0.8 },
-                { url: '/blog', changefreq  : 'daily', priority: 0.8 },
-            ]
-            for (let p = 2; p <= newsTotalPages; p++) {
-                urls.push({ url: `/news/${p}`, changefreq: 'daily', priority: 0.6 })
-            }
-            for (let p = 2; p <= blogTotalPages; p++) {
-                urls.push({ url: `/blog/${p}`, changefreq: 'daily', priority: 0.6 })
-            }
-            return urls
+        debug: process.env.NODE_ENV !== 'production',
+        cacheMaxAgeSeconds: process.env.NODE_ENV === 'production' ? 3600 : 0,
+        exclude: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register', '/checkout', '/search'], // 排除不需要的路由
+        defaults: {
+            changefreq: 'daily',
+            priority: 0.8,
         },
+        urls: [
+            '/custom-paint/HPOP',
+            // '/custom-paint/40USD-M2',
+            // '/custom-paint/CTS',
+            '/news',
+            '/blog'
+        ], // 静态固定路径
+        sources: [
+            '/api/__sitemap__/sitemap-urls',
+            '/api/__sitemap__/sitemap-zone-urls',
+        ],
     },
     robots: {
-        groups: [{ userAgent: '*', allow: '/', disallow: ['/error', '/account/**', '/cart', '/checkout-custom', '/auth', '/login', '/register'] }],
+        groups: [{
+            userAgent: '*',
+            allow: '/',
+            disallow: ['/error', '/cart', '/checkout', '/checkout-custom', '/login', '/register']
+        }],
         sitemap: process.env.NUXT_PUBLIC_SITE_URL + '/sitemap.xml'
     },
     app: {
@@ -107,5 +110,9 @@ export default defineNuxtConfig({
     },
     nitro: {
         compatibilityDate: '2025-11-11',
+    },
+    sourcemap: {
+        server: true,
+        client: false,
     }
 })

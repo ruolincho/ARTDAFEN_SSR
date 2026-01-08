@@ -124,6 +124,9 @@ const keyword = ref('')
 
 useHead(pageMeta["/search"] ?? {});
 
+useSeoMeta({
+  robots: 'noindex, follow'
+})
 
 // 获取历史搜索
 const historyList = ref<ISearch.CompletionRow[]>([])

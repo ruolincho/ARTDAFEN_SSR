@@ -366,9 +366,7 @@ const router = useRouter();
 const currencyStore = useCurrencyStore()
 
 const modules = [Autoplay, Pagination, Navigation, Thumbs]
-
 const activeName = ref('')
-
 const isOpenDesc = ref(false) // 是否展开产品详情
 
 // 获取详情
@@ -611,7 +609,8 @@ const addToCart = () => {
     specs: currentSpecs, // 商品规格值
     quantity: 1, // 购买数量
     dimensionId: null,
-    parts: {}
+    parts: {},
+    selected: true
   }
   cartStore.addition(cartRow)
   ElMessage.success('Add to cart success!')

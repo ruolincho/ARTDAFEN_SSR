@@ -66,12 +66,16 @@ export function debounce<T extends (...args: any[]) => void>(func: T, delay: num
 /**
  * 跳转到新窗口
  * @param urls
+ * @param newWindow 是否新窗口打开
  */
-export const jumpNewWindow = (urls: string) => {
+export const jumpNewWindow = (urls: string, newWindow = false) => {
     const router = useRouter()
-    // const routePath = router.resolve(urls);
-    // window.open(routePath.href, '_blank');
-    router.push(urls)
+    if (newWindow) {
+        const routePath = router.resolve(urls);
+        window.open(routePath.href, '_blank');
+    } else {
+        router.push(urls)
+    }
 }
 
 /**
@@ -90,17 +94,10 @@ export const jumpToUrl = (urls: string) => {
 /**
  * 产品跳转链接
  * @param item
+ * @param newWindow
  */
-export const jumpToProduct = (item: General.GoodsItem) => {
-    jumpNewWindow(productLink(item))
-}
-
-/**
- * 获取产品跳转链接
- * @param item
- */
-export const getProductLink = (item: General.GoodsItem) => {
-    return productLink(item)
+export const jumpToProduct = (item: General.GoodsItem, newWindow = true) => {
+    jumpNewWindow(productLink(item), newWindow)
 }
 
 /**
@@ -112,12 +109,13 @@ export const productLink = (item: General.GoodsItem) => {
     const T2 = [TechniqueCodeEnum.Originals]
     const T3 = [TechniqueCodeEnum.Spot]
     const pid = item.id ?? item.productId
+    const slug = generateTitle2Slug(item.title ?? item.name)
     if (T1.includes(item.techniqueId)) {
-        return `/paint-detail/${pid}`
+        return `/paint-detail/${pid}/${slug}`
     } else if (T2.includes(item.techniqueId)) {
-        return `/original-detail/${pid}`
+        return `/original-detail/${pid}/${slug}`
     } else if (T3.includes(item.techniqueId)) {
-        return `/spot-detail/${pid}`
+        return `/spot-detail/${pid}/${slug}`
     } else {
         return '/'
     }
@@ -313,4 +311,36 @@ export const base64ToHex = (base64: string)=> {
         hex += hexChar.padStart(2, '0');
     }
     return hex;
+}
+
+/**
+ * 生成符合 URL 规范的 slug
+ * @param title 标题
+ * @returns 符合 URL 规范的 slug
+ */
+export const generateTitle2Slug = (title: string) => {
+    return title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')   // 移除特殊字符
+        .trim()
+        .replace(/\s+/g, '-')       // 空格转 -
+}
+
+/**
+ * 解析 idAndSlug，返回 { id, slug }
+ * @param idAndSlug URL 中的 idAndSlug
+ */
+export function parseIdAndSlug(idAndSlug: string): { id: string; slug: string } {
+    const [id, ...slugParts] = idAndSlug.split('-')
+    return { id: id || '', slug: slugParts.join('-') }
+}
+
+/**
+ * 生成 idAndSlug 字符串
+ * @param id 产品 ID
+ * @param title 产品标题
+ */
+export function generateIdAndSlug(id: string | number, title: string): string {
+    const slug = generateTitle2Slug(title)
+    return `${id}-${slug}`
 }

@@ -29,6 +29,10 @@ defineOptions({
 definePageMeta({
   auth: true
 })
+
+useSeoMeta({
+  robots: 'noindex, nofollow'
+})
 </script>
 
 <style scoped lang="scss">

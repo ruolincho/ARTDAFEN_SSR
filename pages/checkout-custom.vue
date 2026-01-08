@@ -29,7 +29,7 @@
                 <p class="text-14 f-bold">{{ currencyStore.formatToCurrency(customStore.subtotal) }}</p>
               </div>
               <div class="mt-10 text-right text-secondary f-bold" v-if="getOfferProduct.length">
-                <p v-for="(promo, index) in getOfferProduct[0]?.promoOffer" :key="index"> {{ promo }}</p>
+                <span> {{ getOfferProduct[0]?.promoOffer.join(' / ') }}</span>
               </div>
             </div>
           </div>
@@ -163,6 +163,7 @@ import {useIndexedDBBase64} from '~/composables/useIndexedDBBase64'
 import {phoneReg} from "~/regular";
 import Decimal from 'decimal.js';
 import {initPaypal} from '~/composables/usePayment'
+import {checkStatus} from "~/api/helper";
 
 defineOptions({
   name: 'CustomPaintCheckout',
@@ -172,6 +173,10 @@ defineOptions({
 definePageMeta({
   auth: false,
   isShowActivity: true
+})
+
+useSeoMeta({
+  robots: 'noindex, follow'
 })
 
 const previewImg = ref<string | null>('')
@@ -250,7 +255,17 @@ const confirmOrder = async () => {
   }
 
   try {
-    const {data} = await confirmOrderApi(shoppingCartData.value)
+    const {data, message, status} = await confirmOrderApi(shoppingCartData.value)
+
+    // 优惠券无法使用会返回一个空data
+    if (!data) {
+      checkStatus(status, message)
+      setTimeout(() => {
+        discountCode.value = ''
+        isDiscount.value = false
+      }, 500)
+      return
+    }
 
     // 切换货币后,需要重新计算金额
     const originalAmount = new Decimal(data.originalAmount || 0)
@@ -265,7 +280,7 @@ const confirmOrder = async () => {
     setTimeout(() => {
       discountCode.value = ''
       isDiscount.value = false
-    }, 1000)
+    }, 500)
   }
 }
 

@@ -111,6 +111,10 @@ definePageMeta({
   auth: true
 })
 
+useSeoMeta({
+  robots: 'noindex, nofollow'
+})
+
 const currencyStore = useCurrencyStore();
 const router = useRouter();
 const initParam = reactive({status: '0', keyword: '', size: 3});

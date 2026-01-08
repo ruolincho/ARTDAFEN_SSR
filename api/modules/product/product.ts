@@ -106,3 +106,12 @@ export const getProductZoneApi = (id: string) => {
 export const getZoneCollectApi = (params: IProduct.zoneCollectQuery) => {
     return $http().post<IPage<General.GoodsItem[]>>(TRADE_MODULE + `/product/zone/collect`, params)
 }
+
+/**
+ * 商品主图查询
+ * @returns {*}
+ * @param id
+ */
+export const getProductAlbumApi = (id: string) => {
+    return $http().get<string>(TRADE_MODULE + `/product/style/${id}`)
+}

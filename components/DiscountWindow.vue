@@ -84,7 +84,9 @@ const initVisibility = () => {
   if (typeof window === 'undefined' || !localStorage) return;
 
   const hasClosedBefore = localStorage.getItem(ACTIVITY_WINDOW_CLOSED);
-  isOpen.value = hasClosedBefore !== 'true';
+  setTimeout(() => {
+    isOpen.value = hasClosedBefore !== 'true';
+  }, 5000)
 }
 
 const activityData = ref<IActivity.ActivityRow | null>(null)

@@ -27,6 +27,8 @@
     >
       <span class="iconfont icon-upload-pictures"></span>
     </el-upload>
+    <span class="split"></span>
+    <span class="iconfont icon-help" @click="beginGuide"></span>
   </div>
 
   <!--规格选择-->
@@ -159,7 +161,7 @@
     <!-- 自定义 -->
     <div class="container" v-show="currentView === 'custom'">
       <!--移动端兼容视图-->
-      <div class="app-preview" style="margin-left: -15px; margin-right: -15px; height: 300px"
+      <div class="app-preview" :style="{margin: '0 -15px', height: '300px', position: appSticky ? 'sticky' : 'relative' }"
            v-if="!appStore.isPc && imageUrl">
         <div class="img-wrapper acea-row row-center-wrapper flex-1 overflow-hidden">
           <ClientOnly>
@@ -287,6 +289,10 @@
                   <div class="acea-row row-middle cursor-pointer" @click="openRoom">
                     <span class="iconfont icon-pictures text-20"></span>
                     <span class="text-14 ml-10">VIEW PAINTING IN A ROOM</span>
+                  </div>
+                  <div class="acea-row row-middle cursor-pointer" @click="beginGuide">
+                    <span class="iconfont icon-help text-20"></span>
+                    <span class="text-14 ml-10">GUIDE</span>
                   </div>
                 </div>
                 <div class="m-md-20 m-15">
@@ -427,7 +433,7 @@
                         <span class="text-26">Choose a Craft</span>
                       </div>
                     </div>
-                    <div class="m-md-20 m-15">
+                    <div class="m-md-20 m-15" ref="chooseTechniqueRef">
                       <div class="width-list row">
                         <div class="col-6">
                           <div
@@ -452,52 +458,54 @@
                   </template>-->
 
                   <!--尺寸选择-->
-                  <div class="acea-row row-between-wrapper m-md-20 m-15">
-                    <div class="acea-row row-middle">
-                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                      <span class="text-26">Choose a Size</span>
-                      <span
-                          class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
-                          @click="openInfo(0)"
-                      >
+                  <template v-if="true">
+                    <div class="acea-row row-between-wrapper m-md-20 m-15">
+                      <div class="acea-row row-middle">
+                        <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                        <span class="text-26">Choose a Size</span>
+                        <span
+                            class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
+                            @click="openInfo(0)"
+                        >
                       <span class="pc">{{ moreInfoVisible[0] ? 'LESS INFO' : 'MORE INFO' }}</span>
                       <span class="iconfont icon-down" :class="{'rotate-180': moreInfoVisible[0]}"></span>
                     </span>
-                      <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
+                        <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
+                      </div>
+                      <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(currentSizeOption?.price || 0) }}</div>
                     </div>
-                    <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(currentSizeOption?.price || 0) }}</div>
-                  </div>
-                  <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[0]">
-                    <p class="p-15 bg-gray-200">
-                      To order a custom size,
-                      <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click here</a>.
-                      Our artists will create a painting in any size you require.
-                    </p>
-                  </div>
-                  <div class="m-md-20 m-15">
-                    <el-select
-                        class="custom-select"
-                        v-model="currentSizeId"
-                        placeholder="Please Select Size"
-                        size="large"
-                        @change="chooseSize"
-                    >
-                      <el-option
-                          v-for="item in sizeOptions"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id"
+                    <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[0]">
+                      <p class="p-15 bg-gray-200">
+                        To order a custom size,
+                        <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click here</a>.
+                        Our artists will create a painting in any size you require.
+                      </p>
+                    </div>
+                    <div class="m-md-20 m-15" ref="chooseSizeRef">
+                      <el-select
+                          class="custom-select"
+                          v-model="currentSizeId"
+                          placeholder="Please Select Size"
+                          size="large"
+                          @change="chooseSize"
                       >
-                        <div class="option-item acea-row row-between-wrapper">
-                          <span>{{ item.name }}</span>
-                          <span>{{ currencyStore.formatToCurrency(item.price || 0) }}</span>
-                        </div>
-                      </el-option>
-                      <template #prefix>
-                        <div class="size-prefix"></div>
-                      </template>
-                    </el-select>
-                  </div>
+                        <el-option
+                            v-for="item in sizeOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                        >
+                          <div class="option-item acea-row row-between-wrapper">
+                            <span>{{ item.name }}</span>
+                            <span>{{ currencyStore.formatToCurrency(item.price || 0) }}</span>
+                          </div>
+                        </el-option>
+                        <template #prefix>
+                          <div class="size-prefix"></div>
+                        </template>
+                      </el-select>
+                    </div>
+                  </template>
 
                   <!--复杂层度选择-->
                   <template v-if="route.params.work === ArtCodeEnum.Painting && !isPrint">
@@ -525,7 +533,7 @@
 
                     <!-- Pc端复杂程度选择 -->
                     <div class="m-md-20 m-15" v-if="appStore.isPc">
-                      <div class="width-list row">
+                      <div class="width-list row" ref="numberPcRef">
                         <div
                             class="col-xl-average col-md-3 col-xs-4 col-6"
                             v-for="(item, index) in maxNumber"
@@ -543,7 +551,7 @@
                     </div>
 
                     <!-- 移动端复杂程度选择 -->
-                    <div class="px-20 acea-row row-between-wrapper gap-base" v-else>
+                    <div class="px-20 acea-row row-between-wrapper gap-base" ref="numberAppRef" v-else>
                       <div class="flex-1">
                         <el-slider
                             :show-tooltip="false"
@@ -560,36 +568,38 @@
                   </template>
 
                   <!--画框选择-->
-                  <div class="acea-row row-between-wrapper m-md-20 m-15">
-                    <div class="acea-row row-middle">
-                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                      <span class="text-26">Choose a Frame</span>
-                      <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
+                  <template v-if="true">
+                    <div class="acea-row row-between-wrapper m-md-20 m-15">
+                      <div class="acea-row row-middle">
+                        <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                        <span class="text-26">Choose a Frame</span>
+                        <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
+                      </div>
+                      <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
                     </div>
-                    <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
-                  </div>
-                  <div class="m-md-20 m-15">
-                    <div class="frame-scroll border-sm p-10">
-                      <div class="frame-list">
-                        <div
-                            v-for="(item, index) in frameOptions" :key="item.id"
-                            class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
-                            :class="{ on: currentFrameId === item.id }"
-                            @click="chooseFrame(item)"
-                        >
-                          <div class="frame-box">
-                            <div class="frame-img aspect-ratio">
-                              <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
+                    <div class="m-md-20 m-15" ref="chooseFrameRef">
+                      <div class="frame-scroll border-sm p-10">
+                        <div class="frame-list">
+                          <div
+                              v-for="(item, index) in frameOptions" :key="item.id"
+                              class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
+                              :class="{ on: currentFrameId === item.id }"
+                              @click="chooseFrame(item)"
+                          >
+                            <div class="frame-box">
+                              <div class="frame-img aspect-ratio">
+                                <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
+                              </div>
+                              <p class="line2 mt-10 frame-name">{{ item.name }}</p>
+                              <p class="f-bold-500 frame-money">
+                                {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
+                              </p>
                             </div>
-                            <p class="line2 mt-10 frame-name">{{ item.name }}</p>
-                            <p class="f-bold-500 frame-money">
-                              {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
-                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </template>
 
                   <!--卡纸选择（选择画框并且画框支持和有卡纸选项才有）-->
                   <template v-if="hasFrame && matVisible">
@@ -602,14 +612,13 @@
                         {{ currencyStore.formatToCurrency(currentMaterialOption?.price || 0) }}
                       </div>
                     </div>
-
                     <div class="m-md-20 m-15">
-                      <div class="material-wrapper border-sm m-md-20 m-15">
+                      <div class="material-wrapper border-sm p-md-20 p-15">
                         <div class="acea-row row-middle text-20 f-bold-500">
                           <p class="mr-xl-40 mr-20">Mat Color</p>
                           <p class="flex-1 line1">Crisp Bright White</p>
                         </div>
-                        <div class="color-list my-md-20 my-15">
+                        <div class="color-list my-md-20 my-15" ref="chooseMatColorRef">
                           <div
                               class="color-item rounded-full cursor-pointer"
                               :class="{on: currentMaterialId === item.id}"
@@ -626,7 +635,7 @@
                             <p class="mr-xl-40 mr-20">Mat Width</p>
                             <p class="flex-1 line1">Increasing the mat width mayaffectthe frame price.</p>
                           </div>
-                          <div class="width-list row mt-md-20 mt-15">
+                          <div class="width-list row mt-md-20 mt-15" ref="chooseMatWidthRef">
                             <div
                                 class="col-average"
                                 v-for="(item, index) in currentMaterialWidthOption"
@@ -667,7 +676,7 @@
                       photo or specific color and background preferences.
                     </p>
                   </div>
-                  <div class="m-md-20 m-15">
+                  <div class="m-md-20 m-15" ref="remarkRef">
                     <el-input
                         type="textarea"
                         v-model="remark"
@@ -810,7 +819,7 @@
   </ClientOnly>
 
   <!-- 图片查看器 -->
-  <el-image-viewer v-if="imgViewVisible" :url-list="[generatorImg]" @close="imgViewVisible = false"/>
+  <el-image-viewer v-if="imgViewVisible" :url-list="[generatorImg]" @close="imgViewVisible = false" hide-on-click-modal/>
 
   <ClientOnly>
     <!-- 图片查看器 -->
@@ -818,6 +827,7 @@
         v-if="exampleViewVisible"
         :url-list="[imagePrefix(TECHNIQUE_EXAMPLE[route.params.work as ArtCodeType]![exampleArrIndex]!.paint)]"
         @close="exampleViewVisible = false"
+        hide-on-click-modal
     />
   </ClientOnly>
 
@@ -847,6 +857,18 @@
   </el-popover>
 
   <LoginWindow ref="loginWindowRef"/>
+
+  <!--引导-->
+  <el-tour v-model="openTour" @close="handleTouchClose">
+    <template #indicators="{ current, total }">
+      <span>{{ current + 1 }} / {{ total }}</span>
+    </template>
+    <el-tour-step
+        v-for="(step, index) in tourSteps"
+        :key="index"
+        v-bind="step"
+    />
+  </el-tour>
 </template>
 
 <script setup lang="ts">
@@ -862,7 +884,7 @@ import {useCustomStore} from "~/stores/modules/custom";
 import {useAppStore} from "~/stores/modules/app";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {useUserStore} from "~/stores/modules/user";
-import {CONTACT_EMAIL} from "~/config";
+import {CONTACT_EMAIL, APP_HAS_SEEN_CUSTOM_GUIDE} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {findClosestMatch} from "~/utils/calculateShape";
 import {ArtCodeEnum, type ArtCodeType} from "~/types/enumeration";
@@ -1044,6 +1066,8 @@ const getCombination = async (senior = false) => {
       chooseMatWidth(materialOptions.value[0].specs![0]?.matWidth || '') // 拿到第一个卡纸宽度
     }
   }
+
+  !firstLoadCombo && initShowGuide() // 开启引导
 
   firstLoadCombo = true
   loadingCombo.value = false
@@ -1505,6 +1529,55 @@ watch(() => currentView.value, () => {
   })
 })
 
+const appSticky = ref(true)
+const openTour = ref(false)
+const chooseTechniqueRef = ref<HTMLElement | null>(null)
+const chooseSizeRef = ref<HTMLElement | null>(null)
+const numberPcRef = ref<HTMLElement | null>(null)
+const numberAppRef = ref<HTMLElement | null>(null)
+const chooseFrameRef = ref<HTMLElement | null>(null)
+const chooseMatColorRef = ref<HTMLElement | null>(null)
+const chooseMatWidthRef = ref<HTMLElement | null>(null)
+const remarkRef = ref<HTMLElement | null>(null)
+const beginGuide = async () => {
+  if (appStore.isPc) {
+    await appStore.forceFoldHeader() // 锁定并折叠，等待动画
+  } else {
+    appSticky.value = false
+  }
+  openTour.value = true
+}
+const handleTouchClose = () => {
+  if (appStore.isPc) {
+    appStore.cancelForceFoldHeader() // 引导结束，恢复自动控制
+  } else {
+    appSticky.value = true
+  }
+}
+const initShowGuide = () => {
+  if (process.server) return;
+  if (localStorage.getItem(APP_HAS_SEEN_CUSTOM_GUIDE) === 'true') return
+  beginGuide()
+  localStorage.setItem(APP_HAS_SEEN_CUSTOM_GUIDE, 'true')
+}
+// 参数顺序：[显示条件, 目标Ref, 标题, 描述, 额外配置(可选)]
+const createStep = (condition: boolean, target: any, title: string, description: string, extras: Record<string, any> = {}) => {
+  if (!condition) return null
+  // 自动组装对象
+  return { target, title, description, ...extras }
+}
+const tourSteps = computed(() => {
+  const steps = [
+    createStep(false, chooseTechniqueRef.value, 'Choose Craftsmanship', 'Select the material and texture that best suits your style.'),
+    createStep(true, chooseSizeRef.value, 'Choose Size', 'Pick the perfect dimensions to fit your space.'),
+    createStep(route.params.work === ArtCodeEnum.Painting && !isPrint.value,appStore.isPc ? numberPcRef.value : numberAppRef.value,'Choose Subject Count','Specify the number of people or objects in your photo to determine the complexity.' ),
+    createStep(true, chooseFrameRef.value, 'Choose Frame', 'Complete the look with one of our premium frames.'),
+    createStep(hasFrame.value && matVisible.value, chooseMatColorRef.value, 'Choose Mat Color', 'Choose a mat tone that perfectly compliments your image.'),
+    createStep(hasFrame.value && matVisible.value && (currentMaterialWidthOption.value?.length > 0), chooseMatWidthRef.value,'Choose Mat Width','Set the thickness of the mat border to balance your artwork within the frame.'),
+    createStep(true, remarkRef.value, 'Add Notes', 'Instructions for edits, colors, or background changes.'),
+  ]
+  return steps.filter(Boolean)
+})
 </script>
 
 <style scoped lang="scss">

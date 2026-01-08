@@ -28,8 +28,11 @@
         <a class="social-item" href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
           <span class="iconfont icon-Youtube"></span>
         </a>
-        <a class="social-item" href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">
-          <span class="iconfont icon-instagram"></span>
+        <!--<a class="social-item" href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">-->
+        <!--  <span class="iconfont icon-instagram"></span>-->
+        <!--</a>-->
+        <a class="social-item" href="https://www.pinterest.com/artdafen/" target="_blank" title="pinterest">
+          <span class="iconfont icon-pinterest"></span>
         </a>
         <a class="social-item" href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
           <span class="iconfont icon-douyinjumuguanli"></span>
@@ -136,8 +139,11 @@
           <a class="social-item" href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
             <span class="iconfont icon-Youtube "></span>
           </a>
-          <a class="social-item" href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">
-            <span class="iconfont icon-instagram "></span>
+          <!--<a class="social-item" href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">-->
+          <!--  <span class="iconfont icon-instagram "></span>-->
+          <!--</a>-->
+          <a class="social-item" href="https://www.pinterest.com/artdafen/" target="_blank" title="pinterest">
+            <span class="iconfont icon-pinterest "></span>
           </a>
           <a class="social-item" href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
             <span class="iconfont icon-douyinjumuguanli "></span>

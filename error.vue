@@ -36,7 +36,7 @@ async function goBack() {
 
 useSeoMeta({
   title: () => `${code.value} | ${title.value}`,
-  robots: 'noindex'                    // 错误页通常不希望被收录
+  robots: 'noindex, follow'                    // 错误页通常不希望被收录
 })
 </script>
 

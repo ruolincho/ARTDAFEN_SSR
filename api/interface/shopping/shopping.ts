@@ -36,6 +36,12 @@ export namespace IShopping {
         retailStock?: string | number;
         /*优惠信息*/
         promoOffer?: string[];
+        /*是否选中*/
+        selected?: boolean
+        /*优惠金额*/
+        discountAmount?: number
+        /*金额计算中状态*/
+        isPriceStale: boolean
     }
 
     /** 购物车数据 */
@@ -62,6 +68,10 @@ export namespace IShopping {
         salesCode?: string;
         /*优惠信息*/
         promoOffer?: string[];
+        /*是否选中*/
+        selected?: boolean;
+        /*优惠金额*/
+        discountAmount?: number;
     }
 
     /** 确认订单接口请求参数 */

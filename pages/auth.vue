@@ -80,6 +80,10 @@ onMounted(() => {
   }
 })
 
+useSeoMeta({
+  robots: 'noindex, nofollow'
+})
+
 const _init = () => {
   loginFn({
     channel: '2',

@@ -155,6 +155,9 @@ export namespace IProduct {
         subTitle: string;
         /*专区背景图 */
         background: string;
+        keywords: string;
+        slug: string;
+        description: string;
     }
 
     /*品牌相关推荐请求参数*/
@@ -167,5 +170,7 @@ export namespace IProduct {
         priceSort?: string | null;
         /*销量排序, null: 重置, 0: 降序, 1: 升序 */
         salesSort?: string | null;
+        /*创作者编号 */
+        creatorId?: string | null;
     }
 }

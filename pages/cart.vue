@@ -7,9 +7,12 @@
         <!-- 产品视图 -->
         <div class="review-list">
           <div class="review-item acea-row gap-base" v-for="(item, index) in canCarts" :key="index">
-            <div class="p-img cursor-pointer" @click="jumpToProduct(item)">
-              <div class="aspect-ratio p-10 border-sm border-gray-200">
-                <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" :alt="item.title">
+            <div class="p-img">
+              <div class="acea-row nowrap row-middle gap-base">
+                <el-checkbox v-model="item.selected" size="large" @change="changeCheck"/>
+                <div class="aspect-ratio p-10 border-sm border-gray-200 cursor-pointer" @click="jumpToProduct(item)">
+                  <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" :alt="item.title">
+                </div>
               </div>
             </div>
             <div class="p-cont flex-1">
@@ -21,107 +24,122 @@
               <div class="acea-row row-between-wrapper mt-10">
                 <el-input-number
                   class="review-number"
-                  v-model="item.quantity"
+                  :model-value="item.quantity"
+                  @update:model-value="(val) => quantityChange(val, item)"
                   :min="1"
                   :max="Number(item.retailStock) > 999 ? 999 : Number(item.retailStock)"
-                  @change="quantityChange"
                   :value-on-clear="1"
                 />
-                <p class="text-14 f-bold">
-                  {{ currencyStore.formatToCurrency(getItemTotal(item.retailPrice, item.quantity)) }}
+                <p>
+                  <span class="shimmer-text" v-if="item.isPriceStale">Calculating...</span>
+                  <template v-else>
+                    <span class="text-14 f-bold">
+                    {{ currencyStore.formatToCurrency(item.discountAmount === 0 ? getItemTotal(item) : getItemDisCountTotal(item)) }}
+                  </span>
+                    <span v-if="item.discountAmount !== 0" class="text-gray-400 text-through ml-5 text-12">
+                      {{ currencyStore.formatToCurrency(getItemTotal(item)) }}
+                    </span>
+                  </template>
                 </p>
               </div>
               <div class="mt-10 text-right text-secondary f-bold">
-                <p v-for="(promo, promoIndex) in item.promoOffer" :key="promoIndex">{{ promo }}</p>
+                <span>{{ item?.promoOffer?.join(' / ') }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="review-summary shadow-lg p-xl-20 p-15">
-        <div class="acea-row row-between-wrapper text-16 f-bold pb-20 mb-20 border-b-sm border-gray-200">
-          <span>Subtotal</span>
-          <span>{{ currencyStore.formatToCurrency(cartStore.subtotal) }}</span>
-        </div>
-        <div class="acea-row row-between-wrapper mb-20">
-          <div class="acea-row row-middle">
-            <span class="f-bold text-16 mr-5">Phone Number</span>
-            <el-tooltip :content="phoneRuleText" placement="top" popper-style="max-width: 345px;">
-              <span class="iconfont icon-info-fill text-18"></span>
-            </el-tooltip>
+        <template v-if="selectedCarts.length > 0">
+          <div class="acea-row row-between-wrapper text-16 f-bold pb-20 mb-20 border-b-sm border-gray-200">
+            <span>Subtotal</span>
+            <span>{{ currencyStore.formatToCurrency(cartStore.checkoutSubtotal) }}</span>
           </div>
-          <span></span>
-        </div>
-        <el-input
-          ref="phoneInputRef"
-          class="mb-20"
-          v-model="phone"
-          placeholder="Enter your phone number"
-          size="large"
-          maxlength="20"
-          @input="checkPhone"
-        />
-        <div class="acea-row row-between-wrapper mb-20">
-          <div class="acea-row row-middle">
-            <span class="f-bold text-16 mr-5">Apply Discount Code</span>
-            <el-tooltip :content="discountRuleText" placement="top" popper-style="max-width: 345px;">
-              <span class="iconfont icon-info-fill text-18"></span>
-            </el-tooltip>
+          <div class="acea-row row-between-wrapper mb-20">
+            <div class="acea-row row-middle">
+              <span class="f-bold text-16 mr-5">Phone Number</span>
+              <el-tooltip :content="phoneRuleText" placement="top" popper-style="max-width: 345px;">
+                <span class="iconfont icon-info-fill text-18"></span>
+              </el-tooltip>
+            </div>
+            <span></span>
           </div>
-          <span class="iconfont text-24 cursor-pointer" :class="[showDiscountInput ? 'icon-reduce' : 'icon-add']"
-                @click="showDiscountInput = !showDiscountInput"/>
-        </div>
-        <div v-show="showDiscountInput">
           <el-input
-            v-model="discountCode"
-            placeholder="Enter your discount code"
-            size="large"
-            :disabled="isDiscount"
-            @keydown.enter="applyCode"
-          >
-            <template #append>
-              <el-button size="large" @click="applyCode">Apply</el-button>
-            </template>
-          </el-input>
-          <div class="acea-row row-right row-center text-error my-20" v-if="isDiscount">
+              ref="phoneInputRef"
+              class="mb-20"
+              v-model="phone"
+              placeholder="Enter your phone number"
+              size="large"
+              maxlength="20"
+              @input="checkPhone"
+          />
+          <div class="acea-row row-between-wrapper mb-20">
+            <div class="acea-row row-middle">
+              <span class="f-bold text-16 mr-5">Apply Discount Code</span>
+              <el-tooltip :content="discountRuleText" placement="top" popper-style="max-width: 345px;">
+                <span class="iconfont icon-info-fill text-18"></span>
+              </el-tooltip>
+            </div>
+            <span class="iconfont text-24 cursor-pointer" :class="[showDiscountInput ? 'icon-reduce' : 'icon-add']"
+                  @click="showDiscountInput = !showDiscountInput"/>
+          </div>
+          <div v-show="showDiscountInput">
+            <el-input
+                v-model="discountCode"
+                placeholder="Enter your discount code"
+                size="large"
+                :disabled="isDiscount"
+                @keydown.enter="applyCode"
+            >
+              <template #append>
+                <el-button size="large" @click="applyCode">Apply</el-button>
+              </template>
+            </el-input>
+            <div class="acea-row row-right row-center text-error my-20" v-if="isDiscount">
             <span class="text-14">
               not using discounts
               <i class="iconfont icon-close text-14 cursor-pointer" @click="delCode"/>
             </span>
+            </div>
           </div>
-        </div>
-        <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
-          <span>Estimated Shipping</span>
-          <span>{{ currencyStore.formatToCurrency(Number(offerData.estimatedDeliveryAmount || 0)) }}</span>
-        </div>
-        <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
-          <span>Discount Amount</span>
-          <span>{{ currencyStore.formatToCurrency(Number(offerData?.discountAmount || 0)) }}</span>
-        </div>
-        <div class="acea-row row-between-wrapper text-16 f-bold pt-20 my-20 border-t-sm border-gray-200">
-          <span>Estimated Total</span>
-          <div>
-            <!-- 优惠之前的金额 -->
-            <p v-if="Number(offerData?.discountAmount || 0) > 0" class="text-through text-gray-600">
-              {{ currencyStore.formatToCurrency(totalBeforeDiscount) }}
-            </p>
-            <!-- 付款前的预估金额 -->
-            <p>{{ currencyStore.formatToCurrency(prePaymentEstimatedAmount) }}</p>
+          <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
+            <span>Estimated Shipping</span>
+            <span>{{ currencyStore.formatToCurrency(Number(offerData.estimatedDeliveryAmount || 0)) }}</span>
           </div>
-        </div>
-        <!-- paypal 按钮 -->
-        <div id="paypal-button-container" class="paypal-button-container" v-if="prePaymentEstimatedAmount !== 0"></div>
-        <!-- 积分支付 按钮 -->
-        <el-button type="primary" class="w-full checkout-btn" @click="createOrderCallback" v-else>Secure Checkout
-        </el-button>
-        <div class="mt-15 text-16">
-          The estimated shipping will be confirmed once you added your shipping address in checkout.
-        </div>
-        <div class="mt-15 acea-row row-middle">
-          <span class="mr-5 text-16">Promotion Rules</span>
-          <el-tooltip :content="promotionRuleText" placement="top" popper-style="max-width: 345px;">
-            <span class="iconfont icon-info-fill text-18"></span>
-          </el-tooltip>
+          <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
+            <span>Discount Amount</span>
+            <span>{{ currencyStore.formatToCurrency(Number(offerData?.discountAmount || 0)) }}</span>
+          </div>
+          <div class="acea-row row-between-wrapper text-16 f-bold pt-20 my-20 border-t-sm border-gray-200">
+            <span>Estimated Total</span>
+            <div>
+              <!-- 优惠之前的金额 -->
+              <p v-if="Number(offerData?.discountAmount || 0) > 0" class="text-through text-gray-600">
+                {{ currencyStore.formatToCurrency(totalBeforeDiscount) }}
+              </p>
+              <!-- 付款前的预估金额 -->
+              <p>{{ currencyStore.formatToCurrency(prePaymentEstimatedAmount) }}</p>
+            </div>
+          </div>
+          <!-- paypal 按钮 -->
+          <div id="paypal-button-container" class="paypal-button-container" v-if="prePaymentEstimatedAmount !== 0"></div>
+          <!-- 积分支付 按钮 -->
+          <el-button type="primary" class="w-full checkout-btn" @click="createOrderCallback" v-else>Secure Checkout
+          </el-button>
+          <div class="mt-15 text-16">
+            The estimated shipping will be confirmed once you added your shipping address in checkout.
+          </div>
+          <div class="mt-15 acea-row row-middle">
+            <span class="mr-5 text-16">Promotion Rules</span>
+            <el-tooltip :content="promotionRuleText" placement="top" popper-style="max-width: 345px;">
+              <span class="iconfont icon-info-fill text-18"></span>
+            </el-tooltip>
+          </div>
+        </template>
+        <div class="text-center py-60" v-else>
+          <span class="iconfont icon-shopping-bag text-50"></span>
+          <p class="text-20 f-bold mt-20">No Items Selected</p>
+          <p class="text-14 my-20">Please select at least one product in your cart before proceeding to checkout.</p>
         </div>
       </div>
     </div>
@@ -157,6 +175,7 @@ import {useCurrencyStore} from "~/stores/modules/currency";
 import {initPaypal} from '~/composables/usePayment'
 import {phoneReg} from "~/regular";
 import Decimal from "decimal.js";
+import {checkStatus} from "~/api/helper";
 
 defineOptions({
   name: 'Cart',
@@ -168,8 +187,12 @@ definePageMeta({
   isShowActivity: true
 })
 
+useSeoMeta({
+  robots: 'noindex, follow'
+})
+
 onMounted(() => {
-  if (canCarts.value.length > 0) {
+  if (selectedCarts.value.length > 0) {
     _init()
   }
   $bus.emit('closeCartWindow')
@@ -197,6 +220,7 @@ const showDiscountInput = ref(false)
 const phone = ref('')
 
 const canCarts = computed(() => cartStore.canCarts)
+const selectedCarts = computed(() => cartStore.selectedCarts)
 
 // 加载 PayPal SDK
 const loadPaypal = async () => {
@@ -218,8 +242,10 @@ const remarks = ref({})
 const shoppingCartData = ref<IShopping.ShoppingCartsRow[]>([])
 const offerData = ref({} as IShopping.OfferRow)
 const confirmOrder = async () => {
+  cartStore.priceCalculated(true) // 开启价格请求状态
+
   // 初始化商品列表
-  shoppingCartData.value = canCarts.value.map((item) => ({
+  shoppingCartData.value = selectedCarts.value.map((item) => ({
     shopId: item.shopId,
     techniqueId: item.techniqueId,
     productId: item.productId,
@@ -229,6 +255,7 @@ const confirmOrder = async () => {
     quantity: item.quantity,
     retailPrice: item.retailPrice,
     redeemPoints: item.redeemPoints,
+    // selected: item.selected ?? false
   })) as IShopping.ShoppingCartsRow[]
 
   const params: IShopping.OfferQuery = {
@@ -237,10 +264,20 @@ const confirmOrder = async () => {
   }
 
   try {
-    const {data} = await confirmOrderApi(params)
+    const {data, message, status} = await confirmOrderApi(params)
+
+    // 优惠券无法使用会返回一个空data
+    if (!data) {
+      checkStatus(status, message)
+      setTimeout(() => {
+        discountCode.value = ''
+        isDiscount.value = false
+      }, 500)
+      return
+    }
+    cartStore.clearPromoOffer() // 清除优惠折扣数组
     const products = data?.detail[0]?.products || []
     offerData.value = data
-
     // 匹配优惠
     if (products.length > 0) {
       // 创建产品映射表，以唯一标识为键
@@ -249,26 +286,36 @@ const confirmOrder = async () => {
       // 构建映射表 O(m)
       products.forEach(item => {
         const key = `${item.specsId}_${item.dimensionId}_${JSON.stringify(item.parts)}`;
-        productMap.set(key, item.promoOffer || []);
+        const obj = {
+          promoOffer: item.promoOffer,
+          discountAmount: item.discountAmount
+        }
+        productMap.set(key, obj);
       });
 
       // 查找匹配项 O(n)
       cartStore.carts.forEach(item => {
         const key = `${item.specsId}_${item.dimensionId}_${JSON.stringify(item.parts)}`;
-        item.promoOffer = productMap.get(key) || [];
+        if (productMap.has(key)) {
+          const obj = productMap.get(key)
+          item.promoOffer = obj?.promoOffer;
+          item.discountAmount = obj?.discountAmount;
+        }
       });
     }
-
   } catch (err) {
     setTimeout(() => {
       discountCode.value = ''
       isDiscount.value = false
-    }, 1000)
+    }, 500)
+  } finally {
+    cartStore.priceCalculated(false) // 关闭价格请求状态
   }
 }
 
 // 数量变化
-const quantityChange = debounce(() => {
+const quantityChange = debounce((newVal, item) => {
+  item.quantity = newVal;
   confirmOrder()
 })
 
@@ -445,10 +492,16 @@ const checkPhone = debounce((val: string) => {
   return isValid
 })
 
-const getItemTotal = (price: number | string, quantity: number) => {
-  return new Decimal(price || 0)
-    .mul(quantity || 0)
+const getItemTotal = (item: IShopping.ShoppingCartsStorageRow) => {
+  return new Decimal(item.retailPrice || 0)
+    .mul(item.quantity || 0)
     .toNumber()
+}
+
+const getItemDisCountTotal = (item: IShopping.ShoppingCartsStorageRow) => {
+  return new Decimal(getItemTotal(item) || 0)
+      .sub(item.discountAmount || 0)
+      .toNumber()
 }
 
 //  优惠之前的金额（原价 + 运费）
@@ -469,6 +522,10 @@ const actualPaidAmount = computed<number>(() => {
   const discountAmount = new Decimal(offerData.value?.discountAmount || 0);
   return originalAmount.minus(discountAmount).toNumber();
 })
+
+const changeCheck = () => {
+  confirmOrder()
+}
 
 watch(() => prePaymentEstimatedAmount.value, (newVal: number) => {
   if (newVal > 0) {
@@ -563,5 +620,30 @@ watch(() => prePaymentEstimatedAmount.value, (newVal: number) => {
     height: 35px;
     font-size: 13px;
   }
+}
+
+.shimmer-text {
+  font-family: sans-serif;
+  font-weight: bold;
+  color: #e0e0e0; /* 底色：浅灰 */
+
+  /* 核心背景渐变逻辑 */
+  background: linear-gradient(
+          100deg,
+          #e0e0e0 40%,
+          #888888 50%,
+          #e0e0e0 60%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text; /* 兼容 Safari/Chrome */
+  -webkit-text-fill-color: transparent; /* 让文字透明，显示出背景 */
+
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: -100% 50%; }
 }
 </style>

@@ -1,9 +1,10 @@
 import type {IPageQuery} from "~/api/interface";
+import type {General, ObjectNode} from "~/types/global";
 
 export namespace INews {
 
     /*新闻查询条件*/
-    export interface RecQuery extends IPageQuery{
+    export interface RecQuery extends IPageQuery {
         id: string
         categoryId: string
     }
@@ -14,6 +15,8 @@ export namespace INews {
         id: string
         /*标题*/
         title: string
+        /*slug*/
+        slug: string
         /*副标题*/
         subtitle: string
         /*属性*/
@@ -38,5 +41,13 @@ export namespace INews {
         index: number
         /*新闻列表*/
         news: Row[]
+    }
+
+    /*新闻顶部数据项*/
+    export interface TopRow {
+        /*顶部主题*/
+        topic: General.MediaItem[]
+        /*最新资讯*/
+        latest: Row[]
     }
 }

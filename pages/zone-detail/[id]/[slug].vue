@@ -1,15 +1,18 @@
 <template>
-  <section class="sec-banner my-md-40 my-20">
-    <img class="w-full" :src="imagePrefix(zone.background)" alt="background">
+  <section class="sec-banner">
+    <img class="w-full" :src="imagePrefix(zoneDetail.background)" alt="background">
   </section>
-
-  <section class="sec-main">
+  <section>
     <div class="container">
       <div class="py-sm-30 py-20 text-center">
-        <h1 class="text-50 f-bold-500 text-uppercase">{{ zone.title }}</h1>
-        <h2 class="text-24 mt-20 mt-sm-40">{{ zone.subTitle }}</h2>
+        <h1 class="text-50 f-bold-500 text-uppercase">{{ zoneDetail.title }}</h1>
+        <h2 class="text-24 mt-20 mt-sm-40">{{ zoneDetail.subTitle }}</h2>
       </div>
-
+    </div>
+  </section>
+  <div id="list-anchor"></div>
+  <section class="sec-filter">
+    <div class="container">
       <!--按钮组 Pc端-->
       <div
           class="buttons-wrapper py-md-30 py-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
@@ -152,33 +155,9 @@
           {{ artistSelected.name }}
         </el-tag>
       </div>
-
-      <ClientOnly>
-        <!--商品数据-->
-        <ProList
-            ref="proListRef"
-            :request-api="getProductList"
-            :init-param="initParam"
-        >
-          <template #default="scope">
-            <div class="row product-list gap-row-base">
-              <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="item in scope.rows" :key="item.id">
-                <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="clickArtistType"/>
-              </div>
-            </div>
-          </template>
-          <template #empty>
-            <div class="text-center py-60">
-              <span class="iconfont icon-empty text-50"></span>
-              <p class="text-20 f-bold mt-20">No Data</p>
-              <p class="text-14 my-20">No data found, please check the query or try again later.</p>
-            </div>
-          </template>
-        </ProList>
-      </ClientOnly>
     </div>
   </section>
-
+  <NuxtPage/>
   <ClientOnly>
     <!-- 移动端弹窗筛选 -->
     <Popup v-model="isPopup" v-if="appStore.device === 'app'">
@@ -287,38 +266,49 @@
       </template>
     </Popup>
   </ClientOnly>
-
-  <LoginWindow ref="loginWindowRef"/>
 </template>
 
 <script setup lang="ts">
-import {debounce, imagePrefix} from "~/utils";
-import {getProductZoneApi} from "~/api/modules/product/product";
+import {imagePrefix} from "~/utils";
 import type {IProduct} from "~/api/interface/product/product";
-import {useAppStore} from "~/stores/modules/app";
 import type {ElPopover} from "element-plus";
 import type {IHome} from "~/api/interface/home/home";
 import {techniqueMenu, priceMenu, salesMenu} from "~/constant";
-import ProList from "~/components/ProList/index.vue";
-import {getZoneCollectApi} from "~/api/modules/product/product";
-import {useUserStore} from "~/stores/modules/user";
-import {productThumbsApi} from "~/api/modules/likes/likes";
-import LoginWindow from "~/components/LoginWindow.vue";
+import {useAppStore} from "~/stores/modules/app";
+import type {IResultData} from "~/api/interface";
+import {TRADE_MODULE} from "~/api/helper/prefix";
+import {computed, ref, nextTick, watch, provide} from 'vue'
 
-onMounted(() => {
-  _getProductZone()
+defineOptions({
+  name: 'ZoneDetail'
 })
 
 const route = useRoute();
+const router = useRouter();
 const appStore = useAppStore()
-const userStore = useUserStore()
 
 // 获取专区详情
-const zone = ref({} as IProduct.ZoneRow)
-const _getProductZone = async () => {
-  const {data} = await getProductZoneApi(route.params.id as string)
-  zone.value = data
-}
+const {data: zoneDetail} = await useAsyncData(() => `zone-detail-${route.params.id}`, async () => {
+  const config = useRuntimeConfig()
+  const {data} = await $fetch<IResultData<IProduct.ZoneRow[]>>(config.public.apiBase + TRADE_MODULE + '/product/zone/detail/' + route.params.id)
+  return data
+})
+
+const filterParams = computed(() => ({
+  zoneId: route.params.id,
+  priceSort: priceSortSelected.value?.config?.code ?? null,
+  salesSort: salesSortSelected.value?.config?.code ?? null,
+  techniqueId: techniqueSelected.value?.config?.code || null,
+  creatorId: artistSelected.value?.id || null,
+}));
+
+const baseRoute = computed(() => `/zone-detail/${route.params.id}/${route.params.slug}`)
+
+const seoInfo = computed(() => ({
+  title: zoneDetail.value?.title,
+  description: zoneDetail.value?.description,
+  keywords: zoneDetail.value?.keywords,
+}))
 
 const sortType = ref<"PRICE_SORT" | "SALES_SORT" | "TECHNIQUE_SORT" | null>(null) // 移动端中SORT类型中筛选的类型
 
@@ -353,32 +343,6 @@ const handleTechnique = (menu: IHome.MenuRow) => {
   techniqueSelected.value = menu
   techniquePopoverRef.value?.hide()
   search()
-}
-
-const initParam = reactive<any>({
-  size: 50,
-  zoneId: 1,
-  priceSort: null,
-  salesSort: null,
-  techniqueId: null,
-  creatorId: null,
-})
-const proListRef = ref<InstanceType<typeof ProList>>();
-const getProductList = (params: IProduct.zoneCollectQuery) => getZoneCollectApi(params)
-
-// 收藏/取消收藏
-const productThumbs = debounce(async (item) => {
-  if (!userStore.isLogin) {
-    showLoginWindow()
-    return
-  }
-  await productThumbsApi({mediaId: item.id, operate: ~~!item.like as Dict.ThumbsOperateType})
-  item.like = !item.like
-}, 300)
-
-const loginWindowRef = ref<InstanceType<typeof LoginWindow>>()
-const showLoginWindow = () => {
-  loginWindowRef.value?.open()
 }
 
 // 点击Artist类型的选项（这里需要立即更新数据）
@@ -474,25 +438,58 @@ const reset = () => {
   techniqueSelected.value = {} as IHome.MenuRow
   priceSortSelected.value = {} as IHome.MenuRow
   salesSortSelected.value = {} as IHome.MenuRow
+  artistSelected.value = {} as IHome.MenuRow
   search()
 }
 
 const search = () => {
   isPopup.value = false
-
-  initParam.priceSort = priceSortSelected.value?.config?.code ?? null
-  initParam.salesSort = salesSortSelected.value?.config?.code ?? null
-  initParam.techniqueId = techniqueSelected.value?.config?.code || null
-  initParam.creatorId = artistSelected.value?.id || null
-
-  proListRef.value?.search(true);
+  router.push(baseRoute.value)
 }
 
+// ⬇️ 定义滚动动作
+const executeScroll = () => {
+  if (!process.client) return
 
+  // 使用 requestAnimationFrame 确保在浏览器渲染下一帧时执行，防止 DOM 还没准备好
+  requestAnimationFrame(() => {
+    const anchor = document.getElementById('list-anchor')
+
+    if (anchor) {
+      // 偏移量计算
+      const headerOffset = appStore.headerState.height
+      const elementPosition = anchor.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      window.scrollTo({
+        top: offsetPosition - 15,
+        behavior: 'smooth' // 建议用 auto (瞬间)，配合骨架屏体验更好；smooth 可能会有视觉上的拉扯
+      })
+    }
+  })
+}
+
+watch(
+    () => route.fullPath,
+    (newPath, oldPath) => {
+      // 简单的防抖，确保不是同一个页面（虽然 fullPath 变了通常就是变了）
+      if (newPath !== oldPath) {
+        // 必须加 nextTick，因为路由变了，Nuxt 还需要一点点时间去卸载旧组件/挂载新组件
+        nextTick(() => {
+          executeScroll()
+        })
+      }
+    }
+)
+
+provide('zoneFilterParams', filterParams);
+provide('updateArtist', clickArtistType);
+provide('baseRoute', baseRoute);
+provide('seoInfo', seoInfo);
 </script>
 
 <style scoped lang="scss">
-  .sec-main {
+  .sec-filter {
     .buttons-wrapper {
       position: sticky;
       top: 0;

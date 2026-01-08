@@ -1,3 +1,5 @@
+import type {General, ObjectNode} from "~/types/global";
+
 export namespace IBlog {
 
     /*博客数据*/
@@ -6,6 +8,8 @@ export namespace IBlog {
         id: string
         /*标题 */
         title: string
+        /* slug */
+        slug: string
         /*内容 */
         content: string
         /*主图 */

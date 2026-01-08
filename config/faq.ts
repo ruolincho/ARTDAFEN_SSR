@@ -1,12 +1,13 @@
 import {CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
+import {generateTitle2Slug} from "~/utils";
 
 export const QUOTE_TYPES = ['shopping', 'footer'] as const;
 
 export type QuoteType = typeof QUOTE_TYPES[number];
 
 export interface FaqCategory {
-    /* 唯一标识 */
-    name: string;
+    /* 分类 */
+    category: string;
     /* 聚合标题 */
     headTitle: string;
     /* 聚合项 */
@@ -14,8 +15,8 @@ export interface FaqCategory {
 }
 
 export interface FaqItem {
-    /* 唯一标识 */
-    name: string;
+    /* URL别名 */
+    slug: string;
     /* 标题 */
     title: string;
     /* 富文本 */
@@ -26,15 +27,35 @@ export interface FaqItem {
     url?: string;
 }
 
-export const faqList: FaqCategory[] = [
+function buildFaqList(source: FaqCategory[]) {
+    return source.map(category => {
+        const categorySlug = generateTitle2Slug(category.category)
+
+        return {
+            ...category,
+            categorySlug,
+            list: category.list.map(item => {
+                const slug = generateTitle2Slug(item.title)
+
+                return {
+                    ...item,
+                    slug,
+                    url: `/faq/${categorySlug}/${slug}`
+                }
+            })
+        }
+    })
+}
+
+const faqListUnBuild: FaqCategory[] = [
     {
-        name: '1',
+        category: 'payments',
         headTitle: 'PAYMENTS',
         list: [
             {
-                name: '1-1',
+                slug: '',
                 title: 'WHAT PAYMENT METHODS DO YOU ACCEPT?',
-                url: '/faq?name=1-1',
+                url: '',
                 content: `
           <p>
             We securely accept payments via <strong>PayPal</strong> and all major
@@ -43,9 +64,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '1-2',
-                title: 'I AM HAVING TROUBLE COMPLETINGTING MY PAYMENT. WHAT SHOULD I DO?',
-                url: '/faq?name=1-2',
+                slug: '',
+                title: 'I AM HAVING TROUBLE COMPLETING MY PAYMENT. WHAT SHOULD I DO?',
+                url: '',
                 content: `
           <p>
             We apologize for the inconvenience. Please try using an alternative card
@@ -64,13 +85,13 @@ export const faqList: FaqCategory[] = [
         ]
     },
     {
-        name: '2',
+        category: 'shipping-delivery',
         headTitle: 'SHIPPING & DELIVERY',
         list: [
             {
-                name: '2-1',
+                slug: '',
                 title: 'HOW ARE THE ARTWORKS PACKAGED?',
-                url: '/faq?name=2-1',
+                url: '',
                 quote: ['shopping'],
                 content: `
           <p>
@@ -84,9 +105,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '2-2',
+                slug: '',
                 title: 'WHO DELIVERS & WHERE DO YOU SHIP?',
-                url: '/faq?name=2-2',
+                url: '',
                 quote: ['shopping'],
                 content: `
           <p>
@@ -95,9 +116,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '2-3',
+                slug: '',
                 title: 'HOW MUCH IS SHIPPING & HOW LONG DOES IT TAKE?',
-                url: '/faq?name=2-3',
+                url: '',
                 quote: ['footer', 'shopping'],
                 content: `
           <p>
@@ -109,9 +130,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '2-4',
+                slug: '',
                 title: 'IS THE DELIVERY INSURED?',
-                url: '/faq?name=2-4',
+                url: '',
                 quote: ['shopping'],
                 content: `
           <p>
@@ -120,9 +141,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '2-5',
+                slug: '',
                 title: 'DOES FREE SHIPPING INCLUDE CUSTOMS DUTIES?',
-                url: '/faq?name=2-5',
+                url: '',
                 quote: ['footer', 'shopping'],
                 content: `
           <p>
@@ -131,9 +152,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '2-6',
+                slug: '',
                 title: 'MY ORDER ARRIVED DAMAGED. WHAT SHOULD I DO?',
-                url: '/faq?name=2-6',
+                url: '',
                 quote: ['shopping'],
                 content: `
           <p>
@@ -142,9 +163,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '2-7',
+                slug: '',
                 title: 'CAN I REQUEST AN EXPEDITED DELIVERY?',
-                url: '/faq?name=2-7',
+                url: '',
                 content: `
           <p>
            We understand that art is often a gift for a special occasion—whether it’s a birthday, an anniversary, or a grand opening event. At Artdafen, we will do our absolute best to meet your deadline.
@@ -170,13 +191,13 @@ export const faqList: FaqCategory[] = [
         ]
     },
     {
-        name: '3',
+        category: 'artwork-customization',
         headTitle: 'ARTWORK & CUSTOMIZATION',
         list: [
             {
-                name: '3-1',
+                slug: '',
                 title: 'YOUR VISION, OUR MASTERPIECE — DO YOU ACCEPT CUSTOM REQUESTS?',
-                url: '/faq?name=3-1',
+                url: '',
                 content: `
             <p>
             Yes. At ARTDAFEN, we bridge the gap between imagination and reality. We provide a one-stop solution for high-end art:
@@ -203,9 +224,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '3-2',
+                slug: '',
                 title: 'HOW LONG DOES IT TAKE TO CREATE MY ARTWORK?',
-                url: '/faq?name=3-2',
+                url: '',
                 content: `
           <p>
            Quality takes time. Our typical <strong> Production & Approval cycle is 5–10 business days</strong> for oil paintings. For mixed media art or custom sculptures, the timeline may vary based on complexity. We will provide a specific timeline with your quote.
@@ -213,9 +234,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '3-3',
+                slug: '',
                 title: 'WILL I SEE THE WORK BEFORE IT SHIPS?',
-                url: '/faq?name=3-3',
+                url: '',
                 quote: ['footer'],
                 content: `
           <p>
@@ -235,9 +256,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '3-4',
+                slug: '',
                 title: 'WHAT TECHNIQUES DO YOU USE?',
-                url: '/faq?name=3-4',
+                url: '',
                 content: `
           <p>
           For oil paintings, our artists strictly employ the classical <strong>Three-Layer Technique</strong> (Underpainting, Modeling, and Glazing), allowing for proper oxidation between stages.
@@ -248,9 +269,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '3-5',
+                slug: '',
                 title: 'DOES A LOWER PRICE MEAN I’M COMPROMISING ON QUALITY?',
-                url: '/faq?name=3-5',
+                url: '',
                 content: `
           <p>
             Absolutely not. At Artdafen, we follow First Principles thinking to redefine how art is sold. We strip away the "noise" and focus only on what truly matters: the canvas, the paint, and the artist's skill.
@@ -278,9 +299,9 @@ export const faqList: FaqCategory[] = [
         `
             },
             {
-                name: '3-6',
+                slug: '',
                 title: 'WHO ARE THE ARTISTS BEHIND ARTDAFEN?',
-                url: '/faq?name=3-6',
+                url: '',
                 content: `
           <p>
 At Artdafen, we are not mere resellers; we are deeply rooted in the heart of the global art community. We collaborate exclusively with the <strong>elite tier of artists from the legendary Dafen Oil Painting Village</strong>—the world's epicenter of oil painting.
@@ -309,13 +330,13 @@ Here is how we distinguish our quality from the mass market:
         ]
     },
     {
-        name: '4',
+        category: 'orders',
         headTitle: 'ORDERS',
         list: [
             {
-                name: '4-1',
+                slug: '',
                 title: "I HAVEN'T RECEIVED MY CONFIRMATION EMAIL.",
-                url: '/faq?name=4-1',
+                url: '',
                 content: `
           <p>
             If you haven't received an email, please check your spam/junk folder.
@@ -329,9 +350,9 @@ Here is how we distinguish our quality from the mass market:
         `
             },
             {
-                name: '4-2',
+                slug: '',
                 title: 'I ENTERED THE WRONG ADDRESS. CAN I CHANGE IT?',
-                url: '/faq?name=4-2',
+                url: '',
                 content: `
           <p>
             Please contact us <strong>immediately</strong> via email
@@ -347,9 +368,9 @@ Here is how we distinguish our quality from the mass market:
         `
             },
             {
-                name: '4-3',
+                slug: '',
                 title: 'MY ORDER IS MISSING ITEMS.',
-                url: '/faq?name=4-3',
+                url: '',
                 content: `
           <p>
           We ship multiple items together whenever possible, but sometimes they are shipped in separate packages (e.g., a rolled canvas and a framed piece). Please contact us at <a class="text-secondary" href="mailto:${CONTACT_EMAIL}">
@@ -361,13 +382,13 @@ Here is how we distinguish our quality from the mass market:
         ]
     },
     {
-        name: '5',
+        category: 'returns-refunds',
         headTitle: 'RETURNS & REFUNDS',
         list: [
             {
-                name: '5-1',
+                slug: '',
                 title: 'WHAT IS YOUR RETURN POLICY?',
-                url: '/faq?name=5-1',
+                url: '',
                 quote: ['footer'],
                 content: `
           <p>
@@ -378,9 +399,9 @@ Here is how we distinguish our quality from the mass market:
         `
             },
             {
-                name: '5-2',
+                slug: '',
                 title: 'CAN I RETURN CUSTOM OR SCULPTURE ORDERS?',
-                url: '/faq?name=5-2',
+                url: '',
                 content: `
           <p>
             Personalized items, bespoke sculptures, and custom commissions are final sale due to their unique nature. However, if there is a defect or quality issue, please let us know immediately so we can resolve it.
@@ -390,13 +411,13 @@ Here is how we distinguish our quality from the mass market:
         ]
     },
     {
-        name: '6',
+        category: 'help-wholesale',
         headTitle: 'HELP & WHOLESALE',
         list: [
             {
-                name: '6-1',
+                slug: '',
                 title: 'HOW DO I CONTACT CUSTOMER SUPPORT?',
-                url: '/faq?name=6-1',
+                url: '',
                 content: `
            <p>
            Our dedicated team is here to support you with any questions regarding returns, shipping, or your order status.
@@ -430,9 +451,9 @@ Here is how we distinguish our quality from the mass market:
         `
             },
             {
-                name: '6-2',
+                slug: '',
                 title: 'WHOLESALE & BULK ORDERS',
-                url: '/faq?name=6-2',
+                url: '',
                 content: `
           <p>
             Ready to scale? Whether you are sourcing for a boutique hotel or curating a private collection, we support bulk purchasing with consistent quality. Please send your project details to <a class="text-secondary" href="mailto:${CONTACT_EMAIL}">
@@ -453,10 +474,15 @@ Here is how we distinguish our quality from the mass market:
     }
 ];
 
+export const faqList: FaqCategory[] = buildFaqList(faqListUnBuild)
+
 /**
  * 获取指定引用类型的常见问题列表
  * @param quote 引用类型或引用类型数组
  * @returns 常见问题项数组
+ * @example
+ * getFaqByQuote('footer') // 获取所有引用类型为 'footer' 的常见问题
+ * getFaqByQuote(['footer', 'shopping']) // 获取所有引用类型为 'footer' 或 'shopping' 的常见问题
  */
 export function getFaqByQuote(quote: QuoteType | QuoteType[]) {
     const quoteList = Array.isArray(quote) ? quote : [quote];
@@ -464,4 +490,49 @@ export function getFaqByQuote(quote: QuoteType | QuoteType[]) {
     return faqList
         .flatMap(category => category.list)
         .filter(item => item.quote?.some(q => quoteList.includes(q)));
+}
+
+/**
+ * 将 HTML 字符串转换为纯文本（安全、SEO 友好）
+ */
+export function htmlToPlainText(html: string): string {
+    if (!html) return ''
+
+    return html
+        // 移除 script / style
+        .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+        .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
+        // 移除所有 HTML 标签
+        .replace(/<\/?[^>]+(>|$)/g, '')
+        // HTML 实体处理
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        // 多余空格 & 换行
+        .replace(/\s+/g, ' ')
+        .trim()
+}
+
+/**
+ * 生成符合 Google FAQPage 规范的 JSON-LD
+ */
+export function generateFAQPageJsonLd(faqGroups: FaqCategory[]) {
+    const mainEntity = faqGroups
+        .flatMap(group => group.list)
+        .filter(item => item.title && item.content)
+        .map(item => ({
+            '@type': 'Question',
+            name: item.title,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: htmlToPlainText(item.content)
+            }
+        }))
+
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity
+    }
 }

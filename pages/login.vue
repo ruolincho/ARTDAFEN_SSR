@@ -176,7 +176,7 @@ const toGoogleAuth = () => {
 
 useHead({
   meta: [
-    {name: 'robots', content: 'index,follow'},
+    {name: 'robots', content: 'noindex, follow'},
   ]
 })
 </script>

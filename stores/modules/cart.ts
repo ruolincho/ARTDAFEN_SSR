@@ -14,6 +14,9 @@ export const useCartStore = defineStore(
         // 可以购买的商品
         const canCarts = computed(() => carts.value.filter(item => item.disable !== true))
 
+        // 选中的商品
+        const selectedCarts = computed(() => canCarts.value.filter(item => item.selected))
+
         // 添加购物车商品
         function addition(cart: IShopping.ShoppingCartsStorageRow) {
             // 查找购物车中是否已有相同的商品
@@ -44,9 +47,9 @@ export const useCartStore = defineStore(
             carts.value = [];
         }
 
-        // 计算总价
+        // 计算总价 (全部)
         const subtotal = computed(() => {
-            return carts.value.reduce((acc, cur) => {
+            return canCarts.value.reduce((acc, cur) => {
                 const price = new Decimal(cur.retailPrice || 0)
                 const quantity = new Decimal(cur.quantity || 0)
                 return acc.plus(price.mul(quantity))
@@ -56,6 +59,16 @@ export const useCartStore = defineStore(
         // 计算总数量
         const subtotalQuantity = computed(() => {
             return canCarts.value.reduce((acc, cur) => acc + Number(cur.quantity), 0);
+        })
+
+        // 计算总价 (选中)
+        const checkoutSubtotal = computed(() => {
+            return canCarts.value.reduce((acc, cur) => {
+                if (!cur?.selected) return acc.plus(new Decimal(0)) // 没有选中
+                const price = new Decimal(cur.retailPrice || 0)
+                const quantity = new Decimal(cur.quantity || 0)
+                return acc.plus(price.mul(quantity))
+            }, new Decimal(0)).toNumber()
         })
 
         // 购买前置检测
@@ -94,15 +107,37 @@ export const useCartStore = defineStore(
             })
         }
 
+        const priceCalculated = (flag: boolean) => {
+            carts.value.forEach(item => {
+                item.isPriceStale = flag
+            })
+        }
+
+        const clearPromoOffer = () => {
+            carts.value.forEach((item, index) => {
+                item.promoOffer = []
+                item.discountAmount = 0
+            })
+        }
+
+        const clearSelected = () => {
+            carts.value.forEach(item => item.selected = false)
+        }
+
         return {
             carts,
             canCarts,
+            selectedCarts,
             subtotal,
+            checkoutSubtotal,
             addition,
             remove,
             clear,
             subtotalQuantity,
             shoppingPreCheck,
+            priceCalculated,
+            clearPromoOffer,
+            clearSelected,
         };
     },
     {

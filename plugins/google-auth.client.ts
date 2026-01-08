@@ -29,7 +29,7 @@ export class AuthGoogle {
         const access_type = 'offline'
         const response_type = 'code'
         const project_url = `${encodeURIComponent(location.origin + '/auth')}`
-        // 这里的跳转微信授权页面写在了服务器上的get-google-code.html中
+        // 这里的跳转谷歌授权页面写在了服务器上的get-google-code.html中
         return `https://accounts.google.com/o/oauth2/auth?response_type=${response_type}&redirect_uri=${redirect_uri}&scope=${scope}&client_id=${client_id}&access_type=${access_type}&state=${project_url}`
     }
 }

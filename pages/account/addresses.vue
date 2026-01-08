@@ -64,6 +64,10 @@ definePageMeta({
   auth: true
 })
 
+useSeoMeta({
+  robots: 'noindex, nofollow'
+})
+
 onMounted(() => {
   getAddressList()
 })

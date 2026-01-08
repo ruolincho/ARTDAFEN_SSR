@@ -5,7 +5,7 @@
       <div class="acea-row">
         <!-- PC端房型列表 -->
         <div class="menu-box text-center">
-          <ul class="menu-list text-16 ">
+          <ul class="menu-list text-16" ref="menuListPcRef">
             <li
               class="cursor-pointer py-10"
               :class="{ 'bg-gray-200': roomIndex === index }"
@@ -26,11 +26,15 @@
             :auto-upload="false"
             :show-file-list="false"
           >
-            <div class="upload-btn mt-20 p-10 cursor-pointer">
+            <div class="upload-btn my-20 p-10 cursor-pointer" ref="uploadBtnPcRef">
               Upload A Photo <br> Of Your Own Room
               <span class="iconfont icon-right"></span>
             </div>
           </el-upload>
+
+          <el-button size="large" type="primary" @click="openTour = true">
+            <span class="px-50">Guide</span>
+          </el-button>
 
         </div>
 
@@ -50,10 +54,11 @@
                 class="resize-handle iconfont icon-suofang"
                 @mousedown.stop.prevent="onResizeStart"
                 @touchstart.stop.prevent="onResizeStart"
+                ref="resizeRef"
               />
             </div>
           </div>
-          <div class="thumb-box mt-10">
+          <div class="thumb-box mt-10" ref="thumbRef">
             <swiper
               :modules="modules"
               :navigation="true"
@@ -87,14 +92,14 @@
               :auto-upload="false"
               :show-file-list="false"
           >
-            <div class="acea-row row-column row-middle px-15">
+            <div class="acea-row row-column row-middle px-15" ref="uploadBtnAppRef">
               <div class="bg-white rounded-full p-10 shadow-md">
                 <span class="iconfont icon-camera-switching" style="font-size: 25px;"/>
               </div>
               <p class="mt-10 f-bold">Upload Photo</p>
             </div>
           </el-upload>
-          <div class="flex-1 overflow-hidden">
+          <div class="flex-1 overflow-hidden" ref="menuListAppRef">
             <div class="app-room-list acea-row nowrap scroll-x scroll-hide py-10">
               <div
                   class="item shadow-md"
@@ -113,8 +118,45 @@
       <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="visible = false">
         <span class="iconfont icon-close"></span>
       </div>
+
+      <!-- 关闭按钮 -->
+      <div class="guide-app-btn shadow-md" @click="openTour = true">
+        <span class="iconfont icon-help"></span>
+      </div>
+
     </div>
   </div>
+
+  <el-tour v-model="openTour">
+    <template #indicators="{ current, total }">
+      <span>{{ current + 1 }} / {{ total }}</span>
+    </template>
+    <el-tour-step
+        :target="dragBox"
+        title="Drag to Move"
+        description="Drag image to reposition."
+    />
+    <el-tour-step
+        :target="resizeRef"
+        title="Resize"
+        description="Drag bottom-right to scale."
+    />
+    <el-tour-step
+        :target="appStore.isPc ? menuListPcRef : menuListAppRef"
+        title="Change Style"
+        description="Switch room categories."
+    />
+    <el-tour-step
+        :target="thumbRef"
+        title="Select Room"
+        description="Switch between rooms."
+    />
+    <el-tour-step
+        :target="appStore.isPc ? uploadBtnPcRef : uploadBtnAppRef"
+        title="Custom Upload"
+        description="Use your own photo."
+    />
+  </el-tour>
 </template>
 
 <script setup lang="ts">
@@ -130,6 +172,7 @@ import list from '~/config/room'
 import {useAppStore} from "~/stores/modules/app";
 import {useLockScroll} from "~/composables/useLockScroll";
 import room from "~/config/room";
+import {APP_HAS_SEEN_ROOM_GUIDE} from "~/config";
 
 defineOptions({
   name: 'Room',
@@ -158,9 +201,16 @@ const choosePhoto = (photo: string) => {
 }
 
 const visible = ref(false)
+const openTour = ref(false)
 
 const previewBox = ref<HTMLDivElement | null>(null);
 const dragBox = ref<HTMLDivElement | null>(null);
+const resizeRef = ref<HTMLDivElement | null>(null);
+const menuListPcRef = ref<HTMLDivElement | null>(null);
+const menuListAppRef = ref<HTMLDivElement | null>(null);
+const uploadBtnPcRef = ref<HTMLDivElement | null>(null);
+const uploadBtnAppRef = ref<HTMLDivElement | null>(null);
+const thumbRef = ref<HTMLDivElement | null>(null);
 
 const aspectRatio = props.pixel.width / props.pixel.height;
 
@@ -314,14 +364,26 @@ function onResizeEnd() {
 }
 
 function centerDragBox() {
-  nextTick(() => {
-    const box = previewBox.value;
-    if (!box) return;
-    const boxRect = box.getBoundingClientRect();
+  return new Promise((resolve) => {
+    nextTick(() => {
+      const box = previewBox.value;
 
-    position.value.left = (boxRect.width - size.value.width) / 2;
-    // position.value.top = (boxRect.height - size.value.height) / 2;
-  })
+      // 注意：即使提前返回，也必须调用 resolve()，否则 Promise 会一直处于 pending 状态
+      if (!box) {
+        resolve(false); // 可以返回 false 表示没执行
+        return;
+      }
+
+      const boxRect = box.getBoundingClientRect();
+      position.value.left = (boxRect.width - size.value.width) / 2;
+      // position.value.top = (boxRect.height - size.value.height) / 2;
+
+      // 逻辑执行完毕，返回成功
+      setTimeout(() => {
+        resolve(true);
+      }, 200)
+    });
+  });
 }
 
 const fileType = ['image/webp', 'image/png', 'image/jpg', 'image/jpeg']
@@ -346,9 +408,17 @@ const uploadChange = (file: UploadFile) => {
   bgSrc.value = URL.createObjectURL(file.raw as Blob);
 }
 
-const open = () => {
+const initShowGuide = () => {
+  if (process.server) return;
+  if (localStorage.getItem(APP_HAS_SEEN_ROOM_GUIDE) === 'true') return
+  openTour.value = true
+  localStorage.setItem(APP_HAS_SEEN_ROOM_GUIDE, 'true')
+}
+
+const open = async () => {
   visible.value = true
-  centerDragBox()
+  await centerDragBox()
+  initShowGuide()
 }
 
 // 监听 visible 变化 锁定滚动
@@ -496,7 +566,6 @@ defineExpose({
             cursor: se-resize;
             color: #fff;
             font-size: 20px;
-            display: none;
           }
 
           &:hover .resize-handle {
@@ -533,6 +602,24 @@ defineExpose({
       height: 39px;
       font-size: 12px;
       background: #fff;
+    }
+
+    .guide-app-btn {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      backdrop-filter: blur(10px);
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      right: 10px;
+      bottom: 35%;
+      display: none;
+
+      .iconfont {
+        font-size: 20px;
+      }
     }
   }
 }
@@ -591,6 +678,10 @@ defineExpose({
         .iconfont {
           font-size: 14px;
         }
+      }
+
+      .guide-app-btn {
+        display: block;
       }
     }
   }

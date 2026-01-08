@@ -9,7 +9,7 @@
         <template #default="scope">
           <div class="row favorites-list gap-row-base">
             <div class="col-lg-3 col-md-4 col-6" v-for="item in scope.rows" :key="item.id">
-              <div class="favorites-item cursor-pointer border-sm border-gray-200 p-10" @click.stop="jumpToProduct(item)">
+              <div class="favorites-item cursor-pointer border-sm border-gray-200 p-10" @click.stop="jumpToProduct(item, false)">
                 <div class="aspect-ratio relative">
                   <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                   <div class="operation rounded-full p-5">
@@ -54,6 +54,10 @@ defineOptions({
 
 definePageMeta({
   auth: true
+})
+
+useSeoMeta({
+  robots: 'noindex, nofollow'
 })
 
 const router = useRouter()

@@ -13,7 +13,7 @@ export const BEST_URL: string = '/best';
 // 客服国际区号
 export const COUNTRY_CODE: string = '+1';
 // 客服电话
-export const CUSTOMER_SERVICE: string = '603 631 6753 ';
+export const CUSTOMER_SERVICE: string = '603 631 6753';
 // 联系邮箱
 export const CONTACT_EMAIL: string  = 'info@artdafen.com';
 // Google Analytics Id
@@ -32,3 +32,13 @@ export const TAWK_WIDGET_ID: string = '1j87jtnt0'
 export const YOUTUBE_PROXY_URL: string = 'https://proxy-youtube.artdafenpay.workers.dev/youtube'
 // 活动弹窗存储Key名
 export const ACTIVITY_WINDOW_CLOSED: string = 'activity_window_closed'
+// 应用是否已见过Room引导
+export const APP_HAS_SEEN_ROOM_GUIDE: string = 'app_has_seen_room_guide'
+// 应用是否已见过Paint引导
+export const APP_HAS_SEEN_PAINT_GUIDE: string = 'app_has_seen_paint_guide'
+// 应用是否已见过Custom引导
+export const APP_HAS_SEEN_CUSTOM_GUIDE: string = 'app_has_seen_custom_guide'
+// 新闻和博客的分页大小
+export const MEDIA_SIZE: number = 12
+// 专区的分页大小
+export const ZONE_SIZE: number = 50

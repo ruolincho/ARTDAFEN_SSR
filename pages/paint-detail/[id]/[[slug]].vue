@@ -18,13 +18,17 @@
     <span class="iconfont icon-pictures" @click="openRoom"></span>
     <span class="split"></span>
     <span class="iconfont icon-quanping" @click="imgViewVisible = true"></span>
+    <span class="split"></span>
+    <span class="iconfont icon-help" @click="beginGuide"></span>
   </div>
 
   <!--规格选择-->
   <section>
     <div class="container">
       <!--移动端兼容视图-->
-      <div class="app-preview" style="margin-left: -15px; margin-right: -15px; height: 300px" v-if="!appStore.isPc">
+      <div class="app-preview"
+           :style="{margin: '0 -15px', height: '300px', position: appSticky ? 'sticky' : 'relative' }"
+           v-if="!appStore.isPc">
         <div class="img-wrapper acea-row row-center-wrapper flex-1 overflow-hidden">
           <ClientOnly>
             <ImageGenerator
@@ -143,6 +147,10 @@
                 <span class="iconfont icon-pictures text-20"></span>
                 <span class="text-14 ml-10">VIEW PAINTING IN A ROOM</span>
               </div>
+              <div class="acea-row row-middle cursor-pointer" @click="beginGuide">
+                <span class="iconfont icon-help text-20"></span>
+                <span class="text-14 ml-10">GUIDE</span>
+              </div>
             </div>
           </div>
         </div>
@@ -195,7 +203,7 @@
                       <span class="text-26">Choose a Craft</span>
                     </div>
                   </div>
-                  <div class="m-md-20 m-15">
+                  <div class="m-md-20 m-15" ref="chooseTechniqueRef">
                     <div class="width-list row">
                       <div
                           class="col-6"
@@ -215,84 +223,91 @@
                 </template>
 
                 <!--尺寸选择-->
-                <div class="acea-row row-between-wrapper m-md-20 m-15">
-                  <div class="acea-row row-middle flex-1 mr-10">
-                    <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                    <span class="text-26">Choose a Size</span>
-                    <span
-                        class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
-                        @click="openInfo(0)"
-                    >
+                <template v-if="true">
+                  <div class="acea-row row-between-wrapper m-md-20 m-15">
+                    <div class="acea-row row-middle flex-1 mr-10">
+                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                      <span class="text-26">Choose a Size</span>
+                      <span
+                          class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
+                          @click="openInfo(0)"
+                      >
                       <span class="pc">{{ moreInfoVisible[0] ? 'LESS INFO' : 'MORE INFO' }}</span>
                       <span class="iconfont icon-down" :class="{'rotate-180': moreInfoVisible[0]}"></span>
                     </span>
-                    <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
+                      <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
+                    </div>
+                    <div class="text-20 f-bold">{{
+                        currencyStore.formatToCurrency(currentSizeOption?.price || 0)
+                      }}
+                    </div>
                   </div>
-                  <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(currentSizeOption?.price || 0) }}</div>
-                </div>
-                <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[0]">
-                  <p class="p-15 bg-gray-200">
-                    To order a custom size,
-                    <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click here</a>.
-                    Our artists will create a painting in any size you require.
-                  </p>
-                </div>
-                <div class="m-md-20 m-15">
-                  <el-select
-                      class="custom-select"
-                      v-model="currentSizeId"
-                      placeholder="Please Select Size"
-                      size="large"
-                      @change="chooseSize"
-                  >
-                    <el-option
-                        v-for="item in sizeOptions"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id"
+                  <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[0]">
+                    <p class="p-15 bg-gray-200">
+                      To order a custom size,
+                      <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click here</a>.
+                      Our artists will create a painting in any size you require.
+                    </p>
+                  </div>
+                  <div class="m-md-20 m-15" ref="chooseSizeRef">
+                    <el-select
+                        class="custom-select"
+                        v-model="currentSizeId"
+                        placeholder="Please Select Size"
+                        size="large"
+                        @change="chooseSize"
                     >
-                      <div class="option-item acea-row row-between-wrapper">
-                        <span>{{ item.name }}</span>
-                        <span>{{ currencyStore.formatToCurrency(item.price || 0) }}</span>
-                      </div>
-                    </el-option>
-                    <template #prefix>
-                      <div class="size-prefix"></div>
-                    </template>
-                  </el-select>
-                </div>
+                      <el-option
+                          v-for="item in sizeOptions"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                      >
+                        <div class="option-item acea-row row-between-wrapper">
+                          <span>{{ item.name }}</span>
+                          <span>{{ currencyStore.formatToCurrency(item.price || 0) }}</span>
+                        </div>
+                      </el-option>
+                      <template #prefix>
+                        <div class="size-prefix"></div>
+                      </template>
+                    </el-select>
+                  </div>
+                </template>
 
                 <!--画框选择-->
-                <div class="acea-row row-between-wrapper m-md-20 m-15">
-                  <div class="acea-row row-middle flex-1 mr-10">
-                    <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                    <span class="text-26">Choose a Frame</span>
-                    <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
+                <template v-if="true">
+                  <div class="acea-row row-between-wrapper m-md-20 m-15">
+                    <div class="acea-row row-middle flex-1 mr-10">
+                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
+                      <span class="text-26">Choose a Frame</span>
+                      <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
+                    </div>
+                    <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
                   </div>
-                  <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
-                </div>
-                <div class="m-md-20 m-15">
-                  <div class="frame-scroll border-sm p-10">
-                    <div class="frame-list">
-                      <div
-                          v-for="(item, index) in frameOptions" :key="item.id"
-                          class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
-                          :class="{ on: currentFrameId === item.id }"
-                          @click="chooseFrame(item)"
-                      >
-                        <div class="frame-box">
-                          <div class="frame-img aspect-ratio">
-                            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
+                  <div class="m-md-20 m-15" ref="chooseFrameRef">
+                    <div class="frame-scroll border-sm p-10">
+                      <div class="frame-list">
+                        <div
+                            v-for="(item, index) in frameOptions" :key="item.id"
+                            class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
+                            :class="{ on: currentFrameId === item.id }"
+                            @click="chooseFrame(item)"
+                        >
+                          <div class="frame-box">
+                            <div class="frame-img aspect-ratio">
+                              <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
+                            </div>
+                            <p class="line2 mt-10 frame-name">{{ item.name }}</p>
+                            <p class="f-bold-500 frame-money">
+                              {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
+                            </p>
                           </div>
-                          <p class="line2 mt-10 frame-name">{{ item.name }}</p>
-                          <p class="f-bold-500 frame-money">
-                            {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
-                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </template>
 
                 <!--卡纸选择（选择画框并且画框支持和有卡纸选项才有）-->
                 <template v-if="hasFrame && matVisible">
@@ -306,12 +321,12 @@
                     </div>
                   </div>
                   <div class="m-md-20 m-15">
-                    <div class="material-wrapper border-sm m-md-20 m-15">
+                    <div class="material-wrapper border-sm p-md-20 p-15">
                       <div class="acea-row row-middle text-20 f-bold-500">
                         <p class="mr-xl-40 mr-20">Mat Color</p>
                         <p class="flex-1 line1">Crisp Bright White</p>
                       </div>
-                      <div class="color-list my-md-20 my-15">
+                      <div class="color-list my-md-20 my-15" ref="chooseMatColorRef">
                         <div
                             class="color-item rounded-full cursor-pointer"
                             :class="{on: currentMaterialId === item.id}"
@@ -328,7 +343,7 @@
                           <p class="mr-xl-40 mr-20">Mat Width</p>
                           <p class="flex-1 line1">Increasing the mat width mayaffectthe frame price.</p>
                         </div>
-                        <div class="width-list row mt-md-20 mt-15">
+                        <div class="width-list row mt-md-20 mt-15" ref="chooseMatWidthRef">
                           <div
                               class="col-average"
                               v-for="(item, index) in currentMaterialWidthOption"
@@ -399,95 +414,95 @@
 
   <!--Tabs-->
   <section class="sec-tabs mt-sm-30 mt-20">
-      <div class="container">
-        <ClientOnly>
-          <el-tabs v-model="activeTabs" type="border-card">
-            <el-tab-pane label="About the Artist" name="artist">
-              <!--创作者-->
-              <div class="artist-box acea-row gap-base">
-                <div class="avatar" v-if="goodsDetail.creator?.portrait">
-                  <img class="w-full" :src="imagePrefix(goodsDetail.creator?.portrait)" alt="avatar">
-                </div>
-                <div class="info flex-1 text-gray-600">
-                  <p class="text-16 f-bold-500">{{ goodsDetail?.creator?.timeline || '--' }}</p>
-                  <p class="text-20 f-bold-500 text-gray-700 my-10">{{ goodsDetail?.creator?.name || '' }}</p>
-                  <!--          <p class="text-16 f-bold-500 my-10">19th-Century</p>-->
-                  <p class="text-18">{{ goodsDetail?.creator?.intro || '' }}</p>
-                </div>
+    <div class="container">
+      <ClientOnly>
+        <el-tabs v-model="activeTabs" type="border-card">
+          <el-tab-pane label="About the Artist" name="artist">
+            <!--创作者-->
+            <div class="artist-box acea-row gap-base">
+              <div class="avatar" v-if="goodsDetail.creator?.portrait">
+                <img class="w-full" :src="imagePrefix(goodsDetail.creator?.portrait)" alt="avatar">
               </div>
-            </el-tab-pane>
-            <el-tab-pane :label="`Comment (${commentTotal})`" name="comment" v-if="hasComment">
-              <!-- 客户评价 -->
-              <ProList
-                  ref="proListRef"
-                  :request-api="_getCommentList"
-                  :initParam="{productId: route.params.id}"
-                  :requestSuccess="handleCommentRequestSuccess"
-              >
-                <template #default="scope">
-                  <div class="reviews-list">
-                    <div class="reviews-item" v-for="item in scope.rows" :key="item.id">
-                      <img class="w-full" :src="imagePrefix(item.img)" :alt="item.name">
-                      <div class="p-content border-sm">
-                        <div class="p-10">
-                          <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
-                          <!--                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
-                          <el-rate
-                              v-model="item.rating"
-                              disabled
-                              size="small"
-                              style="height: auto"
-                          />
-                          <p class="text-16 mt-md-10 mt-5" style="line-height: 1.5">{{ item.content }}</p>
-                        </div>
+              <div class="info flex-1 text-gray-600">
+                <p class="text-16 f-bold-500">{{ goodsDetail?.creator?.timeline || '--' }}</p>
+                <p class="text-20 f-bold-500 text-gray-700 my-10">{{ goodsDetail?.creator?.name || '' }}</p>
+                <!--          <p class="text-16 f-bold-500 my-10">19th-Century</p>-->
+                <p class="text-18">{{ goodsDetail?.creator?.intro || '' }}</p>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane :label="`Comment (${commentTotal})`" name="comment" v-if="hasComment">
+            <!-- 客户评价 -->
+            <ProList
+                ref="proListRef"
+                :request-api="_getCommentList"
+                :initParam="{productId: route.params.id}"
+                :requestSuccess="handleCommentRequestSuccess"
+            >
+              <template #default="scope">
+                <div class="reviews-list">
+                  <div class="reviews-item" v-for="item in scope.rows" :key="item.id">
+                    <img class="w-full" :src="imagePrefix(item.img)" :alt="item.name">
+                    <div class="p-content border-sm">
+                      <div class="p-10">
+                        <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
+                        <!--                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
+                        <el-rate
+                            v-model="item.rating"
+                            disabled
+                            size="small"
+                            style="height: auto"
+                        />
+                        <p class="text-16 mt-md-10 mt-5" style="line-height: 1.5">{{ item.content }}</p>
                       </div>
                     </div>
                   </div>
-                </template>
-              </ProList>
-            </el-tab-pane>
-            <el-tab-pane label="Payment & Shipping" name="info">
-              <div class="info-list">
-                <div class="info-item">
-                  <h2 class="text-20 f-bold">SECURE PAYMENT</h2>
-                  <p class="text-14 my-20">Use PayPal to ensure the security of your payments</p>
-                  <div class="imgs acea-row row-middle gap-column-xs">
-                    <img style="height: 40px" src="~/assets/images/payment-methods.png" alt="payment-methods">
-                  </div>
                 </div>
-                <div class="info-item mt-20">
-                  <h2 class="text-20 f-bold">WORLDWIDE FREE SHIPPING</h2>
-                  <p class="text-14 my-20">Express Delivery</p>
-                  <div class="imgs acea-row row-middle gap-column-xs">
-                    <img style="height: 40px" src="~/assets/images/delivery-methods1.png" alt="UPS">
-                    <img style="height: 40px" src="~/assets/images/delivery-methods2.png" alt="FedEx">
-                    <img style="height: 40px" src="~/assets/images/delivery-methods4.png" alt="DHL">
-                  </div>
-                  <div class="mt-20" style="line-height: 1.7">
-                    <p>- Worldwide free shipping via premium carriers (FedEx, DHL, UPS)</p>
-                    <p>- Express delivery transit time: typically 5–8 business days</p>
-                    <p>- Total turnaround (Order to Door): approx. 2–4 weeks, including 5–10 days production time</p>
-                  </div>
-                </div>
-                <div class="info-item mt-20">
-                  <h2 class="text-20 f-bold">GUARANTEE</h2>
-                  <p class="text-14 my-20">100% Satisfaction</p>
-                  <div class="imgs acea-row row-middle gap-column-xs">
-                    <img style="width: 84px" src="~/assets/images/satisfactionb.png" alt="satisfactionb">
-                  </div>
-                  <div class="mt-20" style="line-height: 1.7">
-                    <p>- 30-day return policy upon receipt for any unused items</p>
-                    <p>- Preview Before Shipping: Approve high-res photos of your art before dispatch</p>
-                    <p>- Damage protection: Immediate free replacement for any shipping issues</p>
-                    <p>- Museum quality: 100% hand-painted by artists with 20–30 years of experience</p>
-                  </div>
+              </template>
+            </ProList>
+          </el-tab-pane>
+          <el-tab-pane label="Payment & Shipping" name="info">
+            <div class="info-list">
+              <div class="info-item">
+                <h2 class="text-20 f-bold">SECURE PAYMENT</h2>
+                <p class="text-14 my-20">Use PayPal to ensure the security of your payments</p>
+                <div class="imgs acea-row row-middle gap-column-xs">
+                  <img style="height: 40px" src="~/assets/images/payment-methods.png" alt="payment-methods">
                 </div>
               </div>
-            </el-tab-pane>
-          </el-tabs>
-        </ClientOnly>
-      </div>
-    </section>
+              <div class="info-item mt-20">
+                <h2 class="text-20 f-bold">WORLDWIDE FREE SHIPPING</h2>
+                <p class="text-14 my-20">Express Delivery</p>
+                <div class="imgs acea-row row-middle gap-column-xs">
+                  <img style="height: 40px" src="~/assets/images/delivery-methods1.png" alt="UPS">
+                  <img style="height: 40px" src="~/assets/images/delivery-methods2.png" alt="FedEx">
+                  <img style="height: 40px" src="~/assets/images/delivery-methods4.png" alt="DHL">
+                </div>
+                <div class="mt-20" style="line-height: 1.7">
+                  <p>- Worldwide free shipping via premium carriers (FedEx, DHL, UPS)</p>
+                  <p>- Express delivery transit time: typically 5–8 business days</p>
+                  <p>- Total turnaround (Order to Door): approx. 2–4 weeks, including 5–10 days production time</p>
+                </div>
+              </div>
+              <div class="info-item mt-20">
+                <h2 class="text-20 f-bold">GUARANTEE</h2>
+                <p class="text-14 my-20">100% Satisfaction</p>
+                <div class="imgs acea-row row-middle gap-column-xs">
+                  <img style="width: 84px" src="~/assets/images/satisfactionb.png" alt="satisfactionb">
+                </div>
+                <div class="mt-20" style="line-height: 1.7">
+                  <p>- 30-day return policy upon receipt for any unused items</p>
+                  <p>- Preview Before Shipping: Approve high-res photos of your art before dispatch</p>
+                  <p>- Damage protection: Immediate free replacement for any shipping issues</p>
+                  <p>- Museum quality: 100% hand-painted by artists with 20–30 years of experience</p>
+                </div>
+              </div>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </ClientOnly>
+    </div>
+  </section>
 
   <!--产品详情-->
   <section class="sec-desc" :class="{ open: isOpenDesc }" v-if="goodsDetail?.details?.length">
@@ -602,7 +617,9 @@
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p>
                   <span class="text-14 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice) }}</span>
-                  <span class="text-gray-400 text-through ml-5 text-12">{{ currencyStore.formatToCurrency(item.marketPrice) }}</span>
+                  <span class="text-gray-400 text-through ml-5 text-12">{{
+                      currencyStore.formatToCurrency(item.marketPrice)
+                    }}</span>
                 </p>
               </NuxtLink>
             </swiper-slide>
@@ -689,7 +706,7 @@
     <div class="container">
       <div class="process-list">
         <div class="process-item text-center" v-for="item in PROCESS_LIST" :key="item.title">
-          <span class="iconfont text-60" :class="[item.icon]" />
+          <span class="iconfont text-60" :class="[item.icon]"/>
           <p class="text-24 mt-20">{{ item.title }}</p>
           <p class="text-20 text-gray-500 mt-10">{{ item.desc }}</p>
         </div>
@@ -714,7 +731,8 @@
   <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon"/>
 
   <!--  图片查看器 -->
-  <el-image-viewer v-if="imgViewVisible" :url-list="[generatorImg]" @close="imgViewVisible = false"/>
+  <el-image-viewer v-if="imgViewVisible" :url-list="[generatorImg]" @close="imgViewVisible = false"
+                   hide-on-click-modal/>
 
   <!--价格详情弹窗-->
   <el-popover
@@ -742,6 +760,18 @@
   </el-popover>
 
   <LoginWindow ref="loginWindowRef"/>
+
+  <!--引导-->
+  <el-tour v-model="openTour" @close="handleTouchClose">
+    <template #indicators="{ current, total }">
+      <span>{{ current + 1 }} / {{ total }}</span>
+    </template>
+    <el-tour-step
+        v-for="(step, index) in tourSteps"
+        :key="index"
+        v-bind="step"
+    />
+  </el-tour>
 </template>
 
 <script setup lang="ts">
@@ -767,7 +797,7 @@ import {useAppStore} from "~/stores/modules/app";
 import {gen_path_obj} from "~/utils/product";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {useUserStore} from "~/stores/modules/user";
-import {CONTACT_EMAIL, PRODUCT_URL} from "~/config";
+import {CONTACT_EMAIL, PRODUCT_URL, APP_HAS_SEEN_PAINT_GUIDE} from "~/config";
 import {getFaqByQuote} from "~/config/faq";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IResultData} from "~/api/interface";
@@ -854,19 +884,22 @@ const isOpenDesc = ref(true) // 是否展开产品详情
 
 // 获取详情
 const config = useRuntimeConfig()
-const {data: goodsDetail, pending: isSkeleton} = await useAsyncData('goods-detail', async () => {
-  const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', {
-    method: 'GET',
-    params: {
-      productId: route.params.id
-    },
-    headers: {
-      'Token': userStore.token || '',
-      'X-Currency': currencyStore.currentCurrency
+const {data: goodsDetail, pending: isSkeleton} = await useAsyncData(
+    'goods-detail',
+    async () => {
+      const {data} = await $fetch<IResultData<IProduct.Row>>(config.public.apiBase + TRADE_MODULE + '/product/detail', {
+        method: 'GET',
+        params: {
+          productId: route.params.id
+        },
+        headers: {
+          'Token': userStore.token || '',
+          'X-Currency': currencyStore.currentCurrency
+        }
+      })
+      return data
     }
-  })
-  return data
-})
+)
 
 useHead({
   title: `${goodsDetail.value?.name || ''} - ${config.public?.siteName}`,
@@ -979,6 +1012,8 @@ const getCombination = async (senior = false) => {
       chooseMatWidth(materialOptions.value[0].specs![0]?.matWidth || '') // 拿到第一个卡纸宽度
     }
   }
+
+  !firstLoadCombo && initShowGuide() // 开启引导
 
   firstLoadCombo = true
   loadingCombo.value = false
@@ -1129,6 +1164,7 @@ const addToCart = () => {
     quantity: 1, // 购买数量
     dimensionId: currentSizeId.value, // 尺寸编号
     parts: parts.value, // 商品配件
+    selected: true
   }
   cartStore.addition(cartRow)
   ElMessage.success('Add to cart success!')
@@ -1232,6 +1268,51 @@ const openInfo = (index: number) => {
 const handleTouchScreen = (img: string) => {
   imgViewVisible.value = true
 }
+
+const appSticky = ref(true)
+const openTour = ref(false)
+const chooseTechniqueRef = ref<HTMLElement | null>(null)
+const chooseSizeRef = ref<HTMLElement | null>(null)
+const chooseFrameRef = ref<HTMLElement | null>(null)
+const chooseMatColorRef = ref<HTMLElement | null>(null)
+const chooseMatWidthRef = ref<HTMLElement | null>(null)
+const beginGuide = async () => {
+  if (appStore.isPc) {
+    await appStore.forceFoldHeader() // 锁定并折叠，等待动画
+  } else {
+    appSticky.value = false
+  }
+  openTour.value = true
+}
+const handleTouchClose = () => {
+  if (appStore.isPc) {
+    appStore.cancelForceFoldHeader() // 引导结束，恢复自动控制
+  } else {
+    appSticky.value = true
+  }
+}
+const initShowGuide = () => {
+  if (process.server) return;
+  if (localStorage.getItem(APP_HAS_SEEN_PAINT_GUIDE) === 'true') return
+  beginGuide()
+  localStorage.setItem(APP_HAS_SEEN_PAINT_GUIDE, 'true')
+}
+// 参数顺序：[显示条件, 目标Ref, 标题, 描述, 额外配置(可选)]
+const createStep = (condition: boolean, target: any, title: string, description: string, extras: Record<string, any> = {}) => {
+  if (!condition) return null
+  // 自动组装对象
+  return {target, title, description, ...extras}
+}
+const tourSteps = computed(() => {
+  const steps = [
+    createStep(specsCombination.value.length > 1, chooseTechniqueRef.value, 'Choose Craftsmanship', 'Select the material and texture that best suits your style.'),
+    createStep(true, chooseSizeRef.value, 'Choose Size', 'Pick the perfect dimensions to fit your space.'),
+    createStep(true, chooseFrameRef.value, 'Choose Frame', 'Complete the look with one of our premium frames.'),
+    createStep(hasFrame.value && matVisible.value, chooseMatColorRef.value, 'Choose Mat Color', 'Choose a mat tone that perfectly compliments your image.'),
+    createStep(hasFrame.value && matVisible.value && (currentMaterialWidthOption.value?.length > 0), chooseMatWidthRef.value, 'Choose Mat Width', 'Set the thickness of the mat border to balance your artwork within the frame.'),
+  ]
+  return steps.filter(Boolean)
+})
 </script>
 
 <style scoped lang="scss">

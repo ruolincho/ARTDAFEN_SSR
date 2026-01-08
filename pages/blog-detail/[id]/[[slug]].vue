@@ -71,7 +71,7 @@ const currencyStore = useCurrencyStore()
 const route = useRoute()
 const modules = [Pagination, Navigation]
 
-const {data: blogDetail} = await useAsyncData('blog-detail', async () => {
+const {data: blogDetail} = await useAsyncData(() => `blog-detail-${route.params.id}`, async () => {
   const config = useRuntimeConfig()
   const {data} = await $fetch<IResultData<IBlog.Row>>(config.public.apiBase + TRADE_MODULE + '/blog/detail/' + route.params.id)
   return data

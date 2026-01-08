@@ -8,7 +8,7 @@
     "build": "nuxi build --dotenv .env.production",
     "build:local": "nuxi build --dotenv .env.development",
     "start": "nuxt start",
-    "generate": "nuxt generate --dotenv .env.generate",
+    "generate": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nuxt generate --dotenv .env.generate",
     "lint:types": "tsc --noEmit"
   },
   "dependencies": {
@@ -39,6 +39,8 @@
     "@nuxt/types": "^2.18.1",
     "@types/google.accounts": "^0.0.18",
     "@types/openseadragon": "^4.1.0",
+    "baseline-browser-mapping": "^2.9.11",
+    "cross-env": "^10.1.0",
     "element-plus": "^2.11.2",
     "sass": "^1.92.1",
     "typescript": "^5.5.4"

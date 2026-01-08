@@ -37,6 +37,10 @@ definePageMeta({
   layout: 'blank',
 })
 
+useSeoMeta({
+  robots: 'noindex, follow'
+})
+
 const cartStore = useCartStore()
 const router = useRouter()
 const route = useRoute()
@@ -85,7 +89,8 @@ const _init = async () => {
     specs: specs.specs, // 商品规格值
     quantity: 1, // 购买数量
     dimensionId: currentSizeId, // 尺寸编号
-    parts: {}
+    parts: {},
+    selected: true
   }
 
   cartStore.addition(cartRow)

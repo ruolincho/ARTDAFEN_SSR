@@ -2,19 +2,13 @@ import { $http } from '~/api/http'
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import type {INews} from "~/api/interface/news/news";
 import type {IPage, IPageQuery} from "~/api/interface";
+import type {General} from "~/types/global";
 
 /**
- * 新闻资讯顶部主题查询
+ * 新闻资讯顶部数据查询
  */
-export const getNewsTopicApi = () => {
-    return $http().get<General.MediaItem[]>(TRADE_MODULE + `/news/topic`)
-}
-
-/**
- * 最新资讯
- */
-export const getNewsLatestApi = () => {
-    return $http().get<INews.Row[]>(TRADE_MODULE + `/news/latest`)
+export const getNewsTopApi = () => {
+    return $http().get<INews.TopRow>(TRADE_MODULE + `/news/top`)
 }
 
 /**

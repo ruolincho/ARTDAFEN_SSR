@@ -1,6 +1,6 @@
 import type {AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig} from 'axios';
 import axios from 'axios';
-import {checkStatus, CODE_SUCCESS, CODE_TOKEN_FAIL} from '~/api/helper';
+import {checkStatus, CODE_SUCCESS, CODE_SUCCESS_PREFIX, CODE_TOKEN_FAIL} from '~/api/helper';
 import type {IResultData} from "~/api/interface";
 import {ElMessage} from "element-plus";
 import type {HttpClient} from "~/api/interface";
@@ -14,6 +14,8 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 
 export default defineNuxtPlugin((_nuxtApp) => {
   const config = useRuntimeConfig()
+
+  const router = useRouter();
 
   const instance: AxiosInstance = axios.create({
     // 默认地址请求地址，可在 .env.** 文件中修改
@@ -52,7 +54,6 @@ export default defineNuxtPlugin((_nuxtApp) => {
   instance.interceptors.response.use(
       response => {
         const userStore = useUserStore()
-        const router = useRouter();
         const {data} = response;
         // 如果是文件流，直接返回整个响应对象
         if (response.config.responseType === 'blob') {
@@ -67,7 +68,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
         }
 
         // 全局错误信息拦截（防止下载文件的时候返回数据流，没有 code 直接报错）
-        if (data.status !== CODE_SUCCESS) {
+        if (data.status !== CODE_SUCCESS && !data.status.toString().startsWith(CODE_SUCCESS_PREFIX.toString())) {
           ElMessage.error({message: data.message || 'request error！', dangerouslyUseHTMLString: true});
           return Promise.reject(data);
         }
@@ -75,7 +76,6 @@ export default defineNuxtPlugin((_nuxtApp) => {
         return data;
       },
       async error => {
-        const router = useRouter();
         const {response} = error;
         // 请求超时 && 网络错误单独判断，没有 response
         if (error.message.indexOf('timeout') !== -1) {
@@ -89,7 +89,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
           checkStatus(response?.status, response?.data?.message);
         }
         // 服务器结果都没有返回(可能服务器错误可能客户端断网)，断网处理:可以跳转到断网页面
-        if (!window.navigator.onLine) {
+        if (import.meta.client && !window.navigator.onLine) {
           router.replace('/500');
         }
         return Promise.reject(error);
