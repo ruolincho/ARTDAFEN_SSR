@@ -1,44 +1,46 @@
 <template>
   <!-- Banner -->
   <section class="sec-banner">
-    <el-skeleton :loading="isSkeleton" animated>
-      <template #template>
-        <el-skeleton-item variant="image" style="width: 100%; height: 31vw"/>
-      </template>
-      <ClientOnly>
-        <div class="banner-swiper">
-          <swiper
-              :modules="modules"
-              :pagination="{ clickable: true }"
-              :autoplay="{ delay: 2500, disableOnInteraction: false }"
-              :loop="true"
-          >
-            <swiper-slide class="cursor-pointer" v-for="item in topicData" :key="item.id" @click="jumpToUrl(item.url)">
-              <!-- 图片 -->
-              <template v-if="item.type === '0'">
-                <img class="w-full pc fit-cover" :src="imagePrefix(item.img)" alt="banner">
-                <img class="w-full app" :src="imagePrefix(item.mobileImg)" alt="banner">
-              </template>
-              <!-- 视频 -->
-              <template v-if="item.type === '1'">
-                <div class="video-box w-full h-full">
-                  <video
-                      class="w-full h-full fit-cover"
-                      :src="imagePrefix(item.media)"
-                      :poster="imagePrefix(item.img)"
-                      :autoplay="true"
-                      :loop="true"
-                      :muted="true"
-                      :controls="false"
-                      playsinline
-                  />
-                </div>
-              </template>
-            </swiper-slide>
-          </swiper>
-        </div>
-      </ClientOnly>
-    </el-skeleton>
+    <div class="banner-swiper">
+      <swiper
+          :modules="modules"
+          :pagination="{ clickable: true }"
+          :autoplay="{ delay: 2500, disableOnInteraction: false }"
+          :loop="true"
+          :lazy="true"
+      >
+        <swiper-slide class="cursor-pointer" v-for="item in topicData" :key="item.id" @click="jumpToUrl(item.url)" :lazt="true">
+          <!-- 图片 -->
+          <template v-if="item.type === '0'">
+            <img
+                class="w-full h-auto pc fit-cover"
+                :src="imagePrefix(item.img)" alt="banner"
+                loading="lazy"
+            >
+            <img
+                class="w-full h-auto app"
+                :src="imagePrefix(item.mobileImg)" alt="banner"
+                loading="lazy"
+            >
+          </template>
+          <!-- 视频 -->
+          <template v-if="item.type === '1'">
+            <div class="video-box w-full h-full">
+              <video
+                  class="w-full h-full fit-cover"
+                  :src="imagePrefix(item.media)"
+                  :poster="imagePrefix(item.img)"
+                  :autoplay="true"
+                  :loop="true"
+                  :muted="true"
+                  :controls="false"
+                  playsinline
+              />
+            </div>
+          </template>
+        </swiper-slide>
+      </swiper>
+    </div>
   </section>
 
   <!-- MUSEUM-QUALITY -->
@@ -52,7 +54,7 @@
       <div class="quality-wrapper" v-aos="'fade-up'">
         <div class="quality-video">
           <ClientOnly>
-            <div class="youtube-cover" v-if="!playYoutube">
+            <div class="youtube-cover w-full h-full" v-if="!playYoutube">
               <img :src="`https://img.youtube.com/vi/${'Brh1ESlRJ0s'}/maxresdefault.jpg`" alt="">
               <svg @click="playYoutube = true" t="1764235842389" class="icon cursor-pointer" viewBox="0 0 1024 1024"
                    version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2875" width="80" height="80">
@@ -137,55 +139,59 @@
     </div>
   </section>
 
-  <!-- WHY CHOOSE ARTDAFEN? -->
-  <section class="sec-choose">
+  <!--SHOP BY VIBE-->
+  <section class="sec-elevating">
     <div class="container">
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
-        <h2 class="text-50">WHY CHOOSE ARTDAFEN?</h2>
+        <h2 class="text-50">SHOP BY VIBE</h2>
         <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">
-          Crafted stroke by stroke by real artists. No printing involved
+          Find the aesthetic that speaks to your soul. From Minimalist calm to Dopamine energy, explore curated collections tailored to every mood and atmosphere.
         </p>
       </div>
-
-      <div class="row gap-row-base" v-if="appStore.isPc">
-        <div
-            class="col-sm-4 col-12"
-            v-aos="{ name: 'fade-up', delay: index * 100}"
-            v-for="(item, index) in WHY_CHOOSE_LIST" :key="item.title"
-        >
-          <div class="text-center">
-            <div>
-              <img class="w-full" :src="imagePrefix(item.img)" alt=""/>
+      <el-skeleton :loading="isSkeleton" animated :count="3" class="row gap-row-base">
+        <template #template>
+          <div class="col-sm-4 col-12">
+            <el-skeleton-item variant="image" style="width: 100%; height: 25vw"/>
+            <div class="text-center">
+              <el-skeleton-item variant="p" class="mt-20" style="width: 50%"/>
             </div>
-            <div>
-              <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
-              <p class="text-18" style="line-height: 1.7;">{{ item.desc }}</p>
-            </div>
+          </div>
+        </template>
+        <div class="row elevating-list" v-if="appStore.isPc">
+          <div
+              class="col-sm-4 col-12"
+              v-for="(item, index) in disCoverData" :key="item.id"
+              v-aos="{ name: 'fade-up', delay: index % 3 * 100}"
+          >
+            <NuxtLink class="block" :to="item?.url || '/'">
+              <div class="overflow-hidden">
+                <img class="w-full img-hover" v-lazy="imagePrefix(item.img)" :alt="item.name">
+              </div>
+              <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
+            </NuxtLink>
           </div>
         </div>
-      </div>
-      <swiper
-          v-else
-          :modules="modules"
-          :autoplay="{ delay: 2500, disableOnInteraction: false }"
-          slides-per-view="auto"
-          :space-between="15"
-          :centered-slides="true"
-          :loop="true"
-          v-aos="'fade-up'"
-      >
-        <swiper-slide v-for="item in WHY_CHOOSE_LIST" :key="item.title" style="width: 80%;">
-          <div class="text-center">
-            <div>
-              <img class="w-full" :src="imagePrefix(item.img)" alt=""/>
-            </div>
-            <div>
-              <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
-              <p class="text-18" style="line-height: 1.7;">{{ item.desc }}</p>
-            </div>
-          </div>
-        </swiper-slide>
-      </swiper>
+        <swiper
+            v-else
+            :modules="modules"
+            :autoplay="{ delay: 2500, disableOnInteraction: false }"
+            slides-per-view="auto"
+            :space-between="15"
+            :centered-slides="true"
+            :loop="true"
+            :lazy="true"
+            v-aos="'fade-up'"
+        >
+          <swiper-slide v-for="item in disCoverData" :key="item.title" style="width: 80%;" :lazy="true">
+            <NuxtLink class="block" :to="item?.url || '/'">
+              <div class="overflow-hidden">
+                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name" loading="lazy">
+              </div>
+              <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
+            </NuxtLink>
+          </swiper-slide>
+        </swiper>
+      </el-skeleton>
     </div>
   </section>
 
@@ -337,7 +343,7 @@
           >
             <NuxtLink class="block" :to="item.url">
               <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name"/>
+                <img class="w-full img-hover" v-lazy="imagePrefix(item.img)" :alt="item.name"/>
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
                 <p class="line1 text-28 f-bold">{{ item.name }}</p>
@@ -355,12 +361,13 @@
             :space-between="15"
             :centered-slides="true"
             :loop="true"
+            :lazy="true"
             v-aos="'fade-up'"
         >
-          <swiper-slide v-for="item in roomData" :key="item.id" style="width: 80%;">
+          <swiper-slide v-for="item in roomData" :key="item.id" style="width: 80%;" :lazy="true">
             <NuxtLink class="block" :to="item.url">
               <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name"/>
+                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name" loading="lazy"/>
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
                 <p class="line1 text-28 f-bold">{{ item.name }}</p>
@@ -423,59 +430,56 @@
     </div>
   </section>
 
-  <!--GAME-->
-  <section class="sec-elevating">
+  <!-- WHY CHOOSE ARTDAFEN? -->
+  <section class="sec-choose">
     <div class="container">
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
-        <h2 class="text-50">ELEVATING YOUR STYLE GAME</h2>
+        <h2 class="text-50">WHY CHOOSE ARTDAFEN?</h2>
         <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">
-          Discover the Perfect Blend of Comfort and Trend with Our Exclusive Collection. Explore Deals on print, Trendy
-          Play, and More!
+          Crafted stroke by stroke by real artists. No printing involved
         </p>
       </div>
-      <el-skeleton :loading="isSkeleton" animated :count="3" class="row gap-row-base">
-        <template #template>
-          <div class="col-sm-4 col-12">
-            <el-skeleton-item variant="image" style="width: 100%; height: 25vw"/>
-            <div class="text-center">
-              <el-skeleton-item variant="p" class="mt-20" style="width: 50%"/>
+
+      <div class="row gap-row-base" v-if="appStore.isPc">
+        <div
+            class="col-sm-4 col-12"
+            v-aos="{ name: 'fade-up', delay: index * 100}"
+            v-for="(item, index) in WHY_CHOOSE_LIST" :key="item.title"
+        >
+          <div class="text-center">
+            <div>
+              <img class="w-full" :alt="item.title" v-lazy="imagePrefix(item.img)"/>
+            </div>
+            <div>
+              <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
+              <p class="text-18" style="line-height: 1.7;">{{ item.desc }}</p>
             </div>
           </div>
-        </template>
-        <div class="row elevating-list" v-if="appStore.isPc">
-          <div
-              class="col-sm-4 col-12"
-              v-for="(item, index) in disCoverData" :key="item.id"
-              v-aos="{ name: 'fade-up', delay: index % 3 * 100}"
-          >
-            <NuxtLink class="block" :to="item?.url || '/'">
-              <div class="overflow-hidden">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name">
-              </div>
-              <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
-            </NuxtLink>
-          </div>
         </div>
-        <swiper
-            v-else
-            :modules="modules"
-            :autoplay="{ delay: 2500, disableOnInteraction: false }"
-            slides-per-view="auto"
-            :space-between="15"
-            :centered-slides="true"
-            :loop="true"
-            v-aos="'fade-up'"
-        >
-          <swiper-slide v-for="item in disCoverData" :key="item.title" style="width: 80%;">
-            <NuxtLink class="block" :to="item?.url || '/'">
-              <div class="overflow-hidden">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name">
-              </div>
-              <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
-            </NuxtLink>
-          </swiper-slide>
-        </swiper>
-      </el-skeleton>
+      </div>
+      <swiper
+          v-else
+          :modules="modules"
+          :autoplay="{ delay: 2500, disableOnInteraction: false }"
+          slides-per-view="auto"
+          :space-between="15"
+          :centered-slides="true"
+          :loop="true"
+          :lazy="true"
+          v-aos="'fade-up'"
+      >
+        <swiper-slide v-for="item in WHY_CHOOSE_LIST" :key="item.title" style="width: 80%;" :lazy="true">
+          <div class="text-center">
+            <div>
+              <img class="w-full" :src="imagePrefix(item.img)" :alt="item.title" loading="lazy" />
+            </div>
+            <div>
+              <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
+              <p class="text-18" style="line-height: 1.7;">{{ item.desc }}</p>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
     </div>
   </section>
 
@@ -568,14 +572,15 @@
           :spaceBetween="4"
           :centeredSlides="true"
           :loop="true"
+          :lazy="true"
           :autoplay="{ delay: 3000 }"
           :modules="modules"
           :navigation="true"
           v-aos="'fade-up'"
       >
-        <swiper-slide v-for="item in commentData" :key="item.id">
+        <swiper-slide v-for="item in commentData" :key="item.id" :lazy="true">
           <div class="review-item h-full w-full">
-            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.name">
+            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.name" loading="lazy">
             <div class="p-content acea-row row-column nowrap p-20">
               <div class="flex-1">
                 <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
@@ -632,7 +637,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
 import {Swiper, SwiperSlide} from 'swiper/vue'
-import {Autoplay, Navigation, Pagination} from 'swiper'
+import {Autoplay, Navigation, Pagination, Lazy} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
@@ -652,7 +657,7 @@ import {ArtCodeEnum} from "~/types/enumeration";
 import {useUserStore} from "~/stores/modules/user";
 import LoginWindow from "~/components/LoginWindow.vue";
 import PromoCode from "~/components/PromoCode.vue";
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 import type {IMessage} from "~/api/interface/message/message";
 import {WHY_CHOOSE_LIST} from "~/constant";
@@ -678,10 +683,10 @@ const appStore = useAppStore()
 const customStore = useCustomStore()
 const currencyStore = useCurrencyStore()
 const userStore = useUserStore()
-const modules = [Autoplay, Pagination, Navigation]
+const modules = [Autoplay, Pagination, Navigation, Lazy]
 const playYoutube = ref(false)
 
-useHead(pageMeta["/"] ?? {});
+useHead(resolvePageMeta("/"));
 
 // 点击艺术家
 const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
@@ -750,7 +755,11 @@ const _getLatestComment = async () => {
   .sec-banner {
     .banner-swiper {
       position: relative;
+
       :deep(.swiper) {
+        background-color: var(--color-bg-secondary);
+        aspect-ratio: 1920 / 598;
+
         .swiper-slide {
           height: auto;
 
@@ -904,20 +913,21 @@ const _getLatestComment = async () => {
   .sec-contact {
     .contact-container {
       position: relative;
-      height: 35.41vw;
+      height: 26.04vw;
       min-height: 450px;
       overflow: hidden;
 
       .contact-bg {
         position: absolute;
-        top: 0;
+        top: 50%;
         left: 0;
         width: 200%; /* 图片宽度为容器的两倍 */
-        height: 100%;
+        height: 80%;
         background-repeat: repeat;
         background-size: contain;
         animation: scroll 50s linear infinite; /* 调整时间来控制滚动速度 */
         mask: radial-gradient(50% 50% at 50% 50%, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
+        opacity: 0.35;
       }
 
       .contact-wrapper {
@@ -1022,10 +1032,10 @@ const _getLatestComment = async () => {
         width: 43.75%;
         flex-shrink: 0;
         background: var(--color-bg-secondary);
+        aspect-ratio: 16 / 9;
 
         .youtube-cover {
           position: relative;
-          min-height: 200px;
 
           svg {
             position: absolute;
@@ -1054,10 +1064,10 @@ const _getLatestComment = async () => {
 
   @keyframes scroll {
     0% {
-      transform: translateX(0);
+      transform: translateX(0) translateY(-50%);
     }
     100% {
-      transform: translateX(-50%); /* 移动图片的一半宽度 */
+      transform: translateX(-50%) translateY(-50%); /* 移动图片的一半宽度 */
     }
   }
 
@@ -1171,6 +1181,15 @@ const _getLatestComment = async () => {
   }
 
   @media (max-width: 768px) {
+    .sec-banner {
+      .banner-swiper {
+        :deep(.swiper) {
+          aspect-ratio: 750 / 782;
+
+        }
+      }
+    }
+
     .sec-artist {
       .artist-list {
         .artist-item {
@@ -1186,7 +1205,6 @@ const _getLatestComment = async () => {
 
         .quality-video {
           .youtube-cover {
-            min-height: unset;
 
             svg {
               width: 50px;

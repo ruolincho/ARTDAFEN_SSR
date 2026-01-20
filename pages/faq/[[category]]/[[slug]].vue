@@ -66,7 +66,7 @@ import {type ElForm, ElMessage} from "element-plus";
 import {faqList, generateFAQPageJsonLd} from "~/config/faq";
 import {sendConsulting} from "~/api/modules/message/message";
 import {emailReg} from "~/regular";
-import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
+import {resolvePageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 
 defineOptions({
   name: 'Faq',
@@ -87,7 +87,7 @@ const route = useRoute()
 
 const origin = useRequestURL().origin
 useHead(mergeHeadWithLodash(
-  pageMeta["/faq"] ?? {},
+  resolvePageMeta("/faq"),
   {
     link: [
       {rel: 'canonical', href: `${origin}/faq`},

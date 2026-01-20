@@ -200,10 +200,9 @@ import {CONTACT_EMAIL} from "~/config";
 import {emailReg} from "~/regular";
 import {sendConsulting} from "~/api/modules/message/message";
 import {imagePrefix} from "~/utils";
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 
-useHead(pageMeta["/collaboration"] ?? {});
-
+useHead(resolvePageMeta("/collaboration"));
 
 const messageForm = ref({
   email: '',

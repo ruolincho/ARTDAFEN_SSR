@@ -46,7 +46,7 @@
     <div class="container">
       <div class="row single-post mt-15">
         <div class="col-6" v-for="item in latestList" :key="item.id">
-          <NuxtLink class="single-item" :to="`/news-detail/${item.id}/${item.slug}`" target="_blank">
+          <NuxtLink class="single-item" :to="`/magazine-detail/${item.id}/${item.slug}`" target="_blank">
             <div class="p-img overflow-hidden">
               <img
                   class="w-full h-full fit-cover img-hover aspect-ratio-16_9"
@@ -85,7 +85,7 @@ import type {INews} from "~/api/interface/news/news";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {computed, nextTick, watch} from "vue";
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 
 defineOptions({
   name: 'News'
@@ -107,7 +107,7 @@ const {data: topData} = await useAsyncData(
 const topicList = computed(() => topData.value?.topic || [])
 const latestList = computed(() => topData.value?.latest || [])
 
-useHead(pageMeta["/news"] ?? {})
+useHead(resolvePageMeta("/magazine"));
 
 // ⬇️ 定义滚动动作
 const executeScroll = () => {

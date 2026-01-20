@@ -1,0 +1,195 @@
+<template>
+  <div class="expandable-wrapper" :class="{ open: modelValue }">
+    <!-- Header -->
+    <slot name="header" :open="modelValue" :toggle="toggle">
+      <!-- 默认 Header -->
+      <div class="expandable-header my-24 acea-row row-between-wrapper">
+        <span class="text-20 f-bold flex-1">{{ title }}</span>
+        <span
+            class="text-18 cursor-pointer iconfont"
+            :class="[modelValue ? 'icon-up' : 'icon-down']"
+            @click="toggle"
+        />
+      </div>
+    </slot>
+
+    <!-- Main -->
+    <div
+        class="expandable-main"
+        @transitionend="onTransitionEnd"
+        v-show="mainVisible"
+    >
+      <div class="inner">
+        <slot />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+/**
+ * ============================================
+ * Expandable
+ * ============================================
+ *
+ * 可折叠容器组件（支持 SSR / grid 动画）
+ *
+ * Props
+ * --------------------------------------------
+ * @prop modelValue boolean
+ *    - v-model，控制展开 / 收起
+ *
+ * @prop title string (optional)
+ *    - 默认 Header 标题（未使用 header slot 时）
+ *
+ * Slots
+ * --------------------------------------------
+ * @slot header
+ *    - 自定义 Header
+ *    - 暴露参数：
+ *        open   : boolean   当前是否展开
+ *        toggle : () => void  切换展开状态
+ *
+ * @slot default
+ *    - 内容区域
+ *
+ * Usage
+ * --------------------------------------------
+ * ```vue
+ * <Expandable v-model="open" title="测试">
+ *   <template #header="{ open, toggle }">
+ *     <div class="acea-row row-between-wrapper">
+ *       <span class="f-bold">测试</span>
+ *       <span
+ *         class="iconfont"
+ *         :class="open ? 'icon-up' : 'icon-down'"
+ *         @click="toggle"
+ *       />
+ *     </div>
+ *   </template>
+ *
+ *   <div class="scroll-y" style="max-height: 300px;">
+ *     <div v-for="item in 10" :key="item">
+ *       {{ item }}
+ *     </div>
+ *   </div>
+ * </Expandable>
+ * ```
+ *
+ * Notes
+ * --------------------------------------------
+ * - 展开时：先显示内容，再触发展开动画
+ * - 收起时：动画结束后才移除内容（display:none）
+ * - SSR 下服务端始终渲染内容，避免 hydration mismatch
+ */
+
+/**
+ * Props
+ *
+ * @prop modelValue - 是否展开（v-model）
+ * @prop title      - 默认 Header 标题（未使用 header slot 时生效）
+ */
+interface Props {
+  modelValue: boolean;
+  title?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: false,
+  title: 'Title'
+});
+
+/**
+ * Emits
+ *
+ * @event update:modelValue - 展开状态变化
+ */
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean];
+}>()
+
+/**
+ * mainVisible
+ * -----------------------------
+ * 控制 expandable-main 是否 display
+ *
+ * 规则：
+ * - 打开时：先 display → 再触发展开动画
+ * - 关闭时：先执行动画 → transitionend 后再 display:none
+ *
+ * SSR：
+ * - 服务端强制为 true，保证结构一致
+ */
+const isClient = import.meta.client
+const mainVisible = ref(isClient ? props.modelValue : true)
+
+/**
+ * 同步外部 v-model 变更
+ * （防止父组件直接修改 modelValue 导致 display 不一致）
+ */
+watch(
+    () => props.modelValue,
+    (val) => {
+      if (val) {
+        mainVisible.value = true
+      }
+    }
+)
+
+/**
+ * toggle
+ * -----------------------------
+ * 切换展开状态
+ *
+ * 行为：
+ * - 打开：立即显示内容，再更新 modelValue
+ * - 关闭：立即更新 modelValue，display 延迟到动画结束
+ *
+ * 暴露给 header slot 使用
+ */
+const toggle = () => {
+  if (!props.modelValue) {
+    // 打开：先显示内容，再触发展开动画
+    mainVisible.value = true
+    requestAnimationFrame(() => {
+      emit('update:modelValue', true)
+    })
+  } else {
+    // 关闭：先收起动画，display 延后
+    emit('update:modelValue', false)
+  }
+}
+
+/**
+ * transitionend 回调
+ *
+ * 仅监听 grid-template-rows
+ * 用于在收起动画完成后移除内容（display:none）
+ */
+const onTransitionEnd = (e: TransitionEvent) => {
+  if (e.propertyName !== 'grid-template-rows') return
+  if (!props.modelValue) {
+    mainVisible.value = false
+  }
+}
+</script>
+
+<style scoped lang="scss">
+  .expandable-wrapper {
+    .expandable-main {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease-out;
+
+      .inner {
+        overflow: hidden;
+      }
+    }
+
+    &.open {
+      .expandable-main {
+        grid-template-rows: 1fr;
+      }
+    }
+  }
+</style>

@@ -17,7 +17,7 @@
     <span class="split"></span>
     <span class="iconfont icon-pictures" @click="openRoom"></span>
     <span class="split"></span>
-    <span class="iconfont icon-quanping" @click="imgViewVisible = true"></span>
+    <span class="iconfont icon-quanping" @click="toggleImageViewer"></span>
     <span class="split"></span>
     <span class="iconfont icon-help" @click="beginGuide"></span>
   </div>
@@ -62,7 +62,7 @@
                     imagePrefix(currentFrameOption?.config?.cr!),
                   ]"
                 @change="handleImageChange"
-                @touch-screen="handleTouchScreen"
+                @touch-screen="toggleImageViewer"
             />
           </ClientOnly>
         </div>
@@ -98,7 +98,7 @@
                         @click="productThumbs"/>
                 <span class="iconfont icon-follow-fill text-40 mr-10 cursor-pointer text-error" v-show="isThumbs"
                       @click="productThumbs"/>
-                <span class="iconfont icon-quanping text-40 cursor-pointer" @click="imgViewVisible = true"></span>
+                <span class="iconfont icon-quanping text-40 cursor-pointer" @click="toggleImageViewer"></span>
               </div>
             </div>
             <div class="preview-box">
@@ -134,7 +134,7 @@
                     imagePrefix(currentFrameOption?.config?.cr!),
                   ]"
                     @change="handleImageChange"
-                    @touch-screen="handleTouchScreen"
+                    @touch-screen="toggleImageViewer"
                 />
               </ClientOnly>
             </div>
@@ -725,14 +725,18 @@
   </el-dialog>
 
   <!-- 背景墙 -->
-  <WallColor :wall-image="generatorImg" ref="wallColorRef"/>
+  <WallColor :wall-image="generatorImg" ref="wallColorRef" @close="toggleWidget(true)"/>
 
   <!-- 房间 -->
-  <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon"/>
+  <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon" @close="toggleWidget(true)"/>
 
   <!--  图片查看器 -->
-  <el-image-viewer v-if="imgViewVisible" :url-list="[generatorImg]" @close="imgViewVisible = false"
-                   hide-on-click-modal/>
+  <el-image-viewer
+      v-if="imgViewVisible"
+      :url-list="[generatorImg]"
+      @close="toggleImageViewer"
+      hide-on-click-modal
+  />
 
   <!--价格详情弹窗-->
   <el-popover
@@ -1202,12 +1206,14 @@ const getBrandRecommend = async () => {
 // 选择背景墙颜色
 const wallColorRef = ref<InstanceType<typeof WallColor>>()
 const openWallColor = () => {
+  toggleWidget(false)
   wallColorRef.value?.open()
 }
 
 // 选择背景墙颜色
 const roomRef = ref<InstanceType<typeof Room>>()
 const openRoom = () => {
+  toggleWidget(false)
   roomRef.value?.open()
 }
 
@@ -1265,8 +1271,17 @@ const openInfo = (index: number) => {
   moreInfoVisible.value[index] = !moreInfoVisible.value[index]
 }
 
-const handleTouchScreen = (img: string) => {
-  imgViewVisible.value = true
+const toggleImageViewer = () => {
+  toggleWidget(imgViewVisible.value)
+  imgViewVisible.value = !imgViewVisible.value
+}
+
+const toggleWidget = (flag: boolean) => {
+  if (flag) {
+    window.Tawk_API.showWidget()
+  } else {
+    window.Tawk_API.hideWidget();
+  }
 }
 
 const appSticky = ref(true)
@@ -1283,6 +1298,7 @@ const beginGuide = async () => {
     appSticky.value = false
   }
   openTour.value = true
+  toggleWidget(false)
 }
 const handleTouchClose = () => {
   if (appStore.isPc) {
@@ -1290,6 +1306,7 @@ const handleTouchClose = () => {
   } else {
     appSticky.value = true
   }
+  toggleWidget(true)
 }
 const initShowGuide = () => {
   if (process.server) return;

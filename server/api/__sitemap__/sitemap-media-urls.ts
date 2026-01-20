@@ -28,14 +28,14 @@ export default defineSitemapEventHandler(async () => {
             blogTotalPages = parseInt(data.blogPageSize) || 1
             for (let i = 2; i <= newsTotalPages; i++) {
                 sitemapLinks.push({
-                    loc: `/news/${i}`,
+                    loc: `/magazine/${i}`,
                     changefreq: 'daily',
                     priority: 0.8
                 })
             }
             for (let i = 2; i <= blogTotalPages; i++) {
                 sitemapLinks.push({
-                    loc: `/blog/${i}`,
+                    loc: `/journal/${i}`,
                     changefreq: 'daily',
                     priority: 0.8
                 })

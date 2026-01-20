@@ -23,7 +23,7 @@
       </el-skeleton>
 
       <div class="py-lg-40 py-20">
-        <SeoPagination :current="currentPage" :totalPages="totalPages" basePath="/blog"/>
+        <SeoPagination :current="currentPage" :totalPages="totalPages" basePath="/journal"/>
       </div>
     </div>
   </section>
@@ -49,7 +49,7 @@ definePageMeta({
 const {pageData, currentPage, totalPages, pending, refresh} = await useSeoPaginationLogic<IBlog.Row>(
     {
       apiPath: `${TRADE_MODULE}/blog/example`,
-      baseRoute: '/blog',
+      baseRoute: '/journal',
       uniqueKey: 'blog-more',
       callBack: (data) => {
         data.forEach(item => {

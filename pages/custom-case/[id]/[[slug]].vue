@@ -10,23 +10,14 @@
           and emotion that our artists bring to life.
         </p>
       </div>
-
-      <div style="min-height: 450px" v-loading="themeLoading">
-        <div class="case-waterfall" v-if="caseContrastData.length">
+      <DataState :loading="themeLoading" :is-empty="!themeLoading && caseContrastData.length === 0">
+        <div class="case-waterfall">
           <div class="item cursor-pointer overflow-hidden" v-for="(sample, index) in caseContrastData" :key="sample.id"
                @click="showCaseContrast(index)">
-            <img class="w-full img-hover " :src="imagePrefix(sample.paintImg)" alt="">
+            <img class="w-full img-hover" :src="imagePrefix(sample.paintImg)" alt="sample">
           </div>
         </div>
-        <div class="text-center py-60" v-else-if="!themeLoading">
-          <span class="iconfont icon-empty text-50"></span>
-          <p class="text-20 f-bold mt-20">No Data</p>
-          <p class="text-14 my-20">No data found, please check the query or try again later.</p>
-          <el-button size="large" type="primary" @click="seeMoreSample()">
-            TRY AGAIN
-          </el-button>
-        </div>
-      </div>
+      </DataState>
     </div>
   </section>
 
@@ -56,6 +47,7 @@
 import type {IPaint} from "~/api/interface/paint/paint";
 import {getSampleApi} from "~/api/modules/paint/paint";
 import {imagePrefix} from "~/utils";
+import {ArtCodeEnum} from "~/types/enumeration";
 
 onMounted(() => {
   if (route.params.id) seeMoreSample()
@@ -84,13 +76,16 @@ const showCaseContrast = (index: number) => {
 
 // 返回上一步
 const handleBack = () => {
-  router.back()
+  router.replace({
+    path: `/custom-paint/${ArtCodeEnum.Painting}`
+  })
 }
 
 // 点击继续（回到定制页面）
 const handleContinue = () => {
-  handleBack()
-  $bus.emit('continueCustomPaint', route.params.id as string)
+  router.replace({
+    path: `/custom-paint/${ArtCodeEnum.Painting}/${route.params.id}`
+  })
 }
 
 </script>

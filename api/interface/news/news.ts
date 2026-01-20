@@ -33,6 +33,12 @@ export namespace INews {
         visit: string
         /*创建时间*/
         createTime: number
+        /*SEO 描述*/
+        description: string
+        /*SEO 关键词 */
+        keywords: string
+        /*是否原创*/
+        original: boolean
     }
 
     /*更多新闻项*/

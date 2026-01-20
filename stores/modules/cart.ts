@@ -44,7 +44,7 @@ export const useCartStore = defineStore(
 
         // 清空购物车
         function clear() {
-            carts.value = [];
+            carts.value = carts.value.filter(item => !item.selected);
         }
 
         // 计算总价 (全部)

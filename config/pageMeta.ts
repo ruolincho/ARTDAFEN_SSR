@@ -1,10 +1,12 @@
 import {ArtCodeEnum} from "~/types/enumeration";
 import {mergeWith} from "lodash-es";
+import type { UseHeadInput } from '@unhead/vue';
 
-type HeadObject = Record<string, any>
+type ArtistAllParams = string;
+type CustomPaintParams = ArtCodeEnum;
 
-export const pageMeta: Record<string, any> = {
-    "/": {
+export const pageMeta = {
+    "/": () => ({
         meta: [
             {
                 name: "description",
@@ -14,14 +16,13 @@ export const pageMeta: Record<string, any> = {
             {
                 name: "keywords",
                 content:
-                    "Artdafen, buy art online, framed prints, canvas prints, custom framing, oil painting reproductions, wall art, framed wall art, limited edition prints, art prints for sale"
-                    +
+                    "Artdafen, buy art online, framed prints, canvas prints, custom framing, oil painting reproductions, wall art, framed wall art, limited edition prints, art prints for sale, " +
                     "Artdafen, deviantart, arte, gallery, pixel art, draw, installation art examples, art and craft project ideas, drawing, artstation, drawings"
             }
         ],
-    },
+    }),
 
-    "/about": {
+    "/about": () => ({
         title: "About - ART DAFEN",
         meta: [
             {
@@ -35,15 +36,15 @@ export const pageMeta: Record<string, any> = {
                     "about Artdafen, Dafen artists, art studio, artist collaborations, commissions, custom reproductions, sourcing prints"
             }
         ],
-    },
+    }),
 
-    "/artists-all": {
-        title: "Artists - ART DAFEN",
+    "/artists-all": (letter: ArtistAllParams) => ({
+        title: `Artists starting with ${letter} - ART DAFEN"`,
         meta: [
             {
                 name: "description",
                 content:
-                    "Artists directory — discover portfolios, prints and commission options from Artdafen artists: oil painters, printmakers, pixel artists and collectible toy designers."
+                    `Artists directory with ${letter} — discover portfolios, prints and commission options from Artdafen artists: oil painters, printmakers, pixel artists and collectible toy designers.`
             },
             {
                 name: "keywords",
@@ -51,8 +52,9 @@ export const pageMeta: Record<string, any> = {
                     "artist directory, artist profiles, oil painters, printmakers, pixel artists, collectible toy artists, commission artists, portfolios"
             }
         ],
-    },
-    "/artists-brief": {
+    }),
+
+    "/artists-brief": () => ({
         title: "Artists - ART DAFEN",
         meta: [
             {
@@ -66,9 +68,9 @@ export const pageMeta: Record<string, any> = {
                     "artist briefs, featured artists, quick profiles, artist highlights, popular prints"
             }
         ],
-    },
+    }),
 
-    "/artists-top": {
+    "/artists-top": () => ({
         title: "Top Artists - ART DAFEN",
         meta: [
             {
@@ -82,9 +84,9 @@ export const pageMeta: Record<string, any> = {
                     "top artists, best selling artists, trending artists, limited edition prints, gallery quality, collectible art"
             }
         ],
-    },
+    }),
 
-    "/best": {
+    "/best": () => ({
         title: "Best Sellers - ART DAFEN",
         meta: [
             {
@@ -98,9 +100,9 @@ export const pageMeta: Record<string, any> = {
                     "best sellers, popular prints, customer favorites, top framed art, trending prints"
             }
         ],
-    },
+    }),
 
-    "/blog": {
+    "/journal": () => ({
         title: "Blog - ART DAFEN",
         meta: [
             {
@@ -114,9 +116,9 @@ export const pageMeta: Record<string, any> = {
                     "art blog, framing guide, artist interview, art tutorials, installation art examples, Dafen news, print trends"
             }
         ],
-    },
+    }),
 
-    "/collaboration": {
+    "/collaboration": () => ({
         title: "Collaboration - ART DAFEN",
         meta: [
             {
@@ -130,9 +132,9 @@ export const pageMeta: Record<string, any> = {
                     "collaboration, partnerships, branded prints, gallery projects, custom editions, wholesale, interior design"
             }
         ],
-    },
+    }),
 
-    "/contact": {
+    "/contact": () => ({
         title: "Contact - ART DAFEN",
         meta: [
             {
@@ -146,9 +148,9 @@ export const pageMeta: Record<string, any> = {
                     "contact Artdafen, customer support, order help, custom framing inquiry, commissions, wholesale inquiries"
             }
         ],
-    },
+    }),
 
-    "/cookies-policy": {
+    "/cookies-policy": () => ({
         title: "Cookies & Tracking - ART DAFEN",
         meta: [
             {
@@ -162,52 +164,39 @@ export const pageMeta: Record<string, any> = {
                     "cookies policy, tracking, analytics, user consent, privacy"
             }
         ],
+    }),
+
+    "/custom-paint": (code: CustomPaintParams) => {
+        const commonMap: Partial<Record<ArtCodeEnum, UseHeadInput>> = {
+            [ArtCodeEnum.Painting]: {
+                title: 'Custom Hand-Painted Oil Paintings | Portrait & Masterpiece Reproduction | ArtDafen',
+                meta: [
+                    {name: "description", content: "Order your own hand-painted custom oil painting from professional artists. Whether it’s a portrait, pet, or reproduction of a famous masterpiece, each piece is crafted with museum-quality detail and brushwork."},
+                    {name: "keywords", content: "custom oil painting, hand-painted art, portrait painting, oil painting reproduction, famous painting replica, custom canvas art"}
+                ]
+            },
+            [ArtCodeEnum.Prints]: {
+                title: 'Printed Custom Paintings | Professional Canvas Reproduction | ArtDafen',
+                meta: [
+                    {name: "description", content: "Discover our printed custom painting service for precise art reproductions. Using professional-grade printing on premium canvas, we deliver museum-quality details and vibrant colors—ideal for décor, art collections, or gallery displays."},
+                    {name: "keywords", content: "printed custom painting, canvas reproduction, art print on canvas, digital painting print, high-quality art reproduction, print to canvas"}
+                ]
+            },
+            [ArtCodeEnum.Certificates]: {
+                title: 'Custom Certificate Printing with 3D Texture | Personalized Art Certificate | ArtDafen',
+                meta: [
+                    {
+                        name: "description",
+                        content: "Upload your own certificate and turn it into a textured masterpiece. ArtDafen provides professional certificate printing with 3D relief texture for a premium, artistic finish—perfect for collectors, artists, and institutions looking to display authenticity with style."
+                    },
+                    {name: "keywords", content: "custom oil painting, hand-painted art, portrait painting, oil painting reproduction, famous painting replica, custom canvas art"}
+                ]
+            }
+        };
+        return commonMap[code] || {};
     },
 
-    "/custom-paint": {
-        [ArtCodeEnum.Painting]: {
-            title: 'Custom Hand-Painted Oil Paintings | Portrait & Masterpiece Reproduction | ArtDafen',
-            meta: [
-                {
-                    name: "description",
-                    content:
-                        "Order your own hand-painted custom oil painting from professional artists. Whether it’s a portrait, pet, or reproduction of a famous masterpiece, each piece is crafted with museum-quality detail and brushwork."
-                },
-                {
-                    name: "keywords",
-                    content: "custom oil painting, hand-painted art, portrait painting, oil painting reproduction, famous painting replica, custom canvas art"
-                }
-            ]
-        },
-        [ArtCodeEnum.Prints]: {
-            title: 'Printed Custom Paintings | Professional Canvas Reproduction | ArtDafen',
-            meta: [
-                {
-                    name: "description",
-                    content: "Discover our printed custom painting service for precise art reproductions. Using professional-grade printing on premium canvas, we deliver museum-quality details and vibrant colors—ideal for décor, art collections, or gallery displays."
-                },
-                {
-                    name: "keywords",
-                    content: "printed custom painting, canvas reproduction, art print on canvas, digital painting print, high-quality art reproduction, print to canvas"
-                }
-            ]
-        },
-        [ArtCodeEnum.Certificates]: {
-            title: 'Custom Certificate Printing with 3D Texture | Personalized Art Certificate | ArtDafen',
-            meta: [
-                {
-                    name: "description",
-                    content: "Upload your own certificate and turn it into a textured masterpiece. ArtDafen provides professional certificate printing with 3D relief texture for a premium, artistic finish—perfect for collectors, artists, and institutions looking to display authenticity with style."
-                },
-                {
-                    name: "keywords",
-                    content: "custom certificate printing, 3D texture certificate, art certificate print, personalized certificate, textured printing, custom document display"
-                }
-            ]
-        },
-    },
-
-    "/faq": {
+    "/faq": () => ({
         title: "FAQ - ART DAFEN",
         meta: [
             {
@@ -221,9 +210,9 @@ export const pageMeta: Record<string, any> = {
                     "FAQ, ordering, framing FAQ, proofing, shipping, returns, Dafen artists"
             }
         ],
-    },
+    }),
 
-    "/forget-password": {
+    "/forget-password": () => ({
         title: "Password Recovery - ART DAFEN",
         meta: [
             {
@@ -237,9 +226,9 @@ export const pageMeta: Record<string, any> = {
                     "password reset, account recovery, login help"
             }
         ],
-    },
+    }),
 
-    "/news": {
+    "/magazine": () => ({
         title: "News - ART DAFEN",
         meta: [
             {
@@ -253,9 +242,9 @@ export const pageMeta: Record<string, any> = {
                     "news, announcements, artist drops, exhibitions, Dafen news, product launches, promotions"
             }
         ],
-    },
+    }),
 
-    "/notice": {
+    "/notice": () => ({
         title: "Notice - ART DAFEN",
         meta: [
             {
@@ -269,9 +258,9 @@ export const pageMeta: Record<string, any> = {
                     "site notice, maintenance, service update, customer announcement"
             }
         ],
-    },
+    }),
 
-    "/privacy-policy": {
+    "/privacy-policy": () => ({
         title: "Privacy & Policy - ART DAFEN",
         meta: [
             {
@@ -285,9 +274,9 @@ export const pageMeta: Record<string, any> = {
                     "privacy policy, data protection, GDPR, personal data, user rights"
             }
         ],
-    },
+    }),
 
-    "/product": {
+    "/product": () => ({
         title: "Products - ART DAFEN",
         meta: [
             {
@@ -301,9 +290,9 @@ export const pageMeta: Record<string, any> = {
                     "products, framed prints, canvas reproductions, online framing, proof preview, original art, limited edition prints, buy art online"
             }
         ],
-    },
+    }),
 
-    "/search": {
+    "/search": () => ({
         title: "Search - ART DAFEN",
         meta: [
             {
@@ -317,9 +306,9 @@ export const pageMeta: Record<string, any> = {
                     "site search, find art, search prints, filter by style, artist search, product search"
             }
         ],
-    },
+    }),
 
-    "/terms-and-conditions": {
+    "/terms-and-conditions": () => ({
         title: "Terms & Conditions - ART DAFEN",
         meta: [
             {
@@ -333,9 +322,9 @@ export const pageMeta: Record<string, any> = {
                     "terms and conditions, T&C, purchase terms, licensing, returns policy, legal"
             }
         ],
-    },
+    }),
 
-    "/our-return-policy": {
+    "/our-return-policy": () => ({
         title: "Return Policy - ART DAFEN",
         meta: [
             {
@@ -349,19 +338,44 @@ export const pageMeta: Record<string, any> = {
                     "return policy, art returns, exchange policy, refund policy, damaged artwork, art prints returns, original paintings returns, custom artwork returns, commissioned art, international returns, return shipping, trackable returns, refund timeline, ARTDAFEN"
             }
         ],
-    },
+    }),
 };
 
+type PageMetaType = typeof pageMeta;
+export type RouteKey = keyof PageMetaType;
+
 /**
- * 合并 useHead 对象，数组拼接、对象递归合并、普通值覆盖
+ * * 安全获取 PageMeta 对象
+ *  * 支持类型推导：resolvePageMeta('/artists-all', 'A') 会自动提示需要 string 参数
+ * @param routeKey
+ * @param params
  */
-export const mergeHeadWithLodash = (base: HeadObject, extend: HeadObject): HeadObject => {
-    return mergeWith({}, base, extend, (objValue, srcValue) => {
+export function resolvePageMeta<K extends RouteKey>(
+    routeKey: K | string,
+    // 下面这行稍微复杂，意思是：如果该路由对应的函数有参数，就取第一个参数的类型，否则为 undefined
+    params?: K extends RouteKey ? Parameters<PageMetaType[K]>[0] : any
+): UseHeadInput {
+    const factory = pageMeta[routeKey as RouteKey];
+
+    if (!factory) {
+        console.warn(`[pageMeta] Missing meta for route: ${routeKey}`);
+        return {};
+    }
+
+    // @ts-ignore: 简单的调用，忽略 strict 类型检查带来的复杂性
+    return factory(params);
+}
+
+/**
+ * 合并 UseHeadInput 对象，数组拼接、对象递归合并、普通值覆盖
+ */
+export const mergeHeadWithLodash = (base: UseHeadInput, extend: UseHeadInput): UseHeadInput => {
+    return mergeWith({}, base, extend, (objValue: any, srcValue: any) => {
         // 如果是数组，则拼接
         if (Array.isArray(objValue) && Array.isArray(srcValue)) {
-            return objValue.concat(srcValue)
+            return objValue.concat(srcValue);
         }
         // 否则交给 lodash 默认逻辑（递归合并或覆盖）
-        return undefined
-    })
+        return undefined;
+    });
 }

@@ -36,12 +36,13 @@ export default defineNuxtConfig({
             '/custom-paint/HPOP',
             // '/custom-paint/40USD-M2',
             // '/custom-paint/CTS',
-            '/news',
-            '/blog'
+            '/magazine',
+            '/journal'
         ], // 静态固定路径
         sources: [
-            '/api/__sitemap__/sitemap-urls',
+            '/api/__sitemap__/sitemap-media-urls',
             '/api/__sitemap__/sitemap-zone-urls',
+            '/api/__sitemap__/sitemap-common-urls',
         ],
     },
     robots: {
@@ -109,7 +110,7 @@ export default defineNuxtConfig({
         }
     },
     nitro: {
-        compatibilityDate: '2025-11-11',
+        compatibilityDate: '2026-01-14',
     },
     sourcemap: {
         server: true,

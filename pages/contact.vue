@@ -82,10 +82,10 @@
 </template>
 
 <script setup lang="ts">
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 import {CONTACT_EMAIL} from "~/config";
 
-useHead(pageMeta["/contact"] ?? {});
+useHead(resolvePageMeta("/contact"));
 
 const pointList = ref([
   {

@@ -22,9 +22,9 @@
   <section class="sec-letter ignore">
     <div class="container">
       <div class="letter-list acea-row row-between-wrapper gap-column-base">
-        <div class="letter-item text-22 py-lg-20 py-10 cursor-pointer" v-for="(letter, index) in letters" :key="index" @click="seeAll(letter)">
+        <NuxtLink class="letter-item text-22 py-lg-20 py-10" v-for="(letter, index) in letters" :key="index" :to="seeAll(letter)">
           {{ letter }}
-        </div>
+        </NuxtLink>
       </div>
     </div>
   </section>
@@ -39,7 +39,7 @@
             <div v-for="art in val" class="mb-10 cursor-pointer name line1" @click="handleClickArtist(art)">
               {{ art.name }}
             </div>
-            <div class="more text-22 f-bold cursor-pointer" v-if="val.length > 4" @click="seeAll(key)">View All <span class="ignore">"{{ key }}"</span> Artists</div>
+            <NuxtLink class="more text-22 f-bold cursor-pointer" v-if="val.length > 4" :to="seeAll(key)">View All <span class="ignore">"{{ key }}"</span> Artists</NuxtLink>
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@ import {getArtistsListApi} from "~/api/modules/artists/artists";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
-import { pageMeta } from "~/config/pageMeta";
+import { resolvePageMeta } from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 
 defineOptions({
@@ -66,9 +66,9 @@ onMounted(() => {
 
 const route = useRoute()
 const router = useRouter()
-const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+const letters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i))
 
-useHead(pageMeta["/artists-brief"] ?? {});
+useHead(resolvePageMeta("/artists-brief"));
 
 // 获取艺术家列表
 const artistsList = ref<IArtists.Res>({})
@@ -81,9 +81,10 @@ const getArtistsList = async () => {
 
 // 点击查看更多
 const seeAll = (letter: string) => {
-  let path = `/artists-all?id=${letter}`
-  if (categoryId.value) path += `&categoryId=${categoryId.value}`
-  router.push(path)
+  let path = `/artists-all/${letter}`
+  if (categoryId.value) path += `?categoryId=${categoryId.value}`
+  // router.push(path)
+  return path
 }
 
 // 点击艺术家

@@ -8,12 +8,19 @@ import type {
 
 // ------- PayPal -------
 export interface PaypalOptions {
+    // 容器ID
     containerId: string
+    // 客户端ID
     clientId: string
+    // 货币
     currency: string
+    // PayPal 创建订单唤起支付回调
     createOrder: PayPalButtonCreateOrder
+    // PayPal 支付成功回调
     onApprove: PayPalButtonOnApprove
+    // PayPal 初始化回调
     onInit?: PayPalButtonOnInit
+    // PayPal 点击支付按钮
     onClick?: PayPalButtonOnClick
 }
 

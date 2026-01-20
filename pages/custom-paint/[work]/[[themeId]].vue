@@ -72,7 +72,7 @@
           <div class="acea-row row-between-wrapper f-bold-500 py-20">
             <span class="text-uppercase text-26">{{ item.name }}</span>
             <span class="text-uppercase text-underline text-20 text-gray-600 cursor-pointer"
-                  @click="seeMoreSample(item.id)">see more</span>
+                  @click="seeMoreSample(item)">see more</span>
           </div>
           <div class="case-content">
             <div class="item" v-for="(sample, index) in item.samples" :key="sample.id"
@@ -101,7 +101,7 @@
               <div class="acea-row row-between-wrapper f-bold-500 py-20">
                 <span class="text-uppercase text-26">{{ item.name }}</span>
                 <span class="text-uppercase text-underline text-20 text-gray-600 cursor-pointer"
-                      @click="seeMoreSample(item.id)">see more</span>
+                      @click="seeMoreSample(item)">see more</span>
               </div>
               <div class="case-content">
                 <div class="item" v-for="(sample, index) in item.samples" :key="sample.id"
@@ -195,7 +195,7 @@
               imagePrefix(currentFrameOption?.config?.cr!),
             ]"
                 @change="handleImageChange"
-                @touch-screen="handleTouchScreen"
+                @touch-screen="toggleImageViewer"
             />
           </ClientOnly>
         </div>
@@ -277,7 +277,7 @@
                         imagePrefix(currentFrameOption?.config?.cr!),
                       ]"
                         @change="handleImageChange"
-                        @touch-screen="handleTouchScreen"
+                        @touch-screen="toggleImageViewer"
                     />
                   </ClientOnly>
                 </div>
@@ -810,16 +810,21 @@
 
   <ClientOnly>
     <!-- 背景墙 -->
-    <WallColor :wall-image="generatorImg" ref="wallColorRef"/>
+    <WallColor :wall-image="generatorImg" ref="wallColorRef" @close="toggleWidget(true)"/>
   </ClientOnly>
 
   <ClientOnly>
     <!-- 房间 -->
-    <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon"/>
+    <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon" @close="toggleWidget(true)"/>
   </ClientOnly>
 
   <!-- 图片查看器 -->
-  <el-image-viewer v-if="imgViewVisible" :url-list="[generatorImg]" @close="imgViewVisible = false" hide-on-click-modal/>
+  <el-image-viewer
+      v-if="imgViewVisible"
+      :url-list="[generatorImg]"
+      @close="toggleImageViewer"
+      hide-on-click-modal
+  />
 
   <ClientOnly>
     <!-- 图片查看器 -->
@@ -878,7 +883,7 @@ import type {UploadFile, UploadProps} from "element-plus";
 import {ElMessage, ElMessageBox} from "element-plus";
 import WallColor from '~/components/WallColor.vue'
 import Room from '~/components/Room.vue'
-import {calculateShape, cm2inch, flattenTree, getImageSize, imagePrefix, debounce} from "~/utils";
+import {calculateShape, cm2inch, flattenTree, getImageSize, imagePrefix, debounce, generateTitle2Slug} from "~/utils";
 import type {ICustom} from "~/api/interface/custom/custom";
 import {useCustomStore} from "~/stores/modules/custom";
 import {useAppStore} from "~/stores/modules/app";
@@ -889,7 +894,7 @@ import {useCurrencyStore} from "~/stores/modules/currency";
 import {findClosestMatch} from "~/utils/calculateShape";
 import {ArtCodeEnum, type ArtCodeType} from "~/types/enumeration";
 import {rangeVerify} from "~/utils/matchingInterval";
-import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
+import {resolvePageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {useIndexedDBBase64} from '~/composables/useIndexedDBBase64'
 import {TECHNIQUE_EXAMPLE, HOW_IT_WORKS} from "~/constant";
 import {Swiper, SwiperSlide} from 'swiper/vue'
@@ -925,9 +930,6 @@ const {
 } = useVerticalDrag(functionalRef, {initialTop: 100})
 
 onMounted(() => {
-  $bus.off('continueCustomPaint') // 防止重复注册
-  $bus.on('continueCustomPaint', (themeId: string) => chooseTheme(themeId))
-
   // 在手绘工艺下，默认选中主题
   const {work, themeId} = route.params
   if (work === ArtCodeEnum.Painting && themeId) {
@@ -947,7 +949,7 @@ const currentView = ref('custom')
 const origin = useRequestURL().origin
 
 useHead(mergeHeadWithLodash(
-    pageMeta["/custom-paint"][route.params.work] ?? {},
+    resolvePageMeta("/custom-paint", route.params.work),
     {
       link: [
         {rel: 'canonical', href: `${origin}/custom-paint/${route.params.work}`}
@@ -1218,12 +1220,14 @@ const onClickOutside = () => {
 // 选择背景墙颜色
 const wallColorRef = ref<InstanceType<typeof WallColor>>()
 const openWallColor = () => {
+  toggleWidget(false)
   wallColorRef.value?.open()
 }
 
 // 选择背景墙颜色
 const roomRef = ref<InstanceType<typeof Room>>()
 const openRoom = () => {
+  toggleWidget(false)
   roomRef.value?.open()
 }
 
@@ -1307,8 +1311,10 @@ const getFavoriteReference = computed(() => {
 })
 
 // 获取喜欢的风格预览图
-const seeMoreSample = async (themeId: string) => {
-  router.push(`/custom-case/${themeId}`)
+const seeMoreSample = async (item: IPaint.ThemeRow) => {
+  const { id, name } = item
+  const slug = generateTitle2Slug(name)
+  router.push(`/custom-case/${id}/${slug}`)
 }
 
 const caseIndex = ref(-1)
@@ -1511,8 +1517,17 @@ const showLoginWindow = () => {
   loginWindowRef.value?.open()
 }
 
-const handleTouchScreen = (img: string) => {
-  imgViewVisible.value = true
+const toggleImageViewer = () => {
+  toggleWidget(imgViewVisible.value)
+  imgViewVisible.value = !imgViewVisible.value
+}
+
+const toggleWidget = (flag: boolean) => {
+  if (flag) {
+    window.Tawk_API.showWidget()
+  } else {
+    window.Tawk_API.hideWidget();
+  }
 }
 
 watch(() => route.fullPath,
@@ -1546,6 +1561,7 @@ const beginGuide = async () => {
     appSticky.value = false
   }
   openTour.value = true
+  toggleWidget(false)
 }
 const handleTouchClose = () => {
   if (appStore.isPc) {
@@ -1553,6 +1569,7 @@ const handleTouchClose = () => {
   } else {
     appSticky.value = true
   }
+  toggleWidget(true)
 }
 const initShowGuide = () => {
   if (process.server) return;

@@ -202,9 +202,9 @@
 </template>
 
 <script setup lang="ts">
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 
-useHead(pageMeta["/terms-and-conditions"] ?? {});
+useHead(resolvePageMeta("/terms-and-conditions"));
 
 defineOptions({
   name: 'PrivacyPolicy'

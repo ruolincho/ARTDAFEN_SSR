@@ -1,32 +1,28 @@
 <template>
-  <div v-loading="loading" style="min-height: 30vh; position: relative">
-    <template v-if="processTableData.length">
-      <!-- 列表内容 -->
-      <slot :rows="processTableData"/>
-      <!-- 分页组件 -->
-      <slot name="pagination">
-        <div class="acea-row row-center-wrapper py-lg-40 py-20">
-          <Pagination
-              v-if="pagination"
-              :pageable="pageable"
-              :handle-size-change="handleSizeChange"
-              :handle-current-change="handleCurrentChange"
-          />
-        </div>
-      </slot>
+  <DataState
+      :loading="loading"
+      :is-empty="requestFinished && processTableData.length === 0"
+      :error="error"
+      :retry="getTableList"
+  >
+    <!-- 列表内容 -->
+    <slot :rows="processTableData"/>
+    <!-- 分页组件 -->
+    <slot name="pagination">
+      <div class="acea-row row-center-wrapper py-lg-40 py-20">
+        <Pagination
+            v-if="pagination"
+            :pageable="pageable"
+            :handle-size-change="handleSizeChange"
+            :handle-current-change="handleCurrentChange"
+        />
+      </div>
+    </slot>
+
+    <template #empty>
+      <slot name="empty" />
     </template>
-    <!-- 空数据 -->
-    <div v-else-if="requestFinished" class="acea-row row-center-wrapper empty-wrapper">
-      <slot name="empty">
-        <div class="text-center py-60">
-          <span class="iconfont icon-empty text-50"></span>
-          <p class="text-20 f-bold mt-20">No Data</p>
-          <p class="text-14 my-20">No data found, please check the query or try again later.</p>
-          <el-button size="large" type="primary" @click="getTableList">TRY AGAIN</el-button>
-        </div>
-      </slot>
-    </div>
-  </div>
+  </DataState>
 </template>
 
 <script setup lang="ts">
@@ -63,7 +59,8 @@ const {
   handleSizeChange,
   handleCurrentChange,
   loading,
-  requestFinished
+  requestFinished,
+  error
 } = useList(
     props.requestApi,
     props.initParam,
@@ -96,10 +93,5 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-.empty-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+
 </style>

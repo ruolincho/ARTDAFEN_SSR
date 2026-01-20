@@ -33,7 +33,7 @@ import type {IArtists} from "~/api/interface/artists/artists";
 import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import {getHomeArtistsApi} from "~/api/modules/home/home";
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 
 defineOptions({
@@ -47,8 +47,7 @@ onMounted(() => {
 const router = useRouter()
 const route = useRoute()
 
-useHead(pageMeta["/artists-top"]?? {});
-
+useHead(resolvePageMeta("/artists-top"));
 
 // 获取Top50艺术家
 const artistsList = ref<IArtists.Row[]>([])

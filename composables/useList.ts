@@ -39,7 +39,8 @@ export const useList = (
         // 总参数(包含分页和查询参数)
         totalParam: {},
         loading: false,
-        requestFinished: false
+        requestFinished: false,
+        error: null
     });
 
     /**
@@ -81,6 +82,7 @@ export const useList = (
             updatePageable({ pageNum, pageSize, total });
             requestSuccess && requestSuccess(data);
         } catch (error) {
+            state.error = error
             requestError && requestError(error);
         }
         finally {

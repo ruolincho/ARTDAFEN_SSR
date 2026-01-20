@@ -155,6 +155,8 @@
 .inline { display: inline; }
 .h-full { height: 100%; }
 .w-full { width: 100%; }
+.h-auto { height: auto; }
+.min-h-\[300px\] { min-height: 300px; }
 
 .aspect-ratio { aspect-ratio: 1 / 1; }
 .aspect-ratio-16_9 { aspect-ratio: 16 / 9; }

@@ -702,15 +702,6 @@ watch(
     height: 200px; /* 可根据需要调整高度 */
   }
 
-  .spinner {
-    border: 4px solid #f3f3f3; /* 灰色边框 */
-    border-top: 4px solid var(--color-primary); /* 蓝色顶部，表示旋转 */
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite; /* 旋转动画 */
-  }
-
   .image-container {
     position: relative;
     z-index: 0;
@@ -769,15 +760,6 @@ watch(
     .touch-container-click {
       cursor: zoom-in;
     }
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 

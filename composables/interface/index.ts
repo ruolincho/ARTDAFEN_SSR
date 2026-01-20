@@ -15,6 +15,7 @@ export namespace ProList {
     };
     loading: boolean;
     requestFinished: boolean;
+    error: any;
   }
 }
 

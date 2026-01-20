@@ -63,9 +63,9 @@
 </template>
 
 <script setup lang="ts">
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 
-useHead(pageMeta["/cookies-policy"] ?? {});
+useHead(resolvePageMeta("/cookies-policy"));
 
 defineOptions({
   name: 'PrivacyPolicy'

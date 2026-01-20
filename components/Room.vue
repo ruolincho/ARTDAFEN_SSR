@@ -1,5 +1,5 @@
 <template>
-  <div class="room-layout" v-show="visible" @click="visible = false">
+  <div class="room-layout" v-show="visible" @click="close">
     <div class="layout-container" @click.stop>
 
       <div class="acea-row">
@@ -115,7 +115,7 @@
       </div>
 
       <!-- 关闭按钮 -->
-      <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="visible = false">
+      <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="close">
         <span class="iconfont icon-close"></span>
       </div>
 
@@ -185,6 +185,10 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const emit = defineEmits<{
+  close: []
+}>()
 
 const appStore = useAppStore()
 const modules = [Navigation]
@@ -421,6 +425,11 @@ const open = async () => {
   initShowGuide()
 }
 
+const close = () => {
+  visible.value = false
+  emit('close')
+}
+
 // 监听 visible 变化 锁定滚动
 useLockScroll(visible)
 
@@ -432,7 +441,8 @@ onBeforeUnmount(() => {
 })
 
 defineExpose({
-  open
+  open,
+  close
 })
 </script>
 

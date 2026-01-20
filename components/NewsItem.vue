@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink class="news-item" :to="`/news-detail/${item.id}/${item.slug}`" target="_blank">
+  <NuxtLink class="news-item" :to="`/magazine-detail/${item.id}/${item.slug}`" target="_blank">
     <div class="p-img overflow-hidden">
       <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" alt="">
     </div>

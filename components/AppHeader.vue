@@ -32,20 +32,20 @@
                   </span>
               </div>
               <div class="split"></div>
-              <div class="nav-item side" @click="router.push('/news')">
+              <div class="nav-item side" @click="router.push('/magazine')">
                   <span
                       class="nav-link cursor-pointer"
-                      :class="{ 'on': currentRouteText === '/news' }"
+                      :class="{ 'on': currentRouteText === '/magazine' || currentRouteText.includes('/magazine-detail') }"
                   >
-                   NEWS
+                   Magazine
                   </span>
               </div>
-              <div class="nav-item side" @click="router.push('/blog')">
+              <div class="nav-item side" @click="router.push('/journal')">
                   <span
                       class="nav-link cursor-pointer"
-                      :class="{ 'on': currentRouteText === '/blog' }"
+                      :class="{ 'on': currentRouteText === '/journal' || currentRouteText.includes('/journal-detail') }"
                   >
-                   BLOG
+                   Journal
                   </span>
               </div>
             </div>
@@ -197,14 +197,14 @@
             </div>
           </div>
         </li>
-        <li class="P_parent" :class="{ open: currentRouteText === '/news' }">
+        <li class="P_parent" :class="{ open: currentRouteText === '/magazine' }">
           <div class="cate-item">
-            <div class="category-a" @click="jumpOperation('/news')">NEWS</div>
+            <div class="category-a" @click="jumpOperation('/magazine')">Magazine</div>
           </div>
         </li>
-        <li class="P_parent" :class="{ open: currentRouteText === '/blog' }">
+        <li class="P_parent" :class="{ open: currentRouteText === '/journal' }">
           <div class="cate-item">
-            <div class="category-a" @click="jumpOperation('/blog')">BLOG</div>
+            <div class="category-a" @click="jumpOperation('/journal')">Journal</div>
           </div>
         </li>
       </ul>

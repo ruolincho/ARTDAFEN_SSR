@@ -100,9 +100,8 @@ import {useUserStore} from "~/stores/modules/user";
 import {useHandleData} from "~/composables/useHandleData";
 import type {ISearch} from "~/api/interface/search/search";
 import {gen_path_obj} from "~/utils/product";
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
-
 
 definePageMeta({
   layout: 'blank',
@@ -117,12 +116,11 @@ onMounted(() => {
 
 const userStore = useUserStore()
 const router = useRouter()
-const route = useRoute()
 
 const searchRef = ref()
 const keyword = ref('')
 
-useHead(pageMeta["/search"] ?? {});
+useHead(resolvePageMeta("/search"));
 
 useSeoMeta({
   robots: 'noindex, follow'

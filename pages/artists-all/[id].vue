@@ -18,15 +18,9 @@
   <section class="sec-letter ignore">
     <div class="container">
       <div class="letter-list acea-row row-between-wrapper gap-column-base">
-        <div
-          class="letter-item text-22 py-lg-20 py-10 cursor-pointer"
-          :class="{ 'on': route.params.id === letter }"
-          v-for="(letter, index) in letters"
-          :key="index"
-          @click="handleLetterClick(letter)"
-        >
+        <NuxtLink class="letter-item text-22 py-lg-20 py-10" v-for="(letter, index) in letters" :key="index" :to="seeAll(letter)" replace>
           {{ letter }}
-        </div>
+        </NuxtLink>
       </div>
     </div>
   </section>
@@ -34,13 +28,20 @@
   <!--列表-->
   <div class="sec-list ignore">
     <div class="container">
-      <div class="row artist-list my-20 gap-row-base">
-        <div class="col-lg-3 col-sm-4 col-6" v-for="art in artistsList" :key="art.id">
-          <div class="artist-item text-20 cursor-pointer line1" @click="handleClickArtist(art)">
-            {{ art.name }}
+      <DataState
+          :loading="isLoading"
+          :is-empty="artistsList.length === 0"
+          :error="error"
+          :retry="getArtistsListBySearch"
+      >
+        <div class="row artist-list my-20 gap-row-base" v-if="artistsList.length">
+          <div class="col-lg-3 col-sm-4 col-6" v-for="art in artistsList" :key="art.id">
+            <div class="artist-item text-20 cursor-pointer line1" @click="handleClickArtist(art)">
+              {{ art.name }}
+            </div>
           </div>
         </div>
-      </div>
+      </DataState>
     </div>
   </div>
 </template>
@@ -50,7 +51,7 @@ import {getArtistsListBySearchApi} from "~/api/modules/artists/artists";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
-import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
+import {mergeHeadWithLodash, resolvePageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 
 defineOptions({
@@ -63,33 +64,42 @@ onMounted(() => {
 
 const router = useRouter()
 const route = useRoute()
-const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+const letters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i))
 const origin = useRequestURL().origin
 
 useHead(mergeHeadWithLodash(
-  pageMeta["/artists-all"] ?? {},
-  {
-    link: [
-      {rel: 'canonical', href: `${origin}/artists-all`},
-    ]
-  }
+    resolvePageMeta("/artists-all", route.params.id as string),
+    {
+      link: [
+        {rel: 'canonical', href: `${origin}/artists-all/${route.params.id}`},
+      ]
+    }
 ))
 
 // 获取艺术家列表
+const error = ref<any>()
+const isLoading = ref(false)
 const artistsList = ref<IArtists.Row[]>([])
 const getArtistsListBySearch = async () => {
-  const params: IArtists.Query = {letter: letter.value as string}
-  if (categoryId.value) params.categoryId = categoryId.value as string
-  const {data} = await getArtistsListBySearchApi(params)
-  artistsList.value = data
+  try {
+    isLoading.value = true
+    const params: IArtists.Query = {letter: letter.value as string}
+    if (categoryId.value) params.categoryId = categoryId.value as string
+    const {data} = await getArtistsListBySearchApi(params)
+    artistsList.value = data
+  } catch (err) {
+    error.value = err
+  } finally {
+    isLoading.value = false
+  }
 }
 
-// 点击其他索引
-const handleLetterClick = (letterStr: string) => {
-  if (letterStr === letter.value) return
-  let path = `/artists-all?id=${letterStr}`
-  if (categoryId.value) path += `&categoryId=${categoryId.value}`
-  router.replace(path)
+// 点击查看更多
+const seeAll = (letter: string) => {
+  let path = `/artists-all/${letter}`
+  if (categoryId.value) path += `?categoryId=${categoryId.value}`
+  // router.replace(path)
+  return path
 }
 
 // 点击艺术家
@@ -107,17 +117,8 @@ const categoryId = computed(() => {
 
 // 获取关键词
 const letter = computed(() => {
-  return route.query.id || 'A'
+  return route.params.id || 'A'
 })
-
-watch(
-  () => route.fullPath,
-  (newId, oldId) => {
-    if (newId !== oldId) {
-      getArtistsListBySearch()
-    }
-  }
-)
 </script>
 
 <style scoped lang="scss">

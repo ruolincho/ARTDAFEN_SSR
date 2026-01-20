@@ -1,5 +1,10 @@
 import { watch, onUnmounted, isRef, type Ref } from 'vue'
 
+/**
+ * 用于锁定滚动
+ * @param args
+ * @example useLockScroll(xxx,xxx)、useLockScroll([xxx,xxx])
+ */
 export function useLockScroll(...args: (Ref<boolean> | Ref<boolean>[])[]) {
     let isLocked = false
     let touchStartX = 0
@@ -83,8 +88,8 @@ export function useLockScroll(...args: (Ref<boolean> | Ref<boolean>[])[]) {
     // 4. 移动端触摸开始 (记录 X 和 Y)
     const handleTouchStart = (e: TouchEvent) => {
         if (!isClient) return
-        touchStartX = e.targetTouches[0].clientX
-        touchStartY = e.targetTouches[0].clientY
+        touchStartX = e.targetTouches[0]?.clientX || 0
+        touchStartY = e.targetTouches[0]?.clientY || 0
     }
 
     // 5. 移动端触摸移动 (区分 X/Y 轴)
@@ -97,8 +102,8 @@ export function useLockScroll(...args: (Ref<boolean> | Ref<boolean>[])[]) {
             return
         }
 
-        const touchX = e.targetTouches[0].clientX
-        const touchY = e.targetTouches[0].clientY
+        const touchX = e.targetTouches[0]?.clientX || 0
+        const touchY = e.targetTouches[0]?.clientY || 0
 
         // 计算移动距离
         const deltaX = touchX - touchStartX

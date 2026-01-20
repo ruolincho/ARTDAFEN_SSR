@@ -115,10 +115,10 @@
 </template>
 
 <script setup lang="ts">
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 import {COUNTRY_CODE, CUSTOMER_SERVICE, CONTACT_EMAIL} from "~/config";
 
-useHead(pageMeta["/our-return-policy"] ?? {});
+useHead(resolvePageMeta("/our-return-policy"));
 
 defineOptions({
   name: 'PrivacyPolicy'

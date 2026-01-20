@@ -41,9 +41,9 @@ import {getNoticeListApi} from "~/api/modules/notice/notice";
 import type {IPageQuery} from "~/api/interface";
 import ProList from "~/components/ProList/index.vue";
 import {formatTimestamp} from "~/utils/format";
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 
-useHead(pageMeta["/notice"] ?? {});
+useHead(resolvePageMeta("/notice"));
 
 // 获取公告列表
 const getNoticeList = (params: IPageQuery) => getNoticeListApi(params);

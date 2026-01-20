@@ -1,163 +1,246 @@
 <template>
   <section class="sec-banner">
-    <img class="w-full" :src="imagePrefix(zoneDetail.background)" alt="background">
+    <swiper
+        :modules="modules"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        :loop="false"
+        :lazy="true"
+        :breakpoints="{
+        '991': { slidesPerView: 3, spaceBetween: 10, slidesPerGroup: 3 },
+        '414': { slidesPerView: 2, spaceBetween: 10, slidesPerGroup: 2 },
+      }"
+    >
+      <swiper-slide v-for="(item, index) in zoneDetail.banners" :key="index" :lazy="true">
+        <img class="w-full h-full fit-cover" :src="imagePrefix(item)" alt="picturesInTheSpecialArea"/>
+      </swiper-slide>
+    </swiper>
   </section>
+
   <section>
-    <div class="container">
-      <div class="py-sm-30 py-20 text-center">
-        <h1 class="text-50 f-bold-500 text-uppercase">{{ zoneDetail.title }}</h1>
-        <h2 class="text-24 mt-20 mt-sm-40">{{ zoneDetail.subTitle }}</h2>
-      </div>
+    <div class="py-sm-30 py-20 text-center bg-gray-700 text-white">
+      <h1 class="text-50 f-bold-500 text-uppercase">{{ zoneDetail.title }}</h1>
+      <h2 class="text-24 mt-10" style="max-width: 1000px; margin: auto;">{{ zoneDetail.subTitle }}</h2>
     </div>
   </section>
-  <div id="list-anchor"></div>
-  <section class="sec-filter">
-    <div class="container">
-      <!--按钮组 Pc端-->
-      <div
-          class="buttons-wrapper py-md-30 py-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
-          v-show="appStore.device === 'pc'"
-          :style="{ top: appStore.headerHeight + 'px' }"
-      >
-        <!--价格排序-->
-        <el-popover ref="pricePopoverRef" trigger="hover" placement="bottom-start" width="200"
-                    :popper-style="{ padding: 0 }">
-          <template #reference>
+
+  <section class="filter-wrapper">
+    <div class="container-fluid">
+      <div class="acea-row row-between">
+        <!-- 左侧专区区域 PC端-->
+        <div class="side-wrapper mr-40" v-show="appStore.device === 'pc' && zoneExploreList.length">
+          <div class="py-24 border-b-lg border-gray-700">
+            <span class="text-20 f-bold flex-1">VIBE EXPLORE</span>
+          </div>
+          <div class="explore-list">
+            <NuxtLink
+                :to="`/zone-detail/${item.id}/${item.slug}`"
+                class="explore-item mt-15 block border-b-sm border-gray-700 pb-15"
+                v-for="item in zoneExploreList" :key="item.id"
+                target="_blank"
+            >
+              <div>
+                <img class="w-full" :src="imagePrefix(item.img)" :alt="item.title"/>
+              </div>
+              <div class="bg-gray-100 p-10">
+                <p class="text-20 f-bold">{{ item.title }}</p>
+                <p class="text-14 mt-10">{{ item.subTitle }}</p>
+              </div>
+            </NuxtLink>
+          </div>
+        </div>
+        <!-- 右侧主要区域 -->
+        <div class="main-wrapper flex-1">
+          <!--锚点-->
+          <div id="list-anchor"></div>
+          <!--按钮组 Pc端-->
+          <div
+              class="buttons-wrapper py-md-30 py-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
+              v-show="appStore.device === 'pc'"
+              :style="{ top: appStore.headerState.height + 'px' }"
+          >
+            <!--价格排序-->
+            <el-popover ref="pricePopoverRef" trigger="hover" placement="bottom-start" width="200"
+                        :popper-style="{ padding: 0 }">
+              <template #reference>
+                <el-tag
+                    size="large"
+                    :type="priceSortSelected.id ? 'primary' : 'info'" round effect="dark"
+                    class="cursor-pointer"
+                    :closable="priceSortSelected.id"
+                    @close="handleSort('PRICE_SORT', {} as IHome.MenuRow)"
+                >
+                  <div class="acea-row row-middle nowrap">
+                    <span>{{ priceSortSelected.name ?? 'Price Sor' }}</span>
+                    <span v-show="!priceSortSelected.id" class="iconfont icon-down text-16 ml-10"/>
+                  </div>
+                </el-tag>
+              </template>
+              <div
+                  class="text-14 cursor-pointer text-center my-15 text-hover"
+                  v-for="item in priceMenu.children"
+                  :key="item.id"
+                  @click="handleSort('PRICE_SORT', item)"
+              >
+                {{ item.name }}
+              </div>
+            </el-popover>
+            <!--销量排序-->
+            <el-popover ref="salesPopoverRef" trigger="hover" placement="bottom-start" width="200"
+                        :popper-style="{ padding: 0 }">
+              <template #reference>
+                <el-tag
+                    size="large"
+                    :type="salesSortSelected.id ? 'primary' : 'info'" round effect="dark"
+                    class="cursor-pointer"
+                    :closable="salesSortSelected.id"
+                    @close="handleSort('SALES_SORT', {} as IHome.MenuRow)"
+                >
+                  <div class="acea-row row-middle nowrap">
+                    <span>{{ salesSortSelected.name ?? 'Sales Sort' }}</span>
+                    <span v-show="!salesSortSelected.id" class="iconfont icon-down text-16 ml-10"/>
+                  </div>
+                </el-tag>
+              </template>
+              <div
+                  class="text-14 cursor-pointer text-center my-15 text-hover"
+                  v-for="item in salesMenu.children"
+                  :key="item.id"
+                  @click="handleSort('SALES_SORT', item)"
+              >
+                {{ item.name }}
+              </div>
+            </el-popover>
+            <!--工艺筛选-->
+            <el-popover ref="techniquePopoverRef" trigger="hover" placement="bottom-start" width="200"
+                        :popper-style="{ padding: 0 }" v-if="hasTechniqueFilter">
+              <template #reference>
+                <el-tag
+                    size="large"
+                    :type="techniqueSelected.id ? 'primary' : 'info'" round effect="dark"
+                    class="cursor-pointer"
+                >
+                  <div class="acea-row row-middle nowrap">
+                    <span>{{ techniqueSelected.name ?? 'Technique' }}</span>
+                    <span class="iconfont icon-down text-16 ml-10"/>
+                  </div>
+                </el-tag>
+              </template>
+              <div
+                  class="text-14 cursor-pointer text-center my-15 text-hover"
+                  v-for="item in techniqueMenu.children"
+                  :key="item.id"
+                  @click="handleTechnique(item)"
+              >
+                {{ item.name }}
+              </div>
+            </el-popover>
+            <!--Artist 选中的值-->
+            <el-tag
+                v-if="artistSelected.id"
+                size="large"
+                type="primary" round effect="dark"
+                class="cursor-pointer"
+                closable
+                @close="closeArtistTag()"
+            >
+              {{ artistSelected.name }}
+            </el-tag>
+          </div>
+
+          <!--筛选区域 App端-->
+          <div
+              class="buttons-wrapper p-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
+              v-show="appStore.device === 'app'"
+              ref="appFilterRef"
+              :style="{ top: appStore.headerState.height + 'px', margin: '0 -15px' }"
+          >
+            <!--价格排序-->
             <el-tag
                 size="large"
                 :type="priceSortSelected.id ? 'primary' : 'info'" round effect="dark"
                 class="cursor-pointer"
-                :closable="priceSortSelected.id"
-                @close="handleSort('PRICE_SORT', {} as IHome.MenuRow)"
+                @click="clickAppFilter('PRICE_SORT', 0)"
             >
-              <div class="acea-row row-middle nowrap">
-                <span>{{ priceSortSelected.name ?? 'Price Sor' }}</span>
-                <span v-show="!priceSortSelected.id" class="iconfont icon-down text-16 ml-10"/>
-              </div>
+              {{ priceSortSelected.name ?? 'Price Sort' }}
             </el-tag>
-          </template>
-          <div
-              class="text-14 cursor-pointer text-center my-15 text-hover"
-              v-for="item in priceMenu.children"
-              :key="item.id"
-              @click="handleSort('PRICE_SORT', item)"
-          >
-            {{ item.name }}
-          </div>
-        </el-popover>
-        <!--销量排序-->
-        <el-popover ref="salesPopoverRef" trigger="hover" placement="bottom-start" width="200"
-                    :popper-style="{ padding: 0 }">
-          <template #reference>
+            <!--销量排序-->
             <el-tag
                 size="large"
                 :type="salesSortSelected.id ? 'primary' : 'info'" round effect="dark"
                 class="cursor-pointer"
-                :closable="salesSortSelected.id"
-                @close="handleSort('SALES_SORT', {} as IHome.MenuRow)"
+                @click="clickAppFilter('SALES_SORT', 1)"
             >
-              <div class="acea-row row-middle nowrap">
-                <span>{{ salesSortSelected.name ?? 'Sales Sort' }}</span>
-                <span v-show="!salesSortSelected.id" class="iconfont icon-down text-16 ml-10"/>
-              </div>
+              {{ salesSortSelected.name ?? 'Sales Sort' }}
             </el-tag>
-          </template>
-          <div
-              class="text-14 cursor-pointer text-center my-15 text-hover"
-              v-for="item in salesMenu.children"
-              :key="item.id"
-              @click="handleSort('SALES_SORT', item)"
-          >
-            {{ item.name }}
-          </div>
-        </el-popover>
-        <!--工艺筛选-->
-        <el-popover ref="techniquePopoverRef" trigger="hover" placement="bottom-start" width="200"
-                    :popper-style="{ padding: 0 }" v-if="hasTechniqueFilter">
-          <template #reference>
+            <!--工艺筛选-->
             <el-tag
+                v-if="hasTechniqueFilter"
                 size="large"
                 :type="techniqueSelected.id ? 'primary' : 'info'" round effect="dark"
                 class="cursor-pointer"
+                @click="clickAppFilter('TECHNIQUE_SORT', 2)"
             >
-              <div class="acea-row row-middle nowrap">
-                <span>{{ techniqueSelected.name ?? 'Technique' }}</span>
-                <span class="iconfont icon-down text-16 ml-10"/>
-              </div>
+              {{ techniqueSelected.name ?? 'Technique' }}
             </el-tag>
-          </template>
-          <div
-              class="text-14 cursor-pointer text-center my-15 text-hover"
-              v-for="item in techniqueMenu.children"
-              :key="item.id"
-              @click="handleTechnique(item)"
-          >
-            {{ item.name }}
+            <!--Artist 选中的值-->
+            <el-tag
+                v-if="artistSelected.id"
+                size="large"
+                type="primary" round effect="dark"
+                class="cursor-pointer"
+                closable
+                @close="closeArtistTag()"
+            >
+              {{ artistSelected.name }}
+            </el-tag>
           </div>
-        </el-popover>
-        <!--Artist 选中的值-->
-        <el-tag
-            v-if="artistSelected.id"
-            size="large"
-            type="primary" round effect="dark"
-            class="cursor-pointer"
-            closable
-            @close="closeArtistTag()"
-        >
-          {{ artistSelected.name }}
-        </el-tag>
-      </div>
 
-      <!--筛选区域 App端-->
-      <div
-          class="buttons-wrapper p-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
-          v-show="appStore.device === 'app'"
-          ref="appFilterRef"
-          :style="{ top: appStore.headerHeight + 'px', margin: '0 -15px' }"
-      >
-        <!--价格排序-->
-        <el-tag
-            size="large"
-            :type="priceSortSelected.id ? 'primary' : 'info'" round effect="dark"
-            class="cursor-pointer"
-            @click="clickAppFilter('PRICE_SORT', 0)"
-        >
-          {{ priceSortSelected.name ?? 'Price Sort' }}
-        </el-tag>
-        <!--销量排序-->
-        <el-tag
-            size="large"
-            :type="salesSortSelected.id ? 'primary' : 'info'" round effect="dark"
-            class="cursor-pointer"
-            @click="clickAppFilter('SALES_SORT', 1)"
-        >
-          {{ salesSortSelected.name ?? 'Sales Sort' }}
-        </el-tag>
-        <!--工艺筛选-->
-        <el-tag
-            v-if="hasTechniqueFilter"
-            size="large"
-            :type="techniqueSelected.id ? 'primary' : 'info'" round effect="dark"
-            class="cursor-pointer"
-            @click="clickAppFilter('TECHNIQUE_SORT', 2)"
-        >
-          {{ techniqueSelected.name ?? 'Technique' }}
-        </el-tag>
-        <!--Artist 选中的值-->
-        <el-tag
-            v-if="artistSelected.id"
-            size="large"
-            type="primary" round effect="dark"
-            class="cursor-pointer"
-            closable
-            @close="closeArtistTag()"
-        >
-          {{ artistSelected.name }}
-        </el-tag>
+          <!--路由插槽-->
+          <NuxtPage/>
+
+          <!-- 左侧专区区域 移动端-->
+          <div v-show="appStore.device === 'app'">
+            <h1 class="py-20 text-26 f-bold border-b-md border-gray-700 mb-20">VIBE EXPLORE</h1>
+            <div class="explore-list row gap-row-base">
+              <div class="col-6" v-for="item in zoneExploreList" :key="item.id">
+                <NuxtLink
+                    :to="`/zone-detail/${item.id}/${item.slug}`"
+                    class="explore-item block"
+                    target="_blank"
+                >
+                  <div>
+                    <img class="w-full" :src="imagePrefix(item.img)" :alt="item.title"/>
+                  </div>
+                  <div class="bg-gray-100 p-10">
+                    <p class="text-20 f-bold">{{ item.title }}</p>
+                    <p class="text-14 mt-10">{{ item.subTitle }}</p>
+                  </div>
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
-  <NuxtPage/>
+
+  <!-- PHOTO TO ART -->
+  <section class="sec-art">
+    <div class="text-center bg-gray-700 text-white py-sm-30 py-20">
+      <div class="text-50">
+        Can't find the perfect piece? Create your own.
+      </div>
+    </div>
+    <NuxtLink class="make-wrapper" :to="`/custom-paint/${ArtCodeEnum.Painting}`" @click="goCustomPaint">
+      <div class="make-box flex-1 bg-gray-100 p-md-40 p-20">
+        <p class="text-18 f-bold">MAKE YOUR MEMORIES LAST</p>
+        <p class="text-60 f-bold my-20">Photo To Art</p>
+        <p class="text-22">Easily Transform Life's Real Moments Into A <br> Masterpiece — Made Just For You.</p>
+      </div>
+      <img class="cover" :src="imagePrefix('/static/artdafen/make.webp')" alt="make"/>
+    </NuxtLink>
+  </section>
+
   <ClientOnly>
     <!-- 移动端弹窗筛选 -->
     <Popup v-model="isPopup" v-if="appStore.device === 'app'">
@@ -275,17 +358,38 @@ import type {ElPopover} from "element-plus";
 import type {IHome} from "~/api/interface/home/home";
 import {techniqueMenu, priceMenu, salesMenu} from "~/constant";
 import {useAppStore} from "~/stores/modules/app";
+import {useCustomStore} from "~/stores/modules/custom";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {computed, ref, nextTick, watch, provide} from 'vue'
+import {Swiper, SwiperSlide} from "swiper/vue";
+import {Autoplay, Lazy} from "swiper";
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import {getZoneExploreApi} from "~/api/modules/product/product";
+import {ArtCodeEnum} from "~/types/enumeration";
 
 defineOptions({
   name: 'ZoneDetail'
 })
 
+onMounted(() => {
+  getZoneExplore()
+})
+
+const modules = [Autoplay, Lazy]
 const route = useRoute();
 const router = useRouter();
 const appStore = useAppStore()
+const customStore = useCustomStore()
+
+const banners = ref([
+  '/trade/advertisement/2025/08/06/1763756679263330304/d01a86a0f2d249c6a0f48f43be2b17fe.webp',
+  '/trade/advertisement/2025/08/06/1763756679263330304/b756024938cf46c28f21d3c164b15d98.webp',
+  '/trade/advertisement/2025/08/06/1763756679263330304/4a00f253ca374e358bdc6830bc3f0464.webp',
+  '/trade/advertisement/2025/07/16/1763756679263330304/7e0ed77ec3274e9ea55a8a0967292e60.webp',
+])
 
 // 获取专区详情
 const {data: zoneDetail} = await useAsyncData(() => `zone-detail-${route.params.id}`, async () => {
@@ -293,6 +397,17 @@ const {data: zoneDetail} = await useAsyncData(() => `zone-detail-${route.params.
   const {data} = await $fetch<IResultData<IProduct.ZoneRow[]>>(config.public.apiBase + TRADE_MODULE + '/product/zone/detail/' + route.params.id)
   return data
 })
+
+// 获取专区探索
+const zoneExploreList = ref<IProduct.ZoneRow[]>([])
+const getZoneExplore = async () => {
+  const {data} = await getZoneExploreApi(route.params.id)
+  zoneExploreList.value = data
+}
+
+const goCustomPaint = () => {
+  customStore.clearCache()
+}
 
 const filterParams = computed(() => ({
   zoneId: route.params.id,
@@ -489,13 +604,56 @@ provide('seoInfo', seoInfo);
 </script>
 
 <style scoped lang="scss">
-  .sec-filter {
-    .buttons-wrapper {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: #fff;
+  .filter-wrapper {
+
+    .side-wrapper {
+      width: 220px;
+      position: relative;
+      animation: animation-my5jl 300ms forwards;
     }
+
+    .main-wrapper {
+      width: 100%;
+      min-width: 0;
+
+      .buttons-wrapper {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #fff;
+      }
+
+      .nav-list {
+
+        .nav-item {
+          position: relative;
+
+          &.on {
+            font-weight: bold;
+            color: var(--color-primary);
+          }
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            height: 19px;
+            width: 1px;
+            background: var(--color-gray-400);
+          }
+
+        }
+      }
+    }
+  }
+
+  .buttons-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #fff;
   }
 
   .app-popup-header {
@@ -506,6 +664,58 @@ provide('seoInfo', seoInfo);
         font-weight: bold;
         color: var(--color-primary);
       }
+    }
+  }
+
+  .sec-art {
+    margin-top: 3.125vw;
+    .make-wrapper {
+      display: flex;
+
+      .make-box {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+      }
+
+      .cover {
+        width: 59.21%;
+        flex-shrink: 0;
+      }
+    }
+
+  }
+
+  @media (max-width: 991px) {
+    .sec-art {
+      .make-wrapper {
+        flex-wrap: wrap;
+
+        .cover {
+          width: 100%;
+        }
+
+        .make-box {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sec-art {
+      margin-bottom: -20px;
+    }
+  }
+
+  @keyframes animation-my5jl {
+    0% {
+      margin-left: -220px;
+      visibility: visible;
+    }
+    100% {
+      margin-left: 0px;
     }
   }
 </style>

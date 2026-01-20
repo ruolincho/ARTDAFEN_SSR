@@ -1,24 +1,15 @@
 <template>
   <section class="sec-main">
-    <div class="container">
-      <div v-loading="pending" style="min-height: 30vh; position: relative">
-        <template v-if="pageData.total > 0">
-          <div class="row product-list gap-row-base">
-            <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="item in pageData.records" :key="item.id">
-              <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="updateArtist!"/>
-            </div>
-          </div>
-          <div class="py-lg-40 py-20">
-            <SeoPagination :current="currentPage" :totalPages="totalPages" :basePath="baseRoute!"/>
-          </div>
-        </template>
-        <div class="text-center py-60" v-else-if="!pending">
-          <span class="iconfont icon-empty text-50"></span>
-          <p class="text-20 f-bold mt-20">No Data</p>
-          <p class="text-14 my-20">No data found, please check the query or try again later.</p>
+    <DataState :loading="pending" :is-empty="pageData.total === 0 && !pending">
+      <div class="row product-list gap-row-base">
+        <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="item in pageData.records" :key="item.id">
+          <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="updateArtist!"/>
         </div>
       </div>
-    </div>
+      <div class="py-lg-40 py-20">
+        <SeoPagination :current="currentPage" :totalPages="totalPages" :basePath="baseRoute!"/>
+      </div>
+    </DataState>
   </section>
   <LoginWindow ref="loginWindowRef"/>
 </template>
@@ -37,11 +28,11 @@ import {ZONE_SIZE} from "~/config";
 
 const userStore = useUserStore()
 
-const parentFilterParams = inject<ComputedRef<IProduct.zoneCollectQuery>>('zoneFilterParams');
+const parentFilterParams = inject<ComputedRef<IProduct.ZoneCollectQuery>>('zoneFilterParams');
 const baseRoute = inject<ComputedRef<string>>('baseRoute');
 const seoInfo = inject<ComputedRef<SeoOptions>>('seoInfo');
 
-const {pageData, currentPage, totalPages, pending, refresh} = await useSeoPaginationLogic<General.GoodsItem[], IProduct.zoneCollectQuery>(
+const {pageData, currentPage, totalPages, pending, refresh} = await useSeoPaginationLogic<General.GoodsItem[], IProduct.ZoneCollectQuery>(
      {
       apiPath: `${TRADE_MODULE}/product/zone/collect`,
       baseRoute: baseRoute!.value,

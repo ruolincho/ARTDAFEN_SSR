@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 import {nextTick, watch} from "vue";
 import {useAppStore} from "~/stores/modules/app";
 
@@ -15,7 +15,7 @@ defineOptions({
 const route = useRoute()
 const appStore = useAppStore()
 
-useHead(pageMeta["/blog"] ?? {})
+useHead(resolvePageMeta("/journal"));
 
 // ⬇️ 定义滚动动作
 const executeScroll = () => {
@@ -30,7 +30,6 @@ const executeScroll = () => {
       const headerOffset = appStore.headerState.height
       const elementPosition = anchor.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-
       window.scrollTo({
         top: offsetPosition - 15,
         behavior: 'smooth' // 建议用 auto (瞬间)，配合骨架屏体验更好；smooth 可能会有视觉上的拉扯

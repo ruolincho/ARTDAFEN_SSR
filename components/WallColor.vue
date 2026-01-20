@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div class="wall-color" v-show="visible" @click="visible = false">
+    <div class="wall-color" v-show="visible" @click="close">
       <div class="wrapper" :style="{'background-color': color }" @click.stop>
         <div class="preview-box w-full acea-row row-center-wrapper aspect-ratio">
           <img :src="wallImage" alt="wallImage">
@@ -18,7 +18,7 @@
             :style="{'background-color': item }"
           />
         </div>
-        <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="visible = false">
+        <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="close">
           <span class="iconfont icon-close"></span>
         </div>
       </div>
@@ -45,6 +45,10 @@ const props = withDefaults(defineProps<Props>(), {
   fixedColor: () => ['#FFFFFF', '#A1887F', '#FF8A65', '#FFCA28', '#DCEDC8', '#66BB6A', '#81D4FA', '#42A5F5', '#CE93D8', '#EC407A', '#90A4AE', '#9E9E9E', '#FFCC80', '#FFEE58', '#DCE775', '#4DB6AC', '#80DEEA', '#7986CB', '#E57373', '#7E57C2']
 });
 
+const emit = defineEmits<{
+  close: []
+}>()
+
 onMounted(() => {
   color.value = props.defaultColor
 })
@@ -56,11 +60,17 @@ const open = () => {
   visible.value = true
 }
 
+const close = () => {
+  visible.value = false
+  emit('close')
+}
+
 // 监听 visible 变化 锁定滚动
 useLockScroll(visible)
 
 defineExpose({
-  open
+  open,
+  close
 })
 </script>
 

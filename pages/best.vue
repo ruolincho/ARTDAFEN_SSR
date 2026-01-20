@@ -8,186 +8,164 @@
           <template v-for="group in groupList" :key="group.id">
             <!-- MUTEX -->
             <template v-if="group.config?.type === 'MUTEX'">
-              <div class="my-24 pr-4 acea-row row-between-wrapper">
-                <span class="text-20 f-bold flex-1">{{ group.name }}</span>
-                <span class="text-18 cursor-pointer iconfont" :class="[group.isShow ? 'icon-up' : 'icon-down']"
-                      @click="group.isShow = !group.isShow"/>
-              </div>
-              <div class="side-menu pr-4 border-t-lg border-b-lg border-primary" v-show="group.isShow">
-                <div
-                  class="menu-item cursor-pointer my-20 "
-                  :class="{ on: mutexSelected.id === item.id }"
-                  v-for="item in group.children"
-                  :key="item.id"
-                  @click="clickMutexType(item)"
-                >
-                  {{ item.name }}
+              <Expandable v-model="group.isShow" :title="group.name">
+                <div class="side-menu pr-4 border-t-lg border-b-lg border-primary">
+                  <div
+                      class="menu-item cursor-pointer my-20 "
+                      :class="{ on: mutexSelected.id === item.id }"
+                      v-for="item in group.children"
+                      :key="item.id"
+                      @click="clickMutexType(item)"
+                  >
+                    {{ item.name }}
+                  </div>
                 </div>
-              </div>
+              </Expandable>
             </template>
 
             <!-- GROUP -->
             <template v-if="group.config?.type === 'GROUP'">
-              <div class="my-24 pr-4 acea-row row-between-wrapper">
-                <span class="text-20 f-bold flex-1">{{ group.name }}</span>
-                <span class="text-18 cursor-pointer iconfont" :class="[group.isShow ? 'icon-up' : 'icon-down']"
-                      @click="group.isShow = !group.isShow"/>
-              </div>
-              <div class="side-menu pr-4 border-t-lg border-b-lg border-primary" v-show="group.isShow">
-                <div
-                  class="menu-item cursor-pointer my-20 line1"
-                  :class="{ on: groupSelected.get(item.parentId)?.id === item.id }"
-                  v-for="item in group.children"
-                  :key="item.id"
-                  @click="clickGroupType(item)"
-                >
-                  {{ item.name }}
+              <Expandable v-model="group.isShow" :title="group.name">
+                <div class="side-menu pr-4 border-t-lg border-b-lg border-primary">
+                  <div
+                      class="menu-item cursor-pointer my-20 line1"
+                      :class="{ on: groupSelected.get(item.parentId)?.id === item.id }"
+                      v-for="item in group.children"
+                      :key="item.id"
+                      @click="clickGroupType(item)"
+                  >
+                    {{ item.name }}
+                  </div>
                 </div>
-              </div>
+              </Expandable>
             </template>
 
             <!-- PRICE -->
             <template v-if="group.config?.type === 'PRICE'">
-              <div class="my-24 pr-4 acea-row row-between-wrapper">
-                <span class="text-20 f-bold flex-1">{{ group.name }}</span>
-                <span class="text-18 cursor-pointer iconfont" :class="[group.isShow ? 'icon-up' : 'icon-down']"
-                      @click="group.isShow = !group.isShow"/>
-              </div>
-              <div class="pr-4" v-show="group.isShow">
-                <div
-                  class="acea-row row-between-wrapper py-20 border-t-sm cursor-pointer"
-                  v-for="item in group.children"
-                  :key="item.id"
-                  @click="clickPriceType(item)"
-                >
-                  <span class="text-16">{{ item.name }}</span>
-                  <span
-                    class="iconfont text-18"
-                    :class="[priceSelected.id === item.id && !isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                  />
-                </div>
-                <div class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
-                     @click="clickPriceType(undefined)">
-                  <span class="text-16">Custom</span>
-                  <span
-                    class="iconfont text-18"
-                    :class="[isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                  />
-                </div>
-                <div v-show="isCustomPrice">
-                  <div class="text-16 my-20">Min Price</div>
-                  <div class="acea-row row-between-wrapper px-15 py-12"
-                       :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']">
-                    <input type="text" placeholder="1400" style="width: 60%" v-model="startPrice"
-                           :disabled="!isCustomPrice" @blur="onStartPriceBlur">
-                    <span class="text-gray-600">{{ currencyStore.getCurrencySymbol }}</span>
-                  </div>
-                  <div class="text-16 my-20">Max Price</div>
-                  <div class="acea-row row-between-wrapper px-15 py-12"
-                       :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']"
+              <Expandable v-model="group.isShow" :title="group.name">
+                <div class="pr-4">
+                  <div
+                      class="acea-row row-between-wrapper py-20 border-t-sm cursor-pointer"
+                      v-for="item in group.children"
+                      :key="item.id"
+                      @click="clickPriceType(item)"
                   >
-                    <input type="text" placeholder="3400" style="width: 60%" v-model="endPrice"
-                           :disabled="!isCustomPrice" @blur="onEndPriceBlur">
-                    <span class=" text-gray-600">{{ currencyStore.getCurrencySymbol }}</span>
+                    <span class="text-16">{{ item.name }}</span>
+                    <span
+                        class="iconfont text-18"
+                        :class="[priceSelected.id === item.id && !isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+                    />
+                  </div>
+                  <div class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
+                       @click="clickPriceType(undefined)">
+                    <span class="text-16">Custom</span>
+                    <span
+                        class="iconfont text-18"
+                        :class="[isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+                    />
+                  </div>
+                  <div v-show="isCustomPrice">
+                    <div class="text-16 my-20">Min Price</div>
+                    <div class="acea-row row-between-wrapper px-15 py-12"
+                         :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']">
+                      <input type="text" placeholder="1400" style="width: 60%" v-model="startPrice"
+                             :disabled="!isCustomPrice" @blur="onStartPriceBlur">
+                      <span class="text-gray-600">{{ currencyStore.getCurrencySymbol }}</span>
+                    </div>
+                    <div class="text-16 my-20">Max Price</div>
+                    <div class="acea-row row-between-wrapper px-15 py-12"
+                         :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']"
+                    >
+                      <input type="text" placeholder="3400" style="width: 60%" v-model="endPrice"
+                             :disabled="!isCustomPrice" @blur="onEndPriceBlur">
+                      <span class=" text-gray-600">{{ currencyStore.getCurrencySymbol }}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Expandable>
             </template>
 
             <!-- RADIO -->
             <template v-if="group.config?.type === 'RADIO'">
-              <div class="my-24 pr-4 acea-row row-between-wrapper">
-                <span class="text-20 f-bold flex-1">{{ group.name }}</span>
-                <span class="text-18 cursor-pointer iconfont" :class="[group.isShow ? 'icon-up' : 'icon-down']"
-                      @click="group.isShow = !group.isShow"/>
-              </div>
-              <div class="scroll-y pr-4 scroll-custom" v-show="group.isShow" style="max-height: 305px;">
-                <div
-                  class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
-                  v-for="item in group.children"
-                  :key="item.id"
-                  @click="clickRadioType(item)"
-                >
-                  <span class="text-16">{{ item.name }}</span>
-                  <span
-                    class="iconfont text-18"
-                    :class="[radioSelected.get(item.parentId)?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                  />
+              <Expandable v-model="group.isShow" :title="group.name">
+                <div class="scroll-y pr-4 scroll-custom" style="max-height: 305px;">
+                  <div
+                      class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
+                      v-for="item in group.children"
+                      :key="item.id"
+                      @click="clickRadioType(item)"
+                  >
+                    <span class="text-16">{{ item.name }}</span>
+                    <span
+                        class="iconfont text-18"
+                        :class="[radioSelected.get(item.parentId)?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+                    />
+                  </div>
                 </div>
-              </div>
+              </Expandable>
             </template>
 
             <!-- CHECKBOX -->
             <template v-if="group.config?.type === 'CHECKBOX'">
-              <div class="my-24 pr-4 acea-row row-between-wrapper">
-                <span class="text-20 f-bold flex-1">{{ group.name }}</span>
-                <span class="text-18 cursor-pointer iconfont" :class="[group.isShow ? 'icon-up' : 'icon-down']"
-                      @click="group.isShow = !group.isShow"/>
-              </div>
-              <div class="scroll-y pr-4 scroll-custom" v-show="group.isShow" style="max-height: 305px;">
-                <div
-                  class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
-                  v-for="item in group.children"
-                  :key="item.id"
-                  @click="clickCheckoutType(item)"
-                >
-                  <span class="text-16">{{ item.name }}</span>
-                  <span
-                    class="iconfont text-18"
-                    :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'icon-checkbox-fill text-primary' : 'icon-checkbox text-gray-400']"
-                  />
+              <Expandable v-model="group.isShow" :title="group.name">
+                <div class="scroll-y pr-4 scroll-custom" style="max-height: 305px;">
+                  <div
+                      class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
+                      v-for="item in group.children"
+                      :key="item.id"
+                      @click="clickCheckoutType(item)"
+                  >
+                    <span class="text-16">{{ item.name }}</span>
+                    <span
+                        class="iconfont text-18"
+                        :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'icon-checkbox-fill text-primary' : 'icon-checkbox text-gray-400']"
+                    />
+                  </div>
                 </div>
-              </div>
+              </Expandable>
             </template>
 
             <!-- COLOR -->
             <template v-if="group.config?.type === 'COLOR'">
-              <div class="my-24 pr-4 acea-row row-between-wrapper">
-                <span class="text-20 f-bold flex-1">{{ group.name }}</span>
-                <span class="text-18 cursor-pointer iconfont" :class="[group.isShow ? 'icon-up' : 'icon-down']"
-                      @click="group.isShow = !group.isShow"/>
-              </div>
-              <div class="color-list pr-4 scroll-y scroll-custom acea-row" v-show="group.isShow">
-                <div
-                  class="color-item acea-row nowrap row-middle cursor-pointer"
-                  v-for="item in group.children"
-                  :key="item.id"
-                  @click="clickColorType(item)"
-                >
-                  <div class="rounded-full border-sm p-2" :class="{ 'border-gray-700': colorSelected?.includes(item) }">
-                    <div
-                      class="circle rounded-full "
-                      :style="{ ...getColorStyle(item.config.color!) }"
-                    />
-                  </div>
-                  <div class="pl-10 text-16 flex-1" :class="{ 'f-bold': colorSelected?.includes(item) }">{{
-                      item.name
-                    }}
+              <Expandable v-model="group.isShow" :title="group.name">
+                <div class="color-list pr-4 scroll-y scroll-custom acea-row">
+                  <div
+                      class="color-item acea-row nowrap row-middle cursor-pointer"
+                      v-for="item in group.children"
+                      :key="item.id"
+                      @click="clickColorType(item)"
+                  >
+                    <div class="rounded-full border-sm p-2" :class="{ 'border-gray-700': colorSelected?.includes(item) }">
+                      <div
+                          class="circle rounded-full "
+                          :style="{ ...getColorStyle(item.config.color!) }"
+                      />
+                    </div>
+                    <div class="pl-10 text-16 flex-1" :class="{ 'f-bold': colorSelected?.includes(item) }">{{
+                        item.name
+                      }}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Expandable>
             </template>
 
             <!-- ARTIST -->
             <template v-if="group.config?.type === 'ARTIST'">
-              <div class="my-24 pr-4 acea-row row-between-wrapper">
-                <span class="text-20 f-bold flex-1">{{ group.name }}</span>
-                <span class="text-18 cursor-pointer iconfont" :class="[group.isShow ? 'icon-up' : 'icon-down']"
-                      @click="group.isShow = !group.isShow"/>
-              </div>
-              <div class="side-menu pr-4 border-t-lg border-b-lg border-primary" v-show="group.isShow">
-                <div
-                  class="menu-item cursor-pointer my-20"
-                  :class="{ on: artistSelected?.id === item.id }"
-                  v-for="item in group.children"
-                  :key="item.id"
-                  @click="clickArtistType(item)"
-                >
-                  {{ item.name }}
+              <Expandable v-model="group.isShow" :title="group.name">
+                <div class="side-menu pr-4 border-t-lg border-b-lg border-primary">
+                  <div
+                      class="menu-item cursor-pointer my-20"
+                      :class="{ on: artistSelected?.id === item.id }"
+                      v-for="item in group.children"
+                      :key="item.id"
+                      @click="clickArtistType(item)"
+                  >
+                    {{ item.name }}
+                  </div>
                 </div>
-              </div>
+              </Expandable>
             </template>
-
           </template>
 
           <div class="acea-row nowrap side-button mt-40 pb-40">
@@ -198,6 +176,8 @@
 
         <!-- 右侧主要区域 -->
         <div class="main-wrapper flex-1">
+          <!--锚点-->
+          <div id="list-anchor"></div>
           <!-- 属性 -->
           <div class="border-sm border-gray-700 acea-row row-between" v-if="attributeList.length">
             <div class="nav-list acea-row flex-1">
@@ -217,7 +197,7 @@
           <div
             class="buttons-wrapper py-md-30 py-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
             v-show="appStore.device === 'pc'"
-            :style="{ top: appStore.headerHeight + 'px' }"
+            :style="{ top: appStore.headerState.height + 'px' }"
           >
             <!--价格排序-->
             <el-popover ref="pricePopoverRef" trigger="hover" placement="bottom-start" width="200"
@@ -383,7 +363,7 @@
             class="buttons-wrapper p-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
             v-show="appStore.device === 'app'"
             ref="appFilterRef"
-            :style="{ top: appStore.headerHeight + 'px', margin: '0 -15px' }"
+            :style="{ top: appStore.headerState.height + 'px', margin: '0 -15px' }"
           >
             <!--价格排序-->
             <el-tag
@@ -511,20 +491,13 @@
           </div>
 
           <!--商品数据-->
-          <div style="min-height: 30vh; position: relative" v-loading="loading">
-            <div class="row product-list gap-row-base" v-if="productList.length">
+          <DataState :loading="loading" :is-empty="requestFinished && productList.length === 0">
+            <div class="row product-list gap-row-base">
               <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="(item, index) in productList" :key="item.id">
                 <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="handleClickArtist" :index="index + 1" />
               </div>
             </div>
-            <div class="empty-wrapper" v-else-if="requestFinished">
-              <div class="text-center py-60">
-                <span class="iconfont icon-empty text-50"></span>
-                <p class="text-20 f-bold mt-20">No Data</p>
-                <p class="text-14 my-20">No data found, please check the query or try again later.</p>
-              </div>
-            </div>
-          </div>
+          </DataState>
         </div>
       </div>
     </div>
@@ -878,7 +851,7 @@ import {formatInteger} from "~/utils/format";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {cloneDeep} from "lodash-es";
 import {techniqueMenu, priceMenu, salesMenu, SPOT_MENU_ID} from "~/constant";
-import {pageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
+import {resolvePageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {unpackQuery, packQuery, type QueryParams} from '~/composables/useQueryShort'
 import type {General, ObjectNode} from "~/types/global";
 
@@ -892,6 +865,7 @@ definePageMeta({
 
 onMounted(() => {
   $bus.on('loginSuccess', paramsWatch)
+  paramsWatch()
 })
 
 onUnmounted(() => {
@@ -907,7 +881,7 @@ const currencyStore = useCurrencyStore();
 const origin = useRequestURL().origin
 
 useHead(mergeHeadWithLodash(
-  pageMeta["/best"] ?? {},
+  resolvePageMeta("/best"),
   {
     meta: [
       { name: 'robots', content: route.query.q ? 'noindex, follow' : 'index, follow' }
@@ -1618,14 +1592,36 @@ const paramsWatch = async () => {
   getProductAttribute(ids)
 }
 
+// ⬇️ 定义滚动动作
+const executeScroll = () => {
+  if (!process.client) return
+
+  // 使用 requestAnimationFrame 确保在浏览器渲染下一帧时执行，防止 DOM 还没准备好
+  requestAnimationFrame(() => {
+    const anchor = document.getElementById('list-anchor')
+
+    if (anchor) {
+      // 偏移量计算
+      const headerOffset = appStore.headerState.height
+      const elementPosition = anchor.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+      window.scrollTo({
+        top: offsetPosition - 15,
+        behavior: 'smooth' // 建议用 auto (瞬间)，配合骨架屏体验更好；smooth 可能会有视觉上的拉扯
+      })
+    }
+  })
+}
+
 // 监听路由的变化
 if (import.meta.client) {
   watch(
     () => route.fullPath,
     () => {
+      executeScroll()
       paramsWatch()
     },
-    {immediate: true}
+    {immediate: false}
   )
 }
 </script>
@@ -1657,6 +1653,7 @@ if (import.meta.client) {
 
   .main-wrapper {
     width: 100%;
+    min-width: 0;
 
     .buttons-wrapper {
       position: sticky;
@@ -1718,13 +1715,6 @@ if (import.meta.client) {
 
 .price-range-text {
   font-size: 20px;
-}
-
-.empty-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 @keyframes animation-my5jl {

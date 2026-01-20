@@ -215,6 +215,7 @@ const footerList = ref([
     auth: false,
     children: [
       {name: 'About ART DAFEN', url: '/about'},
+      {name: 'Trade & Commercial', url: '/commercial'},
       {name: 'Collaborate with Us (For Artists)', url: '/collaboration'},
       {name: 'Contact Us', url: '/contact'},
     ]

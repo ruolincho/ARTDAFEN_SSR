@@ -207,9 +207,9 @@
 </template>
 
 <script setup lang="ts">
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 
-useHead(pageMeta["/privacy-policy"] ?? {});
+useHead(resolvePageMeta("/privacy-policy"));
 
 defineOptions({
   name: 'PrivacyPolicy'

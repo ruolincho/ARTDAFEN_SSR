@@ -153,15 +153,15 @@ export namespace IProduct {
         title: string;
         /*副标题 */
         subTitle: string;
-        /*专区背景图 */
-        background: string;
+        img: string;
+        banners: string[];
         keywords: string;
         slug: string;
         description: string;
     }
 
     /*品牌相关推荐请求参数*/
-    export interface zoneCollectQuery extends IPageQuery {
+    export interface ZoneCollectQuery extends IPageQuery {
         /*专区编号 */
         zoneId: string;
         /*商品工艺编号 */

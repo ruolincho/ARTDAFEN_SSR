@@ -103,7 +103,7 @@ export const getProductZoneApi = (id: string) => {
  * 商品专区列表检索
  * @param params
  */
-export const getZoneCollectApi = (params: IProduct.zoneCollectQuery) => {
+export const getZoneCollectApi = (params: IProduct.ZoneCollectQuery) => {
     return $http().post<IPage<General.GoodsItem[]>>(TRADE_MODULE + `/product/zone/collect`, params)
 }
 
@@ -114,4 +114,13 @@ export const getZoneCollectApi = (params: IProduct.zoneCollectQuery) => {
  */
 export const getProductAlbumApi = (id: string) => {
     return $http().get<string>(TRADE_MODULE + `/product/style/${id}`)
+}
+
+/**
+ * 专区探索
+ * @returns {*}
+ * @param zoneId
+ */
+export const getZoneExploreApi = (zoneId: string) => {
+    return $http().get<IProduct.ZoneRow[]>(TRADE_MODULE + `/product/zone/explore/${zoneId}`)
 }

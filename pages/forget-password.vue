@@ -71,7 +71,7 @@ import VerificationCode from "~/components/VerificationCode.vue";
 import {useAuth} from "~/composables/useAuth";
 import {emailReg} from "~/regular";
 import {CONTACT_EMAIL, LOGIN_URL} from "~/config";
-import {pageMeta} from "~/config/pageMeta";
+import {resolvePageMeta} from "~/config/pageMeta";
 
 defineOptions({
   name: 'ResetPassword'
@@ -80,7 +80,7 @@ defineOptions({
 const router = useRouter()
 const { resetPasswordFn } = useAuth()
 
-useHead(pageMeta["/forget-password"] ?? {});
+useHead(resolvePageMeta("/forget-password"));
 
 const validatePassword = (rule: any, value: any, callback: any) => {
   if (ruleForm.value.password !== value) callback(new Error('Passwords do not match'))
