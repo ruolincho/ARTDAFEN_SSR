@@ -110,8 +110,10 @@ export namespace IPaint {
         parentId: string;
         /*名称 */
         name: string;
-        /*图片 */
+        /*原图 */
         img: string;
+        /*效果图 */
+        painting: string;
         /*简介 */
         intro: string;
         /*排序编号 */

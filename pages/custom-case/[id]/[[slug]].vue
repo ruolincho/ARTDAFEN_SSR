@@ -22,20 +22,11 @@
   </section>
 
   <!-- 底部按钮 -->
-  <div class="foot-wrapper py-20 has-continue">
-    <div class="container">
-      <div class="foot-inner">
-        <div class="back-btn acea-row row-middle cursor-pointer" @click="handleBack">
-          <span class="iconfont icon-left text-20"></span>
-          <span class="text-20 f-bold">Back</span>
-        </div>
-        <div class="foot-center">
-          <div class="foot-text text-20 f-bold text-center line1">Physically Hand-painted by Artists (Zero Printing)</div>
-          <el-button class="foot-btn" type="primary" size="large" @click="handleContinue">Continue</el-button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <FootBar
+      @back="handleBack"
+      @continue="handleContinue"
+      :hasContinue="true"
+  />
 
   <ClientOnly>
     <CasePreview v-model="isShowCaseContrast" :items="caseContrastData" :index="caseIndex" />
@@ -48,6 +39,7 @@ import type {IPaint} from "~/api/interface/paint/paint";
 import {getSampleApi} from "~/api/modules/paint/paint";
 import {imagePrefix} from "~/utils";
 import {ArtCodeEnum} from "~/types/enumeration";
+import FootBar from '~/components/Custom/FootBar.vue'
 
 onMounted(() => {
   if (route.params.id) seeMoreSample()
@@ -107,87 +99,9 @@ const handleContinue = () => {
   }
 }
 
-.foot-wrapper {
-  position: sticky;
-  z-index: 22;
-  bottom: 0;
-  left: 0;
-  background: #fff;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
-
-  .foot-inner {
-    position: relative;
-
-    .back-btn {
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
-
-    .foot-center {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .foot-text {
-        padding: 0 60px;
-        max-width: 600px;
-      }
-    }
-  }
-
-  &.has-continue {
-    .foot-inner {
-
-      .back-btn {
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
-  }
-
-
-}
-
 @media (max-width: 768px) {
   .case-waterfall {
     column-count: 2;
-  }
-
-  .foot-wrapper {
-
-    .foot-inner {
-      .foot-center {
-        flex-direction: column;
-        row-gap: 20px;
-
-        .foot-text {
-          padding: 0 30px;
-          order: 2;
-        }
-
-        .foot-btn {
-          order: 1;
-        }
-      }
-    }
-
-    &.has-continue {
-      .foot-inner {
-        .back-btn {
-          top: 11px;
-          transform: unset;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 414px) {
-  .foot-wrapper .foot-inner .foot-center .foot-text{
-    max-width: 270px;
-    padding: 0 20px;
   }
 }
 </style>

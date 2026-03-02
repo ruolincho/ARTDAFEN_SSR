@@ -36,33 +36,9 @@
                 v-model="generatorImg"
                 v-model:squareImage="squareImageUrl"
                 v-model:pixel="pixel"
-                :shape="goodsDetail.shape"
-                :core-image="imagePrefix(goodsDetail.img)"
-                :has-mat="hasFrame && matVisible && !!currentMaterialId"
-                :mat-thickness="currentMaterialWidth.toString()"
-                :mat-color="currentMaterialOption?.config?.matColor || ''"
-                :has-frame="hasFrame"
-                :inner-frame="isInnerFrame"
-                :embedded-frame="!currentFrameOption?.config?.matSupport!"
-                :frame-cm="currentFrameOption?.config?.thickness!"
-                :size-cm="{
-                    width: Number(currentSizeOption?.widthInCm!),
-                    length: Number(currentSizeOption?.lengthInCm!),
-                  }"
-                :frame-corner-images="[
-                    imagePrefix(currentFrameOption?.config?.lt!),
-                    imagePrefix(currentFrameOption?.config?.rt!),
-                    imagePrefix(currentFrameOption?.config?.lb!),
-                    imagePrefix(currentFrameOption?.config?.rb!),
-                  ]"
-                :frame-side-images="[
-                    imagePrefix(currentFrameOption?.config?.ct!),
-                    imagePrefix(currentFrameOption?.config?.cb!),
-                    imagePrefix(currentFrameOption?.config?.cl!),
-                    imagePrefix(currentFrameOption?.config?.cr!),
-                  ]"
                 @change="handleImageChange"
                 @touch-screen="toggleImageViewer"
+                v-bind="imageGeneratorProps"
             />
           </ClientOnly>
         </div>
@@ -88,7 +64,7 @@
                 <p class="text-22 f-bold-500 cursor-pointer text-underline" @click="handleClickArtist">
                   by:{{ goodsDetail.creator?.name }}</p>
                 <p class="text-18 text-gray-600 mt-10">
-                  <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Painting">Hand-painted oil painting</span>
+                  <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Painting">Hand-painted replica</span>
                   <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Prints">Print painting</span>
                   <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Relief">Relief painting</span>
                 </p>
@@ -108,33 +84,9 @@
                     v-model="generatorImg"
                     v-model:squareImage="squareImageUrl"
                     v-model:pixel="pixel"
-                    :shape="goodsDetail.shape"
-                    :core-image="imagePrefix(goodsDetail.img)"
-                    :has-mat="hasFrame && matVisible && !!currentMaterialId"
-                    :mat-thickness="currentMaterialWidth.toString()"
-                    :mat-color="currentMaterialOption?.config?.matColor || ''"
-                    :has-frame="hasFrame"
-                    :inner-frame="isInnerFrame"
-                    :embedded-frame="!currentFrameOption?.config?.matSupport!"
-                    :frame-cm="currentFrameOption?.config?.thickness!"
-                    :size-cm="{
-                    width: Number(currentSizeOption?.widthInCm!),
-                    length: Number(currentSizeOption?.lengthInCm!),
-                  }"
-                    :frame-corner-images="[
-                    imagePrefix(currentFrameOption?.config?.lt!),
-                    imagePrefix(currentFrameOption?.config?.rt!),
-                    imagePrefix(currentFrameOption?.config?.lb!),
-                    imagePrefix(currentFrameOption?.config?.rb!),
-                  ]"
-                    :frame-side-images="[
-                    imagePrefix(currentFrameOption?.config?.ct!),
-                    imagePrefix(currentFrameOption?.config?.cb!),
-                    imagePrefix(currentFrameOption?.config?.cl!),
-                    imagePrefix(currentFrameOption?.config?.cr!),
-                  ]"
                     @change="handleImageChange"
                     @touch-screen="toggleImageViewer"
+                    v-bind="imageGeneratorProps"
                 />
               </ClientOnly>
             </div>
@@ -156,212 +108,48 @@
         </div>
         <!--规格选择栅格-->
         <div class="col-sm-5">
-          <div class="spu-spec border-sm">
-            <el-skeleton :loading="loadingCombo && !firstLoadCombo" animated>
-              <template #template>
-                <div class="m-md-20 m-15">
-                  <el-skeleton-item variant="h1" style="width: 100%;"/>
-                </div>
-
-                <div class="m-md-20 m-15">
-                  <el-skeleton-item variant="p" style="width: 100%; height: 45px"/>
-                </div>
-                <div class="m-md-20 m-15">
-                  <el-skeleton-item variant="h1" style="width: 100%;"/>
-                </div>
-                <div class="m-md-20 m-15 row">
-                  <div class="col-3" v-for="item in 4" :key="item">
-                    <el-skeleton-item variant="image" :style="{width: '100%', height: appStore.isPc ? '5vw' : '15vw'}"/>
-                    <div class="py-5">
-                      <el-skeleton-item variant="h1"/>
-                      <el-skeleton-item variant="p" class="mt-5" style="width: 50%"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="m-md-20 m-15">
-                  <el-skeleton-item variant="p" style="width: 100%;"/>
-                  <el-skeleton-item variant="p" style="width: 100%;"/>
-                  <el-skeleton-item variant="p" style="width: 100%;"/>
-                </div>
-                <div class="acea-row row-right m-md-20 m-15">
-                  <el-skeleton-item variant="p" style="width: 30%;"/>
-                </div>
-                <div class="m-md-20 m-15">
-                  <el-skeleton-item variant="p" style="width: 100%;"/>
-                  <el-skeleton-item variant="p" style="width: 100%;"/>
-                </div>
-                <div class="m-md-20 m-15">
-                  <el-skeleton-item variant="button" style="width: 100%; height: 40px;"/>
-                </div>
-              </template>
+          <div class="spu-spec border-sm step-wrapper">
+            <ComboSkeleton :loading="loadingCombo && !firstLoadCombo">
               <div>
                 <!--工艺/规格选择-->
-                <template v-if="specsCombination.length > 1">
-                  <div class="acea-row row-between-wrapper m-md-20 m-15">
-                    <div class="acea-row row-middle flex-1 mr-10">
-                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                      <span class="text-26">Choose a Craft</span>
-                    </div>
-                  </div>
-                  <div class="m-md-20 m-15" ref="chooseTechniqueRef">
-                    <div class="width-list row">
-                      <div
-                          class="col-6"
-                          v-for="item in specsCombination"
-                          :key="item.id"
-                      >
-                        <div
-                            class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                            :class="{'border-gray-700': currentSpecId === item.id}"
-                            @click="chooseTechnique(item)"
-                        >
-                          {{ item.craft }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </template>
+                <CraftSelector
+                    v-if="specsCombination.length > 1"
+                    tourId="tour-step-craft"
+                    v-model="currentSpecId"
+                    :options="specsCombination"
+                    label-key="craft"
+                    value-key="id"
+                    @change="chooseTechnique"
+                />
 
                 <!--尺寸选择-->
-                <template v-if="true">
-                  <div class="acea-row row-between-wrapper m-md-20 m-15">
-                    <div class="acea-row row-middle flex-1 mr-10">
-                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                      <span class="text-26">Choose a Size</span>
-                      <span
-                          class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
-                          @click="openInfo(0)"
-                      >
-                      <span class="pc">{{ moreInfoVisible[0] ? 'LESS INFO' : 'MORE INFO' }}</span>
-                      <span class="iconfont icon-down" :class="{'rotate-180': moreInfoVisible[0]}"></span>
-                    </span>
-                      <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(inches)</span>-->
-                    </div>
-                    <div class="text-20 f-bold">{{
-                        currencyStore.formatToCurrency(currentSizeOption?.price || 0)
-                      }}
-                    </div>
-                  </div>
-                  <div class="mx-20 text-16 info-box" v-show="moreInfoVisible[0]">
-                    <p class="p-15 bg-gray-200">
-                      To order a custom size,
-                      <a :href="`mailto:${CONTACT_EMAIL}`" class="text-underline cursor-pointer">click here</a>.
-                      Our artists will create a painting in any size you require.
-                    </p>
-                  </div>
-                  <div class="m-md-20 m-15" ref="chooseSizeRef">
-                    <el-select
-                        class="custom-select"
-                        v-model="currentSizeId"
-                        placeholder="Please Select Size"
-                        size="large"
-                        @change="chooseSize"
-                    >
-                      <el-option
-                          v-for="item in sizeOptions"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id"
-                      >
-                        <div class="option-item acea-row row-between-wrapper">
-                          <span>{{ item.name }}</span>
-                          <span>{{ currencyStore.formatToCurrency(item.price || 0) }}</span>
-                        </div>
-                      </el-option>
-                      <template #prefix>
-                        <div class="size-prefix"></div>
-                      </template>
-                    </el-select>
-                  </div>
-                </template>
+                <SizeSelector
+                    tourId="tour-step-size"
+                    v-model="currentSizeId"
+                    :options="sizeOptions"
+                    :sizeOption="currentSizeOption"
+                    @change="chooseSize"
+                />
 
                 <!--画框选择-->
-                <template v-if="true">
-                  <div class="acea-row row-between-wrapper m-md-20 m-15">
-                    <div class="acea-row row-middle flex-1 mr-10">
-                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                      <span class="text-26">Choose a Frame</span>
-                      <!--                  <span class="text-26 text-gray-400 pc">&nbsp;&nbsp;(100+ styles)</span>-->
-                    </div>
-                    <div class="text-20 f-bold">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</div>
-                  </div>
-                  <div class="m-md-20 m-15" ref="chooseFrameRef">
-                    <div class="frame-scroll border-sm p-10">
-                      <div class="frame-list">
-                        <div
-                            v-for="(item, index) in frameOptions" :key="item.id"
-                            class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
-                            :class="{ on: currentFrameId === item.id }"
-                            @click="chooseFrame(item)"
-                        >
-                          <div class="frame-box">
-                            <div class="frame-img aspect-ratio">
-                              <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
-                            </div>
-                            <p class="line2 mt-10 frame-name">{{ item.name }}</p>
-                            <p class="f-bold-500 frame-money">
-                              {{ currencyStore.formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </template>
+                <FrameSelector
+                    tourId="tour-step-frame"
+                    v-model="currentFrameId"
+                    :options="frameOptions"
+                    :sizeOption="currentFrameOption"
+                    @change="chooseFrame"
+                    :price="frameMoney || 0"
+                />
 
                 <!--卡纸选择（选择画框并且画框支持和有卡纸选项才有）-->
-                <template v-if="hasFrame && matVisible">
-                  <div class="acea-row row-between-wrapper m-md-20 m-15">
-                    <div class="acea-row row-middle flex-1 mr-10">
-                      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-                      <span class="text-26">Choose a Canvas material</span>
-                    </div>
-                    <div class="text-20 f-bold">
-                      {{ currencyStore.formatToCurrency(currentMaterialOption?.price || 0) }}
-                    </div>
-                  </div>
-                  <div class="m-md-20 m-15">
-                    <div class="material-wrapper border-sm p-md-20 p-15">
-                      <div class="acea-row row-middle text-20 f-bold-500">
-                        <p class="mr-xl-40 mr-20">Mat Color</p>
-                        <p class="flex-1 line1">Crisp Bright White</p>
-                      </div>
-                      <div class="color-list my-md-20 my-15" ref="chooseMatColorRef">
-                        <div
-                            class="color-item rounded-full cursor-pointer"
-                            :class="{on: currentMaterialId === item.id}"
-                            :style="{background: item.config?.matColor}"
-                            v-for="(item, index) in materialOptions"
-                            :key="index"
-                            @click="chooseMatColor(item)"
-                        >
-                          <span v-if="item.id === ''" class="iconfont icon-close"></span>
-                        </div>
-                      </div>
-                      <template v-if="currentMaterialWidthOption.length">
-                        <div class="acea-row row-middle text-20 f-bold-500">
-                          <p class="mr-xl-40 mr-20">Mat Width</p>
-                          <p class="flex-1 line1">Increasing the mat width mayaffectthe frame price.</p>
-                        </div>
-                        <div class="width-list row mt-md-20 mt-15" ref="chooseMatWidthRef">
-                          <div
-                              class="col-average"
-                              v-for="(item, index) in currentMaterialWidthOption"
-                              :key="index"
-                          >
-                            <div
-                                class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                                :class="{'border-gray-700': currentMaterialWidth === item.matWidth}"
-                                @click="chooseMatWidth(item.matWidth!)"
-                            >
-                              {{ item.matWidth }}″
-                            </div>
-                          </div>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                </template>
+                <MatSelector
+                    v-if="hasFrame && matVisible"
+                    tourId="tour-step-mat"
+                    v-model:matId="currentMaterialId"
+                    v-model:matWidth="currentMaterialWidth"
+                    :options="materialOptions"
+                    :material-option="currentMaterialOption"
+                />
 
                 <!--Summary-->
                 <!--<div class="acea-row row-middle px-md-20 px-15 py-10">
@@ -392,7 +180,7 @@
                   </p>
                   <p class="f-bold">
                     Total：
-                    <span class="text-26 text-error">{{ currencyStore.formatToCurrency(totalPrice || 0) }}</span>
+                    <span class="text-26 text-error">{{ formatToCurrency(totalPrice || 0) }}</span>
                   </p>
                 </div>
                 <el-button
@@ -405,7 +193,7 @@
                   {{ isBan ? 'Sold Out' : 'Add To Cart' }}
                 </el-button>
               </div>
-            </el-skeleton>
+            </ComboSkeleton>
           </div>
         </div>
       </div>
@@ -616,10 +404,10 @@
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p>
-                  <span class="text-14 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice) }}</span>
-                  <span class="text-gray-400 text-through ml-5 text-12">{{
-                      currencyStore.formatToCurrency(item.marketPrice)
-                    }}</span>
+                  <span class="text-14 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
+                  <span class="text-gray-400 text-through ml-5 text-12" v-if="item.retailPrice !== item.marketPrice">
+                    {{ formatToCurrency(item.marketPrice) }}
+                  </span>
                 </p>
               </NuxtLink>
             </swiper-slide>
@@ -728,7 +516,8 @@
   <WallColor :wall-image="generatorImg" ref="wallColorRef" @close="toggleWidget(true)"/>
 
   <!-- 房间 -->
-  <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon" @close="toggleWidget(true)"/>
+  <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon"
+        @close="toggleWidget(true)"/>
 
   <!--  图片查看器 -->
   <el-image-viewer
@@ -751,15 +540,15 @@
   >
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20">
       <span class="f-bold text-18 flex-1 line1 mr-10">Painting Size Price</span>
-      <span class="text-14">{{ currencyStore.formatToCurrency(currentSizeOption?.price || 0) }}</span>
+      <span class="text-14">{{ formatToCurrency(currentSizeOption?.price || 0) }}</span>
     </div>
     <div class="acea-row row-between-wrapper text-gray-700 py-20 mb-10">
       <span class="f-bold text-18 flex-1 line1 mr-10">Frame Price</span>
-      <span class="text-14">{{ currencyStore.formatToCurrency(frameMoney || 0) }}</span>
+      <span class="text-14">{{ formatToCurrency(frameMoney || 0) }}</span>
     </div>
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20" v-if="hasFrame && !!currentMaterialId">
       <span class="f-bold text-18 flex-1 line1 mr-10">Canvas material Price</span>
-      <span class="text-14">{{ currencyStore.formatToCurrency(currentMaterialOption?.price || 0) }}</span>
+      <span class="text-14">{{ formatToCurrency(currentMaterialOption?.price || 0) }}</span>
     </div>
   </el-popover>
 
@@ -815,6 +604,12 @@ import ProList from "~/components/ProList/index.vue";
 import {TechniqueCodeEnum} from "~/types/enumeration";
 import {useVerticalDrag} from '~/composables/useVerticalDrag'
 import {QUALITY_LIST, PROCESS_LIST} from "~/constant";
+import SizeSelector from "~/components/Custom/SizeSelector.vue";
+import FrameSelector from "~/components/Custom/FrameSelector.vue";
+import MatSelector from "~/components/Custom/MatSelector.vue";
+import CraftSelector from "~/components/Custom/CraftSelector.vue";
+import ComboSkeleton from "~/components/Custom/ComboSkeleton.vue";
+import {usePaintCombo} from '~/composables/usePaintCombo'
 
 defineOptions({
   name: 'PaintDetail'
@@ -829,7 +624,6 @@ onMounted(async () => {
   await getCombination() // 获取组合
   if (goodsDetail.value.brand?.id) await getBrandRecommend() // 获取品牌推荐
   await getRelatedRecommend()
-  generateStepIndex() // 确保在数据加载完成后调用
   if (userStore.isLogin) {
     await getIsThumbs()
   }
@@ -846,7 +640,7 @@ const appStore = useAppStore()
 const cartStore = useCartStore()
 const route = useRoute();
 const router = useRouter();
-const currencyStore = useCurrencyStore();
+const {formatToCurrency, currentCurrency} = useCurrencyStore();
 
 const modules = [Autoplay, Pagination, Navigation]
 const activeName = ref('')
@@ -865,15 +659,29 @@ const {
   onTouchEnd
 } = useVerticalDrag(functionalRef, {initialTop: 100})
 
-// 生成步骤索引
-const generateStepIndex = () => {
-  nextTick(() => {
-    const el = document.documentElement.getElementsByClassName('step-index')
-    Array.from(el).forEach((item, index) => {
-      item.textContent = `STEP ${index + 1}:`
-    })
-  })
+const initShowGuide = () => {
+  if (process.server) return;
+  if (localStorage.getItem(APP_HAS_SEEN_PAINT_GUIDE) === 'true') return
+  beginGuide()
+  localStorage.setItem(APP_HAS_SEEN_PAINT_GUIDE, 'true')
 }
+
+const {
+  loadingCombo, firstLoadCombo,
+  sizeOptions, currentSizeId, currentSizeOption,
+  frameOptions, currentFrameId, currentFrameOption, isInnerFrame, hasFrame, frameMoney,
+  materialOptions, currentMaterialId, currentMaterialOption, currentMaterialWidth, matVisible,
+  totalPrice, specs, parts,
+
+  fetchCombination,
+  chooseSize,
+  chooseFrame,
+
+} = usePaintCombo({
+  onGuideInit: initShowGuide,
+  getCode: () => currentSpecOption.value!.code!,
+  getRatio: () => goodsDetail.value.ratio
+})
 
 const reReckon = ref(false) // 重新识别
 const handleImageChange = () => {
@@ -898,7 +706,7 @@ const {data: goodsDetail, pending: isSkeleton} = await useAsyncData(
         },
         headers: {
           'Token': userStore.token || '',
-          'X-Currency': currencyStore.currentCurrency
+          'X-Currency': currentCurrency
         }
       })
       return data
@@ -925,232 +733,20 @@ const getSpecsList = async () => {
 // 选择工艺（只有spec中出现了一个以上的才可以选择工艺）
 const currentSpecId = ref('')
 const currentSpecOption = computed(() => specsCombination.value.find(item => item.id === currentSpecId.value))
-const chooseTechnique = (item: ISpecs.Row) => {
-  if (currentSpecId.value === item.id) return
-  currentSpecId.value = item.id
+const chooseTechnique = () => {
   getCombination(true)
 }
 
 // 下架或者库存不足
 const isBan = computed(() => currentSpecOption.value?.status === '1' || parseInt(currentSpecOption.value?.retailStock || '0') < 1)
 
-let firstLoadCombo = false // 第一次加载组合
-const loadingCombo = ref(true) // 组合加载中
-
 /**
  * 获取组合
  * @param senior - 开启高级比较
  */
 const getCombination = async (senior = false) => {
-  loadingCombo.value = true
-  const {data} = await getCombinationApi({
-    code: currentSpecOption.value!.code!,
-    ratio: goodsDetail.value.ratio,
-    dimensionId: currentSizeId.value || null,
-  })
-  sizeOptions.value = data.size || [] // 尺寸选项
-  innerFrame.value = data.parts.inner_frame[0] // 内框单项
-  frameOptions.value = [
-    notFrame,
-    innerFrame.value,
-    ...data.parts?.frame || [],
-  ] // 画框选项
-
-  // 是否可以选择卡纸
-  hasMat.value = !!data.parts?.mat?.length
-  if (hasMat.value) {
-    materialOptions.value = [
-      ...data.parts.mat,
-      noMat
-    ] // 卡纸选项
-  }
-
-  // 默认选中尺寸
-  function selectSize() {
-    const defaultSelect = sizeOptions.value.find(item => item.selected === '1') // 拿到默认选中的尺寸选项
-    if (defaultSelect) {
-      currentSizeId.value = defaultSelect.id // 选中
-    } else {
-      currentSizeId.value = sizeOptions.value[0].id // 拿到第一个尺寸ID
-    }
-  }
-
-  // 第一次加载默认选中
-  if (!firstLoadCombo) {
-    selectSize()
-
-    // const innerFrameId = innerFrame.value.id || '' // 拿到内框ID
-    // if (innerFrameId) { // 有内框默认选中内框
-    //   currentFrameId.value = innerFrameId
-    // } else {
-    //   currentFrameId.value = frameOptions.value[0].id // 拿到第一个画框ID
-    // }
-
-    if (hasMat.value) {
-      currentMaterialId.value = materialOptions.value[0].id // 拿到第一个卡纸ID
-      chooseMatWidth(materialOptions.value[0].specs![0]?.matWidth || '') // 拿到第一个卡纸宽度
-    }
-  }
-
-  // 高级比较
-  if (senior) {
-    if (currentSizeId.value) {
-      const findTheSize = sizeOptions.value.findIndex(item => item.id === currentSizeId.value)
-      if (findTheSize === -1) {
-        selectSize()
-      }
-    }
-
-    if (currentFrameId.value) {
-      const findTheFrame = frameOptions.value.findIndex(item => item.id === currentFrameId.value)
-      if (findTheFrame === -1) {
-        currentFrameId.value = ''
-      }
-    }
-
-    if (!hasMat.value || !currentFrameOption.value?.config?.matSupport) {
-      currentMaterialId.value = ''
-      chooseMatWidth('')
-    } else {
-      currentMaterialId.value = materialOptions.value[0].id // 拿到第一个卡纸ID
-      chooseMatWidth(materialOptions.value[0].specs![0]?.matWidth || '') // 拿到第一个卡纸宽度
-    }
-  }
-
-  !firstLoadCombo && initShowGuide() // 开启引导
-
-  firstLoadCombo = true
-  loadingCombo.value = false
-  generateStepIndex()
+  await fetchCombination(senior)
 }
-
-// 选择的尺寸Id
-const currentSizeId = ref('')
-// 尺寸选项
-const sizeOptions = ref<IPaint.CombinationParts[]>([])
-// 当前尺寸选项
-const currentSizeOption = computed(() => sizeOptions.value.find(item => item.id === currentSizeId.value))
-const chooseSize = () => {
-  getCombination()
-}
-
-// 无框单项
-const notFrame = {id: '', name: 'No Frame (Rolled in a Tube)', price: '0.00', img: '/trade/paint/frame/NOT/img.webp'}
-// 内框单项
-const innerFrame = ref({} as IPaint.CombinationParts)
-// 选择的画框Id
-const currentFrameId = ref('')
-// 画框选项
-const frameOptions = ref<IPaint.CombinationParts[]>([])
-// 当前画框选项
-const currentFrameOption = computed(() => frameOptions.value.find(item => item.id === currentFrameId.value))
-const isInnerFrame = computed(() => currentFrameId.value === innerFrame.value.id)
-
-// 选择画框
-const chooseFrame = (item: IPaint.CombinationParts) => {
-  currentFrameId.value = item.id
-  generateStepIndex()
-  if (hasMat.value) {
-    // 画框不支持卡纸
-    if (!item.config?.matSupport) {
-      currentMaterialId.value = ''
-      chooseMatWidth('')
-    } else if (currentMaterialId.value === '') {
-      currentMaterialId.value = materialOptions.value[0].id // 拿到第一个卡纸ID
-      chooseMatWidth(materialOptions.value[0].specs![0]?.matWidth || '') // 拿到第一个卡纸宽度
-    }
-  }
-}
-
-// 画框金额，如果没选择卡纸就需要加内框的金额
-const frameMoney = computed(() => {
-  const price = Number(currentFrameOption.value?.price) || 0 // 当前框的价格
-  const surcharge = Number(currentFrameOption.value?.surcharge) || 0 // 当前框的手续费
-  if (!hasFrame.value) { // 卷轴直接返回金额
-    return price + surcharge
-  } else {
-    if (currentMaterialId.value === '') { // 没有选择卡纸
-      return price + surcharge + Number((innerFrame.value?.price || 0))
-    } else {
-      return price + surcharge
-    }
-  }
-})
-// 是否有画框
-const hasFrame = computed(() => !isInnerFrame.value && currentFrameId.value !== '')
-
-// 无卡纸单项
-const noMat = {id: '', name: 'No Mat', price: '0.00', specs: []}
-// 是否可以选择卡纸
-const hasMat = ref(false)
-// 选择的卡纸Id
-const currentMaterialId = ref('')
-// 卡纸选项
-const materialOptions = ref<IPaint.CombinationParts[]>([])
-// 当前卡纸选项
-const currentMaterialOption = computed(() => materialOptions.value.find(item => item.id === currentMaterialId.value))
-// 选择卡纸颜色
-const chooseMatColor = (item: IPaint.CombinationParts) => {
-  currentMaterialId.value = item.id
-  if (!!item.id) {
-    if (!currentMaterialWidth.value) {
-      chooseMatWidth(currentMaterialOption.value!.specs![0].matWidth!)
-    }
-  } else {
-    chooseMatWidth('')
-  }
-}
-// 当前卡纸宽度选项
-const currentMaterialWidth = ref('')
-// 当前卡纸宽度选项
-const currentMaterialWidthOption = computed(() => currentMaterialOption.value?.specs || [])
-// 选择卡纸宽度
-const chooseMatWidth = (width: string) => {
-  currentMaterialWidth.value = width
-}
-// 是否有卡纸选项（多了个画框配置中是否支持卡纸）
-const matVisible = computed(() => {
-  return currentFrameOption.value.config?.matSupport && hasMat.value
-})
-
-// 总价
-const totalPrice = computed(() => {
-  const sizePrice = currentSizeOption.value?.price || 0
-  const framePrice = frameMoney.value || 0
-  const matPrice = !!currentMaterialId.value && hasFrame.value ? (currentMaterialOption.value?.price || 0) : 0
-  return Number(sizePrice) + Number(framePrice) + Number(matPrice)
-})
-
-// 商品规格值
-const specs = computed(() => {
-  let currentFrameName = currentFrameOption.value?.name
-  const thickness = currentFrameOption.value?.config?.thickness
-  if (thickness) currentFrameName += ' (' + cm2inch(thickness) + ' in wide)'
-  const specs: Record<string, any> = {
-    'Painting Size': currentSizeOption.value?.name, // 尺寸名称
-    'Frame': !hasFrame.value ? currentFrameName : currentMaterialId.value === '' ? currentFrameName + ', ' + innerFrame.value?.name : currentFrameName, // 画框名称
-  }
-  if (hasFrame.value && !!currentMaterialId.value) {
-    specs['Mounting On'] = 'Moisture Proof Backboard, Glass, Mat' // 玻璃、背板
-    specs['Mat Color'] = currentMaterialOption.value?.name // 卡纸颜色
-    specs['Mat Width'] = currentMaterialWidth.value + '″' // 卡纸宽度
-  }
-  return specs
-})
-
-// 商品配件
-const parts = computed(() => {
-  const parts: Record<string, any> = {}
-  if (currentFrameId.value !== '') {
-    parts[currentFrameId.value] = {}
-    if (hasFrame.value && currentMaterialId.value === '') parts[innerFrame.value.id] = {}
-  }
-  if (hasFrame.value && !!currentMaterialId.value) parts[currentMaterialId.value] = {
-    'Mounting On': 'Moisture Proof Backboard, Glass, Mat',
-    'Mat Width': currentMaterialWidth.value + '″',
-  }
-  return parts
-})
 
 // 添加购物车
 const addToCart = () => {
@@ -1168,7 +764,8 @@ const addToCart = () => {
     quantity: 1, // 购买数量
     dimensionId: currentSizeId.value, // 尺寸编号
     parts: parts.value, // 商品配件
-    selected: true
+    selected: true,
+    isPriceStale: false
   }
   cartStore.addition(cartRow)
   ElMessage.success('Add to cart success!')
@@ -1266,17 +863,13 @@ const handleCommentRequestSuccess = () => {
   hasComment.value = commentTotal.value > 0
 }
 
-const moreInfoVisible = ref([false, false, false, false])
-const openInfo = (index: number) => {
-  moreInfoVisible.value[index] = !moreInfoVisible.value[index]
-}
-
 const toggleImageViewer = () => {
   toggleWidget(imgViewVisible.value)
   imgViewVisible.value = !imgViewVisible.value
 }
 
 const toggleWidget = (flag: boolean) => {
+  if (import.meta.env.MODE !== 'production') return
   if (flag) {
     window.Tawk_API.showWidget()
   } else {
@@ -1286,11 +879,6 @@ const toggleWidget = (flag: boolean) => {
 
 const appSticky = ref(true)
 const openTour = ref(false)
-const chooseTechniqueRef = ref<HTMLElement | null>(null)
-const chooseSizeRef = ref<HTMLElement | null>(null)
-const chooseFrameRef = ref<HTMLElement | null>(null)
-const chooseMatColorRef = ref<HTMLElement | null>(null)
-const chooseMatWidthRef = ref<HTMLElement | null>(null)
 const beginGuide = async () => {
   if (appStore.isPc) {
     await appStore.forceFoldHeader() // 锁定并折叠，等待动画
@@ -1308,12 +896,6 @@ const handleTouchClose = () => {
   }
   toggleWidget(true)
 }
-const initShowGuide = () => {
-  if (process.server) return;
-  if (localStorage.getItem(APP_HAS_SEEN_PAINT_GUIDE) === 'true') return
-  beginGuide()
-  localStorage.setItem(APP_HAS_SEEN_PAINT_GUIDE, 'true')
-}
 // 参数顺序：[显示条件, 目标Ref, 标题, 描述, 额外配置(可选)]
 const createStep = (condition: boolean, target: any, title: string, description: string, extras: Record<string, any> = {}) => {
   if (!condition) return null
@@ -1322,13 +904,43 @@ const createStep = (condition: boolean, target: any, title: string, description:
 }
 const tourSteps = computed(() => {
   const steps = [
-    createStep(specsCombination.value.length > 1, chooseTechniqueRef.value, 'Choose Craftsmanship', 'Select the material and texture that best suits your style.'),
-    createStep(true, chooseSizeRef.value, 'Choose Size', 'Pick the perfect dimensions to fit your space.'),
-    createStep(true, chooseFrameRef.value, 'Choose Frame', 'Complete the look with one of our premium frames.'),
-    createStep(hasFrame.value && matVisible.value, chooseMatColorRef.value, 'Choose Mat Color', 'Choose a mat tone that perfectly compliments your image.'),
-    createStep(hasFrame.value && matVisible.value && (currentMaterialWidthOption.value?.length > 0), chooseMatWidthRef.value, 'Choose Mat Width', 'Set the thickness of the mat border to balance your artwork within the frame.'),
+    createStep(specsCombination.value.length > 1, '#tour-step-craft', 'Choose Craftsmanship', 'Select the material and texture that best suits your style.'),
+    createStep(true, '#tour-step-size', 'Choose Size', 'Pick the perfect dimensions to fit your space.'),
+    createStep(true, '#tour-step-frame', 'Choose Frame', 'Complete the look with one of our premium frames.'),
+    createStep(hasFrame.value && matVisible.value, '#tour-step-mat', 'Mat Customization', 'Select the color and width of your mat to enhance your artwork’s visual balance. A carefully chosen mat frames the image, adds depth, and creates harmony between the artwork and the frame.'),
   ]
   return steps.filter(Boolean)
+})
+
+// 集中管理 ImageGenerator 的所有 props
+const imageGeneratorProps = computed(() => {
+  return {
+    shape: goodsDetail.value.shape,
+    coreImage: imagePrefix(goodsDetail.value.img),
+    hasMat: hasFrame.value && matVisible.value && !!currentMaterialId.value,
+    matThickness: currentMaterialWidth.value.toString(),
+    matColor: currentMaterialOption.value?.config?.matColor || '',
+    hasFrame: hasFrame.value,
+    innerFrame: isInnerFrame.value,
+    embeddedFrame: !currentFrameOption.value?.config?.matSupport,
+    frameCm: currentFrameOption.value?.config?.thickness,
+    sizeCm: {
+      width: Number(currentSizeOption.value?.widthInCm || 0),
+      length: Number(currentSizeOption.value?.lengthInCm || 0),
+    },
+    frameCornerImages: [
+      imagePrefix(currentFrameOption.value?.config?.lt || ''),
+      imagePrefix(currentFrameOption.value?.config?.rt || ''),
+      imagePrefix(currentFrameOption.value?.config?.lb || ''),
+      imagePrefix(currentFrameOption.value?.config?.rb || ''),
+    ],
+    frameSideImages: [
+      imagePrefix(currentFrameOption.value?.config?.ct || ''),
+      imagePrefix(currentFrameOption.value?.config?.cb || ''),
+      imagePrefix(currentFrameOption.value?.config?.cl || ''),
+      imagePrefix(currentFrameOption.value?.config?.cr || ''),
+    ]
+  }
 })
 </script>
 
@@ -1371,73 +983,6 @@ const tourSteps = computed(() => {
     }
 
     .spu-spec {
-
-      .frame-scroll {
-        max-height: 427px;
-        overflow: auto;
-
-        .frame-list {
-          display: grid;
-          grid-template-columns: repeat(6, 1fr);
-          grid-gap: 10px;
-
-          .frame-item {
-            position: relative;
-            background: var(--color-gray-100);
-
-            .frame-box {
-              padding-bottom: 25px;
-
-              .frame-money {
-                position: absolute;
-                left: 5px;
-                bottom: 5px;
-              }
-            }
-
-            &.on {
-              background: var(--color-gray-700);
-              color: #fff;
-            }
-          }
-        }
-      }
-
-      .color-list {
-        display: grid;
-        grid-template-columns: repeat(8, 34px);
-        row-gap: 20px;
-        width: 100%;
-        justify-content: space-between;
-
-        .color-item {
-          width: 34px;
-          height: 34px;
-          color: var(--color-gray-400);
-          border: var(--border-width-md) solid var(--border-color);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          .iconfont {
-            font-size: 28px;
-          }
-
-          &.on {
-            border-color: var(--color-gray-700);
-            color: var(--color-gray-700);
-          }
-        }
-      }
-
-      .width-list {
-        --gutter: var(--gutter-base);
-        row-gap: var(--gutter);
-
-        .width-item {
-          width: 100%;
-        }
-      }
     }
   }
 
@@ -1677,45 +1222,7 @@ const tourSteps = computed(() => {
     }
   }
 
-  @media (max-width: 1460px) {
-    .spu-wrapper .spu-spec {
-      .frame-scroll {
-        .frame-list {
-          grid-template-columns: repeat(5, 1fr);
-          grid-gap: 5px;
-        }
-      }
-    }
-  }
-
   @media (max-width: 1260px) {
-    .spu-wrapper .spu-spec {
-      .frame-scroll {
-        max-height: 350px;
-
-        .frame-list {
-          grid-template-columns: repeat(4, 1fr);
-        }
-      }
-
-      .color-list {
-        grid-template-columns: repeat(6, 25px);
-        row-gap: var(--gutter-sm);;
-
-        .color-item {
-          width: 25px;
-          height: 25px;
-
-          .iconfont {
-            font-size: 16px;
-          }
-        }
-      }
-
-      .width-list {
-        --gutter: var(--gutter-sm);
-      }
-    }
 
     .recommend-swiper {
 
@@ -1822,24 +1329,6 @@ const tourSteps = computed(() => {
   }
 
   @media (max-width: 768px) {
-    .spu-wrapper .spu-spec {
-      .frame-scroll {
-        max-height: unset;
-
-        .frame-list {
-          display: flex;
-          grid-template-columns: unset;
-          flex-wrap: nowrap;
-
-          .frame-item {
-            width: 65px;
-            flex-shrink: 0;
-          }
-
-        }
-      }
-    }
-
     .sec-desc {
       .img-box {
 

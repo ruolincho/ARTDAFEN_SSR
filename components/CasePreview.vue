@@ -135,7 +135,7 @@ watch(() => props.modelValue, (newVal) => {
 
     .main-swiper-wrapper {
       position: relative;
-      max-width: 700px;
+      max-width: 850px;
       width: 100%;
 
       .main-swiper {

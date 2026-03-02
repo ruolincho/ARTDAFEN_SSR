@@ -42,3 +42,13 @@
     transform: rotate(360deg);
   }
 }
+
+.step-wrapper {
+  counter-reset: step-counter; /* 初始化计数器 */
+}
+
+
+.step-index::before {
+  counter-increment: step-counter; /* 每次遇到这个类，计数器 +1 */
+  content: "STEP " counter(step-counter) ":"; /* 渲染文字 */
+}
