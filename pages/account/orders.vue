@@ -40,7 +40,7 @@
                   <p class="text-gray-600 my-5">{{ formatAttr(goods.specs) }}</p>
                 </div>
               </div>
-              <div class="f-bold p-price text-center">{{ currencyStore.formatToCurrency(goods.unitPrice, item.currencyCode) }}</div>
+              <div class="f-bold p-price text-center">{{ formatToCurrency(goods.unitPrice, item.currencyCode) }}</div>
               <p class="text-gray-600 p-operation text-center">Qty: {{ goods.quantity }}</p>
             </div>
             <div class="py-lg-20 py-10 border-b-sm border-gray-200 acea-row row-middle">
@@ -71,7 +71,7 @@
                       class="ml-10">Please wait for customer service to provide after-sales service for your order.</span>
                 </template>
               </div>
-              <div class="f-bold p-price text-center">{{ currencyStore.formatToCurrency(item.actualAmount, item.currencyCode) }}</div>
+              <div class="f-bold p-price text-center">{{ formatToCurrency(item.actualAmount, item.currencyCode) }}</div>
               <div class="p-operation">
                 <el-button class="w-full" size="large" @click="router.push(`/order-detail/${item.tradeNo}`)">View
                   Order
@@ -112,8 +112,7 @@ definePageMeta({
 useSeoMeta({
   robots: 'noindex, nofollow'
 })
-
-const currencyStore = useCurrencyStore();
+const { formatToCurrency } = useCurrencyStore();
 const router = useRouter();
 const initParam = reactive({status: '0', keyword: '', size: 3});
 const getOrderList = (params: IPhysical.OrderQuery) => getOrderListApi(params)

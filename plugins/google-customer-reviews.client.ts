@@ -3,6 +3,9 @@ import { useTranslateLang } from '~/composables/useTranslateLang'
 
 export default defineNuxtPlugin(() => {
 
+    // 插件暂时不器用，账号无法启用功能
+    return;
+
     // 只在生产环境生效
     if (import.meta.env.MODE !== 'production') {
         console.log('[google-customer-reviews] 当前非生产环境：', import.meta.env.MODE)

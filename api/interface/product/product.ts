@@ -43,6 +43,9 @@ export namespace IProduct {
         brand: ObjectNode.Brand // 品牌信息
         status: Dict.ProductSaleStatus // 商品状态
         specsCombo: ISpecs.Row[] // SKU组合
+        description: string // 商品描述
+        keywords: string // 商品关键词
+        slug: string // 商品 slug
     }
 
     /*左侧筛选菜单请求参数*/

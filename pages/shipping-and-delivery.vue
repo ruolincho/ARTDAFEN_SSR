@@ -66,6 +66,9 @@
           If your local customs office does assess a fee, it will be your responsibility. Need help with customs? Feel
           free to contact us—we are here to assist!
         </li>
+        <li>
+          <span class="f-bold">Note</span>: Custom sculptures or large mixed-media works may require additional transit time due to crate handling.
+        </li>
       </ul>
       <p class="f-bold">
         Production & Approval: 5–10 business days
@@ -88,8 +91,7 @@
           color balance or texture—until the piece perfectly aligns with your vision.
         </li>
         <li>
-          <span class="f-bold">Shipping Policy:</span> We adhere to a strict <b>approval-based shipping policy</b>. Your
-          artwork will be dispatched only after we receive your final confirmation.
+          <span class="f-bold">Shipping Policy:</span> We adhere to a strict approval-based shipping policy. Your artwork will be dispatched only after we receive your final confirmation. However, to prevent delays and ensure your order arrives within the estimated timeframe, if we do not receive a response within 24 hours of sending the review images, we will consider the artwork approved and proceed with shipping by default.
         </li>
       </ul>
       <p>

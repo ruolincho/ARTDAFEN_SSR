@@ -10,9 +10,9 @@
     >
       <span class="iconfont icon-left"/>
     </NuxtLink>
-    <a class="page-item prev disabled" v-else href="javascript:void(0)" aria-hidden="true">
+    <span class="page-item prev disabled" v-else aria-disabled="true">
       <span class="iconfont icon-left"/>
-    </a>
+    </span>
 
     <template v-for="(p, index) in visiblePages" :key="index">
       <span v-if="p === '...'" class="page-item separator">...</span>
@@ -36,9 +36,9 @@
     >
       <span class="iconfont icon-right"/>
     </NuxtLink>
-    <a class="page-item next disabled" v-else href="javascript:void(0)" aria-hidden="true">
+    <span class="page-item next disabled" v-else aria-hidden="true">
       <span class="iconfont icon-right"/>
-    </a>
+    </span>
 
     <!-- 无脚本兜底 -->
     <noscript>

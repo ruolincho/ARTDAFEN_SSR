@@ -1,32 +1,62 @@
-# 🎨 ARTDAFEN 前端项目
+# 🎨 ARTDAFEN 前端项目文档
+
+![Nuxt 4](https://img.shields.io/badge/Nuxt-4.0.0-00DC82?logo=nuxt.js)
+![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vue.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)
+![Element Plus](https://img.shields.io/badge/Element%20Plus-2.11-409EFF?logo=element)
+![License](https://img.shields.io/badge/License-Proprietary-red)
 
 > **项目名称**：ARTDAFEN  
 > **开发公司**：雅今文化科技有限公司  
-> **框架**：Nuxt.js 4 + TypeScript + Element Plus  
-> **定位**：艺术品展示与电商平台前端系统
+> **技术架构**：Nuxt.js 4 (SSR) + TypeScript + Element Plus  
+> **定位**：跨境艺术品展示与电商平台前端系统
+
+ARTDAFEN 是一个基于 **Nuxt.js 4** 全栈框架构建的高性能电商平台，集成了服务端渲染 (SSR)、自动化国际化、Google
+生态全链路支持及复杂的图像处理功能。
+
+---
+
+## 📚 目录
+
+- [技术栈](#-技术栈)
+- [项目结构](#-项目结构)
+- [快速开始](#-快速开始)
+- [环境变量配置](#-环境变量配置)
+- [🌍 自动化国际化](#-自动化国际化)
+- [🔐 安全与加密](#-安全与加密)
+- [🧩 全局事件管理](#-全局事件管理)
+- [🔑 Google身份认证体系](#-Google身份认证体系)
+- [📊 数据埋点 (GTM)](#-数据埋点-gtm)
+- [🖼️ 图片相关功能](#-图片相关功能)
+- [🔄 持久化状态](#-持久化状态)
+- [🧠 轮播图与Cookie管理](#-轮播图与Cookie管理)
+- [📧 邮件模板](#-邮件模板)
+- [🛍️ SEO 与结构化数据](#-seo-与结构化数据)
+- [🗜️ 数据压缩与短链](#-数据压缩与短链)
+- [🚪 路由权限说明](#-路由权限说明)
+- [👨‍💻 Author](#-Author)
+- [📜 版权说明](#-License)
 
 ---
 
 ## 🚀 技术栈
 
-| 分类        | 技术/库                                                                                                                       | 说明                   |
-|-----------|----------------------------------------------------------------------------------------------------------------------------|----------------------|
-| 前端框架      | [Nuxt.js 4](https://nuxt.com/)                                                                                             | 基于 Vue 3 的服务端渲染框架    |
-| UI 框架     | [Element Plus](https://element-plus.org/)                                                                                  | Vue 3 版本的 Element UI |
-| 状态管理      | [Pinia](https://pinia.vuejs.org/) + [pinia-plugin-persistedstate](https://prazdevs.github.io/pinia-plugin-persistedstate/) | 状态管理及持久化存储           |
-| 请求库       | [Axios](https://axios-http.com/)                                                                                           | 网络请求及拦截管理            |
-| 国际化       | [i18n-jsautotranslate](https://translate.zvo.cn/)                                                                          | 支持自动翻译的国际化方案         |
-| 加密        | [JSEncrypt](https://travistidwell.com/jsencrypt/)                                                                          | 前端 RSA 加密            |
-| 图片预览      | [OpenSeadragon](https://openseadragon.github.io/)                                                                          | 高清图像缩放与预览            |
-| 图片裁剪      | [Vue Advanced Cropper](https://advanced-cropper.github.io/vue-advanced-cropper/)                                           | 图像裁剪组件               |
-| 轮播图       | [Swiper](https://swiperjs.com/)                                                                                            | 响应式滑块组件              |
-| Cookie 提示 | [Vanilla Cookie Consent](https://cookieconsent.orestbida.com/)                                                             | Cookie 政策弹窗          |
-| 事件总线      | [mitt](https://github.com/developit/mitt)                                                                                  | 跨组件事件通信（轻量级）         |
-| 网站统计      | [Google Analytics 4 (GA4)](https://analytics.google.com/analytics/web/#)                                                   | 网站流量及行为分析            |
-| 第三方登录     | [Google OAuth](https://developers.google.com/identity/protocols/oauth2?hl=zh-cn)                                           | Google 授权登录集成        |
-| 数据压缩      | [fflate](https://github.com/101arrowz/fflate)                                                                              | 前端数据压缩库              |
-| 邮件模板      | [MJML](https://mjml.io/)                                                                                                   | 邮件模板引擎               |
-| GTM后台     | [Google Tag Manager](https://tagmanager.google.com/)                                                                         | 标签管理工具               |
+| 分类        | 技术/库                                                                                                                                                                 | 说明                           |
+|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------|
+| 核心框架      | [Nuxt.js 4](https://nuxt.com/)                                                                                                                                       | 基于 Vue 3 的服务端渲染框架，支持 SSR/SSG |
+| UI 组件库    | [Element Plus](https://element-plus.org/)                                                                                                                            | Vue 3 企业级 UI 组件库             |
+| 状态管理      | [Pinia](https://pinia.vuejs.org/) + [pinia-plugin-persistedstate](https://prazdevs.github.io/pinia-plugin-persistedstate/)                                           | 模块化状态管理及数据持久化                |
+| 网络请求      | [Axios](https://axios-http.com/)                                                                                                                                     | 统一的 HTTP 请求拦截与响应处理           |
+| 国际化       | [i18n-jsautotranslate](https://translate.zvo.cn/)                                                                                                                    | 自动化翻译方案，支持 20+ 语种            |
+| 身份认证      | [Google GIS](https://codelabs.developers.google.com/codelabs/google-one-tap?hl=zh-cn#0) / [OAuth2](https://developers.google.com/identity/protocols/oauth2?hl=zh-cn) | 生产环境与开发环境差异化的 Google 登录集成    |
+| 数据分析      | [Google Tag Manager](https://tagmanager.google.com/)                                                                                                                 | 统一管理 GA4、Ads 转化与自定义事件埋点      |
+| 图像处理      | [OpenSeadragon](https://openseadragon.github.io/) / [Vue Advanced Cropper](https://advanced-cropper.github.io/vue-advanced-cropper/)                                 | 高清大图深度缩放预览 / 头像裁剪            |
+| 加密        | [JSEncrypt](https://travistidwell.com/jsencrypt/)                                                                                                                    | 前端 RSA 加密                    |
+| 轮播图       | [Swiper](https://swiperjs.com/)                                                                                                                                      | 响应式滑块组件                      |
+| Cookie 提示 | [Vanilla Cookie Consent](https://cookieconsent.orestbida.com/)                                                                                                       | Cookie 政策弹窗                  |
+| 事件总线      | [mitt](https://github.com/developit/mitt)                                                                                                                            | 跨组件事件通信（轻量级）                 |
+| 数据压缩      | [fflate](https://github.com/101arrowz/fflate)                                                                                                                        | 前端数据压缩库                      |
+| 邮件模板      | [MJML](https://mjml.io/)                                                                                                                                             | 响应式邮件模板构建                    |
 
 ---
 
@@ -61,54 +91,57 @@
 
 ---
 
-## ⚙️ 安装与运行
+## ⚙️ 快速开始
 
-### 1️⃣ 安装依赖
+### 环境要求
+
+- Node.js >= 18.0.0
+- pnpm / npm / yarn
+
+### 安装与运行
 
 ```bash
+# 1. 安装依赖
 npm install
 # 或
 yarn install
 # 或
 pnpm install
-```
 
-### 2️⃣ 启动开发环境
-
-```bash
+# 2. 启动开发环境 (加载 .env.development)
 npm run dev
-```
 
-### 3️⃣ 构建生产环境
+# 3. 构建生产环境 (加载 .env.production)
+npm run build # SSR
+npm run generate # 生成静态站点
+npm run start # 启动生产环境
 
-```bash
-npm run build
-```
-
-### 4️⃣ 启动生产环境
-
-```bash
-npm run start
-```
-
-### 5️⃣ 生成静态站点
-
-```bash
-npm run generate
-```
-
-### 6️⃣ 类型检测
-
-```bash
+# 4. 类型检测
 npm run lint:types
 ```
 
 ---
 
-## 🌍 国际化说明
+## 📁 环境变量配置
 
-本项目使用 **i18n-jsautotranslate** 作为多语言自动翻译核心，并配合自定义的 `useTranslateLang` 组合式函数，实现 *
-*自动语言切换 + Element Plus 语言包联动**。
+请在根目录根据环境创建 .env 文件。
+
+| 变量名                          | 示例值                                   | 说明                     |
+|------------------------------|---------------------------------------|------------------------|
+| NUXT_PUBLIC_OBS_URL          | https://dafen-prod-media.artdafen.com | OBS服务地址                |
+| NUXT_PUBLIC_API_BASE         | https://api.example.com/api           | 后端接口地址                 |
+| NUXT_PUBLIC_PAYPAL_CLIENT_ID | xxxx                                  | PayPal 支付 Client ID    |
+| NUXT_PUBLIC_HTTP_TIMEOUT     | 60000                                 | 超时时间                   |
+| NUXT_PUBLIC_SITE_URL         | https://www.artdafen.com              | 站点主域名 (用于 SEO/Sitemap) |
+| NUXT_PUBLIC_SITE_NAME        | ART DAFEN                             | 站点名称                   |
+| NUXT_PUBLIC_ENABLE_SSR       | true                                  | 是否开启服务端渲染              |
+
+---
+
+## 🌍 自动化国际化
+
+本项目摒弃了传统的 JSON 语言包维护模式，采用 **i18n-jsautotranslate** 结合自定义 **Hook useTranslateLang** 实现全站自动化翻译与
+**Element Plus** 组件语言包的深度联动。
 
 ### 🔗 语言数据来源
 
@@ -201,7 +234,7 @@ npm run lint:types
 
 ---
 
-## 🧩 全局事件管理（mitt）
+## 🧩 全局事件管理
 
 本项目使用 [mitt](https://github.com/developit/mitt) 作为轻量级全局事件总线，用于组件间通信。
 
@@ -217,6 +250,7 @@ export type MittEvents = {
     closeCartWindow: void
     openCartWindow: void
     loginSuccess: void
+    // ...
 }
 
 export default defineNuxtPlugin((_nuxtApp) => {
@@ -261,80 +295,78 @@ $bus.off('closeCartWindow')
 
 ---
 
-## 📊 Google Tag Manager（GTM）统一埋点与广告追踪
+## 🔑 Google身份认证体系
+
+为兼顾开发便捷性与生产环境的用户体验，本项目采用差异化的 Google 登录策略
+
+* 生产环境：Google Identity Services (GIS)
+    * 在线上环境（Production），我们弃用了传统的 OAuth2 跳转方式，全面接入全新的 Google Identity Services，提供无缝登录体验。
+        * One Tap Login：用户进入网站时，右上角自动弹出 Google 账号选择提示，无需点击即可快速登录。
+        * Sign In With Google 按钮：在登录/注册弹窗中渲染官方标准按钮。
+    * 核心实现：
+        * 插件位置：`plugins/google.client.ts`
+        * 功能：加载 `gsi/client` 脚本，初始化 `initOneTap()`
+
+* 开发环境：OAuth 2.0
+    * 由于 GIS 需要严格的域名验证（不支持 localhost 或内网 IP），在开发环境（Development）下，系统自动降级使用标准的 OAuth 2.0
+      跳转授权流程。
+        * 流程：点击 Google 图标 -> 跳转 Google 授权页 -> 回调至 /get-google-code.html -> 解析 Code 并登录
+        * 配置：需在 Google [Cloud Console](https://console.cloud.google.com/) 中配置：
+            * OAuth Client ID；
+            * 授权回调地址；
+            * 作用域（email, profile 等）。
+        * 核心实现：
+            * 插件位置：`plugins/google-auth.client.ts`
+
+### 逻辑判断示例 (LoginWindow.vue)：
+
+```typescript
+// 伪代码逻辑展示
+const isDev = import.meta.env.MODE !== 'production'
+
+if (isDev) {
+    // 开发环境：调用旧版 OAuth 跳转
+    const {$google} = useNuxtApp()
+    $google.oAuth()
+} else {
+    // 生产环境：渲染 Google 官方 GIS 按钮
+    renderButton(BUTTON_ID, true, close)
+}
+```
+
+* `$google.oAuth()` 方法会自动检查是否存在授权 `code`，若无则跳转至 Google 授权页面。
+* 授权完成后会回调至 `/get-google-code.html`，再自动重定向回原业务页面。
+
+### 🧭 授权跳转回调（OAuth 2.0）
+
+`/public/get-google-code.html `是自定义的 Google 授权中转页：
+
+它负责解析授权返回参数，并将 code 回传到业务地址。
+
+在页面或组件中可直接调用全局的 `$google` 方法：
+
+---
+
+## 📊 数据埋点-gtm
 
 > 本项目未直接引入 `gtag.js` 或 GA4 脚本，而是通过 Google Tag Manager (GTM) 作为统一容器，托管以下功能：
 
 | 功能                            | 是否通过 GTM 管理 |
-| ----------------------------- | ----------- |
+|-------------------------------|-------------|
 | GA4（Google Analytics 4）数据统计   | ✅ 是         |
 | Google Ads 转化追踪 & Remarketing | ✅ 是         |
 | 自定义事件 (例如加入购物车、下单成功)          | ✅ 是         |
 | DataLayer 数据推送                | ✅ 支持        |
 
-> GTM 插件在 `plugins/gtm.client.ts` 中注册，仅在 生产环境 生效。
+* 实现方式：通过 `plugins/gtm.client.ts` 监听 `page:finish` 钩子，自动向 `dataLayer` 推送数据。
+* 生效范围：仅在 production 模式下加载，避免污染测试数据。
+* 追踪内容:
+    * 基础流量 (Page View)
+    * 电商行为 (Add to Cart, Purchase)
+    * Google Ads 转化追踪
 
-### 🔧 插件实现
-
-```ts
-// plugins/gtm.client.ts
-export default defineNuxtPlugin((nuxtApp) => {
-    // 只在生产环境生效
-    if (import.meta.env.MODE !== 'production') {
-        console.log('[gtm] 当前非生产环境：', import.meta.env.MODE)
-        return
-    }
-
-    if (!process.client) return
-
-    if (!GTM_ID) {
-        console.warn('[gtm] GTM Measurement ID is not provided.')
-        return;
-    }
-
-    // 插入 <head>：gtm.js
-    // 1. 将此代码粘贴到网页的 <head> 中尽可能靠上的位置：
-    const script = document.createElement('script')
-    script.innerHTML = `
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','${GTM_ID}');
-  `
-    document.head.appendChild(script)
-
-    // 插入 <body> 最前面：noscript iframe
-    // 2. 请将此代码粘帖到紧跟起始 <body> 标记之后的位置：
-    const noscript = document.createElement('noscript')
-    noscript.innerHTML = `
-    <iframe src="https://www.googletagmanager.com/ns.html?id=${GTM_ID}"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-  `
-    document.body.prepend(noscript)
-
-    // 推送 page_view 事件给 GTM dataLayer
-    nuxtApp.hook('page:finish', () => {
-        const route = useRoute()
-        window.dataLayer?.push({
-            event: 'page_view',
-            page_path: route.fullPath,
-            page_title: document.title
-        })
-    })
-})
-```
-
-### ⚙️ 配置方式
-
-```ts
-// .env
-NUXT_PUBLIC_GTM_ID = G - XXXXXXXXXX
-```
-在非生产环境下（如 `development` 或 `staging`），不会加载或上报统计信息，以避免干扰数据。
-
-### 如何触发页面浏览（page_view）事件？
-```ts
+```typescript
+// 路由切换时自动上报 PV
 nuxtApp.hook('page:finish', () => {
     const route = useRoute()
     window.dataLayer?.push({
@@ -344,150 +376,30 @@ nuxtApp.hook('page:finish', () => {
     })
 })
 ```
-说明： 
+
+说明：
+
 * 在 GTM → 触发器 → 选择 “自定义事件”，监听 `page_view` 即可绑定 GA4 的 PageView。
 * 不再手动调用 gtag('config', 'G-XXXX')。
 
 ### 发送自定义事件（例如加入购物车）
+
 ```ts
 window.dataLayer?.push({
-  event: 'add_to_cart',
-  items: [{
-    item_id: goods.id,
-    item_name: goods.name,
-    price: goods.price,
-    quantity: 1
-  }]
+    event: 'add_to_cart',
+    items: [{
+        item_id: goods.id,
+        item_name: goods.name,
+        price: goods.price,
+        quantity: 1
+    }]
 })
 ```
 
 在 GTM 中设置：
+
 * 触发器：自定义事件 → `add_to_cart`
 * 标签：GA4 事件 → 参数映射 → 发送至 GA4 或 Google Ads
-
----
-
-## 🔑 Google 授权登录（OAuth2）
-
-本项目内置 Google 登录授权 功能，在 `plugins/google-auth.client.ts` 中注册，通过 `$google` 对象提供全局调用。
-
-* 支持通过 Google OAuth 2.0 登录；
-* 采用 Google Identity Services 集成；
-* 用户可使用 Google 账号快速注册/登录；
-* 需在 Google [Cloud Console](https://console.cloud.google.com/) 中配置：
-    * OAuth Client ID；
-    * 授权回调地址；
-    * 作用域（email, profile 等）。
-
-### 🔧 插件实现
-
-```ts
-// plugins/google-auth.client.ts
-import {getUrlQuery} from '~/utils'
-
-class AuthGoogle {
-    // 自动授权逻辑
-    oAuth() {
-        const {code} = getUrlQuery()
-        if (!code) return this.toAuth()
-    }
-
-    // 跳转到 Google 授权页面
-    toAuth() {
-        window.location.replace(this.getAuthUrl())
-    }
-
-    // 拼接授权 URL
-    getAuthUrl() {
-        const redirect_uri = 'https://artdafen.com/get-google-code.html'
-        const scope = 'email profile'
-        const client_id = 'xxxxxx'
-        const access_type = 'offline'
-        const response_type = 'code'
-        const project_url = `${encodeURIComponent(location.origin + '/auth')}`
-
-        // get-google-code.html 是自定义跳转回调文件（位于 public 目录）
-        return `https://accounts.google.com/o/oauth2/auth?response_type=${response_type}&redirect_uri=${redirect_uri}&scope=${scope}&client_id=${client_id}&access_type=${access_type}&state=${project_url}`
-    }
-}
-
-export default defineNuxtPlugin(() => {
-    const ga = new AuthGoogle()
-    return {provide: {google: ga}}
-})
-```
-
-### 🧭 授权跳转回调
-
-`/public/get-google-code.html `是自定义的 Google 授权中转页：
-
-它负责解析授权返回参数，并将 code 回传到业务地址。
-
-```html
-<!-- public/get-google-code.html -->
-<script>
-    var GGC = {
-        urlParams: {},
-        getUrlParams: function () {
-            var pairs = location.search.substring(1).split('&')
-            for (var i = 0; i < pairs.length; i++) {
-                var pos = pairs[i].indexOf('=')
-                if (pos === -1) continue
-                GGC.urlParams[pairs[i].substring(0, pos)] = decodeURIComponent(pairs[i].substring(pos + 1))
-            }
-        },
-        appendParams: function (url, params) {
-            if (params) {
-                var baseWithSearch = url.split('#')[0]
-                var hash = url.split('#')[1]
-                for (var key in params) {
-                    var attrValue = params[key]
-                    if (attrValue !== undefined) {
-                        var newParam = key + '=' + attrValue
-                        baseWithSearch += baseWithSearch.indexOf('?') > 0 ? '&' + newParam : '?' + newParam
-                    }
-                }
-                url = hash ? baseWithSearch + '#' + hash : baseWithSearch
-            }
-            return url
-        },
-        doRedirect: function () {
-            var code = GGC.urlParams['code']
-            var state = GGC.urlParams['state']
-            if (code && state) {
-                var targetUrl = GGC.appendParams(state, {
-                    code: code,
-                    state: encodeURIComponent(state)
-                })
-                location.href = targetUrl
-            } else {
-                document.body.innerHTML = '<h3>Missing necessary parameters, unable to complete the jump.</h3>'
-            }
-        }
-    }
-    GGC.getUrlParams()
-    GGC.doRedirect()
-</script>
-
-```
-
-### 💡 使用示例
-
-在页面或组件中可直接调用全局的 `$google` 方法：
-
-```ts
-// 示例：点击按钮执行 Google 登录
-const toGoogleAuth = () => {
-    const {$google} = useNuxtApp()
-    let path = route.fullPath
-    if (path === LOGIN_URL) path = HOME_URL
-    window.localStorage.setItem(STORAGE_BACK_URL, path)
-    $google.oAuth()
-}
-```
-
-* `$google.oAuth()` 方法会自动检查是否存在授权 `code`，若无则跳转至 Google 授权页面。
-* 授权完成后会回调至 `/get-google-code.html`，再自动重定向回原业务页面。
 
 ---
 
@@ -551,9 +463,10 @@ OpenSeadragon 并不能直接读取普通的 `.jpg`、`.png `图片，它需要�
 #### 💡 使用示例
 
 ```vue
+
 <HighResViewer
-  :thumbnail-src="imagePrefix(goodsDetail.img)"
-  :dzi-url="imagePrefix(goodsDetail.dzi)"
+    :thumbnail-src="imagePrefix(goodsDetail.img)"
+    :dzi-url="imagePrefix(goodsDetail.dzi)"
 />
 ```
 
@@ -575,9 +488,9 @@ OpenSeadragon 并不能直接读取普通的 `.jpg`、`.png `图片，它需要�
 ```vue
 
 <ImgCropper
-  ref="imgCropperRef"
-  :src="imageUrl"
-  @cropper-success="cropperSuccess"
+    ref="imgCropperRef"
+    :src="imageUrl"
+    @cropper-success="cropperSuccess"
 />
 ```
 
@@ -613,31 +526,14 @@ const cropperSuccess = async (file: File) => {
 
 ---
 
-## 🧠 轮播图与 Cookie 管理
+## 🧠 轮播图与Cookie管理
 
 * 使用 Swiper 实现轮播广告与作品展示；
 * 使用 Vanilla Cookie Consent 实现 Cookie 政策弹窗。
 
 ---
 
-## 📁 环境变量示例
-
-在根目录创建 `.env` 文件：
-
-```bash
-# 接口地址
-NUXT_PUBLIC_API_BASE=https://api.example.com
-
-# 默认语言
-NUXT_PUBLIC_DEFAULT_LANG=zh-CN
-
-# 加密公钥
-NUXT_PUBLIC_RSA_PUBLIC_KEY=xxxxx
-```
-
----
-
-## 📧 邮件营销模板构建（MJML）
+## 📧 邮件模板
 
 本项目支持通过 Google 邮件系统 进行邮件营销与推送通知。
 
@@ -696,7 +592,7 @@ mjml input.mjml -o output.html
 
 ---
 
-## 🛍️ Google Search Central - 商品 JSON-LD 结构化数据
+## 🛍️ SEO 与结构化数据
 
 本项目遵循 [Google Search Central](https://developers.google.com/search?hl=zh-cn) 官方规范。
 
@@ -801,53 +697,8 @@ injectProductJsonLd()
     "shippingDestination": {
       "@type": "DefinedRegion",
       "addressCountry": [
-        "US",
-        "CA",
-        "MX",
-        "GB",
-        "IE",
-        "DE",
-        "FR",
-        "IT",
-        "ES",
-        "NL",
-        "SE",
-        "NO",
-        "DK",
-        "FI",
-        "PL",
-        "AT",
-        "BE",
-        "CH",
-        "PT",
-        "AU",
-        "NZ",
-        "JP",
-        "KR",
-        "SG",
-        "HK",
-        "TW",
-        "AE",
-        "SA",
-        "IL",
-        "BR",
-        "AR",
-        "CL",
-        "CO",
-        "PE",
-        "UY",
-        "EC",
-        "VE",
-        "ZA",
-        "NG",
-        "EG",
-        "MA",
-        "KE",
-        "GH",
-        "TN",
-        "DZ",
-        "ET",
-        "TZ"
+        "US"
+        // 国家代码...
       ]
     },
     "deliveryTime": {
@@ -871,53 +722,8 @@ injectProductJsonLd()
     "@type": "MerchantReturnPolicy",
     "@id": "#return_policy_global",
     "applicableCountry": [
-      "US",
-      "CA",
-      "MX",
-      "GB",
-      "IE",
-      "DE",
-      "FR",
-      "IT",
-      "ES",
-      "NL",
-      "SE",
-      "NO",
-      "DK",
-      "FI",
-      "PL",
-      "AT",
-      "BE",
-      "CH",
-      "PT",
-      "AU",
-      "NZ",
-      "JP",
-      "KR",
-      "SG",
-      "HK",
-      "TW",
-      "AE",
-      "SA",
-      "IL",
-      "BR",
-      "AR",
-      "CL",
-      "CO",
-      "PE",
-      "UY",
-      "EC",
-      "VE",
-      "ZA",
-      "NG",
-      "EG",
-      "MA",
-      "KE",
-      "GH",
-      "TN",
-      "DZ",
-      "ET",
-      "TZ"
+      "US"
+      // 国家代码...
     ],
     "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
     "merchantReturnDays": 14,
@@ -953,7 +759,7 @@ injectProductJsonLd()
 
 ---
 
-## 🗜️ 查询参数压缩与短路径优化
+## 🗜️ 数据压缩与短链
 
 本项目使用 [fflate](https://101arrowz.github.io/fflate/) 库对 URL 查询参数进行压缩与解压，实现了“短路径参数（Token）”功能，有效缩短
 URL 长度，避免复杂对象参数暴露。
@@ -1107,20 +913,21 @@ definePageMeta({
 ```
 
 当 `auth` 为 `true` 时：
+
 * 若用户未登录，将自动跳转至登录页；
 * 客户端会自动保存当前页面路径至 `localStorage` 中（键名为 `STORAGE_BACK_URL`），登录成功后可自动回跳。
 
 ```ts
 if (needAuth && !userStore.isLogin) {
-  if (import.meta.client) localStorage.setItem(STORAGE_BACK_URL, to.fullPath)
-  if (path !== loginPath) return navigateTo(LOGIN_URL, { redirectCode: 302 })
+    if (import.meta.client) localStorage.setItem(STORAGE_BACK_URL, to.fullPath)
+    if (path !== loginPath) return navigateTo(LOGIN_URL, {redirectCode: 302})
 }
 ```
 
 ### 📘 使用规范总结
 
 | 功能描述          | 实现方式                             |
-| ------------- | -------------------------------- |
+|---------------|----------------------------------|
 | SSR 恢复登录状态与货币 | 自动从 Cookie 中获取并注入 Pinia          |
 | 已登录访问登录/注册页   | 自动重定向至首页                         |
 | 需要登录的页面校验     | `definePageMeta({ auth: true })` |

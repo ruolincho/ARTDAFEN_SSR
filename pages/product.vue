@@ -104,7 +104,7 @@
                          :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']">
                       <input type="text" placeholder="1400" style="width: 60%" v-model="startPrice"
                              :disabled="!isCustomPrice" @blur="onStartPriceBlur">
-                      <span class="text-gray-600">{{ currencyStore.getCurrencySymbol }}</span>
+                      <span class="text-gray-600">{{ getCurrencySymbol }}</span>
                     </div>
                     <div class="text-16 my-20">Max Price</div>
                     <div class="acea-row row-between-wrapper px-15 py-12"
@@ -112,7 +112,7 @@
                     >
                       <input type="text" placeholder="3400" style="width: 60%" v-model="endPrice"
                              :disabled="!isCustomPrice" @blur="onEndPriceBlur">
-                      <span class=" text-gray-600">{{ currencyStore.getCurrencySymbol }}</span>
+                      <span class=" text-gray-600">{{ getCurrencySymbol }}</span>
                     </div>
                   </div>
                 </div>
@@ -677,9 +677,7 @@
         <template v-if="popupCurrentMenu.config?.type === 'PRICE'">
           <div class="mx-12 price-range-text ">
             <div class="text-center f-bold pt-20 pb-20">
-              {{ currencyStore.getCurrencySymbol }}{{ priceRange[0] }} ~ {{
-                currencyStore.getCurrencySymbol
-              }}{{ priceRange[1] }}
+              {{ getCurrencySymbol }}{{ priceRange[0] }} ~ {{ getCurrencySymbol }}{{ priceRange[1] }}
               <template v-if="priceRange[1] >= PRICER_MAX">+</template>
             </div>
             <el-slider
@@ -973,17 +971,12 @@ onUnmounted(() => {
   $bus.off('loginSuccess', paramsWatch)
 })
 
-
-const test = ref(true)
-const test2 = ref(true)
-const test3 = ref(true)
-
 const {$bus} = useNuxtApp()
 const route = useRoute()
 const router = useRouter()
 const appStore = useAppStore()
 const userStore = useUserStore()
-const currencyStore = useCurrencyStore();
+const { getCurrencySymbol } = useCurrencyStore();
 const origin = useRequestURL().origin
 
 useHead(mergeHeadWithLodash(

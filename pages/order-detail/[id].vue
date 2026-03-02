@@ -17,7 +17,7 @@
                 <p class="text-16 f-bold-500 flex-1">{{ item.title }}</p>
               </div>
               <p class="text-14 f-bold">{{ item.quantity }} ×
-                {{ currencyStore.formatToCurrency(item.unitPrice, currencyCode) }}</p>
+                {{ formatToCurrency(item.unitPrice, currencyCode) }}</p>
               <p class="text-14 text-gray-500 mt-4" v-for="(v, k) in item.specs">{{ k }}: {{ v }}</p>
             </div>
           </div>
@@ -47,19 +47,19 @@
       <div class="review-summary shadow-lg p-20">
         <div class="acea-row row-between-wrapper text-16 f-bold pb-20 mb-20 border-b-sm border-gray-200">
           <span>Subtotal</span>
-          <span>{{ currencyStore.formatToCurrency(orderDetail?.order?.originalAmount || 0, currencyCode) }}</span>
+          <span>{{ formatToCurrency(orderDetail?.order?.originalAmount || 0, currencyCode) }}</span>
         </div>
         <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
           <span>Delivery Amount</span>
-          <span>{{ currencyStore.formatToCurrency(orderDetail?.order?.deliveryAmount || 0, currencyCode) }}</span>
+          <span>{{ formatToCurrency(orderDetail?.order?.deliveryAmount || 0, currencyCode) }}</span>
         </div>
         <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
           <span>Discount Amount</span>
-          <span>{{ currencyStore.formatToCurrency(orderDetail?.order?.discountAmount || 0, currencyCode) }}</span>
+          <span>{{ formatToCurrency(orderDetail?.order?.discountAmount || 0, currencyCode) }}</span>
         </div>
         <div class="acea-row row-between-wrapper text-16 f-bold pt-20 mt-20 border-t-sm border-gray-200 text-error">
           <span>Grand Total</span>
-          <span>{{ currencyStore.formatToCurrency(orderDetail?.order?.actualAmount || 0, currencyCode) }}</span>
+          <span>{{ formatToCurrency(orderDetail?.order?.actualAmount || 0, currencyCode) }}</span>
         </div>
       </div>
 
@@ -83,7 +83,7 @@ onMounted(() => {
 })
 
 const route = useRoute()
-const currencyStore = useCurrencyStore()
+const { formatToCurrency } = useCurrencyStore();
 
 // 获取订单详情
 const currencyCode = ref('USD')

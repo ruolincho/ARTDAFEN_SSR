@@ -12,16 +12,27 @@
         <swiper-slide class="cursor-pointer" v-for="item in topicData" :key="item.id" @click="jumpToUrl(item.url)" :lazt="true">
           <!-- 图片 -->
           <template v-if="item.type === '0'">
-            <img
-                class="w-full h-auto pc fit-cover"
-                :src="imagePrefix(item.img)" alt="banner"
-                loading="lazy"
-            >
-            <img
-                class="w-full h-auto app"
-                :src="imagePrefix(item.mobileImg)" alt="banner"
-                loading="lazy"
-            >
+            <picture>
+              <!-- Mobile -->
+              <source
+                  media="(max-width: 768px)"
+                  :srcset="getMobileBanner(imagePrefix(item.mobileImg)).srcset"
+                  sizes="100vw"
+              />
+              <!-- PC -->
+              <source
+                  media="(min-width: 769px)"
+                  :srcset="getPcBanner(imagePrefix(item.img)).srcset"
+                  sizes="100vw"
+              />
+              <!-- fallback img -->
+              <img
+                  :src="getPcBanner(imagePrefix(item.img)).src"
+                  alt="banner"
+                  class="w-full h-auto fit-cover"
+                  loading="lazy"
+              />
+            </picture>
           </template>
           <!-- 视频 -->
           <template v-if="item.type === '1'">
@@ -160,7 +171,7 @@
         <div class="row elevating-list" v-if="appStore.isPc">
           <div
               class="col-sm-4 col-12"
-              v-for="(item, index) in disCoverData" :key="item.id"
+              v-for="(item, index) in disVibeData" :key="item.id"
               v-aos="{ name: 'fade-up', delay: index % 3 * 100}"
           >
             <NuxtLink class="block" :to="item?.url || '/'">
@@ -182,7 +193,7 @@
             :lazy="true"
             v-aos="'fade-up'"
         >
-          <swiper-slide v-for="item in disCoverData" :key="item.title" style="width: 80%;" :lazy="true">
+          <swiper-slide v-for="item in disVibeData" :key="item.title" style="width: 80%;" :lazy="true">
             <NuxtLink class="block" :to="item?.url || '/'">
               <div class="overflow-hidden">
                 <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name" loading="lazy">
@@ -247,10 +258,22 @@
           <p class="text-60 f-bold my-20">Photo To Art</p>
           <p class="text-22">Easily Transform Life's Real Moments Into A <br> Masterpiece — Made Just For You.</p>
         </div>
-        <img class="cover" :src="imagePrefix('/static/artdafen/make.webp')" alt="make"/>
+        <NuxtImg
+            class="cover"
+            src="/static/artdafen/make.webp"
+            provider="huaweiObs"
+            sizes="xs:100vw sm:100vw md:50vw lg:900px"
+            alt="make"
+        />
       </NuxtLink>
       <div class="bespoke-wrapper" v-aos="'fade-up'" v-if="appStore.isPc">
-        <img class="cover" :src="imagePrefix('/static/artdafen/bespoke.webp')" alt="bespoke">
+        <NuxtImg
+            class="cover"
+            src="/static/artdafen/bespoke.webp"
+            provider="huaweiObs"
+            sizes="xs:100vw sm:100vw md:50vw lg:800px"
+            alt="bespoke"
+        />
         <div class="content overflow-hidden">
           <div>
             <h2 class="text-40">The Essence of Quality</h2>
@@ -413,8 +436,8 @@
                   </NuxtLink>
                   <NuxtLink class="line2 text-14 block text-hover" :to="productLink(item)">{{ item.title }}</NuxtLink>
                   <p class="my-10">
-                    <span class="text-16 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice) }}</span>
-                    <span class="text-gray-400 text-through ml-5 text-14">{{ currencyStore.formatToCurrency(item.marketPrice) }}</span>
+                    <span class="text-16 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
+                    <span class="text-gray-400 text-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
                   </p>
                 </div>
               </div>
@@ -661,6 +684,7 @@ import {resolvePageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 import type {IMessage} from "~/api/interface/message/message";
 import {WHY_CHOOSE_LIST} from "~/constant";
+import type {ObjectNode} from "~/types/global";
 
 defineOptions({
   name: 'Home'
@@ -681,12 +705,28 @@ const route = useRoute()
 const router = useRouter()
 const appStore = useAppStore()
 const customStore = useCustomStore()
-const currencyStore = useCurrencyStore()
+const { formatToCurrency } = useCurrencyStore();
 const userStore = useUserStore()
 const modules = [Autoplay, Pagination, Navigation, Lazy]
 const playYoutube = ref(false)
 
 useHead(resolvePageMeta("/"));
+
+function getMobileBanner(imgPath: string) {
+  const widths = [414, 768]
+  const srcset = widths
+      .map(w => `${imgPath}?x-image-process=image/resize,w_${w},limit_0 ${w}w`)
+      .join(', ')
+  return { srcset, src: `${imgPath}?x-image-process=image/resize,w_768,limit_0` }
+}
+
+function getPcBanner(imgPath: string) {
+  const widths = [992, 1260, 1460, 1680, 1920]
+  const srcset = widths
+      .map(w => `${imgPath}?x-image-process=image/resize,w_${w},limit_0 ${w}w`)
+      .join(', ')
+  return { srcset, src: `${imgPath}?x-image-process=image/resize,w_1260,limit_0` }
+}
 
 // 点击艺术家
 const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
@@ -703,7 +743,7 @@ const {data: homeData, pending: isSkeleton} = await useAsyncData('homeData', asy
 const topicData = computed(() => (homeData.value?.ad ?? []).filter(i => i.tags === 'index:topic'))
 const roomData = computed(() => (homeData.value?.ad ?? []).filter(i => i.tags === 'index:room'))
 const styleData = computed(() => (homeData.value?.ad ?? []).filter(i => i.tags === 'index:style'))
-const disCoverData = computed(() => (homeData.value?.ad ?? []).filter(i => i.tags === 'index:discover'))
+const disVibeData = computed(() => (homeData.value?.ad ?? []).filter(i => i.tags === 'index:vibe'))
 const officialData = computed(() => (homeData.value?.ad ?? []).filter(i => i.tags === 'index:official'))
 const exploreData = computed(() => (homeData.value?.product ?? [])) // Top 100 作品
 const artistsData = computed(() => (homeData.value?.artists ?? [])) // Top 50 艺术家

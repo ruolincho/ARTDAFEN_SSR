@@ -1,7 +1,7 @@
 // @ts-ignore
 export default defineNuxtConfig({
     ssr: process.env.NUXT_PUBLIC_ENABLE_SSR === 'true',
-    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/google-fonts'],
+    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/google-fonts', '@nuxt/image'],
     runtimeConfig: {
         public: {
             siteName: process.env.NUXT_PUBLIC_SITE_NAME,
@@ -87,9 +87,13 @@ export default defineNuxtConfig({
             Roboto: [100, 300, 400, 500, 700, 900],
         },
         display: 'swap',  // 自动添加 font-display
+        prefetch: false, // 建议：如果是 download: true，通常不需要 prefetch/preconnect Google 的域名
         preconnect: true,
         preload: true,
         download: true,   // 建议开启，将字体下载到本地避免 CDN 限制
+        base64: false,  // 建议 false，除非字体文件极小
+        inject: true,   // 确保注入 CSS
+        overwriting: true, // 允许覆盖现有规则
     },
     devServer: {
         host: '0.0.0.0',
@@ -107,13 +111,28 @@ export default defineNuxtConfig({
         },
         esbuild: {
             drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
+        },
+        build: {
+            cssCodeSplit: false,  // 所有组件的 CSS 将会被合并到 entry.css 中 , 设置为 false，禁止将 CSS 拆分成多个小文件
         }
     },
     nitro: {
-        compatibilityDate: '2026-01-14',
+        compatibilityDate: '2026-02-09',
     },
     sourcemap: {
         server: true,
         client: false,
+    },
+    image: {
+        provider: 'huaweiObs', // 默认使用
+        providers: {
+            huaweiObs: {
+                name: 'huaweiObs', // provider 名称
+                provider: '~/providers/huawei-obs.ts',
+                options: {
+                    baseURL: process.env.NUXT_PUBLIC_OBS_URL
+                }
+            }
+        }
     }
 })

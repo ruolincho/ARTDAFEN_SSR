@@ -16,6 +16,8 @@ export const COUNTRY_CODE: string = '+1';
 export const CUSTOMER_SERVICE: string = '603 631 6753';
 // 联系邮箱
 export const CONTACT_EMAIL: string  = 'info@artdafen.com';
+// Business Address
+export const BUSINESS_ADDRESS = 'DD106 Lot 1479C, Kam Sheung Road, Yuen Long, Hong Kong'
 // Google Analytics Id
 export const GA_ID: string  = 'G-ZYVS05RLZV';
 // 存储登录返回地址的key

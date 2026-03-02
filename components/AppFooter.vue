@@ -93,7 +93,10 @@
 <!--        <NuxtLink to="/our-return-policy" class="friends-item">Our Return Policy</NuxtLink>-->
 <!--      </div>-->
       <div class="text-gray-600 mt-10">
-        Business Address: Kam Sheung Road, Yuen Long, Hong Kong DD106 Lot 1479C Lot
+        Business Address: {{ BUSINESS_ADDRESS }}
+      </div>
+      <div class="text-gray-600 mt-10">
+        US Customer Support: <a :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{ COUNTRY_CODE }} {{ CUSTOMER_SERVICE }}</a>
       </div>
       <div class="text-gray-600 mt-10">
         Email: <a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a>
@@ -121,7 +124,8 @@
             v-for="(menu, index) in footerList"
             :key="menu.name"
           >
-            <NuxtLink :to="menu.url">{{ menu.name }}</NuxtLink>
+            <NuxtLink v-if="menu.url" :to="menu.url">{{ menu.name }}</NuxtLink>
+            <span v-else>{{ menu.name }}</span>
             <div class="footer-tig P_tig" @click="toggleMenu(index)"></div>
             <ul class="footer_nav2 footer-cont">
               <li v-for="subMenu in menu.children" :key="subMenu.name">
@@ -176,7 +180,9 @@
           </a>
         </div>
       </div>
-      <div class="tel">Email Address<a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a></div>
+      <div class="tel">Business Address: {{ BUSINESS_ADDRESS }}</div>
+      <div class="tel">US Customer Support: <a :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{ COUNTRY_CODE }} {{ CUSTOMER_SERVICE }}</a></div>
+      <div class="tel">Email: <a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a></div>
       <p>For some products, Artdafen is not a direct seller, but a sales intermediary. For product information, please
         refer to the specific content on each product page.</p>
     </div>
@@ -187,7 +193,7 @@
 import {onMounted, ref} from "vue";
 import {getNoticeBtoApi} from "~/api/modules/notice/notice";
 import type {INotice} from "~/api/interface/notice/notice";
-import {CONTACT_EMAIL} from "~/config";
+import {BUSINESS_ADDRESS, CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
 import {getFaqByQuote} from "~/config/faq";
 
 onMounted(() => {
@@ -199,7 +205,7 @@ const faqList = getFaqByQuote('footer')
 const footerList = ref([
   {
     name: 'Agreement',
-    url: 'javascript:void(0)',
+    url: '',
     auth: false,
     children: [
       {name: 'Privacy Policy', url: 'privacy-policy'},
@@ -432,7 +438,8 @@ const getNoticeBto = async () => {
         position: relative;
         border-bottom: 1px solid #333;
 
-        > a {
+        > a,
+        > span {
           font-size: 16px;
           color: var(--color-gray-600);
           line-height: 48px;
@@ -525,6 +532,7 @@ const getNoticeBto = async () => {
       color: var(--color-gray-600);
       font-size: 14px;
       margin-bottom: 10px;
+      line-height: 1.5;
 
       span, a {
         color: var(--color-gray-600);

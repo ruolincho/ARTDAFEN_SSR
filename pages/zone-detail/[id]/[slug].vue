@@ -27,11 +27,11 @@
     <div class="container-fluid">
       <div class="acea-row row-between">
         <!-- 左侧专区区域 PC端-->
-        <div class="side-wrapper mr-40" v-show="appStore.device === 'pc' && zoneExploreList.length">
+        <div class="side-wrapper mr-30" v-show="appStore.device === 'pc' && zoneExploreList.length">
           <div class="py-24 border-b-lg border-gray-700">
             <span class="text-20 f-bold flex-1">VIBE EXPLORE</span>
           </div>
-          <div class="explore-list">
+          <div class="explore-list scroll-y pr-10" style="max-height: 1200px;">
             <NuxtLink
                 :to="`/zone-detail/${item.id}/${item.slug}`"
                 class="explore-item mt-15 block border-b-sm border-gray-700 pb-15"
@@ -383,13 +383,6 @@ const route = useRoute();
 const router = useRouter();
 const appStore = useAppStore()
 const customStore = useCustomStore()
-
-const banners = ref([
-  '/trade/advertisement/2025/08/06/1763756679263330304/d01a86a0f2d249c6a0f48f43be2b17fe.webp',
-  '/trade/advertisement/2025/08/06/1763756679263330304/b756024938cf46c28f21d3c164b15d98.webp',
-  '/trade/advertisement/2025/08/06/1763756679263330304/4a00f253ca374e358bdc6830bc3f0464.webp',
-  '/trade/advertisement/2025/07/16/1763756679263330304/7e0ed77ec3274e9ea55a8a0967292e60.webp',
-])
 
 // 获取专区详情
 const {data: zoneDetail} = await useAsyncData(() => `zone-detail-${route.params.id}`, async () => {

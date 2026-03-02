@@ -1,4 +1,4 @@
-import {CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
+import {BUSINESS_ADDRESS, CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
 import {generateTitle2Slug} from "~/utils";
 
 export const QUOTE_TYPES = ['shopping', 'footer'] as const;
@@ -431,14 +431,14 @@ Here is how we distinguish our quality from the mass market:
                 </a>
             </li>
             <li style="list-style: disc; list-style-position: inside;">
-                <strong>Phone:</strong>
+                <strong>US Customer Support:</strong>
                 <a class="text-secondary" href="tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}">
               ${COUNTRY_CODE} ${CUSTOMER_SERVICE}
             </a>
             </li>
             <li style="list-style: disc; list-style-position: inside;">
-                <strong>Address:</strong>
-                Kam Sheung Road, Yuen Long, Hong Kong (DD106 Lot 1479C)
+                <strong>Business Address:</strong>
+                ${ BUSINESS_ADDRESS }
             </li>
             <li style="list-style: disc; list-style-position: inside;">
                 <strong>Service Hours:</strong>

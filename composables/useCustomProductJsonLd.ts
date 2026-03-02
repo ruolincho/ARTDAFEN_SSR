@@ -83,8 +83,9 @@ export function useCustomProductJsonLd(
             "name": p.title, // 父级名称（商品主标题）
             "sku": p.id, // 商品SKU
             "image": imagePrefix(p.img), // 商品图片
-            "description": "Personalized custom painting with selectable size, frame, and material options. Price varies depending on customization.", // 商品描述（可读友好、与页面一致）
-            "url": `${siteUrl.replace(/\/+$/, '')}/paint-detail/${p.id}`, // 此商品详情页的规范URL（canonical）
+            "keywords": p.keywords, // 商品关键词
+            "description": p.description, // 商品描述（可读友好、与页面一致）
+            "url": `${siteUrl.replace(/\/+$/, '')}/paint-detail/${p.id}/${p.slug}`, // 此商品详情页的规范URL（canonical）
             "offers": {
                 "@type": "Offer",  // 类型：报价
                 "priceCurrency": defaultCurrency, // 价格币种（ISO 4217）

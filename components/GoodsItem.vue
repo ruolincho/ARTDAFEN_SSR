@@ -27,10 +27,10 @@
       <NuxtLink class="line2 text-14 block text-hover" :to="productLink(item)">{{ item.title }}</NuxtLink>
       <p class="my-8">
         <span class="text-16 f-bold">
-          {{ currencyStore.formatToCurrency(item.retailPrice) }}
+          {{ formatToCurrency(item.retailPrice) }}
         </span>
-        <span class="text-gray-400 text-through ml-5 text-14">
-          {{ currencyStore.formatToCurrency(item.marketPrice)}}
+        <span class="text-gray-400 text-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">
+          {{ formatToCurrency(item.marketPrice)}}
         </span>
       </p>
       <div class="acea-row gap-xs">
@@ -62,7 +62,7 @@ const emit = defineEmits<{
   'artistClick': [value: ObjectNode.Creator]
 }>()
 
-const currencyStore = useCurrencyStore();
+const { formatToCurrency } = useCurrencyStore();
 
 const productThumbs = () => {
   emit('thumbsClick', props.item);

@@ -1,8 +1,13 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4853487 */
-  src: url('//at.alicdn.com/t/c/font_4853487_40jqzc3i3ew.woff2?t=1768646215884') format('woff2'),
-  url('//at.alicdn.com/t/c/font_4853487_40jqzc3i3ew.woff?t=1768646215884') format('woff'),
-  url('//at.alicdn.com/t/c/font_4853487_40jqzc3i3ew.ttf?t=1768646215884') format('truetype');
+  src: url('~/assets/fonts/iconfont.woff2') format('woff2');
+
+  /* 核心优化2: 显式设置字体显示策略 */
+  /* swap: 字体没加载出来前显示备用字体（图标会显示成一个方框或乱码），加载完后替换。Lighthouse 喜欢这个。
+     block: 字体没加载出来前显示空白（占位），加载完后显示。图标体验通常这个更好，但 Lighthouse 可能会警告。
+     为了跑分高，建议用 swap；为了视觉不闪烁乱码，建议用 block (且本地加载很快，空白期极短)。
+  */
+  font-display: swap;
 }
 
 .iconfont {
@@ -11,6 +16,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-choose-1:before {
+  content: "\e616";
 }
 
 .icon-link:before {
@@ -35,10 +44,6 @@
 
 .icon-choose-3:before {
   content: "\e613";
-}
-
-.icon-choose-1:before {
-  content: "\e611";
 }
 
 .icon-zhongduancuowuxinxi:before {

@@ -82,8 +82,9 @@ export function useOriginalProductJsonLd(
             "name": p.title, // 父级名称（商品主标题）
             "sku": p.id, // 商品SKU
             "image": imagePrefix(p.img), // 商品图片
-            "description": "Unique hand-painted oil painting, one of a kind.", // 商品描述（可读友好、与页面一致）
-            "url": `${siteUrl.replace(/\/+$/, '')}/original-detail/${p.id}`, // 此商品详情页的规范URL（canonical）
+            "keywords": p.keywords, // 商品关键词
+            "description": p.description, // 商品描述（可读友好、与页面一致）
+            "url": `${siteUrl.replace(/\/+$/, '')}/original-detail/${p.id}/${p.slug}`, // 此商品详情页的规范URL（canonical）
             "offers": {
                 "@type": "Offer",  // 类型：报价
                 "priceCurrency": defaultCurrency, // 价格币种（ISO 4217）

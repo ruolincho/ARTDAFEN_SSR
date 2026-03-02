@@ -88,13 +88,13 @@
             </div>
           </ClientOnly>
           <div class="operation-item acea-row row-middle currency">
-            <span class="operation-text ignore">{{ currencyStore.currentCurrency }}</span>
+            <span class="operation-text ignore">{{ currentCurrency }}</span>
             <span class="iconfont icon-down"></span>
             <ul class="currency-list">
               <li
-                  v-for="item in currencyStore.currencyList"
+                  v-for="item in currencyList"
                   :key="item.id"
-                  @click="currencyStore.setCurrentCurrency(item.code)"
+                  @click="setCurrentCurrency(item.code)"
               >
                 <span class="ignore">{{ item.code }}</span> - {{ item.name }}
               </li>
@@ -213,7 +213,7 @@
       <ul class="nav-list">
         <li class="P_parent" :class="{ open: openCurrencyApp }" @click="openCurrencyApp = !openCurrencyApp">
           <div class="cate-item">
-            <div class="category-a ignore">{{ currencyStore.currentCurrency }}</div>
+            <div class="category-a ignore">{{ currentCurrency }}</div>
             <div class="category-tig P_tig">
               <span><i class="iconfont icon-down"></i></span>
             </div>
@@ -222,9 +222,9 @@
             <div class="category-pad">
               <div
                   class="pad-a"
-                  v-for="item in currencyStore.currencyList"
+                  v-for="item in currencyList"
                   :key="item.id"
-                  @click="currencyStore.setCurrentCurrency(item.code)"
+                  @click="setCurrentCurrency(item.code)"
               >
                 <span class="ignore">{{ item.code }}</span> - {{ item.name }}
               </div>
@@ -305,7 +305,7 @@ if (import.meta.client) {
     checkFolded()
     getHeaderHeight()
 
-    currencyStore.getCurrency()
+    getCurrency()
 
     $bus.on('closeCartWindow', () => { // 隐藏购物车窗口
       cartPopoverRef.value?.hide?.()
@@ -331,7 +331,7 @@ if (import.meta.client) {
 const modules = [Pagination]
 const userStore = useUserStore()
 const appStore = useAppStore()
-const currencyStore = useCurrencyStore()
+const { getCurrency, currentCurrency, currencyList, setCurrentCurrency } = useCurrencyStore();
 const cartStore = useCartStore()
 const customStore = useCustomStore()
 const router = useRouter()

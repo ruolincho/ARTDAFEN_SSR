@@ -18,8 +18,8 @@
                 </div>
                 <p class="line1 text-12 my-8">{{ item.title }}</p>
                 <p>
-                  <span class="text-14 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice) }}</span>
-                  <span class="text-gray-400 text-through ml-5 text-12">{{ currencyStore.formatToCurrency(item.marketPrice) }}</span>
+                  <span class="text-14 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
+                  <span class="text-gray-400 text-through ml-5 text-12" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
                 </p>
               </div>
             </div>
@@ -61,7 +61,7 @@ useSeoMeta({
 })
 
 const router = useRouter()
-const currencyStore = useCurrencyStore()
+const { formatToCurrency } = useCurrencyStore();
 
 const proListRef = ref<InstanceType<typeof ProList>>()
 const initParam = reactive({size: 12});

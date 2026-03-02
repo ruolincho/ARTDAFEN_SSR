@@ -193,8 +193,9 @@ export function useProductJsonLd(
             const variant: any = {
                 "@type": "Product",
                 "name": [p.title, ...specPairs].filter(Boolean).join(' - '), // 变体展示名（建议包含父标题 + 关键属性）
-                "description": p.description || p.name, // 变体描述（可读友好、与页面一致）
                 "image": imagePrefix(v.img), // 变体图片（绝对URL；多张更好）
+                "keywords": p.keywords, // 商品关键词
+                "description": p.description, // 变体描述（可读友好、与页面一致）
                 "offers": offer, // 绑定该变体的报价信息
                 ...(v.id ? {"sku": String(v.id)} : {}), // SKU（强烈推荐，唯一）
                 ...(v.gtin ? {"gtin13": v.gtin} : {}),
@@ -220,8 +221,9 @@ export function useProductJsonLd(
             "@context": "https://schema.org/",
             "@type": "ProductGroup", // 类型：商品组（用于聚合变体）
             "name": p.title, // 父级名称（商品主标题）
-            "description": p.description || p.name, // 父级描述（可读友好、与页面一致）
-            "url": `${siteUrl.replace(/\/+$/, '')}/spot-detail/${p.id}`, // 此商品详情页的规范URL（canonical）
+            "keywords": p.keywords, // 商品关键词
+            "description": p.description, // 父级描述（可读友好、与页面一致）
+            "url": `${siteUrl.replace(/\/+$/, '')}/spot-detail/${p.id}/${p.slug}`, // 此商品详情页的规范URL（canonical）
             ...(p.brand ? {
                 "brand": {
                     "@type": "Brand",

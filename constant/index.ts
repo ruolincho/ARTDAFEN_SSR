@@ -487,7 +487,10 @@ export const PARTNER_LIST = [
 
 export const CASE_LIST = [
     {img: '/static/artdafen/case/case-1.webp', title: 'The Carter Houston TX', size: '180*180', name: 'untitled no. 1 (gold)', id: '1'},
-    {img: '/static/artdafen/case/case-2.webp', title: 'JW Marriott Mexico City', size: '395*440', name: 'Almond Blossom', id: '2'},
+    {img: '/static/artdafen/case/case-2.webp', title: 'Capital One, Las Vegas NV', size: '190x260', name: 'Colorful Botanical04', id: '2'},
     {img: '/static/artdafen/case/case-3.webp', title: 'Tate at Tanglewood TX', size: '240*630', name: 'The Eight Steeds', id: '3'},
     {img: '/static/artdafen/case/case-4.webp', title: 'The Oriental Spa HK', size: '95*70', name: 'Flowers in a Blue Vase', id: '4'},
+    {img: '/static/artdafen/case/case-5.webp', title: 'JW Marriott Mexico City', size: '310x440', name: 'Cerulean Abstract01', id: '5'},
+    {img: '/static/artdafen/case/case-6.webp', title: 'Marriott, Newport RI', size: '350x135', name: 'Gray Golden Blossoms05', id: '6'},
+    {img: '/static/artdafen/case/case-7.webp', title: 'Private Residence, Henderson Nevada', size: '300x140', name: 'Untitled_', id: '7'},
 ]

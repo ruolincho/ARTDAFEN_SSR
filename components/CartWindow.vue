@@ -22,7 +22,7 @@
               </div>
               <div class="flex-1 text-16 overflow-hidden">
                 <p class="line1">{{ item.title }}</p>
-                <p class="f-bold my-5">{{ item.quantity }} × {{ currencyStore.formatToCurrency(item.retailPrice) }}</p>
+                <p class="f-bold my-5">{{ item.quantity }} × {{ formatToCurrency(item.retailPrice) }}</p>
                 <div class="acea-row row-between-wrapper overflow-hidden">
                   <p class="flex-1 line1 mr-10">{{ formatAttr(item.specs) }}</p>
                   <span class="iconfont icon-delete text-20 cursor-pointer" @click="cartStore.remove(index)"></span>
@@ -33,7 +33,7 @@
         </div>
         <div class="acea-row row-between-wrapper py-20 text-16 f-bold">
           <p>Subtotal</p>
-          <p>{{ currencyStore.formatToCurrency(cartStore.subtotal) }}</p>
+          <p>{{ formatToCurrency(cartStore.subtotal) }}</p>
         </div>
         <el-button class="w-full" size="large" type="primary" @click="router.push('/cart')">Checkout</el-button>
       </template>
@@ -53,7 +53,7 @@ import {useCurrencyStore} from "~/stores/modules/currency";
 
 const router = useRouter();
 const cartStore = useCartStore();
-const currencyStore = useCurrencyStore();
+const { formatToCurrency } = useCurrencyStore();
 
 </script>
 

@@ -130,7 +130,7 @@
           </div>
         </div>
         <div class="part-auto border-r-sm border-b-sm border-gray-700 acea-row row-center-wrapper">
-          <div class="content-box mx-10">
+          <div class="content-box m-10">
             <div class="acea-row row-center">
               <p class="text-24">Multiple dedicated studios ensure fast, meticulous framing for any type of art.</p>
             </div>

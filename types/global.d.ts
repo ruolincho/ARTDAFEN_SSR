@@ -134,6 +134,8 @@ declare namespace General {
         status: Dict.ProductSaleStatus
         /* 商家 */
         merchant?: ObjectNode.Merchant
+        /* slug */
+        slug: string
     }
 
     /* 媒体类型 */

@@ -29,6 +29,10 @@ export namespace ISpecs {
         code: string
         /* 商品工艺Label */
         craft: string
+        /* 后续后端添加 */
+        gtin?: string
+        /* 后续后端添加 */
+        mpn?: string
     }
 
     /* 用于渲染的 SKU 数据 */

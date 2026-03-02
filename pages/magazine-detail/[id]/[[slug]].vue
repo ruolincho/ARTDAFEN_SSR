@@ -5,7 +5,7 @@
       <div class="text-40 f-bold my-20"> {{ newsDetail.title }}</div>
 
       <div class="my-20 acea-row row-between-wrapper">
-        <span class="text-16">{{ formatTimestamp(newsDetail.createTime, 'YYYY-MM-DD HH:mm:ss') }}</span>
+        <span class="text-16">{{ formatTimestamp(newsDetail.updateTime, 'YYYY-MM-DD HH:mm') }}</span>
         <el-popover
             :placement="appStore.isPc ? 'bottom' : 'left'"
             trigger="click"
@@ -33,21 +33,20 @@
                 <span class="iconfont" :class="[item.icon]"></span>
                 <span class="ml-12">{{ item.name }}</span>
               </a>
-              <a
-                  href="javascript:void(0);"
-                  class="share-item acea-row row-middle py-10 border-gray-200 block"
+              <span
+                  class="share-item acea-row row-middle py-10 border-gray-200 block cursor-pointer"
                   @click="handleCopy"
               >
                 <span class="iconfont icon-link"></span>
                 <span class="ml-12">{{ isClipboard ? 'Link Copied!' : 'Copy Link ' }}</span>
                 <span class="iconfont icon-check ml-6" v-show="isClipboard"></span>
-              </a>
+              </span>
             </div>
           </div>
         </el-popover>
       </div>
 
-      <div v-html="newsDetail.content"/>
+      <div class="rich-content" v-html="newsDetail.content"/>
     </div>
   </section>
 
@@ -70,8 +69,8 @@
                     <p class="text-26 line2">{{ item.title }}</p>
                     <p class="text-16 my-10 line2">{{ item.subtitle }}</p>
                   </div>
-                  <div class="acea-row row-between-wrapper">
-                    <div class="acea-row row-middle gap-xs">
+                  <div class="acea-row row-between-wrapper gap-xs">
+                    <div class="acea-row row-middle gap-xs flex-1">
                       <el-tag type="info" effect="plain" v-for="label in item.labels" :key="label">{{ label }}</el-tag>
                     </div>
                     <span class="text-14">{{ formatTimestamp(item.createTime, 'YYYY.MM.DD') }}</span>
@@ -260,11 +259,143 @@ watch(() => newsDetail.value, (newVal: INews.Row) => {
     initParam.categoryId = newVal.categoryId;
   }
 }, { immediate: true });
-
-
 </script>
 
 <style scoped lang="scss">
+:deep(.rich-content) {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+
+  // 段落
+  p {
+    margin: 1em 0;
+  }
+
+  // 标题
+  h1 {
+    font-size: 32px;
+    line-height: 1.4;
+    margin: 0.67em 0;
+    font-weight: bold;
+  }
+  h2 {
+    font-size: 26px;
+    line-height: 1.4;
+    margin: 0.75em 0;
+    font-weight: bold;
+  }
+  h3 {
+    font-size: 20px;
+    line-height: 1.4;
+    margin: 0.83em 0;
+    font-weight: bold;
+  }
+  h4 {
+    font-size: 18px;
+    line-height: 1.4;
+    margin: 0.83em 0;
+    font-weight: bold;
+  }
+
+  // 列表
+  ul {
+    list-style: disc;
+    margin: 1em 0;
+    padding-left: 1.5em;
+
+    ul {
+      list-style: circle;
+      padding-left: 1.5em;
+
+      ul {
+        list-style: square;
+        padding-left: 1.5em;
+      }
+    }
+  }
+
+  ol {
+    list-style: decimal;
+    margin: 1em 0;
+    padding-left: 1.5em;
+  }
+
+  li {
+    margin: 0.5em 0;
+    list-style: unset;
+  }
+
+  // 图片
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  // 引用
+  blockquote {
+    margin: 1em 0;
+    padding-left: 1em;
+    border-left: 4px solid #ddd;
+    color: #666;
+    font-style: italic;
+    background: #f9f9f9;
+  }
+
+  // 表格
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    overflow-x: auto;
+    display: block;
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f5f5f5;
+    }
+  }
+
+  // 链接
+  a {
+  }
+
+  // 强调文字
+  strong {
+    font-weight: bold;
+  }
+  em {
+    font-style: italic;
+  }
+
+  // 代码块
+  pre {
+    background: #f5f5f5;
+    padding: 10px;
+    overflow-x: auto;
+  }
+  code {
+    background: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+
+  // 分隔线
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 1em 0;
+  }
+}
+
 .news-more {
   .news-more-list {
     .news-more-item {
@@ -347,5 +478,4 @@ watch(() => newsDetail.value, (newVal: INews.Row) => {
     }
   }
 }
-
 </style>

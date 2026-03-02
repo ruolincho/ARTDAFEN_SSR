@@ -66,7 +66,12 @@
             <div class="content-wrapper">
               <p class="text-18 f-bold-600">Call us now</p>
               <p class="text-14 text-gray-600 mt-8 mb-12 desc">{{ item.detail }}</p>
-              <p class="text-24 mb-24">{{ item.email }}</p>
+              <p class="text-24 mb-24">
+                <a :href="`mailto:${item.email}`">{{ item.email }}</a>
+              </p>
+              <p class="text-24 mb-24" v-if="item.tel">
+                US Customer Support: <a :href="`tel:${item.tel}`">{{ item.tel }}</a>
+              </p>
               <el-button type="primary" size="large" :disabled="!item.tel">
                 <a :href="item.tel ? `tel:${item.tel}` : 'void:0'">
                   CALL NOW
@@ -84,6 +89,7 @@
 <script setup lang="ts">
 import {resolvePageMeta} from "~/config/pageMeta";
 import {CONTACT_EMAIL} from "~/config";
+import {COUNTRY_CODE, CUSTOMER_SERVICE} from "../config";
 
 useHead(resolvePageMeta("/contact"));
 

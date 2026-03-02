@@ -1,7 +1,7 @@
 <template>
   <NuxtLink class="news-item" :to="`/magazine-detail/${item.id}/${item.slug}`" target="_blank">
     <div class="p-img overflow-hidden">
-      <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" alt="">
+      <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" :alt="item.title">
     </div>
     <h2 class="text-22 mt-18 line2">{{ item.title }}</h2>
     <p class="text-14 my-10 line3">{{ item.subtitle || '- -' }}</p>

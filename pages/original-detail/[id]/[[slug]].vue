@@ -19,7 +19,7 @@
           <div class="spu-spec">
             <p class="text-20 text-error">Transaction Price</p>
             <div class="acea-row row-between row-bottom mt-10 mb-40">
-              <span class="text-60 f-bold-500">{{ currencyStore.formatToCurrency(goodsDetail.retailPrice || 0) }}</span>
+              <span class="text-60 f-bold-500">{{ formatToCurrency(goodsDetail.retailPrice || 0) }}</span>
               <el-tag type="danger" effect="dark" v-if="goodsDetail.status === '-1'">Sale Out</el-tag>
               <el-tag type="primary" effect="dark" v-if="goodsDetail.status === '0'">For Sale</el-tag>
             </div>
@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix, jumpNewWindow, youtubeProxyPrefix, generateTitle2Slug} from "~/utils";
+import {imagePrefix, jumpNewWindow, youtubeProxyPrefix} from "~/utils";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IProduct} from "~/api/interface/product/product";
 import {CONTACT_EMAIL} from "~/config";
@@ -164,8 +164,7 @@ onMounted(() => {
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore()
-const currencyStore = useCurrencyStore()
-
+const { formatToCurrency, currentCurrency } = useCurrencyStore();
 const playYoutube = ref(false)
 const isOpenDesc = ref(false) // 是否展开产品详情
 
@@ -177,7 +176,7 @@ const {data: goodsDetail} = await useAsyncData('goods-detail', async () => {
     params: {productId: route.params.id},
     headers: {
       'Token': userStore.token || '',
-      'X-Currency': currencyStore.currentCurrency
+      'X-Currency': currentCurrency
     }
   })
   return data
@@ -200,7 +199,7 @@ const goArtistDetail = () => {
 }
 
 const goReplicas = (item: ISpecs.Row) => {
-  const slug = generateTitle2Slug(goodsDetail.value.title ?? goodsDetail.value.name)
+  const slug = goodsDetail.value.slug
   const {referenceProductId, referenceSpecsId} = item.specs
   jumpNewWindow(`/paint-detail/${referenceProductId}/${slug}?specId=${referenceSpecsId}`)
 }

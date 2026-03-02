@@ -6,7 +6,7 @@
         Privacy Statement
       </h2>
       <p>
-        We take your privacy seriously and this privacy statement explains how <a class="text-secondary" href="#">artdafen.com</a>
+        We take your privacy seriously and this privacy statement explains how <a class="text-secondary" href="www.artdafen.com">artdafen.com</a>
         (collectively, “we,” “us,” or “our”) collect, use, share and process your information.
       </p>
       <h2 class="text-18 f-bold my-15">
@@ -189,8 +189,8 @@
       </h2>
       <p>
         We may periodically change this Privacy Statement to keep pace with new technologies, industry practices, and
-        regulatory requirements, among other reasons. If you do not agree to the revised contact us Privacy Statement,
-        please refrain from using our products or services and contact us to close any account you may have created.
+        regulatory requirements, among other reasons. If you do not agree to the revised Privacy Statement, please
+        refrain from using our products or services and contact us to close any account you may have created.
       </p>
       <h2 class="text-18 f-bold my-15">
         Storage And Transfer Of Your Personal Data
@@ -202,12 +202,28 @@
         transferred, processed or maintained outside the country or jurisdiction in which you reside, you should
         immediately stop accessing or using the services.
       </p>
+      <h2 class="text-18 f-bold my-15">
+        Children’s Privacy
+      </h2>
+      <p>
+        Our services are not intended for children under the age of 16. We do not knowingly collect personal information from children under 16. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately so we can delete such data.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Contact Us
+      </h2>
+      <p>
+        If you have questions about this Privacy Statement or its implementation, here is how you can reach us: <br>
+        Business Address: {{ BUSINESS_ADDRESS }} <br>
+        Email: <a class="text-secondary" :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a> <br>
+        US Customer Support: <a class="text-secondary" :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{COUNTRY_CODE}} {{ CUSTOMER_SERVICE }}</a>
+      </p>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import {resolvePageMeta} from "~/config/pageMeta";
+import {BUSINESS_ADDRESS, CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
 
 useHead(resolvePageMeta("/privacy-policy"));
 

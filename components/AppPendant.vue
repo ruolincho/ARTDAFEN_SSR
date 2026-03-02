@@ -6,9 +6,9 @@
 <!--    >-->
 <!--      <span class="iconfont icon-message "></span>-->
 <!--    </a>-->
-    <a v-if="showBackTop" class="widget-btn" @click="scrollToTop" href="javascript:void(0)">
+    <span v-if="showBackTop" class="widget-btn" @click="scrollToTop">
       <span class="iconfont icon-top "></span>
-    </a>
+    </span>
 
   </div>
 </template>

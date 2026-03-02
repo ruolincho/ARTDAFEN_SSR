@@ -42,7 +42,7 @@
             </div>
             <div class="content-wrapper">
               <h1 class="line2 text-14">{{ item.title }}</h1>
-              <p class="text-16 f-bold my-8">{{ currencyStore.formatToCurrency(item.retailPrice) }}</p>
+              <p class="text-16 f-bold my-8">{{ formatToCurrency(item.retailPrice) }}</p>
               <div class="acea-row gap-xs">
                 <div class="p-tag bg-gray-400" v-for="label in item.labels" :key="label">{{ label }}</div>
               </div>
@@ -67,7 +67,7 @@ import 'swiper/css/pagination'
 import {imagePrefix, productLink} from "~/utils";
 import {useCurrencyStore} from "~/stores/modules/currency";
 
-const currencyStore = useCurrencyStore()
+const { formatToCurrency } = useCurrencyStore();
 const route = useRoute()
 const modules = [Pagination, Navigation]
 

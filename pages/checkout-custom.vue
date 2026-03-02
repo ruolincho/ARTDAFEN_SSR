@@ -26,7 +26,7 @@
                   :disabled="isCreate"
                   :value-on-clear="1"
                 />
-                <p class="text-14 f-bold">{{ currencyStore.formatToCurrency(customStore.subtotal) }}</p>
+                <p class="text-14 f-bold">{{ formatToCurrency(customStore.subtotal) }}</p>
               </div>
               <div class="mt-10 text-right text-secondary f-bold" v-if="getOfferProduct.length">
                 <span> {{ getOfferProduct[0]?.promoOffer.join(' / ') }}</span>
@@ -38,7 +38,7 @@
       <div class="review-summary shadow-lg p-xl-20 p-15">
         <div class="acea-row row-between-wrapper text-16 f-bold pb-20 mb-20 border-b-sm border-gray-200">
           <span>Subtotal</span>
-          <span>{{ currencyStore.formatToCurrency(customStore.subtotal) }}</span>
+          <span>{{ formatToCurrency(customStore.subtotal) }}</span>
         </div>
         <div class="acea-row row-between-wrapper mb-20">
           <div class="acea-row row-middle">
@@ -96,21 +96,21 @@
         </div>
         <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
           <span>Estimated Shipping</span>
-          <span>{{ currencyStore.formatToCurrency(offerData.estimatedDeliveryAmount || 0) }}</span>
+          <span>{{ formatToCurrency(offerData.estimatedDeliveryAmount || 0) }}</span>
         </div>
         <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
           <span>Discount Amount</span>
-          <span>{{ currencyStore.formatToCurrency(Number(offerData?.discountAmount || 0)) }}</span>
+          <span>{{ formatToCurrency(Number(offerData?.discountAmount || 0)) }}</span>
         </div>
         <div class="acea-row row-between-wrapper text-16 f-bold pt-20 my-20 border-t-sm border-gray-200">
           <span>Estimated Total</span>
           <div>
             <!-- 优惠之前的金额 -->
             <p v-if="Number(offerData?.discountAmount || 0) > 0" class="text-through text-gray-600">
-              {{ currencyStore.formatToCurrency(totalBeforeDiscount) }}
+              {{ formatToCurrency(totalBeforeDiscount) }}
             </p>
             <!-- 付款前的预估金额 -->
-            <p>{{ currencyStore.formatToCurrency(prePaymentEstimatedAmount) }}</p>
+            <p>{{ formatToCurrency(prePaymentEstimatedAmount) }}</p>
           </div>
         </div>
         <!-- paypal 按钮 -->
@@ -201,7 +201,7 @@ const _init = async () => {
 const {$bus} = useNuxtApp()
 const router = useRouter()
 const customStore = useCustomStore()
-const currencyStore = useCurrencyStore();
+const { formatToCurrency, currentCurrency } = useCurrencyStore();
 const {getBase64} = useIndexedDBBase64()
 
 const promotionRuleText = '*Promotion applies to order total before shipping, taxes, and duties. Promotions that involve a price reduction may take a variety of forms, including strikethrough prices or a discount code (e.g., percent-off or dollar-off discount code) that is applied by the customer at checkout (collectively “Product Discounts”). Promotional offers may be used one time only per household. Only one discount or promotional offer may be used per item. “Bonus Discounts” that are automatically applied to your order total may not be combined with one-time use discount codes or gift codes. Discounts will not be applied to previous or existing orders, We offer fair shipping rates based on the size and quantity of the items in an order. Final shipping charges will be calculated during checkout.'
@@ -217,7 +217,7 @@ const loadPaypal = async () => {
   initPaypal({
     containerId: '#paypal-button-container',
     clientId: config.public.paypalClientId,
-    currency: currencyStore.currentCurrency,
+    currency: currentCurrency,
     createOrder: createOrderCallback,
     onApprove: onApproveCallback,
     onInit: onPaypalInit,
@@ -418,7 +418,7 @@ const onApproveCallback: PayPalButtonOnApprove = async (data, actions) => {
         event: 'purchase_success', // 👈 事件名称，自定义但要与GTM触发器对应
         transactionId: tradeNo.value, // 订单号（字符串）
         transactionValue: prePaymentEstimatedAmount.value, // 实际支付金额（数字）
-        transactionCurrency: currencyStore.currentCurrency // 货币代码，如 'CNY'
+        transactionCurrency: currentCurrency // 货币代码，如 'CNY'
       })
       customStore.clear()
       paySuccessPopupRef.value?.show()

@@ -69,6 +69,17 @@
         </li>
       </ul>
       <h2 class="text-18 f-bold my-15">
+        Refunds & Fees (Clear Transparency)
+      </h2>
+      <ul class="list-ul disc">
+        <li>
+          <span class="f-bold">Restocking Fee</span>: We do <span class="f-bold">not</span> charge any restocking fees.
+        </li>
+        <li>
+          <span class="f-bold">Refund Method</span>: Once your return is received and inspected, your refund will be automatically processed back to your <span class="f-bold">original payment method</span> within 5-7 business days.
+        </li>
+      </ul>
+      <h2 class="text-18 f-bold my-15">
         Changed Your Mind?
       </h2>
       <p>

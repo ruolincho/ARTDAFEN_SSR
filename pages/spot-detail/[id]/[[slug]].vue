@@ -151,7 +151,7 @@
               </div>
               <div class="p-20 mt-20 acea-row row-right text-20 bg-gray-100">
                 <p class="f-bold">Total：<span
-                  class="text-26 text-error">{{ currencyStore.formatToCurrency(currentPrice || 0) }}</span></p>
+                  class="text-26 text-error">{{ formatToCurrency(currentPrice || 0) }}</span></p>
               </div>
               <el-button class="w-full add-cart__button" size="large" type="danger" @click="addToCart"
                          :disabled="!chooseComplete || stockNum == 0 || isShelves == true">Add To Cart
@@ -225,8 +225,8 @@
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p class="text-12">
-                  <span class="text-16 f-bold">{{ currencyStore.formatToCurrency(item.retailPrice) }}</span>
-                  <span class="text-gray-400 text-through ml-5 text-14">{{ currencyStore.formatToCurrency(item.marketPrice) }}</span>
+                  <span class="text-16 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
+                  <span class="text-gray-400 text-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
                 </p>
               </NuxtLink>
             </swiper-slide>
@@ -363,7 +363,7 @@ const userStore = useUserStore()
 const cartStore = useCartStore()
 const route = useRoute();
 const router = useRouter();
-const currencyStore = useCurrencyStore()
+const { formatToCurrency, currentCurrency } = useCurrencyStore();
 
 const modules = [Autoplay, Pagination, Navigation, Thumbs]
 const activeName = ref('')
@@ -379,7 +379,7 @@ const {data: goodsDetail, pending: isSkeleton} = await useAsyncData('goods-detai
     },
     headers: {
       'Token': userStore.token || '',
-      'X-Currency': currencyStore.currentCurrency
+      'X-Currency': currentCurrency
     }
   })
   return data

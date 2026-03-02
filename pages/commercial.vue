@@ -8,8 +8,8 @@
 
   <section class="sec-case">
     <div class="container">
-      <h1 class="text-50 font-bold text-center py-lg-60 py-40" >Case Studies</h1>
-      <div class="case-swiper-wrapper" >
+      <h1 class="text-50 font-bold text-center py-lg-60 py-40">Case Studies</h1>
+      <div class="case-swiper-wrapper">
         <swiper
             class="case-swiper"
             :modules="modules"
@@ -42,8 +42,8 @@
 
   <section class="sec-history">
     <div class="container">
-      <h1 class="text-50 font-bold text-center py-lg-60 py-40" >History & Heritage: The Dafen Legend Since 1989</h1>
-      <div class="history-swiper-wrapper" >
+      <h1 class="text-50 font-bold text-center py-lg-60 py-40">History & Heritage: The Dafen Legend Since 1989</h1>
+      <div class="history-swiper-wrapper">
         <swiper
             class="history-swiper"
             :modules="modules"
@@ -73,26 +73,80 @@
 
   <section class="sec-museum">
     <div class="container">
-      <h1 class="text-50 font-bold text-center py-lg-60 py-40" >Museum Quality. 100% Hand-Painted.</h1>
-      <img :src="imagePrefix('/static/artdafen/program-2.webp')" alt="museum-img" >
-      <div class="museum-wrapper" >
-        <img class="cover" :src="imagePrefix('/static/artdafen/program-3.webp')" alt="bespoke">
-        <div class="content text-center">
-          <p class="text-40 f-bold mb-48">Premium Material Standards</p>
-          <p class="text-24" style="line-height: 2;">Canvas & Frame: 400gsm heavy-duty linen canvas on solid wood inner frames for lasting durability.</p>
-          <p class="text-24" style="line-height: 2;">Eco-Friendly Paints: Certified non-toxic pigments that are safe, pollution-free, and vibrant.</p>
-          <p class="text-24" style="line-height: 2;">Custom Framing: A diverse selection of 100+ solid wood frames with expert craftsmanship.</p>
+      <h1 class="text-50 font-bold text-center py-lg-60 py-40">Museum Quality. 100% Hand-Painted.</h1>
+      <img :src="imagePrefix('/static/artdafen/program-2.webp')" alt="museum-img">
+      <div class="museum-wrapper">
+        <img class="cover fit-contain" :src="imagePrefix('/static/artdafen/program-3.webp')" alt="bespoke">
+        <div class="content text-center acea-row row-column-between gap-row-base">
+          <p class="text-30 f-bold">Premium Material Standards</p>
+          <div>
+            <p class="text-26" style="line-height: 2;">Canvas & Frame: 400gsm heavy-duty linen canvas on solid wood
+              inner frames for lasting durability.</p>
+            <p class="text-26" style="line-height: 2;">Eco-Friendly Paints: Certified non-toxic pigments that are safe,
+              pollution-free, and vibrant.</p>
+            <p class="text-26" style="line-height: 2;">Custom Framing: A diverse selection of 100+ solid wood frames
+              with expert craftsmanship.</p>
+          </div>
         </div>
+      </div>
+      <div class="trusted-wrapper">
+        <div class="content text-center acea-row row-column-between gap-row-base">
+          <p class="text-30 f-bold">Your Trusted Physical Partner in Art Manufacturing</p>
+          <div>
+            <p class="text-26" style="line-height: 2;">Step inside ArtDaFen. Unlike dropshippers, we own our
+              infrastructure. From our dedicated artisan studios and modern corporate offices to our immersive physical
+              showrooms, we control every link in the supply chain. Partner with a supplier you can see, verify, and
+              trust.</p>
+          </div>
+        </div>
+        <div class="view">
+          <div class="large overflow-hidden">
+            <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-4.webp')" alt="">
+          </div>
+          <div class="combination-wrapper">
+            <div class="combination-item">
+              <div class="middle overflow-hidden">
+                <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-5.webp')"
+                     alt="">
+              </div>
+              <div class="small overflow-hidden">
+                <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-6.webp')"
+                     alt="">
+              </div>
+            </div>
+            <div class="combination-item reverse">
+              <div class="middle overflow-hidden">
+                <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-8.webp')"
+                     alt="">
+              </div>
+              <div class="small overflow-hidden">
+                <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-7.webp')"
+                     alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-contact">
+    <div class="contact-container">
+      <div class="contact-bg contact-bg1" :style="{ backgroundImage: `url(${partnerImage})` }"></div>
+      <div class="contact-bg contact-bg2" :style="{ backgroundImage: `url(${artistImage})` }"></div>
+      <div class="contact-wrapper text-center px-15">
+        <p class="text-40">Trusted by Industry Leaders, Crafted by Global Artists.</p>
+        <p class="text-40">The preferred art partner for top-tier furniture brands and interior design firms.</p>
       </div>
     </div>
   </section>
 
   <section class="sec-choose pb-lg-60 pb-40">
     <div class="container">
-      <h1 class="text-50 font-bold text-center py-lg-60 py-40 text-white" >Why Choose ARTDAFEN</h1>
-      <div class="row process-list gap-row-base" >
+      <h1 class="text-50 font-bold text-center py-lg-60 py-40 text-white">Why Choose ARTDAFEN</h1>
+      <div class="row process-list gap-row-base">
         <div class="col-xs-4 col-12" v-for="item in WHY_CHOOSE_LIST2" :key="item.title">
-          <div class="process-item text-center text-white" >
+          <div class="process-item text-center text-white">
             <span class="iconfont text-60" :class="[item.icon]"/>
             <p class="mt-xs-30 mt-15 content">
               <span class="text-26 f-bold">{{ item.title }}: </span>
@@ -103,6 +157,28 @@
       </div>
     </div>
   </section>
+
+  <section class="sec-inquire">
+    <div class="container">
+      <h1 class="text-40 font-bold text-center py-lg-50 py-30">
+        Partner with ArtDaFen for VIP 1-on-1 concierge service. <br/>
+        Sign up today and enjoy a 10% welcome discount on qualified wholesale purchases.
+      </h1>
+      <div class="acea-row row-center-wrapper">
+        <el-button size="large" type="danger">
+          <a :href="`mailto:${CONTACT_EMAIL}`">
+            Inquire Now
+          </a>
+        </el-button>
+      </div>
+      <div class="py-30">
+        <p class="text-center text-20">Instantly access curated art collections and exclusive trade deals.</p>
+        <p class="text-center text-20">Streamline your sourcing with our professional platform.</p>
+      </div>
+    </div>
+  </section>
+
+
 </template>
 
 <script setup lang="ts">
@@ -117,57 +193,15 @@ import {CONTACT_EMAIL} from "~/config";
 
 const modules = [Autoplay, Pagination, Navigation, Lazy]
 
-const caseList = [
-  {
-    id: '1',
-    img: imagePrefix('/trade/advertisement/2025/08/06/1763756679263330304/d01a86a0f2d249c6a0f48f43be2b17fe.webp'),
-    title: 'The Carter Houston TX',
-    size: '180*180',
-    name: 'untitled no. 1 (gold)'
-  },
-  {
-    id: '2',
-    img: imagePrefix('/trade/advertisement/2025/08/06/1763756679263330304/d01a86a0f2d249c6a0f48f43be2b17fe.webp'),
-    title: 'The Carter Houston TX',
-    size: '180*180',
-    name: 'untitled no. 1 (gold)'
-  },
-  {
-    id: '3',
-    img: imagePrefix('/trade/advertisement/2025/08/06/1763756679263330304/d01a86a0f2d249c6a0f48f43be2b17fe.webp'),
-    title: 'The Carter Houston TX',
-    size: '180*180',
-    name: 'untitled no. 1 (gold)'
-  },
-  {
-    id: '4',
-    img: imagePrefix('/trade/advertisement/2025/08/06/1763756679263330304/d01a86a0f2d249c6a0f48f43be2b17fe.webp'),
-    title: 'The Carter Houston TX',
-    size: '180*180',
-    name: 'untitled no. 1 (gold)'
-  },
-  {
-    id: '5',
-    img: imagePrefix('/trade/advertisement/2025/08/06/1763756679263330304/d01a86a0f2d249c6a0f48f43be2b17fe.webp'),
-    title: 'The Carter Houston TX',
-    size: '180*180',
-    name: 'untitled no. 1 (gold)'
-  },
-  {
-    id: '6',
-    img: imagePrefix('/trade/advertisement/2025/08/06/1763756679263330304/d01a86a0f2d249c6a0f48f43be2b17fe.webp'),
-    title: 'The Carter Houston TX',
-    size: '180*180',
-    name: 'untitled no. 1 (gold)'
-  },
-]
-
+const partnerImage = imagePrefix('/static/artdafen/partner-bg.webp');
+const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
 </script>
 
 <style scoped lang="scss">
-  .sec-history{
+  .sec-history {
     .history-swiper-wrapper {
       position: relative;
+
       .history-item {
         .circle {
           width: 26px;
@@ -193,10 +227,9 @@ const caseList = [
   .sec-museum {
     .museum-wrapper {
       display: flex;
-      align-items: center;
       justify-content: space-between;
       column-gap: 30px;
-      padding: 7.55vw 0;
+      margin: 5.20vw 0;
 
       .cover {
         width: 63.75%;
@@ -205,12 +238,106 @@ const caseList = [
 
       .content {
         flex: 1;
+      }
 
+    }
+
+    .trusted-wrapper {
+      display: flex;
+      justify-content: space-between;
+      column-gap: 30px;
+      margin: 5.20vw 0;
+
+      .view {
+        flex-shrink: 0;
+        width: 53.125vw;
+        max-height: 512px;
+        display: flex;
+        gap: 20px;
+
+        .large {
+          height: 100%;
+          width: 100%;
+          max-width: 414px;
+        }
+
+        .combination-wrapper {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 20px;
+
+          .combination-item {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            overflow: hidden;
+
+            &.reverse {
+              flex-direction: row-reverse;
+            }
+
+            .middle {
+              width: 57.34%;
+            }
+
+            .small {
+              width: 42.66%;
+            }
+          }
+        }
+      }
+
+      .content {
+        flex: 1;
       }
 
     }
   }
-  
+
+  .sec-contact {
+    margin: 5.20vw 0;
+
+    .contact-container {
+      position: relative;
+      height: 680px;
+      overflow: hidden;
+
+      .contact-bg {
+        --scroll-distance: 2978px;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 49%;
+        background-repeat: repeat-x;
+        background-position: 0 0;
+        background-size: auto 100%;
+        opacity: 0.35;
+
+      }
+
+      .contact-bg1 {
+        top: 0;
+        animation: bg-scroll 30s linear infinite reverse; /* 调整时间来控制滚动速度 */
+      }
+
+      .contact-bg2 {
+        bottom: 0;
+        animation: bg-scroll 30s linear infinite; /* 调整时间来控制滚动速度 */
+      }
+
+      .contact-wrapper {
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
   .sec-choose {
     background: #4d4d4d;
 
@@ -221,6 +348,7 @@ const caseList = [
           color: #b1a383;
           font-size: clamp(80px, 10.41vw, 200px);
         }
+
         .content {
           max-width: 320px;
           margin: auto;
@@ -228,25 +356,96 @@ const caseList = [
       }
     }
   }
-  
-  @media (max-width: 991px) {
-    .sec-museum .museum-wrapper {
-      flex-wrap: wrap;
-      column-gap: unset;
-      row-gap: var(--gutter-base);
-      .cover {
-        width: 100%;
-        order: 1;
+
+  .sec-inquire {
+    .el-button {
+      max-width: 100%;
+      width: 550px;
+      height: 60px;
+    }
+  }
+
+  @media (max-width: 1260px) {
+    .sec-museum .trusted-wrapper .view {
+      gap: var(--gutter-base);
+
+      .combination-wrapper {
+        gap: var(--gutter-base);
+
+        .combination-item {
+          gap: var(--gutter-base);
+        }
       }
-      .content {
-        width: 100%;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .sec-museum {
+      .museum-wrapper {
+        flex-wrap: wrap;
+        column-gap: unset;
+        row-gap: var(--gutter-base);
+
+        .cover {
+          width: 100%;
+          order: 1;
+        }
+
+        .content {
+          width: 100%;
+        }
+      }
+
+      .trusted-wrapper {
+        flex-wrap: wrap;
+        column-gap: unset;
+        row-gap: var(--gutter-base);
+
+        .cover {
+          width: 100%;
+        }
+
+        .view {
+          width: 100%;
+        }
       }
     }
   }
 
   @media (max-width: 768px) {
-    .sec-choose {
+    .sec-contact .contact-container {
+      height: 350px;
+
+      .contact-bg {
+        --scroll-distance: 1534px;
+      }
+    }
+
+    .sec-inquire {
       margin-bottom: -20px;
+    }
+  }
+
+  @media (max-width: 414px) {
+    .sec-museum .trusted-wrapper .view {
+      gap: var(--gutter-sm);
+
+      .combination-wrapper {
+        gap: var(--gutter-sm);
+
+        .combination-item {
+          gap: var(--gutter-sm);
+        }
+      }
+    }
+  }
+
+  @keyframes bg-scroll {
+    from {
+      background-position-x: 0;
+    }
+    to {
+      background-position-x: calc(var(--scroll-distance) * -1);
     }
   }
 </style>

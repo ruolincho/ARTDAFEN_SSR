@@ -109,7 +109,7 @@ export const productLink = (item: General.GoodsItem) => {
     const T2 = [TechniqueCodeEnum.Originals]
     const T3 = [TechniqueCodeEnum.Spot]
     const pid = item.id ?? item.productId
-    const slug = generateTitle2Slug(item.title ?? item.name)
+    const slug = item.slug
     if (T1.includes(item.techniqueId)) {
         return `/paint-detail/${pid}/${slug}`
     } else if (T2.includes(item.techniqueId)) {

@@ -36,7 +36,7 @@
         <div class="flex-1 overflow-hidden">
           <h1 class="line1 text-16">{{ goods.title }}</h1>
           <p class="line1 text-14 my-4 text-gray-400">{{ formatAttr(goods.labels) }}</p>
-          <p class="text-14">{{ currencyStore.formatToCurrency(goods.retailPrice) }}</p>
+          <p class="text-14">{{ formatToCurrency(goods.retailPrice) }}</p>
         </div>
       </NuxtLink>
     </div>
@@ -44,11 +44,10 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix, productLink} from "~/utils";
+import {imagePrefix, productLink, formatAttr} from "~/utils";
 import type {IBlog} from "~/api/interface/blog/blog";
 import {useCurrencyStore} from "~/stores/modules/currency";
-
-const currencyStore = useCurrencyStore();
+const { formatToCurrency } = useCurrencyStore();
 
 // 定义 Props
 interface Props {
