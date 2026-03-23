@@ -74,7 +74,8 @@
   <section class="sec-museum">
     <div class="container">
       <h1 class="text-50 font-bold text-center py-lg-60 py-40">Museum Quality. 100% Hand-Painted.</h1>
-      <img :src="imagePrefix('/static/artdafen/program-2.webp')" alt="museum-img">
+      <img v-if="appStore.isPc" :src="imagePrefix('/static/artdafen/program-2_pc.webp')" alt="Museum Quality. 100% Hand-Painted.">
+      <img v-else :src="imagePrefix('/static/artdafen/program-2_app.webp')" alt="Museum Quality. 100% Hand-Painted.">
       <div class="museum-wrapper">
         <img class="cover fit-contain" :src="imagePrefix('/static/artdafen/program-3.webp')" alt="bespoke">
         <div class="content text-center acea-row row-column-between gap-row-base">
@@ -182,7 +183,7 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix} from '~/utils'
+import {useImage} from "~/composables/useImage";
 import {Swiper, SwiperSlide} from "swiper/vue";
 import {Autoplay, Navigation, Pagination, Lazy} from "swiper";
 import 'swiper/css'
@@ -190,9 +191,11 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import {HISTORY_LIST, CASE_LIST, WHY_CHOOSE_LIST2} from "~/constant";
 import {CONTACT_EMAIL} from "~/config";
+import {useAppStore} from "~/stores/modules/app";
 
 const modules = [Autoplay, Pagination, Navigation, Lazy]
-
+const { imagePrefix } = useImage()
+const appStore = useAppStore()
 const partnerImage = imagePrefix('/static/artdafen/partner-bg.webp');
 const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
 </script>

@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import {formatTimestamp} from "~/utils/format";
 import type {INews} from "~/api/interface/news/news";
 
@@ -22,6 +22,7 @@ interface Props {
   item: INews.Row
 }
 
+const { imagePrefix } = useImage()
 const props = withDefaults(defineProps<Props>(), {
   item: () => ({}) as INews.Row,
 });

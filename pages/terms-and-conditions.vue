@@ -200,26 +200,12 @@
       <p>
         You can review the most current version of the TERMS AND CONDITIONS at any time at this page. We reserve the right, at our sole discretion, to update, change or replace any part of these TERMS AND CONDITIONS by posting updates and changes to our website/application. It is your responsibility to check our website/application periodically for changes. Your continued use of or access to our website/application or the Service following the posting of any changes to these TERMS AND CONDITIONS constitutes acceptance of those changes.
       </p>
-      <h2 class="text-18 f-bold my-15">
-        Section 20 - Contact Information
-      </h2>
-      <p>
-        Questions about the TERMS AND CONDITIONS should be sent to us at <a class="text-secondary" :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a>. Our contact information is posted below:
-      </p>
-      <p>
-        Business Address: {{ BUSINESS_ADDRESS }} <br>
-      </p>
-      <p>
-        US Customer Support: <a class="text-secondary" :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{COUNTRY_CODE}} {{ CUSTOMER_SERVICE }}</a>
-      </p>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import {resolvePageMeta} from "~/config/pageMeta";
-import {BUSINESS_ADDRESS} from "~/config";
-import {CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "../config";
 
 useHead(resolvePageMeta("/terms-and-conditions"));
 

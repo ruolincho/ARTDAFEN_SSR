@@ -17,7 +17,7 @@
         >
           <div class="frame-box">
             <div class="frame-img aspect-ratio">
-              <img class="w-full h-full fit-cover" :src="imagePrefix(item.img!)" :alt="item.name">
+              <img class="w-full h-full fit-cover" v-lazy="imagePrefix(item.img!)" :alt="item.name">
             </div>
             <p class="line2 mt-10 frame-name">{{ item.name }}</p>
             <p class="f-bold-500 frame-money">
@@ -33,7 +33,9 @@
 <script setup lang="ts">
 import type {IPaint} from "~/api/interface/paint/paint";
 import {useCurrencyStore} from "~/stores/modules/currency";
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
+
+const { imagePrefix } = useImage()
 
 interface Props {
   modelValue: string;

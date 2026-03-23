@@ -39,18 +39,20 @@
     </div>
 
     <!-- 主题 -->
-    <div class="container" v-show="currentView === 'theme'">
-      <ThemeChoose
-          v-model="themeIdMap[0]"
-          :themeOptions="themeOptions"
-          @choose="chooseTheme"
-      />
+    <div class="container" style="min-height: 450px" v-show="currentView === 'theme'" v-loading="themeLoading">
+     <template v-if="themeOptions?.length">
+       <ThemeChoose
+           v-model="themeIdMap[0]"
+           :themeOptions="themeOptions"
+           @choose="chooseTheme"
+       />
 
-      <ThemeCaseStudies
-          v-model="themeIdMap[0]"
-          :themeOptions="themeOptions"
-          @choose="chooseTheme"
-      />
+       <ThemeCaseStudies
+           v-model="themeIdMap[0]"
+           :themeOptions="themeOptions"
+           @choose="chooseTheme"
+       />
+     </template>
     </div>
 
     <!-- 风格 -->
@@ -69,8 +71,11 @@
     <div class="container" v-show="currentView === 'custom'">
       <!--移动端兼容视图-->
       <div class="app-preview"
+           id="tour-step-preview-app"
            :style="{margin: '0 -15px', height: '300px', position: appSticky ? 'sticky' : 'relative' }"
-           v-if="!appStore.isPc && imageUrl">
+           v-if="!appStore.isPc && imageUrl"
+           ref="appPreviewRef"
+      >
         <div class="img-wrapper acea-row row-center-wrapper flex-1 overflow-hidden">
           <ClientOnly>
             <ImageGenerator
@@ -129,7 +134,7 @@
                   <p class="mt-10 text-18">Commission a museum quality hand-painted oil painting from your family
                     photo!</p>
                 </div>
-                <div class="preview-box">
+                <div class="preview-box" id="tour-step-preview-pc">
                   <ClientOnly>
                     <ImageGenerator
                         v-model="generatorImg"
@@ -444,7 +449,8 @@ import type {UploadFile, UploadProps} from "element-plus";
 import {ElMessage, ElMessageBox} from "element-plus";
 import WallColor from '~/components/WallColor.vue'
 import Room from '~/components/Room.vue'
-import {calculateShape, flattenTree, getImageSize, imagePrefix} from "~/utils";
+import {calculateShape, flattenTree, getImageSize} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import type {ICustom} from "~/api/interface/custom/custom";
 import {useCustomStore} from "~/stores/modules/custom";
 import {useAppStore} from "~/stores/modules/app";
@@ -473,16 +479,12 @@ import RemarkInput from "~/components/Custom/RemarkInput.vue";
 import CraftSelector from "~/components/Custom/CraftSelector.vue";
 import ComboSkeleton from "~/components/Custom/ComboSkeleton.vue";
 import {usePaintCombo} from '~/composables/usePaintCombo'
-import {computed} from "../../../.nuxt/imports";
 
 defineOptions({
   name: 'CustomPaint'
 })
 
-definePageMeta({
-  isShowActivity: true
-})
-
+const { imagePrefix } = useImage()
 const userStore = useUserStore()
 const appStore = useAppStore()
 const customStore = useCustomStore()
@@ -888,14 +890,21 @@ watch(() => currentView.value, () => {
   })
 })
 
+const appPreviewRef = ref<HTMLElement>()
 const appSticky = ref(true)
 const openTour = ref(false)
 const beginGuide = async () => {
+  let top = 0
   if (appStore.isPc) {
     await appStore.forceFoldHeader() // 锁定并折叠，等待动画
   } else {
+    top = appPreviewRef.value.offsetHeight
     appSticky.value = false
   }
+  window.scrollTo({
+    top: top,
+    behavior: "instant",
+  })
   openTour.value = true
   toggleWidget(false)
 }
@@ -905,6 +914,10 @@ const handleTouchClose = () => {
   } else {
     appSticky.value = true
   }
+  window.scrollTo({
+    top: 0,
+    behavior: "instant",
+  })
   toggleWidget(true)
 }
 
@@ -916,6 +929,7 @@ const createStep = (condition: boolean, target: any, title: string, description:
 }
 const tourSteps = computed(() => {
   const steps = [
+    createStep(true, appStore.isPc ? '#tour-step-preview-pc' : '#tour-step-preview-app', 'Preview Artwork', 'Get a first look at your core image to ensure it’s exactly how you envision before customizing the details.'),
     // createStep(route.params.work === ArtCodeEnum.Painting, '#tour-step-craft', 'Choose Craftsmanship', 'Select the material and texture that best suits your style.'),
     createStep(true, '#tour-step-size', 'Choose Size', 'Pick the perfect dimensions to fit your space.'),
     createStep(route.params.work === ArtCodeEnum.Painting && !isPrint.value, '#tour-step-complexity', 'Choose Subject Count', 'Specify the number of people or objects in your photo to determine the complexity.'),

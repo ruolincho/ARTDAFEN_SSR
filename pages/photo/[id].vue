@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import {ElMessageBox, ElMessage} from "element-plus";
 import {getProductAlbumApi} from "~/api/modules/product/product";
 
@@ -66,6 +66,7 @@ onMounted(() => {
   }
 })
 
+const { imagePrefix } = useImage()
 const router = useRouter()
 const route = useRoute()
 const id = ref()

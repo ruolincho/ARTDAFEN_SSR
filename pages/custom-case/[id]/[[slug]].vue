@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import type {IPaint} from "~/api/interface/paint/paint";
 import {getSampleApi} from "~/api/modules/paint/paint";
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import {ArtCodeEnum} from "~/types/enumeration";
 import FootBar from '~/components/Custom/FootBar.vue'
 
@@ -45,6 +45,7 @@ onMounted(() => {
   if (route.params.id) seeMoreSample()
 })
 
+const { imagePrefix } = useImage()
 const {$bus} = useNuxtApp()
 const route = useRoute()
 const router = useRouter()

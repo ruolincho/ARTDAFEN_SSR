@@ -40,6 +40,10 @@
             <span :class="`iconfont ${menu.icon} text-24`"></span>
             <span class="text-16 ml-12">{{ menu.name }}</span>
           </div>
+          <div class="account-item acea-row row-middle py-16 px-20 cursor-pointer" @click="unsubscribe">
+            <span class="iconfont icon-quxiaodingyue text-24"></span>
+            <span class="text-16 ml-12">Unsubscribe</span>
+          </div>
           <div class="account-item acea-row row-middle py-16 px-20 cursor-pointer" @click="logout">
             <span class="iconfont icon-money-wallet text-24"></span>
             <span class="text-16 ml-12">Log Out</span>
@@ -64,6 +68,7 @@ import ImgCropper from '~/components/ImgCropper.vue'
 import type {UploadFile, UploadProps} from "element-plus";
 import {ElMessage} from "element-plus";
 import {uploadAvatar} from "~/api/modules/mine/mine";
+import {unsubscribeApi} from "~/api/modules/message/message";
 
 defineOptions({
   name: 'Account'
@@ -73,6 +78,15 @@ const {logoutFn} = useAuth();
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
+
+const unsubscribe = async () => {
+  await useHandleData(
+      unsubscribeApi,
+      {},
+      'Are you sure you want to unsubscribe?'
+  )
+  userStore.updateSubscribe('1')
+}
 
 const logout = () => {
   useHandleData(

@@ -64,9 +64,11 @@ import {Navigation, Pagination} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import {imagePrefix, productLink} from "~/utils";
+import {productLink} from "~/utils";
 import {useCurrencyStore} from "~/stores/modules/currency";
+import {useImage} from "~/composables/useImage";
 
+const { imagePrefix } = useImage()
 const { formatToCurrency } = useCurrencyStore();
 const route = useRoute()
 const modules = [Pagination, Navigation]

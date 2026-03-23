@@ -70,7 +70,8 @@
             >
               <swiper-slide v-for="(photo, index) in roomPhotos" :key="index">
                 <div class="slide acea-row row-center-wrapper bg-gray-200 cursor-pointer" @click="choosePhoto(photo)">
-                  <img class="w-full h-full fit-contain" :src="imagePrefix(photo)" alt="Scene Graph">
+                  <el-image class="w-full h-full" fit="contain" :src="imagePrefix(photo)" :alt="'Scene Graph' + index" lazy />
+                  <!--<img class="w-full h-full fit-contain" :src="imagePrefix(photo)" :alt="'Scene Graph' + index">-->
                 </div>
               </swiper-slide>
             </swiper>
@@ -164,7 +165,7 @@ import {Swiper, SwiperSlide} from 'swiper/vue'
 import {Navigation} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import type {UploadFile, UploadProps} from "element-plus";
 import {ElMessage} from "element-plus";
 import type {PixelType} from "./interface";
@@ -184,6 +185,7 @@ interface Props {
   pixel: PixelType; // 背景墙图片的 尺寸
 }
 
+const { imagePrefix } = useImage()
 const props = defineProps<Props>();
 
 const emit = defineEmits<{

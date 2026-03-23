@@ -42,11 +42,12 @@
 import ProList from "~/components/ProList/index.vue";
 import {getUserCollectGoodsApi} from "~/api/modules/mine/mine";
 import type {IPageQuery} from "~/api/interface";
-import {imagePrefix, jumpToProduct} from "~/utils";
+import {jumpToProduct} from "~/utils";
 import {useHandleData} from "~/composables/useHandleData";
 import {productThumbsApi} from "~/api/modules/likes/likes";
 import {PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'Favorites'
@@ -60,6 +61,7 @@ useSeoMeta({
   robots: 'noindex, nofollow'
 })
 
+const { imagePrefix } = useImage()
 const router = useRouter()
 const { formatToCurrency } = useCurrencyStore();
 

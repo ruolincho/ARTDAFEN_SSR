@@ -61,6 +61,7 @@ export namespace JsonLd {
    */
   export interface ProductJsonLdOptions {
     siteUrl?: string                       // 站点根域名（用于拼 canonical / 变体URL）
+    isGlobal?: boolean               // 是否全球通用运输、退货政策
     countryCodes?: string[]            // 可配送国家（ISO 3166-1 alpha-2）
     handlingDays?: { min: number; max: number }
     transitDays?: { min: number; max: number }

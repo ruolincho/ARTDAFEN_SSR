@@ -51,9 +51,12 @@
       <h2 class="text-18 f-bold my-15">
         Shipping & Customs:
       </h2>
+      <p>
+        <span class="f-bold">Total Estimated Delivery Time: 10–20 business days</span> (This includes 5–10 business days for Production & Approval, plus 5–10 business days for Shipping).
+      </p>
       <ul class="list-ul disc">
         <li>
-          <span class="f-bold">How long does it take?</span> Generally <span class="f-bold">5–8 business days</span> via
+          <span class="f-bold">How long does the transit take?</span> Generally <span class="f-bold">5–10 business days</span> via
           <span class="f-bold">FedEx, DHL, or UPS</span>.
         </li>
         <li>
@@ -102,6 +105,12 @@
       </p>
       <p class="f-bold">
         Tip: You can find the confirmation email by searching for your Order Number.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Where do your artworks ship from?
+      </h2>
+      <p class="f-bold">
+        To ensure direct-from-studio value and prevent any intermediary delays, all artworks are securely packaged and shipped directly from our master studio in Dafen, Shenzhen, China.
       </p>
       <h2 class="text-18 f-bold my-15">
         Who takes care of the delivery?

@@ -2,7 +2,7 @@
   <div class="product-item">
     <div class="relative aspect-ratio">
       <NuxtLink class="img-wrapper bg-gray-100 w-full h-full block" :to="productLink(item)">
-        <img v-lazy="imagePrefix(item.img)" :alt="item.title">
+        <img v-lazy="imagePrefix(item.img)" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
       </NuxtLink>
       <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === TechniqueCodeEnum.Originals">
         <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
@@ -41,10 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix, productLink} from "~/utils";
+import {productLink} from "~/utils";
 import {TechniqueCodeEnum} from "~/types/enumeration";
 import type { General, ObjectNode} from "~/types/global";
 import {useCurrencyStore} from "~/stores/modules/currency";
+import {useImage} from "~/composables/useImage";
 
 // 定义 Props
 interface Props {
@@ -52,6 +53,7 @@ interface Props {
   index: number
 }
 
+const { imagePrefix } = useImage()
 const props = withDefaults(defineProps<Props>(), {
   item: () => ({}) as General.GoodsItem,
   index: 0

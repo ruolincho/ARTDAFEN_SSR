@@ -78,7 +78,7 @@ import {Navigation, Pagination} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import {imagePrefix, jumpNewWindow, jumpToUrl} from "~/utils";
+import {jumpNewWindow, jumpToUrl} from "~/utils";
 import {formatTimestamp} from "~/utils/format";
 import {useAppStore} from "~/stores/modules/app";
 import type {INews} from "~/api/interface/news/news";
@@ -86,11 +86,13 @@ import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {computed, nextTick, watch} from "vue";
 import {resolvePageMeta} from "~/config/pageMeta";
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'News'
 })
 
+const { imagePrefix } = useImage()
 const route = useRoute()
 const appStore = useAppStore()
 const modules = [Pagination, Navigation]

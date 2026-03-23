@@ -75,7 +75,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import {useAppStore} from "~/stores/modules/app";
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import {useLockScroll} from '~/composables/useLockScroll'
 
 defineOptions({
@@ -88,6 +88,7 @@ interface Props {
   index: number; // 当前选中的对比项索引
 }
 
+const { imagePrefix } = useImage()
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 const appStore = useAppStore()
@@ -220,7 +221,6 @@ watch(() => props.modelValue, (newVal) => {
     position: absolute;
     right: 2vw;
     top: 2vw;
-    font-size: 30px;
     color: #fff;
   }
 }

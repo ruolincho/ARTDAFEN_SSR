@@ -70,7 +70,7 @@
                 <a :href="`mailto:${item.email}`">{{ item.email }}</a>
               </p>
               <p class="text-24 mb-24" v-if="item.tel">
-                US Customer Support: <a :href="`tel:${item.tel}`">{{ item.tel }}</a>
+                <a :href="`tel:${item.tel}`">{{ item.tel }}</a>
               </p>
               <el-button type="primary" size="large" :disabled="!item.tel">
                 <a :href="item.tel ? `tel:${item.tel}` : 'void:0'">
@@ -89,15 +89,15 @@
 <script setup lang="ts">
 import {resolvePageMeta} from "~/config/pageMeta";
 import {CONTACT_EMAIL} from "~/config";
-import {COUNTRY_CODE, CUSTOMER_SERVICE} from "../config";
+import {COUNTRY_CODE, CUSTOMER_SERVICE, REGISTERED_ADDRESS, STUDIO_ADDRESS} from "../config";
 
 useHead(resolvePageMeta("/contact"));
 
 const pointList = ref([
   {
-    detail: 'Kam Sheung Road, Yuen Long, Hong Kong DD106 Lot 1479C Lot',
-    tel: '+1 603 631 6753',
-    email: 'info@artdafen.com',
+    detail: `${STUDIO_ADDRESS} / ${REGISTERED_ADDRESS}`,
+    tel: `${COUNTRY_CODE} ${CUSTOMER_SERVICE}`,
+    email: `${CONTACT_EMAIL}`,
   },
   // {
   //   detail: '103, 1st Floor, Dafen Oil Painting Trading Plaza, Buji Street, Longgang District, Shenzhen',

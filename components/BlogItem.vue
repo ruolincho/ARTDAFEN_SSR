@@ -44,10 +44,13 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix, productLink, formatAttr} from "~/utils";
+import {productLink, formatAttr} from "~/utils";
 import type {IBlog} from "~/api/interface/blog/blog";
 import {useCurrencyStore} from "~/stores/modules/currency";
 const { formatToCurrency } = useCurrencyStore();
+import {useImage} from "~/composables/useImage";
+
+const { imagePrefix } = useImage()
 
 // 定义 Props
 interface Props {

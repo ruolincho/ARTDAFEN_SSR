@@ -7,6 +7,7 @@ type CustomPaintParams = ArtCodeEnum;
 
 export const pageMeta = {
     "/": () => ({
+        title: "ART DAFEN | Museum-Quality Hand-Painted Oil Painting Reproductions",
         meta: [
             {
                 name: "description",

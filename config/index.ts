@@ -11,13 +11,15 @@ export const PRODUCT_URL: string = '/product';
 // Top100检索地址
 export const BEST_URL: string = '/best';
 // 客服国际区号
-export const COUNTRY_CODE: string = '+1';
+export const COUNTRY_CODE: string = '+86';
 // 客服电话
-export const CUSTOMER_SERVICE: string = '603 631 6753';
+export const CUSTOMER_SERVICE: string = '137 6043 6780';
 // 联系邮箱
 export const CONTACT_EMAIL: string  = 'info@artdafen.com';
 // Business Address
 export const BUSINESS_ADDRESS = 'DD106 Lot 1479C, Kam Sheung Road, Yuen Long, Hong Kong'
+export const STUDIO_ADDRESS = 'A-103-104, Dafen Oil Painting Plaza, Longgang, Shenzhen, Guangdong'
+export const REGISTERED_ADDRESS = 'Flat/Rm 502, Arion Commercial Centre, 2-12 Queen\'s Road West, Sheung Wan, Hong Kong'
 // Google Analytics Id
 export const GA_ID: string  = 'G-ZYVS05RLZV';
 // 存储登录返回地址的key

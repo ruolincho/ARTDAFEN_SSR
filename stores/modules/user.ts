@@ -1,9 +1,8 @@
 import {defineStore} from 'pinia'
 import piniaPersistConfig from "../helper/persist";
 import type {IMine} from "~/api/interface/mine/mine";
-import type {IHome} from "~/api/interface/home/home";
 import {getUserBaseInfoApi, getUserEchoInfoApi} from "~/api/modules/mine/mine";
-import { imagePrefix } from "~/utils";
+import {useImage} from "~/composables/useImage";
 import {checkToken} from "~/api/modules/oauth/oauth";
 import {computed, ref} from 'vue';
 import {LOGIN_URL} from "~/config";
@@ -20,6 +19,7 @@ export const useUserStore = defineStore(
         const token = ref('');
         const userInfo = ref<IMine.UserInfoRow>(defaultInfo());
         const isLogin = computed(() => !!token.value)
+        const { imagePrefix } = useImage()
 
         const setToken = (tokenStr: string) => {
             token.value = tokenStr;
@@ -44,7 +44,7 @@ export const useUserStore = defineStore(
         }
 
         const setUserInfo = (info: IMine.UserInfoRow) => {
-            info.avatar = imagePrefix(info.avatar, true) + `?t=${new Date().getTime()}`
+            info.avatar = imagePrefix(info.avatar) + `?t=${new Date().getTime()}`
             userInfo.value = {
                 ...userInfo.value,
                 ...info,

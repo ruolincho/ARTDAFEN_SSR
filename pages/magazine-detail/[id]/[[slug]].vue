@@ -93,16 +93,18 @@
 import {getNewsRecommendApi} from "~/api/modules/news/news";
 import {formatTimestamp} from "~/utils/format";
 import type {INews} from "~/api/interface/news/news";
-import {imagePrefix, copyToClipboard} from "~/utils";
+import {copyToClipboard} from "~/utils";
 import ProInfinite from "~/components/ProInfinite.vue";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {useAppStore} from "~/stores/modules/app";
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'NewsDetail',
 })
 
+const { imagePrefix } = useImage()
 const appStore = useAppStore()
 const origin = useRequestURL().origin
 const route = useRoute()
@@ -244,11 +246,13 @@ watch(() => newsDetail.value, (newVal: INews.Row) => {
             const wrapperStyle = extractedWidth ? ` style="width: ${extractedWidth};"` : '';
 
             return `
-              <span class="img-wrapper"${wrapperStyle}>
-                <img ${newBefore} src="${src}" ${newAfter}>
-                <a href="${createShareLink('pinterest', src)}" target="_blank" rel="noopener noreferrer" class="img-badge">
-                  <span class="iconfont icon-pinterest"></span>
-                </a>
+              <span style="text-align: center; display: block;">
+                <span class="img-wrapper"${wrapperStyle}>
+                  <img ${newBefore} src="${src}" ${newAfter}>
+                  <a href="${createShareLink('pinterest', src)}" target="_blank" rel="noopener noreferrer" class="img-badge">
+                    <span class="iconfont icon-pinterest"></span>
+                  </a>
+                </span>
               </span>
           `;
           }

@@ -1,4 +1,4 @@
-import {BUSINESS_ADDRESS, CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
+import {STUDIO_ADDRESS, REGISTERED_ADDRESS, CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
 import {generateTitle2Slug} from "~/utils";
 
 export const QUOTE_TYPES = ['shopping', 'footer'] as const;
@@ -125,7 +125,7 @@ const faqListUnBuild: FaqCategory[] = [
             Shipping is <strong>100% Free Worldwide</strong>. The price you see is the price you pay.
           </p>
           <p>
-            Typically shipping takes <strong>5–8 business days</strong> via express carriers (after production is complete). Note: Custom sculptures or large mixed-media works may require additional transit time due to crate handling.
+            Typically shipping takes <strong>5–10 business days</strong> via express carriers (after production is complete). Note: Custom sculptures or large mixed-media works may require additional transit time due to crate handling.
           </p>
         `
             },
@@ -136,7 +136,7 @@ const faqListUnBuild: FaqCategory[] = [
                 quote: ['shopping'],
                 content: `
           <p>
-            Yes, absolutely. ARTDAFEN provides <strong>full transit insurance</strong> for every shipment, including high-value sculptures and bulk orders. Your investment is protected from our studio in Hong Kong to your doorstep at no extra cost.
+            Yes, absolutely. ARTDAFEN provides <strong>full transit insurance</strong> for every shipment, including high-value sculptures and bulk orders. Your investment is protected from our <strong>master studio in Shenzhen, China</strong> to your doorstep at no extra cost.
           </p>
         `
             },
@@ -431,18 +431,22 @@ Here is how we distinguish our quality from the mass market:
                 </a>
             </li>
             <li style="list-style: disc; list-style-position: inside;">
-                <strong>US Customer Support:</strong>
+                <strong>Phone:</strong>
                 <a class="text-secondary" href="tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}">
               ${COUNTRY_CODE} ${CUSTOMER_SERVICE}
             </a>
             </li>
             <li style="list-style: disc; list-style-position: inside;">
-                <strong>Business Address:</strong>
-                ${ BUSINESS_ADDRESS }
+                <strong>Our Studio & Fulfillment:</strong>
+                ${ STUDIO_ADDRESS }
+            </li>
+             <li style="list-style: disc; list-style-position: inside;">
+                <strong>Registered Office:</strong>
+                ${ REGISTERED_ADDRESS }
             </li>
             <li style="list-style: disc; list-style-position: inside;">
                 <strong>Service Hours:</strong>
-                Mon-Fri, 9:00 AM - 6:00 PM (HKT)
+                Mon-Fri, 9:00 AM - 6:30 PM (HKT)
             </li>
           </ul>
           <p>

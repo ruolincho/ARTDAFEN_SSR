@@ -15,4 +15,18 @@ export default class TypedFormData<T extends Record<string, string | Blob>> {
     getFormData(): FormData {
         return this.formData;
     }
+
+    // 方便调试打印的方法
+    log() {
+        console.log("--- FormData Details ---");
+        for (const [key, value] of (this.formData as any).entries()) {
+            console.log(`${key}:`, value);
+        }
+        console.log("------------------------");
+    }
+
+    // 转普通对象的方法（方便在 Vue/React DevTools 中查看）
+    toObject(): Record<string, any> {
+        return Object.fromEntries((this.formData as any).entries());
+    }
 }

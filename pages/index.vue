@@ -16,18 +16,18 @@
               <!-- Mobile -->
               <source
                   media="(max-width: 768px)"
-                  :srcset="getMobileBanner(imagePrefix(item.mobileImg)).srcset"
+                  :srcset="getMobileSrcset(item.mobileImg).srcset"
                   sizes="100vw"
               />
               <!-- PC -->
               <source
                   media="(min-width: 769px)"
-                  :srcset="getPcBanner(imagePrefix(item.img)).srcset"
+                  :srcset="getPcSrcset(item.img).srcset"
                   sizes="100vw"
               />
               <!-- fallback img -->
               <img
-                  :src="getPcBanner(imagePrefix(item.img)).src"
+                  :src="getPcSrcset(item.img).src"
                   alt="banner"
                   class="w-full h-auto fit-cover"
                   loading="lazy"
@@ -59,8 +59,9 @@
     <div class="container">
       <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
         <h2 class="text-50">MUSEUM-QUALITY OIL PAINTING REPRODUCTIONS</h2>
-        <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">Bring
-          the museum home</p>
+        <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">
+          Bring the museum home
+        </p>
       </div>
       <div class="quality-wrapper" v-aos="'fade-up'">
         <div class="quality-video">
@@ -176,7 +177,7 @@
           >
             <NuxtLink class="block" :to="item?.url || '/'">
               <div class="overflow-hidden">
-                <img class="w-full img-hover" v-lazy="imagePrefix(item.img)" :alt="item.name">
+                <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
             </NuxtLink>
@@ -190,13 +191,12 @@
             :space-between="15"
             :centered-slides="true"
             :loop="true"
-            :lazy="true"
             v-aos="'fade-up'"
         >
-          <swiper-slide v-for="item in disVibeData" :key="item.title" style="width: 80%;" :lazy="true">
+          <swiper-slide v-for="item in disVibeData" :key="item.id" style="width: 80%;">
             <NuxtLink class="block" :to="item?.url || '/'">
               <div class="overflow-hidden">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name" loading="lazy">
+                <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
             </NuxtLink>
@@ -366,7 +366,7 @@
           >
             <NuxtLink class="block" :to="item.url">
               <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
-                <img class="w-full img-hover" v-lazy="imagePrefix(item.img)" :alt="item.name"/>
+                <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
                 <p class="line1 text-28 f-bold">{{ item.name }}</p>
@@ -384,13 +384,12 @@
             :space-between="15"
             :centered-slides="true"
             :loop="true"
-            :lazy="true"
             v-aos="'fade-up'"
         >
-          <swiper-slide v-for="item in roomData" :key="item.id" style="width: 80%;" :lazy="true">
+          <swiper-slide v-for="item in roomData" :key="item.id" style="width: 80%;">
             <NuxtLink class="block" :to="item.url">
               <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
-                <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name" loading="lazy"/>
+                <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
                 <p class="line1 text-28 f-bold">{{ item.name }}</p>
@@ -427,7 +426,7 @@
                   v-aos="{ name: 'fade-up', delay: index % 6 * 100}"
               >
                 <NuxtLink class="img-wrapper aspect-ratio block overflow-hidden" :to="productLink(item)">
-                  <img class="w-full h-full fit-cover img-hover" v-lazy="imagePrefix(item.img)" :alt="item.title">
+                  <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`" lazy />
                 </NuxtLink>
                 <div class="content-wrapper">
                   <NuxtLink class="my-10 line1 block text-hover" :to="handleClickArtist(item.creator)">
@@ -471,7 +470,7 @@
         >
           <div class="text-center">
             <div>
-              <img class="w-full" :alt="item.title" v-lazy="imagePrefix(item.img)"/>
+              <el-image class="w-full" fit="cover" :src="imagePrefix(item.img)" :alt="item.title" lazy />
             </div>
             <div>
               <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
@@ -494,7 +493,7 @@
         <swiper-slide v-for="item in WHY_CHOOSE_LIST" :key="item.title" style="width: 80%;" :lazy="true">
           <div class="text-center">
             <div>
-              <img class="w-full" :src="imagePrefix(item.img)" :alt="item.title" loading="lazy" />
+              <el-image class="w-full" fit="cover" :src="imagePrefix(item.img)" :alt="item.title" lazy />
             </div>
             <div>
               <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
@@ -529,12 +528,8 @@
                   class="artist-item block"
                   v-aos="{ name: 'fade-up', delay: index % 6 * 100}"
               >
-                <div class="img-wrapper rounded-full overflow-hidden">
-                  <img
-                      class="w-full aspect-ratio bg-gray-200 img-hover"
-                      v-lazy="imagePrefix(item.portrait)"
-                      :alt="item.name"
-                  >
+                <div class="img-wrapper rounded-full aspect-ratio overflow-hidden">
+                  <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.portrait)" :alt="item.name" lazy />
                 </div>
                 <p class="text-center text-20 f-bold-500 mt-15 line1">{{ item.name }}</p>
               </NuxtLink>
@@ -580,7 +575,7 @@
     </section>-->
 
   <!--WHAT CUSTOMERS SAY-->
-  <section class="sec-review">
+  <!--<section class="sec-review">
     <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
       <h2 class="text-50">WHAT CUSTOMERS SAY</h2>
     </div>
@@ -607,7 +602,7 @@
             <div class="p-content acea-row row-column nowrap p-20">
               <div class="flex-1">
                 <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
-                <!--                <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
+                &lt;!&ndash;                <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>&ndash;&gt;
                 <el-rate
                     v-model="item.rating"
                     disabled
@@ -625,7 +620,7 @@
         </swiper-slide>
       </swiper>
     </el-skeleton>
-  </section>
+  </section>-->
 
   <!--CONTACT-->
   <section class="sec-contact">
@@ -643,10 +638,14 @@
               <template v-else>Sign Up</template>
             </el-button>
           </div>
-          <p class="text-16">
+          <p class="text-16 mt-20">
             INSTANTLY ACCESS THE LATEST FASHION TRENDS AND EXCLUSIVE DEALS ON OUR
             SITE.DISCOVER YOUR PERFECT STYLE IN A FEW CLICKS!
           </p>
+          <template v-if="userStore.isLogin && userStore.userInfo.subscribe === '1'">
+            <el-checkbox v-model="agree" size="large">I agree to receive marketing communications, including the latest news, art magazine issues, and event promotions.</el-checkbox>
+            <p class="text-14">Tips: You can unsubscribe at any time. For more details, review our <NuxtLink to="/privacy-policy" class="text-secondary">Privacy Policy</NuxtLink>.</p>
+          </template>
         </div>
       </div>
     </div>
@@ -665,13 +664,13 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import {useAppStore} from "~/stores/modules/app";
-import {imagePrefix, jumpToUrl, productLink, youtubeProxyPrefix} from "~/utils";
+import {jumpToUrl, productLink, youtubeProxyPrefix} from "~/utils";
 import {BEST_URL, PRODUCT_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IArtists} from "~/api/interface/artists/artists";
 import type {IHome} from "~/api/interface/home/home";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import {subscribeForRealName, getLatestComment} from "~/api/modules/message/message";
 import {useCustomStore} from "~/stores/modules/custom";
 import type {IResultData} from "~/api/interface";
@@ -685,6 +684,7 @@ import {packQuery} from "~/composables/useQueryShort";
 import type {IMessage} from "~/api/interface/message/message";
 import {WHY_CHOOSE_LIST} from "~/constant";
 import type {ObjectNode} from "~/types/global";
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'Home'
@@ -700,6 +700,7 @@ onMounted(() => {
   if (route.query.couponId) showPromoCode(route.query.couponId)
 })
 
+const { imagePrefix, getPcSrcset, getMobileSrcset } = useImage()
 const contactImage = imagePrefix('/static/artdafen/contact-bg.webp');
 const route = useRoute()
 const router = useRouter()
@@ -709,24 +710,9 @@ const { formatToCurrency } = useCurrencyStore();
 const userStore = useUserStore()
 const modules = [Autoplay, Pagination, Navigation, Lazy]
 const playYoutube = ref(false)
+const agree = ref(false)
 
 useHead(resolvePageMeta("/"));
-
-function getMobileBanner(imgPath: string) {
-  const widths = [414, 768]
-  const srcset = widths
-      .map(w => `${imgPath}?x-image-process=image/resize,w_${w},limit_0 ${w}w`)
-      .join(', ')
-  return { srcset, src: `${imgPath}?x-image-process=image/resize,w_768,limit_0` }
-}
-
-function getPcBanner(imgPath: string) {
-  const widths = [992, 1260, 1460, 1680, 1920]
-  const srcset = widths
-      .map(w => `${imgPath}?x-image-process=image/resize,w_${w},limit_0 ${w}w`)
-      .join(', ')
-  return { srcset, src: `${imgPath}?x-image-process=image/resize,w_1260,limit_0` }
-}
 
 // 点击艺术家
 const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
@@ -755,8 +741,16 @@ const handleSeeMoreBest = () => {
 
 // 消息订阅
 const handleSubscribe = async () => {
-  if (userStore.userInfo.subscribe === '0') return
   if (!userStore.isLogin) return showLoginWindow()
+  if (userStore.userInfo.subscribe === '0') return
+  else if (!agree.value) {
+    ElMessageBox.confirm('Please agree to the terms and conditions to subscribe.', 'Tips', {
+      confirmButtonText: 'Agree',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }).then(() => agree.value = true)
+    return
+  }
   await subscribeForRealName()
   ElMessage.success('Subscription successful，Please pay attention to the email.')
   userStore.updateSubscribe('0')
@@ -988,7 +982,7 @@ const _getLatestComment = async () => {
 
         > p {
           max-width: 607px;
-          margin: 20px auto 0;
+          margin: auto;
         }
       }
 
@@ -1082,6 +1076,11 @@ const _getLatestComment = async () => {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            transition: all 0.38s ease-in-out;
+
+            &:hover {
+              transform: translate(-50%, -50%) scale(1.2);
+            }
           }
         }
       }

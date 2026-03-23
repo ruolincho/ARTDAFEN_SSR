@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import {getOrderDetailApi} from "~/api/modules/physical/physical";
 import type {IPhysical} from "~/api/interface/physical/physical";
 import {formatPayChannel, formatTimestamp} from "~/utils/format";
@@ -82,6 +82,7 @@ onMounted(() => {
   if (route.params.id) getOrderDetail()
 })
 
+const { imagePrefix } = useImage()
 const route = useRoute()
 const { formatToCurrency } = useCurrencyStore();
 

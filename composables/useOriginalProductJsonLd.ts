@@ -3,13 +3,14 @@ import type {IProduct} from "~/api/interface/product/product";
 import type {JsonLd} from "~/composables/interface";
 import {POP_COUNTRY_CODES} from "~/composables/useProductJsonLd";
 import {useCurrencyStore} from "~/stores/modules/currency";
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 
 export function useOriginalProductJsonLd(
     goodsDetail: IProduct.Row | null | undefined,
     options: JsonLd.ProductJsonLdOptions = {}
 ) {
     const runtime = useRuntimeConfig()
+    const { imagePrefix } = useImage()
     const currencyStore = useCurrencyStore()
     const siteUrl = options.siteUrl || runtime.public?.siteUrl || ''
     const countryCodes = options.countryCodes || POP_COUNTRY_CODES

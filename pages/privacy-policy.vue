@@ -6,7 +6,7 @@
         Privacy Statement
       </h2>
       <p>
-        We take your privacy seriously and this privacy statement explains how <a class="text-secondary" href="www.artdafen.com">artdafen.com</a>
+        We take your privacy seriously and this privacy statement explains how <a class="text-secondary" href="https://www.artdafen.com" target="_blank">artdafen.com</a>
         (collectively, “we,” “us,” or “our”) collect, use, share and process your information.
       </p>
       <h2 class="text-18 f-bold my-15">
@@ -74,14 +74,17 @@
         ⅱ. Communicating with you:
       </p>
       <p>
-        Subject to your prior express consent, we may use personal data to send you marketing communications in relation
-        to our own products and services, communicate with you about your account or transactions, and inform you about
-        our policies and terms. If you no longer wish to receive email communications for marketing purposes, please
-        contact us to opt-out. We also may use your data to process and respond to your requests when you contact us.
-        Subject to your prior express consent, we may share your personal data with third party partners who may send
-        you marketing communications in relation to their products and services. Subject to your prior express consent,
-        we may use personal data to personalize your experience with our products and services and on third-party
-        websites and applications and to determine the effectiveness of our promotional campaigns.
+        Subject to your prior express consent (such as by checking the subscription box on our website), we may use
+        personal data to send you marketing communications including the latest news, art magazine updates, and event
+        offers in relation to our own products and services, communicate with you about your account or transactions,
+        and inform you about our policies and terms. If you no lon()ger wish to receive email communications for
+        marketing purposes, you can easily unsubscribe at any time by clicking the "unsubscribe" link provided at the
+        bottom of any promotional email we send you, updating your account preferences, or please contact us to opt-out.
+        We also may use your data to process and respond to your requests when you contact us. Subject to your prior
+        express consent, we may share your personal data with third party partners who may send you mar()keting
+        communications in relation to their products and services. Subject to your prior express consent, we may use
+        personal data to personalize your experience with our products and services and on third-party websites and
+        applications and to determine the effectiveness of our promotional campaigns.
       </p>
       <p>
         NOTE: For any of the uses of your data described above that require your prior express consent, note that you
@@ -206,16 +209,9 @@
         Children’s Privacy
       </h2>
       <p>
-        Our services are not intended for children under the age of 16. We do not knowingly collect personal information from children under 16. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately so we can delete such data.
-      </p>
-      <h2 class="text-18 f-bold my-15">
-        Contact Us
-      </h2>
-      <p>
-        If you have questions about this Privacy Statement or its implementation, here is how you can reach us: <br>
-        Business Address: {{ BUSINESS_ADDRESS }} <br>
-        Email: <a class="text-secondary" :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a> <br>
-        US Customer Support: <a class="text-secondary" :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{COUNTRY_CODE}} {{ CUSTOMER_SERVICE }}</a>
+        Our services are not intended for children under the age of 16. We do not knowingly collect personal information
+        from children under 16. If you are a parent or guardian and believe your child has provided us with personal
+        information, please contact us immediately so we can delete such data.
       </p>
     </div>
   </section>
@@ -223,7 +219,6 @@
 
 <script setup lang="ts">
 import {resolvePageMeta} from "~/config/pageMeta";
-import {BUSINESS_ADDRESS, CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
 
 useHead(resolvePageMeta("/privacy-policy"));
 

@@ -10,7 +10,7 @@
         '414': { slidesPerView: 2, spaceBetween: 10, slidesPerGroup: 2 },
       }"
     >
-      <swiper-slide v-for="(item, index) in zoneDetail.banners" :key="index" :lazy="true">
+      <swiper-slide v-for="(item, index) in zoneDetail?.banners" :key="index" :lazy="true">
         <img class="w-full h-full fit-cover" :src="imagePrefix(item)" alt="picturesInTheSpecialArea"/>
       </swiper-slide>
     </swiper>
@@ -352,7 +352,7 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import type {IProduct} from "~/api/interface/product/product";
 import type {ElPopover} from "element-plus";
 import type {IHome} from "~/api/interface/home/home";
@@ -378,6 +378,7 @@ onMounted(() => {
   getZoneExplore()
 })
 
+const { imagePrefix } = useImage()
 const modules = [Autoplay, Lazy]
 const route = useRoute();
 const router = useRouter();

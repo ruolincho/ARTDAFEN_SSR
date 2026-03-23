@@ -18,8 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import { imagePrefix } from "~/utils";
+import {useImage} from "~/composables/useImage";
 import type {IPaint} from "~/api/interface/paint/paint";
+
+const { imagePrefix } = useImage()
 
 // 定义 Props
 interface Props {

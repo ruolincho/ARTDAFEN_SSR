@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import {getBlogDetailApi} from "~/api/modules/blog/blog";
-import {formatAttr, imagePrefix, jumpToProduct} from "~/utils";
+import {formatAttr, jumpToProduct} from "~/utils";
 import {Swiper, SwiperSlide} from "swiper/vue";
 import {Navigation, Pagination} from "swiper";
 import 'swiper/css'
@@ -76,6 +76,7 @@ import {debounce} from "lodash-es";
 import {useUserStore} from "~/stores/modules/user";
 import {blogThumbsApi} from "~/api/modules/likes/likes";
 import {useLockScroll} from "~/composables/useLockScroll";
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'BlogPopup',
@@ -93,6 +94,7 @@ interface Props {
   nowTime: Date; // 当前时间
 }
 
+const { imagePrefix } = useImage()
 const props = defineProps<Props>()
 const modules = [Pagination, Navigation]
 const noteInfo = ref({} as  IBlog.Row)

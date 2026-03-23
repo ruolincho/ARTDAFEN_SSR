@@ -27,8 +27,11 @@
     <div class="container">
       <!--移动端兼容视图-->
       <div class="app-preview"
-           :style="{margin: '0 -15px', height: '300px', position: appSticky ? 'sticky' : 'relative' }"
-           v-if="!appStore.isPc">
+           id="tour-step-preview-app"
+           :style="{margin: '0 -15px', height: '300px', position: appSticky ? 'sticky' : 'static' }"
+           v-if="!appStore.isPc"
+           ref="appPreviewRef"
+      >
         <div class="img-wrapper acea-row row-center-wrapper flex-1 overflow-hidden">
           <ClientOnly>
             <ImageGenerator
@@ -45,7 +48,7 @@
       </div>
       <!-- 移动端兼容标题 -->
       <div class="app-title pt-20 acea-row row-between-wrapper" v-if="!appStore.isPc">
-        <p style="font-size: 20px;" class="f-bold-500 flex-1 mr-10">{{ goodsDetail.title }}</p>
+        <p style="font-size: 20px;" class="f-bold-500 flex-1 mr-10">{{ `${goodsDetail.title}: Hand-painted Oil Painting Reproduction` }}</p>
         <span class="iconfont icon-follow text-40 mr-10 cursor-pointer" v-show="!isThumbs" @click="productThumbs"/>
         <span class="iconfont icon-follow-fill text-40 mr-10 cursor-pointer text-error" v-show="isThumbs"
               @click="productThumbs"/>
@@ -57,7 +60,7 @@
           <!--预览图-->
           <div class="spu-preview border-sm">
             <div class="p-md-20 p-15 border-b-sm">
-              <p class="text-22 f-bold-500">{{ goodsDetail.title }}</p>
+              <p class="text-22 f-bold-500">{{ `${goodsDetail.title}: Hand-painted Oil Painting Reproduction` }}</p>
             </div>
             <div class="acea-row row-between-wrapper p-md-20 p-15">
               <div>
@@ -77,7 +80,7 @@
                 <span class="iconfont icon-quanping text-40 cursor-pointer" @click="toggleImageViewer"></span>
               </div>
             </div>
-            <div class="preview-box">
+            <div class="preview-box" id="tour-step-preview-pc">
               <ClientOnly>
                 <ImageGenerator
                     v-if="goodsDetail.id"
@@ -268,7 +271,7 @@
                 </div>
                 <div class="mt-20" style="line-height: 1.7">
                   <p>- Worldwide free shipping via premium carriers (FedEx, DHL, UPS)</p>
-                  <p>- Express delivery transit time: typically 5–8 business days</p>
+                  <p>- Express delivery transit time: typically 5–10 business days</p>
                   <p>- Total turnaround (Order to Door): approx. 2–4 weeks, including 5–10 days production time</p>
                 </div>
               </div>
@@ -574,12 +577,10 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import {getBrandRecommendApi, getRelatedRecommendApi} from "~/api/modules/product/product";
-import {getCombinationApi} from "~/api/modules/paint/paint";
-import type {IPaint} from "~/api/interface/paint/paint";
 import type {IProduct} from "~/api/interface/product/product";
 import WallColor from '~/components/WallColor.vue'
 import Room from '~/components/Room.vue'
-import {cm2inch, debounce, imagePrefix, youtubeProxyPrefix, productLink} from "~/utils";
+import {debounce, youtubeProxyPrefix, productLink} from "~/utils";
 import {useCartStore} from '~/stores/modules/cart'
 import type {IShopping} from "~/api/interface/shopping/shopping";
 import {getSpecsListApi} from "~/api/modules/specs/specs";
@@ -590,7 +591,7 @@ import {useAppStore} from "~/stores/modules/app";
 import {gen_path_obj} from "~/utils/product";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {useUserStore} from "~/stores/modules/user";
-import {CONTACT_EMAIL, PRODUCT_URL, APP_HAS_SEEN_PAINT_GUIDE} from "~/config";
+import {PRODUCT_URL, APP_HAS_SEEN_PAINT_GUIDE} from "~/config";
 import {getFaqByQuote} from "~/config/faq";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IResultData} from "~/api/interface";
@@ -610,13 +611,10 @@ import MatSelector from "~/components/Custom/MatSelector.vue";
 import CraftSelector from "~/components/Custom/CraftSelector.vue";
 import ComboSkeleton from "~/components/Custom/ComboSkeleton.vue";
 import {usePaintCombo} from '~/composables/usePaintCombo'
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'PaintDetail'
-})
-
-definePageMeta({
-  isShowActivity: true
 })
 
 onMounted(async () => {
@@ -634,6 +632,7 @@ onUnmounted(() => {
   $bus.off('loginSuccess', getIsThumbs)
 })
 
+const { imagePrefix } = useImage()
 const {$bus} = useNuxtApp()
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -714,7 +713,14 @@ const {data: goodsDetail, pending: isSkeleton} = await useAsyncData(
 )
 
 useHead({
-  title: `${goodsDetail.value?.name || ''} - ${config.public?.siteName}`,
+  // title: `${goodsDetail.value?.name || ''} - ${config.public?.siteName}`,
+  title: `${goodsDetail.value?.name} by ${goodsDetail.value?.creator?.name} Reproduction | Pink Impressionist Landscape Wall Art for Bedroom`,
+  meta: [
+    {
+      name: "description",
+      content: goodsDetail.value?.description
+    }
+  ]
 })
 
 const {injectProductJsonLd, jsonLd} = useCustomProductJsonLd(goodsDetail.value, {})
@@ -722,7 +728,7 @@ injectProductJsonLd()
 
 console.log(' =>', jsonLd.value)
 
-// 获取SKu
+// 获取Sku
 const specsCombination = ref<ISpecs.Row[]>([])
 const getSpecsList = async () => {
   const {data} = await getSpecsListApi(route.params.id)
@@ -877,14 +883,21 @@ const toggleWidget = (flag: boolean) => {
   }
 }
 
+const appPreviewRef = ref<HTMLElement>()
 const appSticky = ref(true)
 const openTour = ref(false)
 const beginGuide = async () => {
+  let top = 0
   if (appStore.isPc) {
     await appStore.forceFoldHeader() // 锁定并折叠，等待动画
   } else {
+    top = appPreviewRef.value.offsetHeight
     appSticky.value = false
   }
+  window.scrollTo({
+    top: top,
+    behavior: "instant",
+  })
   openTour.value = true
   toggleWidget(false)
 }
@@ -894,6 +907,10 @@ const handleTouchClose = () => {
   } else {
     appSticky.value = true
   }
+  window.scrollTo({
+    top: 0,
+    behavior: "instant",
+  })
   toggleWidget(true)
 }
 // 参数顺序：[显示条件, 目标Ref, 标题, 描述, 额外配置(可选)]
@@ -904,6 +921,7 @@ const createStep = (condition: boolean, target: any, title: string, description:
 }
 const tourSteps = computed(() => {
   const steps = [
+    createStep(true, appStore.isPc ? '#tour-step-preview-pc' : '#tour-step-preview-app', 'Preview Artwork', 'Get a first look at your core image to ensure it’s exactly how you envision before customizing the details.'),
     createStep(specsCombination.value.length > 1, '#tour-step-craft', 'Choose Craftsmanship', 'Select the material and texture that best suits your style.'),
     createStep(true, '#tour-step-size', 'Choose Size', 'Pick the perfect dimensions to fit your space.'),
     createStep(true, '#tour-step-frame', 'Choose Frame', 'Complete the look with one of our premium frames.'),

@@ -4,7 +4,7 @@
     <div class="acea-row row-between row-bottom">
       <div>
         <p class="text-14 text-gray-600 my-10">
-          Business Hours: Mon-Fri 9:00 AM - 6:00 PM (Lunchtime: 12:00 PM - 1:00 PM)
+          Business Hours: Mon-Fri 9:00 AM - 6:30 PM (Lunchtime: 12:00 PM - 1:30 PM)
         </p>
         <el-button type="primary" size="large" @click="router.push('/faq')">
           FAQ
@@ -93,17 +93,20 @@
 <!--        <NuxtLink to="/our-return-policy" class="friends-item">Our Return Policy</NuxtLink>-->
 <!--      </div>-->
       <div class="text-gray-600 mt-10">
-        Business Address: {{ BUSINESS_ADDRESS }}
+        Our Studio & Fulfillment: {{ STUDIO_ADDRESS }}
       </div>
       <div class="text-gray-600 mt-10">
-        US Customer Support: <a :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{ COUNTRY_CODE }} {{ CUSTOMER_SERVICE }}</a>
+        Registered Office: {{ REGISTERED_ADDRESS }}
+      </div>
+      <div class="text-gray-600 mt-10">
+        Phone: <a :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{ COUNTRY_CODE }} {{ CUSTOMER_SERVICE }}</a>
       </div>
       <div class="text-gray-600 mt-10">
         Email: <a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a>
       </div>
     </div>
     <div class="copyright mt-10 text-gray-600" style="line-height: 1.7">
-      © 1989-{{ new Date().getFullYear() }} ARTDAFEN.COM - Affordable Museum Quality Oil Painting Reproductions for Sale Online. <br>
+      © 2014-{{ new Date().getFullYear() }} ARTDAFEN.COM Museum-caliber oil painting reproductions, exclusively available online. <br />
       According to the intellectual property rights, we will only sell artworks in the public domain which means the original artists died no less than 70 years. If you find any paintings listed may have copyright problem, please contact us to remove.
     </div>
   </footer>
@@ -180,8 +183,9 @@
           </a>
         </div>
       </div>
-      <div class="tel">Business Address: {{ BUSINESS_ADDRESS }}</div>
-      <div class="tel">US Customer Support: <a :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{ COUNTRY_CODE }} {{ CUSTOMER_SERVICE }}</a></div>
+      <div class="tel">Our Studio & Fulfillment: {{ STUDIO_ADDRESS }}</div>
+      <div class="tel">Registered Office: {{ REGISTERED_ADDRESS }}</div>
+      <div class="tel">Phone: <a :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{ COUNTRY_CODE }} {{ CUSTOMER_SERVICE }}</a></div>
       <div class="tel">Email: <a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a></div>
       <p>For some products, Artdafen is not a direct seller, but a sales intermediary. For product information, please
         refer to the specific content on each product page.</p>
@@ -193,7 +197,7 @@
 import {onMounted, ref} from "vue";
 import {getNoticeBtoApi} from "~/api/modules/notice/notice";
 import type {INotice} from "~/api/interface/notice/notice";
-import {BUSINESS_ADDRESS, CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE} from "~/config";
+import { CONTACT_EMAIL, COUNTRY_CODE, CUSTOMER_SERVICE, STUDIO_ADDRESS, REGISTERED_ADDRESS } from "~/config";
 import {getFaqByQuote} from "~/config/faq";
 
 onMounted(() => {
@@ -208,7 +212,7 @@ const footerList = ref([
     url: '',
     auth: false,
     children: [
-      {name: 'Privacy Policy', url: 'privacy-policy'},
+      {name: 'Privacy Policy', url: '/privacy-policy'},
       {name: 'Terms of Condition', url: '/terms-and-conditions'},
       // {name: 'Cookies Policy', url: '/cookies-policy'},
       {name: 'Our Return Policy', url: '/our-return-policy'},
@@ -226,17 +230,17 @@ const footerList = ref([
       {name: 'Contact Us', url: '/contact'},
     ]
   },
-  {
-    name: 'MY ACCOUNT',
-    url: '/account',
-    auth: true,
-    children: [
-      {name: 'My Orders', url: '/account/orders'},
-      {name: 'My Wishlists', url: '/account/favorites'},
-      {name: 'My Addresses', url: '/account/addresses'},
-      {name: 'My Profile', url: '/account/profile'},
-    ]
-  },
+  // {
+  //   name: 'MY ACCOUNT',
+  //   url: '/account',
+  //   auth: true,
+  //   children: [
+  //     {name: 'My Orders', url: '/account/orders'},
+  //     {name: 'My Wishlists', url: '/account/favorites'},
+  //     {name: 'My Addresses', url: '/account/addresses'},
+  //     {name: 'My Profile', url: '/account/profile'},
+  //   ]
+  // },
   {
     name: 'FAQS',
     url: '/faq',
@@ -537,8 +541,6 @@ const getNoticeBto = async () => {
       span, a {
         color: var(--color-gray-600);
         display: inline-block;
-        font-size: 18px;
-        margin-left: 10px;
       }
     }
 

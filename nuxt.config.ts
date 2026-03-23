@@ -1,3 +1,4 @@
+import path from 'path';
 // @ts-ignore
 export default defineNuxtConfig({
     ssr: process.env.NUXT_PUBLIC_ENABLE_SSR === 'true',
@@ -117,7 +118,10 @@ export default defineNuxtConfig({
         }
     },
     nitro: {
-        compatibilityDate: '2026-02-09',
+        compatibilityDate: '2025-09-10', // 这是项目的创建日期
+        output: {
+            dir: path.join(__dirname, 'output')
+        }
     },
     sourcemap: {
         server: true,

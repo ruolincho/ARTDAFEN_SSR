@@ -97,9 +97,10 @@
 import {getOrderListApi} from "~/api/modules/physical/physical";
 import type {IPhysical} from "~/api/interface/physical/physical";
 import ProList from "~/components/ProList/index.vue";
-import {formatAttr, imagePrefix} from "~/utils";
+import {formatAttr} from "~/utils";
 import {PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'Orders'
@@ -112,6 +113,8 @@ definePageMeta({
 useSeoMeta({
   robots: 'noindex, nofollow'
 })
+
+const { imagePrefix } = useImage()
 const { formatToCurrency } = useCurrencyStore();
 const router = useRouter();
 const initParam = reactive({status: '0', keyword: '', size: 3});

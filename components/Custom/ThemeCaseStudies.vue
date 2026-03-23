@@ -14,7 +14,7 @@
         <div class="item" v-for="(sample, index) in item.samples" :key="sample.id"
              @click="showCaseContrast(item.samples, index)">
           <img class="w-full h-full fit-cover img-hover"
-               :src="imagePrefix(sample.compareImg)"
+               v-lazy="imagePrefix(sample.compareImg)"
                :alt="item.name + '_sample'"
           />
         </div>
@@ -66,13 +66,14 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix, generateTitle2Slug} from "~/utils";
+import {generateTitle2Slug} from "~/utils";
 import {useAppStore} from "~/stores/modules/app";
 import type {IPaint} from "~/api/interface/paint/paint";
 import {Swiper, SwiperSlide} from 'swiper/vue'
 import {Autoplay, Pagination} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import {useImage} from "~/composables/useImage";
 
 // 定义 Props
 interface Props {
@@ -80,6 +81,7 @@ interface Props {
   themeOptions: IPaint.ThemeRow[];
 }
 
+const { imagePrefix } = useImage()
 const props = defineProps<Props>()
 
 const emit = defineEmits<{

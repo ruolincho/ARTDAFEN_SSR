@@ -14,7 +14,7 @@
         <div class="part-auto border-r-sm border-b-sm border-gray-700 ">
           <div class="slogan2 w-full h-full acea-row row-column row-center-wrapper">
             <p class="text-30">Since 1989 · Reimagined 2020</p>
-            <p class="text-30">The Hidden Studio Behind Global Galleries.</p>
+            <p class="text-30">Masterpieces for millions, not millions for a masterpiece.</p>
           </div>
         </div>
         <div class="part-small border-b-sm border-gray-700"></div>
@@ -29,12 +29,9 @@
             >
             <div class="p-box text-30 text-white f-bold-200 flex-1 acea-row row-column row-center-wrapper">
               <p style="line-height: 1.7">
-                The Hidden Studio Behind <strong>Global Galleries</strong>. Direct from Dafen Village, the world’s art
-                center. We are a
-                <strong>heritage studio</strong> established
-                in 1989, offering strict
-                <strong>"M useum-Quality Reproductions."</strong> No intermediaries, just authentic artistry and
-                source-factory value.
+                The Hidden Studio Behind Global Galleries. Direct from <strong>Dafen Village</strong>, the world’s art center. We are a
+                <strong>heritage studio established in 1989</strong>, offering strict "<strong>Museum-Quality Reproductions</strong>." No intermediaries,
+                just authentic artistry and <strong>source-factory value</strong>.
               </p>
             </div>
             <img class="w-full" :src="imagePrefix('/static/artdafen/about-7.webp')" alt="Dafeng Oil Painting Village"
@@ -175,15 +172,11 @@
           <div class="intro-box acea-row row-column">
             <div class="p-box text-30 text-white f-bold-200 flex-1 acea-row row-column row-center-wrapper">
               <p style="line-height: 1.7">
-                As the distinguished Chairman Unit and an officially designated <strong>National Demonstration
-                Base</strong>, we do not
-                simply participate in the market—we lead it. We are the architects of the industry, rigorously defining
-                and elevating the standards that others follow. Our celebrated legacy, famously highlighted by our
-                pivotal role in the <strong>World Expo</strong>, serves as a powerful testament to our capability. This
-                history
-                guarantees our clients unwavering trust and the consistent delivery of exquisite, <strong>museum-grade
-                quality</strong>
-                in every project we undertake.
+                As a <strong>registered art enterprise</strong> operating within Dafen’s <strong>National Demonstration Base</strong>, we pride ourselves
+                on elevating industry standards. We lead through <strong>transparent business practices</strong>, clear customer
+                policies, and <strong>rigorous in-house quality control</strong>. This solid foundation guarantees our clients unwavering
+                trust, reliable <strong>after-sales support</strong>, and the consistent delivery of museum-grade artwork for every home
+                we touch.
               </p>
             </div>
           </div>
@@ -267,11 +260,12 @@ import {Autoplay, Navigation, Pagination, Lazy} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import {imagePrefix} from "~/utils";
 import {resolvePageMeta} from "~/config/pageMeta";
 import {ARTISTS_LIST, HONOR_LIST, HISTORY_LIST, PARTNER_LIST} from "~/constant";
+import {useImage} from "~/composables/useImage";
 
 const modules = [Autoplay, Pagination, Navigation, Lazy]
+const {imagePrefix} = useImage()
 
 useHead(resolvePageMeta("/about"))
 </script>

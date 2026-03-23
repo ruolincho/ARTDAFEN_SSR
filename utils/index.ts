@@ -4,28 +4,6 @@ import {TechniqueCodeEnum} from "~/types/enumeration";
 import {YOUTUBE_PROXY_URL} from "~/config";
 
 /**
- * 图片添加服务器前缀
- * @param path
- * @param defaultImage
- */
-export function imagePrefix(path: string, defaultImage = false) {
-    const config = useRuntimeConfig()
-    defaultImage && !path && (path = '/static/default_avatar1.webp')
-    // 域名判断逻辑
-    if (path?.startsWith('http')) return path
-    return config.public.obsUrl + path
-}
-
-/**
- * 图片取消服务器前缀
- * @param path
- */
-export function imageUnPrefix(path: string = '') {
-    const config = useRuntimeConfig()
-    return path.replace(config.public.obsUrl, '')
-}
-
-/**
  * YouTube 视频添加服务器前缀（代理）
  * @param embedId
  */

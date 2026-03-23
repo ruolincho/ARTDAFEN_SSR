@@ -3,7 +3,7 @@ import type {IProduct} from "~/api/interface/product/product";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {packSpecs} from "~/composables/useSpotSpecToken";
 import type {JsonLd} from "./interface";
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 
 /**
  * 一个覆盖多区域的国家短清单（可立即上线）；你也可以传入全量国家码替换
@@ -97,6 +97,7 @@ export function useProductJsonLd(
     options: JsonLd.ProductJsonLdOptions = {}
 ) {
     const runtime = useRuntimeConfig()
+    const { imagePrefix } = useImage()
     const currencyStore = useCurrencyStore()
     const siteUrl = options.siteUrl || runtime.public?.siteUrl || ''
     const countryCodes = options.countryCodes || POP_COUNTRY_CODES

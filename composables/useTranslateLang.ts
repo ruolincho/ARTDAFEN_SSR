@@ -691,6 +691,7 @@ const TRANSLATE_LANG_LIST = [
     "hungarian",
     "croatian",
     "chinese_traditional",
+    "chinese_simplified",
 ]
 
 const currentServiceId = ref('') // en / zh-TW

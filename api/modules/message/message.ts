@@ -1,4 +1,4 @@
-import { $http } from '~/api/http'
+import {$http} from '~/api/http'
 import {TRADE_MODULE, USER_MODULE} from "~/api/helper/prefix";
 import type {IMessage} from "~/api/interface/message/message";
 import type {IPage} from "~/api/interface";
@@ -16,6 +16,14 @@ export const subscribe = (params: { email: string }) => {
  */
 export const subscribeForRealName = () => {
     return $http().get(USER_MODULE + `/message/subscribe`)
+}
+
+/**
+ * 取消消息订阅
+ * @param params
+ */
+export const unsubscribeApi = (params: { token?: string }) => {
+    return $http().post<string>(USER_MODULE + `/message/unsubscribe`, params)
 }
 
 /**

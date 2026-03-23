@@ -52,9 +52,11 @@
 import ProInfinite from "~/components/ProInfinite.vue";
 import type {IMessage} from "~/api/interface/message/message";
 import {getCommentList} from "~/api/modules/message/message";
-import {imagePrefix, jumpToProduct} from "~/utils";
+import {jumpToProduct} from "~/utils";
 import {formatTimestamp} from "~/utils/format";
+import {useImage} from "~/composables/useImage";
 
+const { imagePrefix } = useImage()
 
 // 获取买家秀数据
 const _getCommentList = (params: IMessage.CommentQuery) => getCommentList(params)

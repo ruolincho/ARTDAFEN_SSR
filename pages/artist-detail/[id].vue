@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import {debounce, imagePrefix} from "~/utils";
+import {debounce} from "~/utils";
 import {getArtistDetailApi} from "~/api/modules/artists/artists";
 import ProList from "~/components/ProList/index.vue";
 import type {IProduct} from "~/api/interface/product/product";
@@ -70,6 +70,7 @@ import {gen_path_obj} from "~/utils/product";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {packQuery} from "~/composables/useQueryShort";
 import type {ObjectNode} from "~/types/global";
+import {useImage} from "~/composables/useImage";
 
 onMounted(() => {
   if (route.params.id) getDetail()
@@ -78,6 +79,7 @@ onMounted(() => {
   })
 })
 
+const { imagePrefix } = useImage()
 const {$bus} = useNuxtApp()
 const route = useRoute();
 const router = useRouter();

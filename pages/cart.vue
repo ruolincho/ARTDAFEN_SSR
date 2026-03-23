@@ -163,7 +163,7 @@ import type {
   PayPalButtonOnClick,
   PayPalButtonOnInit
 } from "@paypal/paypal-js/types/components/buttons";
-import {debounce, imagePrefix, jumpToProduct} from "~/utils";
+import {debounce, jumpToProduct} from "~/utils";
 import {useCartStore} from "~/stores/modules/cart";
 import PaySuccessPopup from "~/components/PaySuccessPopup.vue";
 import {ElMessage, type ElInput} from "element-plus";
@@ -176,6 +176,7 @@ import {initPaypal} from '~/composables/usePayment'
 import {phoneReg} from "~/regular";
 import Decimal from "decimal.js";
 import {checkStatus} from "~/api/helper";
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'Cart',
@@ -207,6 +208,7 @@ const _init = async () => {
   await confirmOrder()
 }
 
+const { imagePrefix } = useImage()
 const {$bus} = useNuxtApp()
 const router = useRouter()
 const cartStore = useCartStore();

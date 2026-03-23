@@ -52,8 +52,8 @@
 
         </div>
         <img class="discount-image" :src="imagePrefix(activityData.img)" alt="poster">
-        <div class="discount-close-button" @click="handleClose">
-          <span class="iconfont icon-close text-20"></span>
+        <div class="discount-close-button cursor-pointer" @click="handleClose">
+          <span class="iconfont icon-error-fill"></span>
         </div>
       </div>
     </div>
@@ -74,7 +74,9 @@ import {subscribe} from "~/api/modules/message/message";
 import Countdown from "~/components/Countdown.vue";
 import type {IActivity} from "~/api/interface/activity/activity";
 import {getActivityApi} from "~/api/modules/activity/activity";
+import {useImage} from "~/composables/useImage";
 
+const { imagePrefix } = useImage()
 const userStore = useUserStore()
 const isOpen = ref(false);
 
@@ -149,7 +151,7 @@ const handleDiscountEnd = () => {
     top: 50%;
     left: 50%;
     width: 100%;
-    max-width: 627px;
+    max-width: 680px;
     max-height: 100%;
     min-height: 300px;
     display: flex;
@@ -237,11 +239,14 @@ const handleDiscountEnd = () => {
 
       .discount-close-button {
         position: absolute;
-        right: 0;
-        top: 0;
+        right: 10px;
+        top: 10px;
         z-index: 2;
-        padding: 8px;
-        cursor: pointer;
+        color: #fff;
+
+        .iconfont {
+          font-size: 22px;
+        }
       }
     }
 
@@ -296,6 +301,14 @@ const handleDiscountEnd = () => {
 
         .discount-image {
           display: none;
+        }
+
+        .discount-close-button {
+          color: var(--color-primary);
+
+          .iconfont {
+            font-size: 20px;
+          }
         }
       }
     }

@@ -14,12 +14,12 @@
             <div class="compare-container" style="--pos: 50%;">
 
               <div class="img-layer after">
-                <img :src="imagePrefix(img)" alt="ORIGINAL PHOTO"/>
+                <img v-lazy="imagePrefix(img)" alt="ORIGINAL PHOTO"/>
                 <span class="label">ORIGINAL PHOTO</span>
               </div>
 
               <div class="img-layer before">
-                <img :src="imagePrefix(painting)" alt="OUR PAINTING"/>
+                <img v-lazy="imagePrefix(painting)" alt="OUR PAINTING"/>
                 <span class="label">OUR PAINTING</span>
               </div>
 
@@ -66,8 +66,10 @@
 
 <script setup lang="ts">
 import type {IPaint} from "~/api/interface/paint/paint";
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import type {UploadFile, UploadProps} from "element-plus";
+
+const { imagePrefix } = useImage()
 
 // 定义 Props
 interface Props {

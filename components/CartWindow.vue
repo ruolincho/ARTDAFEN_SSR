@@ -47,10 +47,12 @@
 
 <script setup lang="ts">
 import {useCartStore} from "~/stores/modules/cart";
-import {formatAttr, imagePrefix, jumpToProduct} from "~/utils";
+import {formatAttr, jumpToProduct} from "~/utils";
 import {PRODUCT_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
+import {useImage} from "~/composables/useImage";
 
+const { imagePrefix } = useImage()
 const router = useRouter();
 const cartStore = useCartStore();
 const { formatToCurrency } = useCurrencyStore();

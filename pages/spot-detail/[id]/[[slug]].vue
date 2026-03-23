@@ -33,7 +33,7 @@
                     :thumbs="{ swiper: thumbsSwiper }"
                   >
                     <swiper-slide
-                      v-for="(banner, index) in goodsDetail.banners"
+                      v-for="(banner, index) in goodsDetail?.banners"
                       :key="index"
                     >
                       <div class="w-full h-full acea-row row-center-wrapper">
@@ -56,7 +56,7 @@
                 }"
                   >
                     <swiper-slide
-                      v-for="(banner, index) in goodsDetail.banners"
+                      v-for="(banner, index) in goodsDetail?.banners"
                       :key="index"
                     >
                       <div class="w-full h-full acea-row row-center-wrapper">
@@ -318,7 +318,7 @@ import {Autoplay, Navigation, Pagination, Thumbs} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import {debounce, imagePrefix, productLink} from "~/utils";
+import {debounce, productLink} from "~/utils";
 import type {IProduct} from "~/api/interface/product/product";
 import {getBrandRecommendApi, getRelatedRecommendApi} from "~/api/modules/product/product";
 import type {ISpecs} from "~/api/interface/specs/specs";
@@ -337,6 +337,7 @@ import {TRADE_MODULE} from "~/api/helper/prefix";
 import {packQuery} from "~/composables/useQueryShort";
 import {unpackSpecs} from "~/composables/useSpotSpecToken";
 import {useProductJsonLd} from "~/composables/useProductJsonLd";
+import {useImage} from "~/composables/useImage";
 
 defineOptions({
   name: 'SpotDetail'
@@ -358,6 +359,7 @@ onUnmounted(() => {
   $bus.off('loginSuccess', getIsThumbs)
 })
 
+const { imagePrefix } = useImage()
 const {$bus} = useNuxtApp()
 const userStore = useUserStore()
 const cartStore = useCartStore()

@@ -146,7 +146,7 @@
 </template>
 
 <script setup lang="ts">
-import {imagePrefix, jumpNewWindow, youtubeProxyPrefix} from "~/utils";
+import {jumpNewWindow, youtubeProxyPrefix} from "~/utils";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IProduct} from "~/api/interface/product/product";
 import {CONTACT_EMAIL} from "~/config";
@@ -156,11 +156,13 @@ import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {useUserStore} from "~/stores/modules/user";
 import {useOriginalProductJsonLd} from "~/composables/useOriginalProductJsonLd";
+import {useImage} from "~/composables/useImage";
 
 onMounted(() => {
   if (goodsDetail.value.status === '-1') getSpecsList()
 })
 
+const { imagePrefix } = useImage()
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore()

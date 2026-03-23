@@ -45,54 +45,48 @@
         understanding.
       </p>
       <h2 class="text-18 f-bold my-15">
-        30-Day Return Guarantee
+        30-Day Return Window
       </h2>
       <p>
-        You may request a return within 30 days of delivery, for any reason.
-      </p>
-      <p>
-        We will assist in arranging return shipping. The shipping cost will be your responsibility.
+        You may return or exchange your artwork within 30 days of the delivery date. After 30 days, we unfortunately cannot offer a refund or exchange. Once your return is initiated, you have 14 days to ship the artwork back to us.
       </p>
       <h2 class="text-18 f-bold my-15">
-        Important Return Conditions
+        How to Initiate a Return
       </h2>
+      <p>
+        To start a return, please follow these steps:
+      </p>
       <ul class="list-ul disc">
         <li>
-          Return requests must be submitted within <span class="f-bold">30 days</span> of delivery.
+          Contact our support team at <a class="text-secondary" :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a> with your order number and reason for return.
         </li>
         <li>
-          Once approved, you have <span class="f-bold">14 days</span> to return the artwork.
+          Ensure the artwork is in its original condition and securely packaged, ideally in its original box, to prevent transit damage.
         </li>
         <li>
-          The artwork must be in <span class="f-bold">original condition</span> and securely packaged, ideally in its
-          original box.
+          Ship the artwork directly to our processing center at the following address:
         </li>
       </ul>
+      <p>
+        <strong>ARTDAFEN Returns Department</strong> {{ STUDIO_ADDRESS }}
+      </p>
       <h2 class="text-18 f-bold my-15">
-        Refunds & Fees (Clear Transparency)
-      </h2>
-      <ul class="list-ul disc">
-        <li>
-          <span class="f-bold">Restocking Fee</span>: We do <span class="f-bold">not</span> charge any restocking fees.
-        </li>
-        <li>
-          <span class="f-bold">Refund Method</span>: Once your return is received and inspected, your refund will be automatically processed back to your <span class="f-bold">original payment method</span> within 5-7 business days.
-        </li>
-      </ul>
-      <h2 class="text-18 f-bold my-15">
-        Changed Your Mind?
+        Return Shipping Costs
       </h2>
       <p>
-        We understand a piece may not always suit your space, style, or scale.
+        <strong>Changed Your Mind (Buyer's Remorse):</strong> If the artwork does not suit your space or style, you are responsible for covering the return shipping costs.
       </p>
       <p>
-        You may return your artwork within 30 days of delivery, with return shipping costs covered by you.
+        <strong>Damaged or Incorrect Items:</strong> In the rare event your painting arrives damaged, ARTDAFEN will arrange a complimentary replacement or provide a full refund. Please email photos of the damage and packaging to <a class="text-secondary" :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a> so we can assist promptly.
+      </p>
+      <h2 class="text-18 f-bold my-15">
+        Refunds & Fees
+      </h2>
+      <p>
+        <strong>Restocking Fee:</strong> We do not charge any restocking fees.
       </p>
       <p>
-        Once received in its original condition, a full refund will be promptly issued.
-      </p>
-      <p>
-        Tip: Package the artwork with care to ensure safe transit back to us.
+        <strong>Processing Time:</strong> Once your return is received and inspected at our Shenzhen facility, we will notify you via email. Approved refunds are automatically processed back to your original payment method within <strong>5 to 7 business days</strong>.
       </p>
       <h2 class="text-18 f-bold my-15">
         Need Assistance?
@@ -101,25 +95,8 @@
         Our dedicated team is here to support you with any questions regarding returns, exchanges, shipping, or your
         order status.
       </p>
-      <h2 class="text-18 f-bold my-15">
-        Contact Us
-      </h2>
-      <ul class="list-ul disc">
-        <li>
-          <span class="f-bold">Email:</span> <a class="text-secondary"
-                                                :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a>
-        </li>
-        <li>
-          <span class="f-bold">Phone:</span> <a class="text-secondary" :href="`tel:${COUNTRY_CODE}${CUSTOMER_SERVICE}`">{{
-            COUNTRY_CODE
-          }} {{ CUSTOMER_SERVICE }}</a> (Available Mon-Fri, 9:00 AM - 6:00 PM HKT)
-        </li>
-      </ul>
       <p>
-        <span class="f-bold">Quick Tip:</span>
-        When emailing us regarding an existing purchase, please include your <span class="f-bold">Order Number</span>
-        (e.g.,
-        2511065885200f3adm5vhknb4) in the subject line. This helps us locate your details and serve you faster.
+        <strong>Quick Tip:</strong> When emailing us regarding an existing purchase, please include your <strong>Order Number</strong> (e.g., 2511065885200f3adm5vhknb4) in the subject line. This helps us locate your details and serve you faster.
       </p>
     </div>
   </section>
@@ -127,7 +104,8 @@
 
 <script setup lang="ts">
 import {resolvePageMeta} from "~/config/pageMeta";
-import {COUNTRY_CODE, CUSTOMER_SERVICE, CONTACT_EMAIL} from "~/config";
+import {CONTACT_EMAIL} from "~/config";
+import {STUDIO_ADDRESS} from "../config";
 
 useHead(resolvePageMeta("/our-return-policy"));
 

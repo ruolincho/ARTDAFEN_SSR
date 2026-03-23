@@ -199,11 +199,11 @@ import {type ElForm, ElMessage} from "element-plus";
 import {CONTACT_EMAIL} from "~/config";
 import {emailReg} from "~/regular";
 import {sendConsulting} from "~/api/modules/message/message";
-import {imagePrefix} from "~/utils";
+import {useImage} from "~/composables/useImage";
 import {resolvePageMeta} from "~/config/pageMeta";
 
 useHead(resolvePageMeta("/collaboration"));
-
+const { imagePrefix } = useImage()
 const messageForm = ref({
   email: '',
   subject: '',
