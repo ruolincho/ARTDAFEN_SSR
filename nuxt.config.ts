@@ -58,7 +58,7 @@ export default defineNuxtConfig({
         head: {
             charset: 'utf-8',
             viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
-            title: 'ART DAFEN',
+            title: 'ARTDAFEN',
             meta: [
                 {
                     name: 'description',
@@ -67,7 +67,7 @@ export default defineNuxtConfig({
                 {
                     name: 'keywords',
                     content:
-                        'ART DAFEN, ARTDAFEN art, artworks, contemporary art, gallery, sculpture, custom art, art workshops, Dafen, Dafen Oil Painting Village Shenzhen, oil painting' +
+                        'ARTDAFEN, ARTDAFEN art, artworks, contemporary art, gallery, sculpture, custom art, art workshops, Dafen, Dafen Oil Painting Village Shenzhen, oil painting' +
                         'Artdafen, deviantart, arte, gallery, pixel art, draw, installation art examples, art and craft project ideas, drawing, artstation, drawings'
                 },
                 {

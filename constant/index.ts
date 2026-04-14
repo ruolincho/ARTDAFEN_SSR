@@ -87,6 +87,59 @@ export const salesMenu: IHome.MenuRow = {
     ],
 }
 
+// 排序的菜单数据
+export const SORT_MENU: IHome.MenuRow = {
+    id: '9999',
+    parentId: '0',
+    name: 'By Sort',
+    config: {type: 'SORT'},
+    children: [
+        {
+            id: '99991',
+            parentId: '9999',
+            name: 'Featured',
+            config: {type: 'SORT', code: '0'},
+            children: [],
+        },
+        {
+            id: '99992',
+            parentId: '9999',
+            name: 'Best selling',
+            config: {type: 'SORT', code: '1'},
+            children: [],
+        },
+        {
+            id: '99993',
+            parentId: '9999',
+            name: 'Price, high to low',
+            config: {type: 'SORT', code: '2'},
+            children: [],
+        },
+        {
+            id: '99994',
+            parentId: '9999',
+            name: 'Price, low to high',
+            config: {type: 'SORT', code: '3'},
+            children: [],
+        },
+        {
+            id: '99995',
+            parentId: '9999',
+            name: 'Date, new to old',
+            config: {type: 'SORT', code: '4'},
+            children: [],
+        },
+        {
+            id: '99996',
+            parentId: '9999',
+            name: 'Date, old to new',
+            config: {type: 'SORT', code: '5'},
+            children: [],
+        }
+
+    ],
+}
+
 export const ARTIST_MENU_NAME = 'Artists' // 艺术家菜单名称
 export const CUSTOM_MENU_NAME = 'Photo to art' // 自定义商品菜单名称
 export const BEST_MENU_NAME = 'Best Sellers' // 热门商品菜单名称
@@ -324,7 +377,7 @@ export const HISTORY_LIST = [
         img: '/static/artdafen/history/about-history-5.webp',
         year: '2020-NOW',
         title: 'Enter ARTDAFEN',
-        content: 'Reimagined for the modern collector.We launched ART DAFEN to cut out the middleman.Today,we connect our master artists directly to you,delivering museum-quality hand-painted art from our easels to your wall.'
+        content: 'Reimagined for the modern collector.We launched ARTDAFEN to cut out the middleman.Today,we connect our master artists directly to you,delivering museum-quality hand-painted art from our easels to your wall.'
     },
 ]
 

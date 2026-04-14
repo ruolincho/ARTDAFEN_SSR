@@ -1,39 +1,24 @@
 <template>
-  <div class="acea-row row-between-wrapper m-md-20 m-15">
-    <div class="acea-row row-middle">
-      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-      <span class="text-26">Additional Notes</span>
-      <span
-          class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
-          @click="showInfo = !showInfo"
-      >
-        <span class="pc">{{ showInfo ? 'LESS INFO' : 'MORE INFO' }}</span>
-        <span class="iconfont icon-down" :class="{'rotate-180': showInfo}"></span>
-      </span>
-    </div>
-    <div class="text-20 f-bold"></div>
-  </div>
-  <div class="mx-20 text-16 info-box" v-show="showInfo">
-    <p class="p-15 bg-gray-200">
-      Here is where you can convey any special requests to the artist, such as removing certain aspects
-      in
-      the
-      photo or specific color and background preferences.
+  <div class="my-15">
+    <p class="acea-row row-middle mb-15">
+      <span class="text-16">Additional Notes: </span>
+      <span class="iconfont icon-info-fill text-20 ml-8 cursor-pointer" @click="openNotice"></span>
     </p>
-  </div>
-  <div class="m-md-20 m-15" :id="tourId" ref="remarkRef">
-    <el-input
-        type="textarea"
-        v-model="internalValue"
-        placeholder="Please enter any additional instructions"
-        :rows="appStore.isPc ? 8 : 3"
-    />
+
+    <div :id="tourId">
+      <el-input
+          type="textarea"
+          v-model="internalValue"
+          placeholder="Leave your specific instructions for our design team here."
+          :rows="appStore.isPc ? 6 : 3"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref, computed} from 'vue'
 import {useAppStore} from '~/stores/modules/app'
+import { ElMessageBox } from 'element-plus';
 
 const appStore = useAppStore()
 
@@ -48,7 +33,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['update:modelValue'])
 
-const showInfo = ref(false)
 
 const internalValue = computed({
   get: () => props.modelValue,
@@ -56,6 +40,13 @@ const internalValue = computed({
     emit('update:modelValue', val)
   }
 })
+
+const openNotice = () => {
+  ElMessageBox({
+    title: 'Notice',
+    message: 'Here is where you can convey any special requests to the artist, such as removing certain aspects in the photo or specific color and background preferences.',
+  })
+}
 </script>
 
 

@@ -239,57 +239,6 @@
     </div>
   </section>
 
-  <!-- 品牌-->
-  <section class="mt-lg-60 mt-sm-20" v-if="goodsDetail?.brand?.id">
-    <div class="container-middle">
-      <div class="brand-topic mb-20">
-        <div class="brand-topic-caption text-white text-26">
-          <p>{{ goodsDetail?.brand?.name }}</p>
-          <p class="text-60 f-bold my-xs-20 my-15">{{ goodsDetail?.brand?.title }}</p>
-          <p>{{ goodsDetail?.brand?.intro }}</p>
-        </div>
-        <button class="caption-btn text-28 p-xs-20 p-15" @click="handleClickBrand">
-          Brand Home
-          <span class="iconfont icon-right-arrow text-28 ml-xs-60 ml-30"></span>
-        </button>
-        <img class="w-full pc" :src="imagePrefix(goodsDetail?.brand?.background)" alt="brand">
-        <img class="w-full app" :src="imagePrefix(goodsDetail?.brand?.img)" alt="brand">
-      </div>
-      <ClientOnly>
-        <div class="recommend-swiper" v-if="brandRecList.length">
-          <swiper
-            :modules="modules"
-            :navigation="{ nextEl: '.brand-next', prevEl: '.brand-prev' }"
-            :pagination="{
-          el: '.pagination-brand',
-          type: 'fraction'
-         }"
-            :autoplay="{ delay: 5000 }"
-            :breakpoints="{
-          '1680': { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 20 },
-          '1460': { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 },
-          '1260': { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 10 },
-          '375': { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
-        }"
-          >
-            <swiper-slide v-for="item in brandRecList" :key="item.id">
-              <NuxtLink class="explore-item block" :to="productLink(item)" target="_blank">
-                <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
-                </div>
-                <p class="line1 text-14 my-8">{{ item.title }}</p>
-                <p class="text-12 f-bold">{{ item.retailPrice }}</p>
-              </NuxtLink>
-            </swiper-slide>
-          </swiper>
-          <div class="recommend-button swiper-button-next brand-next"></div>
-          <div class="recommend-button swiper-button-prev brand-prev"></div>
-          <div class="recommend-pagination swiper-pagination pagination-brand"></div>
-        </div>
-      </ClientOnly>
-    </div>
-  </section>
-
   <!-- FQ4-->
   <section class="mt-lg-60 mt-sm-20">
     <div class="container-middle">
@@ -320,7 +269,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import {debounce, productLink} from "~/utils";
 import type {IProduct} from "~/api/interface/product/product";
-import {getBrandRecommendApi, getRelatedRecommendApi} from "~/api/modules/product/product";
+import {getRelatedRecommendApi} from "~/api/modules/product/product";
 import type {ISpecs} from "~/api/interface/specs/specs";
 import type {IShopping} from "~/api/interface/shopping/shopping";
 import {useCartStore} from "~/stores/modules/cart";
@@ -329,7 +278,7 @@ import {getIsThumbsApi, productThumbsApi} from "~/api/modules/likes/likes";
 import {gen_path_obj} from "~/utils/product";
 import {useUserStore} from "~/stores/modules/user";
 import LoginWindow from "~/components/LoginWindow.vue";
-import {PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {getFaqByQuote} from "~/config/faq";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IResultData} from "~/api/interface";
@@ -347,7 +296,6 @@ onMounted(async () => {
   specsList.value = goodsDetail.value.specs
   specsCombination.value = goodsDetail.value.specsCombo
   _initSpecs()
-  if (goodsDetail.value.brand?.id) await getBrandRecommend() // 获取品牌推荐
   await getRelatedRecommend()
   if (userStore.isLogin) {
     await getIsThumbs()
@@ -635,16 +583,6 @@ const getRelatedRecommend = async () => {
   relatedList.value = data
 }
 
-// 获取品牌推荐产品
-const brandRecList = ref<General.GoodsItem[]>([])
-const getBrandRecommend = async () => {
-  const {data} = await getBrandRecommendApi({
-    brandId: goodsDetail.value.brand.id,
-    productId: goodsDetail.value.id,
-  })
-  brandRecList.value = data
-}
-
 // 是否收藏
 const isThumbs = ref(false)
 const getIsThumbs = async () => {
@@ -666,16 +604,8 @@ const productThumbs = debounce(async () => {
 // 点击艺术家
 const handleClickArtist = () => {
   router.push({
-    path: PRODUCT_URL,
+    path: COLLECTIONS_URL,
     query: {q: packQuery(gen_path_obj(goodsDetail.value.creator, 'ARTIST', ['name']))}
-  })
-}
-
-// 点击品牌
-const handleClickBrand = () => {
-  router.push({
-    path: PRODUCT_URL,
-    query: {q: gen_path_obj(goodsDetail.value.brand, 'BRAND', ['name'])}
   })
 }
 
@@ -859,33 +789,6 @@ useHead({
   }
 }
 
-.brand-topic {
-  position: relative;
-
-  .brand-topic-caption {
-    position: absolute;
-    z-index: 1;
-    left: 60px;
-    top: 60px;
-  }
-
-  .caption-btn {
-    position: absolute;
-    z-index: 2;
-    border: var(--border-width-sm) solid #fff;
-    color: #fff;
-    cursor: pointer;
-    left: 60px;
-    bottom: 60px;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-  }
-}
 
 .artist-box .avatar {
   min-width: 100px;
@@ -926,17 +829,6 @@ useHead({
     }
   }
 
-  .brand-topic {
-    .brand-topic-caption {
-      left: 30px;
-      top: 30px;
-    }
-
-    .caption-btn {
-      left: 30px;
-      bottom: 30px;
-    }
-  }
 }
 
 @media (max-width: 991px) {
@@ -957,19 +849,5 @@ useHead({
     }
   }
 
-}
-
-@media (max-width: 414px) {
-  .brand-topic {
-    .brand-topic-caption {
-      left: 20px;
-      top: 20px;
-    }
-
-    .caption-btn {
-      left: 20px;
-      bottom: 20px;
-    }
-  }
 }
 </style>

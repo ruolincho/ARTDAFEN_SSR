@@ -1,57 +1,36 @@
 <template>
-  <div class="mat-selector">
-    <div class="acea-row row-between-wrapper m-md-20 m-15">
-      <div class="acea-row row-middle flex-1 mr-10">
-        <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-        <span class="text-26">Choose a Canvas material</span>
-      </div>
-      <div class="text-20 f-bold">
-        {{ formatToCurrency(materialOption?.price || 0) }}
-      </div>
-    </div>
+  <div class="my-15">
+    <p class="acea-row row-middle mb-15">
+      <span class="text-16">Mat Color & Size: {{ materialOption?.name }} / {{ matWidth || 0 }}″</span>
+    </p>
 
-    <div class="m-md-20 m-15" :id="tourId">
-      <div class="material-wrapper border-sm p-md-20 p-15">
-
-        <div class="acea-row row-middle text-20 f-bold-500">
-          <p class="mr-xl-40 mr-20">Mat Color</p>
-          <p class="flex-1 line1">{{ materialOption?.name }}</p>
-        </div>
-        <div class="color-list my-md-20 my-15">
-          <div
-              class="color-item rounded-full cursor-pointer"
-              :class="{ on: matId === item.id }"
-              :style="{ background: item.config?.matColor }"
-              v-for="item in options"
-              :key="item.id"
-              @click="handleColorChange(item)"
-          >
-            <span v-if="item.id === ''" class="iconfont icon-close"></span>
-          </div>
-        </div>
-
-        <template v-if="currentMaterialWidthOption.length">
-          <div class="acea-row row-middle text-20 f-bold-500">
-            <p class="mr-xl-40 mr-20">Mat Width</p>
-            <p class="flex-1 line1">{{ matWidth }}″</p>
-          </div>
-          <div class="width-list row mt-md-20 mt-15">
+    <div class="my-15" :id="tourId">
+      <div class="color-picker">
+        <div
+            class="color-option cursor-pointer overflow-hidden"
+            :class="{ on: matId === item.id }"
+            v-for="item in options" :key="item.id"
+            @click="handleColorChange(item)"
+        >
+          <el-tooltip :content="item.name" placement="top" :hide-after="100">
             <div
-                class="col-average"
-                v-for="(item, index) in currentMaterialWidthOption"
-                :key="index"
-            >
-              <div
-                  class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
-                  :class="{ 'border-gray-700': matWidth === item.matWidth }"
-                  @click="handleWidthChange(item.matWidth!)"
-              >
-                {{ item.matWidth }}″
-              </div>
-            </div>
-          </div>
-        </template>
+                class="w-full h-full"
+                :class="{ none: !item.config?.matColor }"
+                :style="{ background: item.config?.matColor }"
+            />
+          </el-tooltip>
+        </div>
+      </div>
 
+      <div class="size-picker mt-15" v-if="currentMaterialWidthOption.length">
+        <div
+            class="size-option cursor-pointer text-14"
+            :class="{ 'on': matWidth === item.matWidth }"
+            v-for="(item, index) in currentMaterialWidthOption" :key="index"
+            @click="handleWidthChange(item.matWidth!)"
+        >
+          {{ item.matWidth }}″
+        </div>
       </div>
     </div>
   </div>
@@ -77,7 +56,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 // 声明双向绑定的 emit 事件
-const emit = defineEmits(['update:matId', 'update:matWidth'])
+const emit = defineEmits(['update:matId', 'update:matWidth', 'change'])
 
 // 当前卡纸宽度选项
 const currentMaterialWidthOption = computed(() => props.materialOption?.specs || [])
@@ -95,68 +74,68 @@ const handleColorChange = (item: any) => {
   else {
     emit('update:matWidth', '')
   }
+  emit('change')
 }
 
 const handleWidthChange = (width: string) => {
   if (props.matWidth === width) return
   emit('update:matWidth', width)
+  emit('change')
 }
 </script>
 
 <style scoped lang="scss">
-  .color-list {
-    display: grid;
-    grid-template-columns: repeat(8, 34px);
-    row-gap: 20px;
-    width: 100%;
-    justify-content: space-between;
+  .color-picker {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
 
-    .color-item {
+    .color-option {
       width: 34px;
       height: 34px;
-      color: var(--color-gray-400);
-      border: var(--border-width-md) solid var(--border-color);
+      border: var(--border-width-sm) solid var(--color-gray-300);
+
+      &.on,
+      &:hover {
+        border-color: var(--color-gray-700);
+        border-width: var(--border-width-md);
+
+
+      }
+
+      .none {
+        background: repeating-linear-gradient(
+                -45deg,
+                #ffffff,
+                #ffffff 4px,
+                #cccccc 4px,
+                #cccccc 5px
+        );
+      }
+    }
+  }
+
+  .size-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .size-option {
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 50px;
+      height: 36px;
+      padding: 0 12px;
+      border: var(--border-width-sm) solid var(--color-gray-300);
 
-      .iconfont {
-        font-size: 28px;
-      }
-
-      &.on {
+      &.on,
+      &:hover {
         border-color: var(--color-gray-700);
-        color: var(--color-gray-700);
+        border-width: var(--border-width-md);
       }
-    }
-  }
-
-  .width-list {
-    --gutter: var(--gutter-base);
-    row-gap: var(--gutter);
-
-    .width-item {
-      width: 100%;
-    }
-  }
-
-  @media (max-width: 1260px) {
-    .color-list {
-      grid-template-columns: repeat(6, 25px);
-      row-gap: var(--gutter-sm);;
-
-      .color-item {
-        width: 25px;
-        height: 25px;
-
-        .iconfont {
-          font-size: 16px;
-        }
-      }
-    }
-
-    .width-list {
-      --gutter: var(--gutter-sm);
     }
   }
 </style>

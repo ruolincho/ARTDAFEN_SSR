@@ -81,7 +81,7 @@ onMounted(() => {
 })
 
 useSeoMeta({
-  robots: 'noindex, nofollow'
+  robots: 'noindex, nocache, noarchive, nofollow'
 })
 
 const _init = () => {

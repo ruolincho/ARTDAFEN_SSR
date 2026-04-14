@@ -66,6 +66,7 @@ export const useList = (
         if (!api) return;
         state.loading = true;
         state.requestFinished = false;
+        state.error = null
         try {
             await delayLoading(loadingTime);
             // 先把初始化参数和分页参数放到总参数里面

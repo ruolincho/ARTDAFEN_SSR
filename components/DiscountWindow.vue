@@ -75,13 +75,16 @@ import Countdown from "~/components/Countdown.vue";
 import type {IActivity} from "~/api/interface/activity/activity";
 import {getActivityApi} from "~/api/modules/activity/activity";
 import {useImage} from "~/composables/useImage";
+import {useAppStore} from "~/stores/modules/app";
 
 const { imagePrefix } = useImage()
 const userStore = useUserStore()
+const appStore = useAppStore()
 const isOpen = ref(false);
 
 // 抽离出一个初始化方法
 const initVisibility = () => {
+  if (!appStore.isPc) return;
   // 安全检查：如果代码意外在服务端运行，直接返回，防止报错
   if (typeof window === 'undefined' || !localStorage) return;
 

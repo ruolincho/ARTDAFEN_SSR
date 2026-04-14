@@ -6,9 +6,9 @@
         <div class="fq-left">
           <el-collapse v-model="activeName" accordion>
             <div
-              v-for="(item, index) in faqList"
-              :key="item.category"
-              :ref="(el) => sectionRefs[index] = el as HTMLElement"
+                v-for="(item, index) in faqList"
+                :key="item.category"
+                :ref="(el) => sectionRefs[index] = el as HTMLElement"
             >
               <div class="text-center my-20 f-bold-500">{{ item.headTitle }}</div>
               <el-collapse-item
@@ -39,10 +39,10 @@
             <el-form-item prop="subject">
               <el-select v-model="messageForm.subject" placeholder="Subject" clearable>
                 <el-option
-                  v-for="subject in faqList"
-                  :key="subject.headTitle"
-                  :label="subject.headTitle"
-                  :value="subject.headTitle"
+                    v-for="subject in faqList"
+                    :key="subject.headTitle"
+                    :label="subject.headTitle"
+                    :value="subject.headTitle"
                 />
               </el-select>
             </el-form-item>
@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import {type ElForm, ElMessage} from "element-plus";
-import {faqList, generateFAQPageJsonLd} from "~/config/faq";
+import {faqList, generateFAQPageJsonLd, generateBreadcrumbJsonLd, htmlToPlainText} from "~/config/faq";
 import {sendConsulting} from "~/api/modules/message/message";
 import {emailReg} from "~/regular";
 import {resolvePageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
@@ -76,6 +76,8 @@ onMounted(() => {
   // 只有在客户端且 params 存在时才执行
   const {category, slug} = route.params
   if (category && slug) {
+    categoryParam.value = category
+    slugParam.value = slug
     // 这里加一个小延时是为了对抗浏览器的“滚动恢复”机制
     setTimeout(() => {
       scrollToSection();
@@ -84,24 +86,53 @@ onMounted(() => {
 })
 
 const route = useRoute()
-
 const origin = useRequestURL().origin
-useHead(mergeHeadWithLodash(
-  resolvePageMeta("/faq"),
-  {
-    link: [
-      {rel: 'canonical', href: `${origin}/faq`},
-    ],
-    script: [
-      {
-        type: 'application/ld+json',
-        children: JSON.stringify(generateFAQPageJsonLd(faqList))
-      }
-    ]
-  }
-))
+const categoryParam = ref(null)
+const slugParam = ref(null)
 
-const messageForm = ref( {
+//找到当前匹配的 FAQ（如果有参数的话）
+const activeFaq = computed(() => {
+  if (!categoryParam.value || !slugParam.value) return null;
+
+  const category = faqList.find(c => c.categorySlug === categoryParam.value);
+  if (category) {
+    const question = category.list.find(q => q.slug === slugParam.value);
+    if (question) {
+      return {
+        ...question,
+        categoryTitle: category.headTitle // 顺便把分类名带上，给面包屑用
+      };
+    }
+  }
+  return null;
+});
+
+useHead(computed(() => {
+  return mergeHeadWithLodash(
+      resolvePageMeta("/faq"),
+      {
+        ...(activeFaq.value ? {title: `${activeFaq.value.title} - FAQ | ARTDAFEN`} : {}),
+        link: [
+          {rel: 'canonical', href: `${origin}${route.path}`},
+        ],
+        meta: [
+          ...(activeFaq.value ? [{name: "description", content: htmlToPlainText(activeFaq.value.content)}] : []),
+        ],
+        script: [
+          {
+            type: 'application/ld+json',
+            children: JSON.stringify(generateFAQPageJsonLd(faqList))
+          },
+          {
+            type: 'application/ld+json',
+            children: JSON.stringify(generateBreadcrumbJsonLd(activeFaq.value))
+          }
+        ]
+      }
+  )
+}))
+
+const messageForm = ref({
   email: '',
   subject: '',
   message: '',
@@ -121,8 +152,8 @@ const sectionRefs = ref<HTMLElement[]>([]);
 const activeName = ref('')
 
 const scrollToSection = async () => {
-
-  const {category, slug} = route.params
+  const category = categoryParam.value
+  const slug = slugParam.value
 
   if (!slug || !category) return;
 
@@ -181,32 +212,32 @@ watch(() => route.fullPath, (newVal: string) => {
 </script>
 
 <style scoped lang="scss">
-.fq-container {
-  position: relative;
-
-  .fq-left {
-    width: 62.89%;
-  }
-
-  .fq-right {
-    width: 27.89%;
-    position: sticky;
-    top: 150px;
-  }
-
-}
-
-@media (max-width: 991px) {
   .fq-container {
+    position: relative;
+
     .fq-left {
-      width: 100%;
+      width: 62.89%;
     }
 
     .fq-right {
-      width: 100%;
-      margin-top: 15px;
-      position: static;
+      width: 27.89%;
+      position: sticky;
+      top: 150px;
+    }
+
+  }
+
+  @media (max-width: 991px) {
+    .fq-container {
+      .fq-left {
+        width: 100%;
+      }
+
+      .fq-right {
+        width: 100%;
+        margin-top: 15px;
+        position: static;
+      }
     }
   }
-}
 </style>

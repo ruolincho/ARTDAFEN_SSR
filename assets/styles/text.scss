@@ -98,3 +98,8 @@ $font-size-map: (
     color: var(--color-secondary);
   }
 }
+.text-underline-hover {
+  &:hover {
+    text-decoration: underline
+  }
+}

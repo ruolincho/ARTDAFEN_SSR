@@ -29,15 +29,22 @@ export namespace IHome {
             code?: string
             techniqueId?: TechniqueCodeType
             referenceId?: string
+            url?: string
         }
         /*子*/
         children: MenuRow[]
         /*前端添加参数（用户导航聚焦）*/
         path?: string[]
         /*描述*/
-        intro?: string[]
+        description?: string[]
         /*是否显示（前端添加的参数）*/
         isShow?: boolean
+        //跳转相关的配置（前端添加的参数）
+        linkProps?: {
+            to: string;
+            target: string;
+            isPureLink: boolean; // 是否是纯叶子节点（可跳转）
+        }
     }
 
     /*更多分类数据*/

@@ -2,6 +2,7 @@
   <div>
     <AppHeader />
     <main class="main">
+      <AppBreadcrumb />
       <slot />
     </main>
     <AppFooter />
@@ -15,6 +16,7 @@ import {onMounted, onBeforeUnmount} from "vue";
 import {useAppStore} from "~/stores/modules/app";
 import {throttle} from "lodash";
 import { useRequestHeaders } from 'nuxt/app'
+import AppHeader from '~/components/AppHeader/index.vue'
 
 const WIDTH = 768
 const appStore = useAppStore()

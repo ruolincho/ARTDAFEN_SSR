@@ -5,7 +5,7 @@
       <div class="artist-wrapper row gap-row-base">
         <div class="col-md-6">
           <div class="avatar" v-if="artistDetail?.portrait">
-            <img class="w-full" :src="imagePrefix(artistDetail?.portrait)" alt="avatar">
+            <img class="w-full" :src="imagePrefix(artistDetail?.portrait)" :alt="`Portrait of ${artistDetail?.name}`">
           </div>
           <p class="text-22 f-bold-500 my-20 text-underline cursor-pointer">{{ artistDetail?.name }}</p>
           <p class="text-16 f-bold-500 my-20">{{ artistDetail?.location }}</p>
@@ -58,27 +58,28 @@
 
 <script setup lang="ts">
 import {debounce} from "~/utils";
-import {getArtistDetailApi} from "~/api/modules/artists/artists";
 import ProList from "~/components/ProList/index.vue";
 import type {IProduct} from "~/api/interface/product/product";
 import {getArtworksApi} from "~/api/modules/product/product";
 import {useUserStore} from "~/stores/modules/user";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {productThumbsApi} from "~/api/modules/likes/likes";
-import {PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {packQuery} from "~/composables/useQueryShort";
 import type {ObjectNode} from "~/types/global";
 import {useImage} from "~/composables/useImage";
+import type {IResultData} from "~/api/interface";
+import {TRADE_MODULE} from "~/api/helper/prefix";
 
 onMounted(() => {
-  if (route.params.id) getDetail()
   $bus.on('loginSuccess', () => {
     proListRef.value?.reset()
   })
 })
 
+const origin = useRequestURL().origin
 const { imagePrefix } = useImage()
 const {$bus} = useNuxtApp()
 const route = useRoute();
@@ -86,11 +87,56 @@ const router = useRouter();
 const userStore = useUserStore()
 
 // 获取详情
-const artistDetail = ref({} as ObjectNode.Creator)
-const getDetail = async () => {
-  const {data} = await getArtistDetailApi(route.params.id as string)
-  artistDetail.value = data
-}
+const config = useRuntimeConfig()
+const {data: artistDetail } = await useAsyncData(
+    'artist-detail',
+    async () => {
+      const {data} = await $fetch<IResultData<ObjectNode.Creator>>(config.public.apiBase + TRADE_MODULE + `/artists/detail/${route.params.id}`, {
+        method: 'GET',
+        headers: {
+          'Token': userStore.token || '',
+        }
+      })
+      return data
+    }
+)
+
+const pageUrl = computed(() => `${origin}${route.path}`)
+
+const pageTitle = computed(() => `${artistDetail.value?.name}  - Artist Introduction | ARTDAFEN`)
+
+const pageDescription = computed(() => {
+  if (artistDetail.value?.intro) {
+    return artistDetail.value.intro.length > 150
+        ? artistDetail.value.intro.substring(0, 150) + '...'
+        : artistDetail.value.intro
+  }
+  return `Discover the life, artworks, and legacy of ${artistDetail.value?.name} on ARTDAFEN. Explore their timeline ${artistDetail.value?.timeline || ''}.`
+})
+
+useHead({
+  title: pageTitle.value,
+  meta: [
+    { name: 'description', content: pageDescription.value }
+  ],
+  link: [
+    { rel: 'canonical', href: pageUrl.value }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": artistDetail.value?.name,
+        "description": pageDescription.value,
+        "image": imagePrefix(artistDetail.value?.portrait),
+        "url": pageUrl.value,
+        "jobTitle": "Artist"
+      })
+    }
+  ]
+})
 
 const proListRef = ref<InstanceType<typeof ProList>>();
 const getProductList = (params: IProduct.ArtworksQuery) => getArtworksApi(params)
@@ -102,7 +148,7 @@ const initParam = ref({
 // 点击艺术家
 const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
   router.push({
-    path: PRODUCT_URL,
+    path: COLLECTIONS_URL,
     query: {q: packQuery(gen_path_obj(creator, 'ARTIST', ['name']))}
   })
 }

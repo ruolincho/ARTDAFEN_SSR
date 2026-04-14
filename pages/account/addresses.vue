@@ -55,6 +55,7 @@ import {
 } from "~/api/modules/address/address";
 import type {IAddress} from "~/api/interface/address/address";
 import {useHandleData} from "~/composables/useHandleData";
+import {resolvePageMeta} from "~/config/pageMeta";
 
 defineOptions({
   name: 'Addresses'
@@ -64,9 +65,7 @@ definePageMeta({
   auth: true
 })
 
-useSeoMeta({
-  robots: 'noindex, nofollow'
-})
+useHead(resolvePageMeta("/addresses"));
 
 onMounted(() => {
   getAddressList()

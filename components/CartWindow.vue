@@ -39,7 +39,7 @@
       </template>
       <div v-else class="text-center">
         <p class="mb-15">Your Cart is Empty.</p>
-        <el-button size="large" type="primary" @click="router.push(PRODUCT_URL)">START SHOPPING</el-button>
+        <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">START SHOPPING</el-button>
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import {useCartStore} from "~/stores/modules/cart";
 import {formatAttr, jumpToProduct} from "~/utils";
-import {PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useImage} from "~/composables/useImage";
 

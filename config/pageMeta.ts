@@ -7,7 +7,7 @@ type CustomPaintParams = ArtCodeEnum;
 
 export const pageMeta = {
     "/": () => ({
-        title: "ART DAFEN | Museum-Quality Hand-Painted Oil Painting Reproductions",
+        title: "ARTDAFEN | Museum-Quality Hand-Painted Oil Painting Reproductions",
         meta: [
             {
                 name: "description",
@@ -24,135 +24,100 @@ export const pageMeta = {
     }),
 
     "/about": () => ({
-        title: "About - ART DAFEN",
+        title: "Hand-Painted Oil Paintings & Custom Art | About ARTDAFEN",
         meta: [
             {
                 name: "description",
                 content:
-                    "About Artdafen — our studio collaborates with Dafen-trained artists to create custom reproductions, hand-finished prints and framing services. Learn about quality, sourcing and commissions."
-            },
-            {
-                name: "keywords",
-                content:
-                    "about Artdafen, Dafen artists, art studio, artist collaborations, commissions, custom reproductions, sourcing prints"
+                    "Explore our collection of authentic, hand-painted art. ARTDAFEN bridges the gap between master artists and art lovers worldwide, ensuring museum-quality pieces and personalized service."
             }
         ],
     }),
 
     "/artists-all": (letter: ArtistAllParams) => ({
-        title: `Artists starting with ${letter} - ART DAFEN"`,
+        title: `Artists starting with ${letter} | Browse Creators - ARTDAFEN"`,
         meta: [
             {
                 name: "description",
                 content:
-                    `Artists directory with ${letter} — discover portfolios, prints and commission options from Artdafen artists: oil painters, printmakers, pixel artists and collectible toy designers.`
-            },
-            {
-                name: "keywords",
-                content:
-                    "artist directory, artist profiles, oil painters, printmakers, pixel artists, collectible toy artists, commission artists, portfolios"
+                    `Explore all ARTDAFEN artists whose names begin with ${letter}. View their unique portfolios, original hand-painted works, and specialized styles.`
             }
         ],
     }),
 
     "/artists-brief": () => ({
-        title: "Artists - ART DAFEN",
+        title: "Our Artists A-Z | Discover Talented Painters & Creators - ARTDAFEN",
         meta: [
             {
                 name: "description",
                 content:
-                    "Short artist briefs — quick overviews of featured makers, popular prints and framing/proofing options for each artist's works."
-            },
-            {
-                name: "keywords",
-                content:
-                    "artist briefs, featured artists, quick profiles, artist highlights, popular prints"
-            }
-        ],
-    }),
-
-    "/artists-top": () => ({
-        title: "Top Artists - ART DAFEN",
-        meta: [
-            {
-                name: "description",
-                content:
-                    "Top artists — curated best-sellers and trending creators on Artdafen with gallery-quality prints, limited editions and collectible pieces."
-            },
-            {
-                name: "keywords",
-                content:
-                    "top artists, best selling artists, trending artists, limited edition prints, gallery quality, collectible art"
-            }
-        ],
-    }),
-
-    "/best": () => ({
-        title: "Best Sellers - ART DAFEN",
-        meta: [
-            {
-                name: "description",
-                content:
-                    "Best sellers — shop Artdafen's most popular framed prints, canvas reproductions and art collectibles chosen by customers and curators."
-            },
-            {
-                name: "keywords",
-                content:
-                    "best sellers, popular prints, customer favorites, top framed art, trending prints"
+                    "Browse our curated directory of professional artists. From traditional oil painters to contemporary masters, find the perfect talent for your custom art and home decor at ARTDAFEN."
             }
         ],
     }),
 
     "/journal": () => ({
-        title: "Blog - ART DAFEN",
+        title: "Art Journal & Studio Insights | ARTDAFEN",
         meta: [
             {
                 name: "description",
                 content:
-                    "Artdafen Blog — framing guides, artist interviews, how-to tutorials and trend reports on prints, installation art and Dafen painting techniques."
+                    "Explore the ARTDAFEN's journal. Discover behind-the-scenes stories from our studio, classical oil painting techniques, artist spotlights, and custom artwork inspiration."
             },
             {
                 name: "keywords",
                 content:
-                    "art blog, framing guide, artist interview, art tutorials, installation art examples, Dafen news, print trends"
+                    "Buy oil paintings online, art collecting guide, canvas art tips, Dafen painters, modern landscape paintings, abstract art blog."
             }
         ],
     }),
 
-    "/collaboration": () => ({
-        title: "Collaboration - ART DAFEN",
+    "/zone": () => ({
+        title: "Explore Custom Oil Paintings & Masterpiece Reproductions | ARTDAFEN",
         meta: [
             {
                 name: "description",
                 content:
-                    "Collaborations — partner with Artdafen for branded prints, gallery projects, custom editions and design-led framing solutions."
-            },
+                    "Step into the ARTDAFEN Zone. Discover a curated collection of museum-quality oil painting reproductions and bespoke portrait services. From classical masterpieces to modern abstracts, find the perfect hand-painted art to elevate your space."
+            }
+        ],
+    }),
+
+    "/join-as-artist": () => ({
+        title: "Join ARTDAFEN as an Artist | Sell Your Original Paintings Worldwide",
+        meta: [
             {
-                name: "keywords",
+                name: "description",
                 content:
-                    "collaboration, partnerships, branded prints, gallery projects, custom editions, wholesale, interior design"
+                    "Are you a talented painter? Join the ARTDAFEN artist community. We provide a global platform for artists to showcase their work, reach international collectors, and grow their careers. Apply now."
+            }
+        ],
+    }),
+
+    "/trade-commercial": () => ({
+        title: "Art & Design Trade Program | Exclusive Benefits",
+        meta: [
+            {
+                name: "description",
+                content:
+                    "Trade program for designers & artists. Get exclusive access to original, custom, museum-quality paintings, special pricing, and dedicated support."
             }
         ],
     }),
 
     "/contact": () => ({
-        title: "Contact - ART DAFEN",
+        title: "Contact Us | Art & Custom Painting Support",
         meta: [
             {
                 name: "description",
                 content:
-                    "Contact Artdafen — support for orders, custom framing, proofs, commissions and wholesale inquiries. Reach our team for production and shipping details."
-            },
-            {
-                name: "keywords",
-                content:
-                    "contact Artdafen, customer support, order help, custom framing inquiry, commissions, wholesale inquiries"
+                    "Support for original & custom art. Dedicated service for unique landscapes, modern cityscapes, quality, and sustainable artwork inquiries."
             }
         ],
     }),
 
     "/cookies-policy": () => ({
-        title: "Cookies & Tracking - ART DAFEN",
+        title: "Cookies & Tracking | ARTDAFEN",
         meta: [
             {
                 name: "description",
@@ -197,13 +162,24 @@ export const pageMeta = {
         return commonMap[code] || {};
     },
 
-    "/faq": () => ({
-        title: "FAQ - ART DAFEN",
+    "/custom-case": (themeText: string) => ({
+        title: `Custom ${themeText || ''} Portrait Showcase — From Photo to Art | ARTDAFEN`,
         meta: [
             {
                 name: "description",
                 content:
-                    "FAQ — answers about ordering, framing, proof approvals, shipping times, returns and working with Dafen artists."
+                    `Discover how an ordinary ${themeText || '' } photo transforms into extraordinary art. In our Custom ${themeText || ''} Portrait Showcase, you’ll see real examples of before-and-after results — side-by-side comparisons revealing the remarkable detail, color, and emotion our artists bring to life.`
+            }
+        ],
+    }),
+
+    "/faq": () => ({
+        title: "Frequently Asked Questions | ARTDAFEN",
+        meta: [
+            {
+                name: "description",
+                content:
+                    "Find answers to frequently asked questions about ARTDAFEN's custom artworks, shipping, payments, returns, and more."
             },
             {
                 name: "keywords",
@@ -214,7 +190,7 @@ export const pageMeta = {
     }),
 
     "/forget-password": () => ({
-        title: "Password Recovery - ART DAFEN",
+        title: "Password Recovery | ARTDAFEN",
         meta: [
             {
                 name: "description",
@@ -229,24 +205,32 @@ export const pageMeta = {
         ],
     }),
 
+    "/login": () => ({
+        title: "Login | ARTDAFEN"
+    }),
+
+    "/register": () => ({
+        title: "Register | ARTDAFEN"
+    }),
+
     "/magazine": () => ({
-        title: "News - ART DAFEN",
+        title: "Curated Oil Painting Trends & Artist Spotlights | ARTDAFEN",
         meta: [
             {
                 name: "description",
                 content:
-                    "News & announcements — Artdafen releases, exhibitions, artist drops and Dafen community updates. Stay informed on new products and promotions."
+                    "Dive into ARTDAFEN Magazine. Your premier source for contemporary oil painting trends, exclusive interviews with Dafen artists, and professional guides on building your home art collection."
             },
             {
                 name: "keywords",
                 content:
-                    "news, announcements, artist drops, exhibitions, Dafen news, product launches, promotions"
+                    "Art magazine, oil painting trends 2026, home art gallery, Dafen artist interviews, contemporary wall decor, fine art collection."
             }
         ],
     }),
 
     "/notice": () => ({
-        title: "Notice - ART DAFEN",
+        title: "Notice | ARTDAFEN",
         meta: [
             {
                 name: "description",
@@ -262,7 +246,7 @@ export const pageMeta = {
     }),
 
     "/privacy-policy": () => ({
-        title: "Privacy & Policy - ART DAFEN",
+        title: "Privacy & Policy | ARTDAFEN",
         meta: [
             {
                 name: "description",
@@ -277,13 +261,13 @@ export const pageMeta = {
         ],
     }),
 
-    "/product": () => ({
-        title: "Products - ART DAFEN",
+    "/collections": () => ({
+        title: "Collections - Hand-Painted Canvas Art | ARTDAFEN",
         meta: [
             {
                 name: "description",
                 content:
-                    "Products — framed prints, canvas reproductions, originals and designer collectibles with online framing and proof preview. Shop by style, size and finish."
+                    "Explore ARTDAFEN’s stunning art collection—original hand-painted canvas artwork featuring captivating details, diverse themes, and unique style. Shop limited-edition pieces today!"
             },
             {
                 name: "keywords",
@@ -294,7 +278,7 @@ export const pageMeta = {
     }),
 
     "/search": () => ({
-        title: "Search - ART DAFEN",
+        title: "Search | ARTDAFEN",
         meta: [
             {
                 name: "description",
@@ -310,7 +294,7 @@ export const pageMeta = {
     }),
 
     "/terms-and-conditions": () => ({
-        title: "Terms & Conditions - ART DAFEN",
+        title: "Terms & Conditions | ARTDAFEN",
         meta: [
             {
                 name: "description",
@@ -326,7 +310,7 @@ export const pageMeta = {
     }),
 
     "/our-return-policy": () => ({
-        title: "Return Policy - ART DAFEN",
+        title: "Our Return Policy | ARTDAFEN",
         meta: [
             {
                 name: "description",
@@ -337,6 +321,60 @@ export const pageMeta = {
                 name: "keywords",
                 content:
                     "return policy, art returns, exchange policy, refund policy, damaged artwork, art prints returns, original paintings returns, custom artwork returns, commissioned art, international returns, return shipping, trackable returns, refund timeline, ARTDAFEN"
+            }
+        ],
+    }),
+
+    "/profile": () => ({
+        title: "Profile - Account | ARTDAFEN",
+        meta: [
+            {
+                name: 'robots',
+                content: 'noindex, nocache, noarchive, nofollow'
+            }
+        ],
+    }),
+
+    "/orders": () => ({
+        title: "Orders - Account | ARTDAFEN",
+        meta: [
+            {
+                name: 'robots',
+                content: 'noindex, nocache, noarchive, nofollow'
+
+            }
+        ],
+    }),
+
+    "/favorites": () => ({
+        title: "Favorites - Account | ARTDAFEN",
+        meta: [
+            {
+                name: 'robots',
+                content: 'noindex, nocache, noarchive, nofollow'
+
+            }
+        ],
+    }),
+
+    "/addresses": () => ({
+        title: "Addresses - Account | ARTDAFEN",
+        meta: [
+            {
+                name: 'robots',
+                content: 'noindex, nocache, noarchive, nofollow'
+
+            }
+        ],
+    }),
+
+    "/payments": () => ({
+        title: "Payments - Account | ARTDAFEN",
+        meta: [
+            {
+                name: 'robots',
+                content: 'noindex, nocache, noarchive, nofollow'
+
             }
         ],
     }),

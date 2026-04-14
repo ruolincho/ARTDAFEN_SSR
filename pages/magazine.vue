@@ -78,7 +78,7 @@ import {Navigation, Pagination} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import {jumpNewWindow, jumpToUrl} from "~/utils";
+import {jumpToUrl} from "~/utils";
 import {formatTimestamp} from "~/utils/format";
 import {useAppStore} from "~/stores/modules/app";
 import type {INews} from "~/api/interface/news/news";
@@ -92,7 +92,7 @@ defineOptions({
   name: 'News'
 })
 
-const { imagePrefix } = useImage()
+const {imagePrefix} = useImage()
 const route = useRoute()
 const appStore = useAppStore()
 const modules = [Pagination, Navigation]
@@ -184,6 +184,7 @@ watch(
 
         }
       }
+
       .swiper-button {
         position: absolute;
         top: 50%;

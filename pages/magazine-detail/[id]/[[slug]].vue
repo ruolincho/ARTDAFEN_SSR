@@ -2,7 +2,7 @@
   <section class="news-detail">
     <div class="container-small">
 
-      <div class="text-40 f-bold my-20"> {{ newsDetail.title }}</div>
+      <h1 class="text-40 f-bold my-20"> {{ newsDetail.title }}</h1>
 
       <div class="my-20 acea-row row-between-wrapper">
         <span class="text-16">{{ formatTimestamp(newsDetail.updateTime, 'YYYY-MM-DD HH:mm') }}</span>
@@ -62,7 +62,6 @@
         >
           <template #default="scope">
             <div class="news-more-list">
-              <!--@click="router.replace(`/magazine-detail/${item.id}/${item.slug}`)"-->
               <NuxtLink class="news-more-item acea-row row-between gap-row-base" :to="`/magazine-detail/${item.id}/${item.slug}`" v-for="item in scope.rows" :key="item.id">
                 <div class="p-cont">
                   <div>
@@ -108,9 +107,8 @@ const { imagePrefix } = useImage()
 const appStore = useAppStore()
 const origin = useRequestURL().origin
 const route = useRoute()
-const router = useRouter()
 const id = toRef(route.params, 'id') // 响应式拿 id
-const canonicalUrl = computed(() =>`${origin}${route.fullPath}`)
+const canonicalUrl = `${origin}${route.path}`
 
 // 新闻详情
 const { data: newsDetail, pending, error, refresh } = await useAsyncData(() => `news-detail-${id.value}`, async () => {
@@ -124,29 +122,48 @@ const { data: newsDetail, pending, error, refresh } = await useAsyncData(() => `
   watch: [id],
 })
 
+const pageDescription = computed(() => {
+  const { description } = newsDetail.value
+  if (!description) return ''
+  return description.length > 155 ? `${description.substring(0, 155).replace(/\n/g, ' ')}...` : description;
+})
+
 useHead({
-  title: newsDetail.value.title,
+  title: `${newsDetail.value.title} | ARTDAFEN Magazine`,
   meta: [
     {
       name: "description",
-      content: newsDetail.value.description
+      content: pageDescription.value
     },
     {
       name: "keywords",
       content: newsDetail.value.keywords
     },
+    { property: 'og:type', content: 'article' },
     { property: 'og:title', content: newsDetail.value.title },
-    { property: 'og:description', content: newsDetail.value.description },
+    { property: 'og:description', content: pageDescription.value },
     { property: 'og:image', content: imagePrefix(newsDetail.value.img) },
-    { property: 'og:url', content: canonicalUrl.value },
+    { property: 'og:url', content: canonicalUrl },
+
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: newsDetail.value.title },
+    { name: 'twitter:description', content: pageDescription.value },
+    { name: 'twitter:image', content: `${imagePrefix(newsDetail.value.img)}` }
   ],
+  // 规范链接（防止重复内容影响权重）
+  link: [
+    {
+      rel: 'canonical',
+      href: canonicalUrl
+    }
+  ]
 })
 
 function createShareLink(platform: 'pinterest' | 'x' | 'reddit' | 'email', media?: string) {
-  const url = encodeURIComponent(canonicalUrl.value)
+  const url = encodeURIComponent(canonicalUrl)
   const title = encodeURIComponent(newsDetail.value?.title || '')
   const description = encodeURIComponent(newsDetail.value?.description || '')
-  const subject = encodeURIComponent('ART DAFEN')
+  const subject = encodeURIComponent('ARTDAFEN')
 
   switch(platform) {
     case 'pinterest':
@@ -170,7 +187,7 @@ const share = computed(() => [
 const isClipboard = ref(false)
 const handleCopy = async () => {
   if (isClipboard.value) return
-  await copyToClipboard(canonicalUrl.value)
+  await copyToClipboard(canonicalUrl)
   isClipboard.value = true
 }
 

@@ -7,6 +7,7 @@
     size="large"
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
+    :pager-count="5"
   />
 </template>
 

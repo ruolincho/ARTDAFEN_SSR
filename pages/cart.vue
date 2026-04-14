@@ -147,7 +147,7 @@
       <span class="iconfont icon-shopping-bag text-50"></span>
       <p class="text-20 f-bold mt-20">Your Cart is Empty.</p>
       <p class="text-14 my-20">Please add products to your cart to checkout.</p>
-      <el-button size="large" type="primary" @click="router.push(PRODUCT_URL)">
+      <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">
         Start Shopping
       </el-button>
     </div>
@@ -170,7 +170,7 @@ import {ElMessage, type ElInput} from "element-plus";
 import type {IShopping} from "~/api/interface/shopping/shopping";
 import {confirmOrderApi, createOrderApi} from "~/api/modules/shopping/shopping";
 import {paymentApi, paymentCallbackApi} from "~/api/modules/pay/pay";
-import {PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {initPaypal} from '~/composables/usePayment'
 import {phoneReg} from "~/regular";
@@ -189,7 +189,8 @@ definePageMeta({
 })
 
 useSeoMeta({
-  robots: 'noindex, follow'
+  title: 'Your Shopping Cart',
+  robots: 'noindex, nocache, noarchive, nofollow'
 })
 
 onMounted(() => {

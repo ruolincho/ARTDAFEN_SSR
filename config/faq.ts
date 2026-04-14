@@ -438,11 +438,11 @@ Here is how we distinguish our quality from the mass market:
             </li>
             <li style="list-style: disc; list-style-position: inside;">
                 <strong>Our Studio & Fulfillment:</strong>
-                ${ STUDIO_ADDRESS }
+                ${STUDIO_ADDRESS}
             </li>
              <li style="list-style: disc; list-style-position: inside;">
                 <strong>Registered Office:</strong>
-                ${ REGISTERED_ADDRESS }
+                ${REGISTERED_ADDRESS}
             </li>
             <li style="list-style: disc; list-style-position: inside;">
                 <strong>Service Hours:</strong>
@@ -538,5 +538,39 @@ export function generateFAQPageJsonLd(faqGroups: FaqCategory[]) {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
         mainEntity
+    }
+}
+
+/**
+ * 生成符合 Google FAQPage 规范的面包屑数据 JSON-LD（有这个数据出来的就是 ARTDAFEN > FAQ > PAYMENTS ）
+ */
+export function generateBreadcrumbJsonLd(activeItem: FaqItem & { categoryTitle: string }) {
+    const runtime = useRuntimeConfig()
+    const siteUrl = runtime.public?.siteUrl
+    const itemListElement = [
+        {'@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}`},
+        {'@type': 'ListItem', position: 2, name: 'FAQ', item: `${siteUrl}/faq`}
+    ]
+
+    // 如果处于特定问题路由下，追加层级
+    if (activeItem) {
+        itemListElement.push({
+            '@type': 'ListItem',
+            position: 3,
+            name: activeItem.categoryTitle,
+            item: `${siteUrl}/faq/${generateTitle2Slug(activeItem.categoryTitle)}`
+        })
+        itemListElement.push({
+            '@type': 'ListItem',
+            position: 4,
+            name: activeItem.title,
+            item: `${siteUrl}${activeItem.url}`
+        })
+    }
+
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement
     }
 }

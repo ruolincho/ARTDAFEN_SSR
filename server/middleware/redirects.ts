@@ -29,4 +29,9 @@ export default defineEventHandler((event) => {
         const newPath = path.replace(/^\/blog-detail\//, '/journal-detail/')
         return sendRedirect(event, newPath + reqUrl.search, 301)
     }
+
+    if (path === '/best' || path === '/product') {
+        return sendRedirect(event, '/collections', 301)
+    }
+
 })

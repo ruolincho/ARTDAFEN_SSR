@@ -46,6 +46,7 @@ export namespace IProduct {
         description: string // 商品描述
         keywords: string // 商品关键词
         slug: string // 商品 slug
+        seoTitle: string // 产品 SEO 优化描述
     }
 
     /*左侧筛选菜单请求参数*/

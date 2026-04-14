@@ -1,9 +1,10 @@
 <template>
   <DataState
       :loading="loading"
-      :is-empty="requestFinished && processTableData.length === 0"
+      :is-empty="processTableData.length === 0"
       :error="error"
       :retry="getTableList"
+      :requestFinished="requestFinished"
   >
     <!-- 列表内容 -->
     <slot :rows="processTableData"/>

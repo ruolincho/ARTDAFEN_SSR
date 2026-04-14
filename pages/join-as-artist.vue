@@ -24,7 +24,7 @@
     <div class="container">
       <div class="section-header text-center text-left-md">
         <div class="text-16 py-10 px-16 border-sm border-gray-700 inline-block" v-aos="'fade-up'">Benefits</div>
-        <h1 class="text-50 f-bold-500 mt-30" v-aos="'fade-up'">PARTNERING WITH ART DAFEN</h1>
+        <h1 class="text-50 f-bold-500 mt-30" v-aos="'fade-up'">PARTNERING WITH ARTDAFEN</h1>
       </div>
       <div class="row benefits-list mt-30">
         <div class="col-xs-6 col-12" v-aos="{ name: 'fade-up', delay: 0}">
@@ -202,7 +202,8 @@ import {sendConsulting} from "~/api/modules/message/message";
 import {useImage} from "~/composables/useImage";
 import {resolvePageMeta} from "~/config/pageMeta";
 
-useHead(resolvePageMeta("/collaboration"));
+useHead(resolvePageMeta("/join-as-artist"));
+
 const { imagePrefix } = useImage()
 const messageForm = ref({
   email: '',

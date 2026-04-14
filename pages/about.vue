@@ -29,16 +29,15 @@
             >
             <div class="p-box text-30 text-white f-bold-200 flex-1 acea-row row-column row-center-wrapper">
               <p style="line-height: 1.7">
-                The Hidden Studio Behind Global Galleries. Direct from <strong>Dafen Village</strong>, the world’s art center. We are a
-                <strong>heritage studio established in 1989</strong>, offering strict "<strong>Museum-Quality Reproductions</strong>." No intermediaries,
-                just authentic artistry and <strong>source-factory value</strong>.
+                Operated proudly by YAGENE INTERNATIONAL ART CO., LIMITED, <strong>Artdafen</strong> is your direct link to <strong>Dafen Village</strong>, the world’s leading center for art. Building upon an artistic heritage that dates back to 1989, our modern mission remains unchanged: offering strict "<strong>Museum-Quality Reproductions</strong>" to art lovers worldwide.
+                By <strong>eliminating all intermediaries</strong>, we guarantee <strong>authentic, handcrafted artistry</strong> at true <strong>source-factory value</strong>.
               </p>
             </div>
             <img class="w-full" :src="imagePrefix('/static/artdafen/about-7.webp')" alt="Dafeng Oil Painting Village"
             >
           </div>
         </div>
-        <div class="part-auto border-r-sm border-b-sm border-gray-700">
+        <div class="part-auto border-r-sm border-b-sm border-g  ray-700">
           <div class="history-list">
             <div class="history-item" v-for="(item, index) in HISTORY_LIST" :key="item.id" :data-index="index"
             >
@@ -260,14 +259,23 @@ import {Autoplay, Navigation, Pagination, Lazy} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import {resolvePageMeta} from "~/config/pageMeta";
+import {resolvePageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {ARTISTS_LIST, HONOR_LIST, HISTORY_LIST, PARTNER_LIST} from "~/constant";
 import {useImage} from "~/composables/useImage";
 
 const modules = [Autoplay, Pagination, Navigation, Lazy]
 const {imagePrefix} = useImage()
+const route = useRoute()
+const origin = useRequestURL().origin
 
-useHead(resolvePageMeta("/about"))
+useHead(mergeHeadWithLodash(
+    resolvePageMeta("/about"),
+    {
+      link: [
+        {rel: 'canonical', href: `${origin}${route.path}`},
+      ]
+    }
+))
 </script>
 
 <style scoped lang="scss">

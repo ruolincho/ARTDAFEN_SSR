@@ -13,7 +13,7 @@ interface PaginationOptions<ItemType, FilterType> {
     apiPath: string,
     baseRoute: string,
     uniqueKey: string,
-    callBack?: (data: ItemType[]) => void;
+    callBack?: (data?: ItemType[]) => void;
     pageSize?: number | Ref<number>; // 支持动态改变每页数量
     filterParams?: Ref<FilterType> | (() => FilterType); // 额外的筛选参数 (响应式)
     seo?: SeoOptions | Ref<SeoOptions> | (() => SeoOptions); // SEO 配置

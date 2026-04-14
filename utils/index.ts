@@ -322,3 +322,34 @@ export function generateIdAndSlug(id: string | number, title: string): string {
     const slug = generateTitle2Slug(title)
     return `${id}-${slug}`
 }
+
+/**
+ * 格式化：将普通文本转换为 kebab-case 格式
+ * @example "Top 100 Bestsellers" => "top-100-bestsellers"
+ * @param text 原始文本
+ * @returns 格式化后的字符串
+ */
+export function formatHandle(text: string) {
+    if (!text) return '';
+    return text
+        .trim()             // 去除首尾空格
+        .toLowerCase()      // 转换为全小写
+        .replace(/\s+/g, '-'); // 将一个或多个空格替换为中划线
+}
+
+/**
+ * 回显：将 kebab-case 格式还原为首字母大写的普通文本
+ * @example "top-100-bestsellers" => "Top 100 Bestsellers"
+ * @param slug 格式化后的字符串
+ * @returns 回显的原始文本
+ */
+export function restoreHandle(slug: string) {
+    if (!slug) return '';
+    return slug
+        .split('-')         // 按照中划线拆分单词
+        .map(word => {
+            // 将每个单词首字母大写，其余字母小写（兼容全小写回显的情况）
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        })
+        .join(' ');         // 用空格重新拼接
+}

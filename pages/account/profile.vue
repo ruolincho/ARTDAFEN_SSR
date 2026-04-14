@@ -18,7 +18,7 @@
         </div>
         <div class="col-sm-4 col-12">
           <div class="mb-10 f-bold">Introduction</div>
-          <div>{{ userStore.userInfo.intro }}</div>
+          <div>{{ userStore.userInfo.intro || '' }}</div>
         </div>
       </div>
     </div>
@@ -46,6 +46,7 @@
 import {useUserStore} from "~/stores/modules/user";
 import UserInfoForm from '~/components/UserInfoForm.vue'
 import ResetPasswordWindow from '~/components/ResetPasswordWindow.vue'
+import {resolvePageMeta} from "~/config/pageMeta";
 
 defineOptions({
   name: 'Profile'
@@ -55,9 +56,7 @@ definePageMeta({
   auth: true
 })
 
-useSeoMeta({
-  robots: 'noindex, nofollow'
-})
+useHead(resolvePageMeta("/profile"));
 
 onMounted(() => {
   userStore.getUserEcho()

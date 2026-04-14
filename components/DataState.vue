@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="data-state-loading" :class="wrapperClass">
+  <div v-if="loading && isEmpty" class="data-state-loading" :class="wrapperClass">
     <slot name="loading">
       <div class="spinner"></div>
       <span class="mt-10 text-gray-500">loading...</span>
@@ -16,7 +16,7 @@
     </slot>
   </div>
 
-  <div v-else-if="isEmpty" class="data-state-empty" :class="wrapperClass">
+  <div v-else-if="isEmpty && requestFinished" class="data-state-empty" :class="wrapperClass">
     <slot name="empty">
       <div class="text-center">
         <span class="iconfont icon-empty text-50"></span>
@@ -26,7 +26,7 @@
     </slot>
   </div>
 
-  <div v-else class="data-state-content">
+  <div v-else class="data-state-content" v-loading="loading">
     <slot/>
   </div>
 </template>
@@ -46,6 +46,8 @@ interface Props {
   errorText?: string
   // 重试事件 (如果传入该函数，会显示"点击重试"按钮)
   retry?: () => void | Promise<void>
+  // 请求是否已完成（用来防止首次请求发出前闪烁空状态）
+  requestFinished?: boolean
   // 是否为空数据 (当 loading 为 false 时生效)
   isEmpty?: boolean
   // 空状态时的提示文字
@@ -59,6 +61,8 @@ const props = withDefaults(defineProps<Props>(), {
   error: null,
   errorText: 'Loading fails check the network or try again.',
   isEmpty: false,
+  // 默认设置为 true，是为了兼容项目中其他还没传入此参数的地方，不影响其他老代码
+  requestFinished: true,
   emptyText: 'No data found, please check the query or try again later.',
   wrapperClass: 'min-h-[300px] acea-row row-column row-center-wrapper' // 默认给一个最小高度和居中
 })

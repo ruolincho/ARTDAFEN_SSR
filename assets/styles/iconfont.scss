@@ -18,6 +18,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-arrow-l:before {
+  content: "\e78a";
+}
+
+.icon-arrow-r:before {
+  content: "\e78b";
+}
+
 .icon-quxiaodingyue:before {
   content: "\e6b7";
 }

@@ -22,6 +22,8 @@
 </template>
 
 <script setup lang="ts">
+import {resolvePageMeta} from "~/config/pageMeta";
+
 defineOptions({
   name: 'Payments'
 })
@@ -30,9 +32,7 @@ definePageMeta({
   auth: true
 })
 
-useSeoMeta({
-  robots: 'noindex, nofollow'
-})
+useHead(resolvePageMeta("/payments"));
 </script>
 
 <style scoped lang="scss">

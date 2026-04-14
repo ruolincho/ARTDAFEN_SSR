@@ -192,6 +192,9 @@ import 'swiper/css/pagination'
 import {HISTORY_LIST, CASE_LIST, WHY_CHOOSE_LIST2} from "~/constant";
 import {CONTACT_EMAIL} from "~/config";
 import {useAppStore} from "~/stores/modules/app";
+import {resolvePageMeta} from "~/config/pageMeta";
+
+useHead(resolvePageMeta("/trade-commercial"));
 
 const modules = [Autoplay, Pagination, Navigation, Lazy]
 const { imagePrefix } = useImage()

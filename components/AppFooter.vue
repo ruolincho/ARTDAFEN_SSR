@@ -28,9 +28,9 @@
         <a class="social-item" href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
           <span class="iconfont icon-Youtube"></span>
         </a>
-        <!--<a class="social-item" href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">-->
-        <!--  <span class="iconfont icon-instagram"></span>-->
-        <!--</a>-->
+        <a class="social-item" href="https://www.instagram.com/art_dafen/" target="_blank" title="instagram">
+          <span class="iconfont icon-instagram"></span>
+        </a>
         <a class="social-item" href="https://www.pinterest.com/artdafen/" target="_blank" title="pinterest">
           <span class="iconfont icon-pinterest"></span>
         </a>
@@ -146,9 +146,9 @@
           <a class="social-item" href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
             <span class="iconfont icon-Youtube "></span>
           </a>
-          <!--<a class="social-item" href="https://www.instagram.com/artdafen/" target="_blank" title="instagram">-->
-          <!--  <span class="iconfont icon-instagram "></span>-->
-          <!--</a>-->
+          <a class="social-item" href="https://www.instagram.com/art_dafen/" target="_blank" title="instagram">
+            <span class="iconfont icon-instagram "></span>
+          </a>
           <a class="social-item" href="https://www.pinterest.com/artdafen/" target="_blank" title="pinterest">
             <span class="iconfont icon-pinterest "></span>
           </a>
@@ -224,9 +224,9 @@ const footerList = ref([
     url: '/about',
     auth: false,
     children: [
-      {name: 'About ART DAFEN', url: '/about'},
-      {name: 'Trade & Commercial', url: '/commercial'},
-      {name: 'Collaborate with Us (For Artists)', url: '/collaboration'},
+      {name: 'About ARTDAFEN', url: '/about'},
+      {name: 'Trade & Commercial', url: '/trade-commercial'},
+      {name: 'Collaborate with Us (For Artists)', url: '/join-as-artist'},
       {name: 'Contact Us', url: '/contact'},
     ]
   },

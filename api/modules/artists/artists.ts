@@ -1,6 +1,7 @@
 import { $http } from '~/api/http'
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import type {IArtists} from "~/api/interface/artists/artists";
+import type {ObjectNode} from "~/types/global";
 
 /**
  * 获取艺术家列表

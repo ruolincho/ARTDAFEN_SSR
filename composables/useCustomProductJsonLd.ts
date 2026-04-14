@@ -138,8 +138,18 @@ export function useCustomProductJsonLd(
             }))
         }
 
+        // 面包屑
+        const breadcrumb =  {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                {'@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl.replace(/\/+$/, '')}`},
+                {'@type': 'ListItem', position: 2, name: p.title, item: `${siteUrl.replace(/\/+$/, '')}/paint-detail/${p.id}/${p.slug}`}
+            ]
+        }
+
         // 返回数组：Google 支持同一 <script> 中输出多个 JSON-LD 对象（shipping 可能是“全局1条 + 每国分组若干条”）
-        return [product, shippingDetailsGlobal, returnPolicy]
+        return [product, shippingDetailsGlobal, returnPolicy, breadcrumb]
     })
 
     /** 便捷方法：直接把 JSON-LD 注入到 <head>（SSR/CSR均可） */
@@ -148,7 +158,7 @@ export function useCustomProductJsonLd(
             script: [
                 {
                     type: 'application/ld+json',
-                    key: 'custom-product-jsonld-',
+                    key: 'custom-product-jsonld',
                     innerHTML: JSON.stringify(jsonLd.value)
                 }
             ]

@@ -1,128 +1,129 @@
 <template>
-  <!--移动端功能区域-->
-  <div
-      ref="functionalRef"
-      class="functional-area"
-      v-if="!appStore.isPc"
-      :style="{
-      top: functionalTop + 'px',
-      transition: enableTransition ? 'top 0.25s cubic-bezier(.25,.8,.25,1)' : 'none'
-    }"
-      @touchstart="onTouchStart"
-      @touchmove.prevent="onTouchMove"
-      @touchend="onTouchEnd"
-      @click.stop
-  >
-    <span class="iconfont icon-user-defined" @click="openWallColor"></span>
-    <span class="split"></span>
-    <span class="iconfont icon-pictures" @click="openRoom"></span>
-    <span class="split"></span>
-    <span class="iconfont icon-quanping" @click="toggleImageViewer"></span>
-    <span class="split"></span>
-    <span class="iconfont icon-help" @click="beginGuide"></span>
-  </div>
-
   <!--规格选择-->
   <section>
     <div class="container">
-      <!--移动端兼容视图-->
-      <div class="app-preview"
-           id="tour-step-preview-app"
-           :style="{margin: '0 -15px', height: '300px', position: appSticky ? 'sticky' : 'static' }"
-           v-if="!appStore.isPc"
-           ref="appPreviewRef"
-      >
-        <div class="img-wrapper acea-row row-center-wrapper flex-1 overflow-hidden">
-          <ClientOnly>
-            <ImageGenerator
-                v-if="goodsDetail.id"
-                v-model="generatorImg"
-                v-model:squareImage="squareImageUrl"
-                v-model:pixel="pixel"
-                @change="handleImageChange"
-                @touch-screen="toggleImageViewer"
-                v-bind="imageGeneratorProps"
-            />
-          </ClientOnly>
-        </div>
-      </div>
-      <!-- 移动端兼容标题 -->
-      <div class="app-title pt-20 acea-row row-between-wrapper" v-if="!appStore.isPc">
-        <p style="font-size: 20px;" class="f-bold-500 flex-1 mr-10">{{ `${goodsDetail.title}: Hand-painted Oil Painting Reproduction` }}</p>
-        <span class="iconfont icon-follow text-40 mr-10 cursor-pointer" v-show="!isThumbs" @click="productThumbs"/>
-        <span class="iconfont icon-follow-fill text-40 mr-10 cursor-pointer text-error" v-show="isThumbs"
-              @click="productThumbs"/>
-      </div>
-
       <div class="spu-wrapper row pt-md-50 pt-20">
         <!--预览图栅格-->
-        <div class="col-sm-7" v-if="appStore.isPc">
-          <!--预览图-->
-          <div class="spu-preview border-sm">
-            <div class="p-md-20 p-15 border-b-sm">
-              <p class="text-22 f-bold-500">{{ `${goodsDetail.title}: Hand-painted Oil Painting Reproduction` }}</p>
-            </div>
-            <div class="acea-row row-between-wrapper p-md-20 p-15">
-              <div>
-                <p class="text-22 f-bold-500 cursor-pointer text-underline" @click="handleClickArtist">
-                  by:{{ goodsDetail.creator?.name }}</p>
-                <p class="text-18 text-gray-600 mt-10">
-                  <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Painting">Hand-painted replica</span>
-                  <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Prints">Print painting</span>
-                  <span v-if="goodsDetail.techniqueId === TechniqueCodeEnum.Relief">Relief painting</span>
-                </p>
+        <div class="col-md-6">
+          <div :style="{ top: appStore?.headerState?.height + 'px', position: 'sticky' }">
+            <div class="spu-preview" id="tour-step-preview" ref="spuPreviewRef">
+              <div class="thumb-swiper-wrapper">
+                <swiper
+                    class="thumb-swiper"
+                    :modules="modules"
+                    @swiper="setThumbsSwiper"
+                    slides-per-view="auto"
+                    :breakpoints="{
+                      0: {
+                        direction: 'horizontal',
+                        spaceBetween: 10
+                      },
+                      1261: {
+                        direction: 'vertical',
+                        autoHeight: true,
+                        spaceBetween: 17
+                      }
+                    }"
+                >
+                  <swiper-slide>
+                    <img class="cursor-pointer w-full h-full fit-contain aspect-ratio" :src="imagePrefix(goodsDetail?.img)" style="user-select: none;"
+                         alt=""/>
+                  </swiper-slide>
+                  <swiper-slide
+                      v-for="(banner, index) in banners"
+                      :key="index"
+                  >
+                    <img
+                        class="cursor-pointer w-full h-full fit-contain aspect-ratio"
+                        :src="imagePrefix(banner)" style="user-select: none;"
+                        alt=""
+                    />
+                  </swiper-slide>
+                </swiper>
               </div>
-              <div>
-                  <span class="iconfont icon-follow text-40 mr-10 cursor-pointer" v-show="!isThumbs"
-                        @click="productThumbs"/>
-                <span class="iconfont icon-follow-fill text-40 mr-10 cursor-pointer text-error" v-show="isThumbs"
-                      @click="productThumbs"/>
-                <span class="iconfont icon-quanping text-40 cursor-pointer" @click="toggleImageViewer"></span>
-              </div>
-            </div>
-            <div class="preview-box" id="tour-step-preview-pc">
-              <ClientOnly>
-                <ImageGenerator
-                    v-if="goodsDetail.id"
-                    v-model="generatorImg"
-                    v-model:squareImage="squareImageUrl"
-                    v-model:pixel="pixel"
-                    @change="handleImageChange"
-                    @touch-screen="toggleImageViewer"
-                    v-bind="imageGeneratorProps"
-                />
-              </ClientOnly>
-            </div>
-            <div class="acea-row row-evenly py-20">
-              <div class="acea-row row-middle cursor-pointer" @click="openWallColor">
-                <span class="iconfont icon-user-defined text-20"></span>
-                <span class="text-14 ml-10">SELECT WALL COLOR</span>
-              </div>
-              <div class="acea-row row-middle cursor-pointer" @click="openRoom">
-                <span class="iconfont icon-pictures text-20"></span>
-                <span class="text-14 ml-10">VIEW PAINTING IN A ROOM</span>
-              </div>
-              <div class="acea-row row-middle cursor-pointer" @click="beginGuide">
-                <span class="iconfont icon-help text-20"></span>
-                <span class="text-14 ml-10">GUIDE</span>
+              <div class="main-swiper-wrapper">
+                <swiper
+                    class="main-swiper"
+                    :modules="modules"
+                    :navigation="true"
+                    :thumbs="{ swiper: thumbsSwiper }"
+                    :loop="false"
+                    @slideChange="onSlideChange"
+                    @swiper="onSwiper"
+                >
+                  <swiper-slide>
+                    <ClientOnly>
+                      <div class="acea-row row-center-wrapper w-full h-full bg-gray-100">
+                        <ImageGenerator
+                            v-if="goodsDetail.id"
+                            v-model="generatorImg"
+                            v-model:squareImage="squareImageUrl"
+                            v-model:pixel="pixel"
+                            @change="handleImageChange"
+                            v-bind="imageGeneratorProps"
+                        />
+                      </div>
+                    </ClientOnly>
+                  </swiper-slide>
+                  <swiper-slide
+                      v-for="(banner, index) in banners"
+                      :key="index"
+                  >
+                    <img
+                        class="w-full h-full fit-cover"
+                        :src="imagePrefix(banner)" alt="banner"
+                        style="user-select: none"
+                    />
+                  </swiper-slide>
+                </swiper>
+                <ToolFloatBall :actions="tools" :z-index="2" :position="{ bottom: appStore.isPc ? '24px' : '12px', right: appStore.isPc ? '24px' : '12px' }" />
               </div>
             </div>
           </div>
         </div>
         <!--规格选择栅格-->
-        <div class="col-sm-5">
-          <div class="spu-spec border-sm step-wrapper">
+        <div class="col-md-6">
+          <div class="spu-spec">
             <ComboSkeleton :loading="loadingCombo && !firstLoadCombo">
               <div>
+                <div class="acea-row row-between-wrapper mb-15 gap-column-base">
+                  <h1 class="text-22 flex-1 line2" style="line-height: 1.5">
+                    <span class="text-uppercase">{{ goodsDetail.title }}</span>
+                    <span>: Hand-painted Oil Painting Reproduction</span>
+                  </h1>
+                  <span class="iconfont icon-follow text-40 mr-10 cursor-pointer" v-show="!isThumbs"
+                        @click="productThumbs"/>
+                  <span class="iconfont icon-follow-fill text-40 mr-10 cursor-pointer text-error" v-show="isThumbs"
+                        @click="productThumbs"/>
+                </div>
+
+                <p class="my-15 text-14 cursor-pointer text-underline-hover" @click="handleClickArtist">by: {{ goodsDetail?.creator?.name }}</p>
+
+                <div class="my-15 acea-row row-middle price-wrapper py-10"
+                     :style="{ top: appStore?.headerState?.height + 'px' }">
+                  <span class="text-28 f-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
+                  <el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"
+                          ref="checkButtonRef">Check
+                  </el-tag>
+                </div>
+
+                <p class="text-14 text-gray-400 my-15">
+                  All framing includes free canvas stretching, mounting & wall hooks.Your framed oil painting will
+                  arrive to your door ready to hang on your wall.
+                </p>
+
+                <hr>
+
                 <!--工艺/规格选择-->
                 <CraftSelector
                     v-if="specsCombination.length > 1"
                     tourId="tour-step-craft"
                     v-model="currentSpecId"
                     :options="specsCombination"
+                    :option="currentSpecOption"
                     label-key="craft"
                     value-key="id"
-                    @change="chooseTechnique"
+                    @change="back2First(chooseTechnique, $event)"
                 />
 
                 <!--尺寸选择-->
@@ -131,7 +132,7 @@
                     v-model="currentSizeId"
                     :options="sizeOptions"
                     :sizeOption="currentSizeOption"
-                    @change="chooseSize"
+                    @change="back2First(chooseSize, $event)"
                 />
 
                 <!--画框选择-->
@@ -140,8 +141,8 @@
                     v-model="currentFrameId"
                     :options="frameOptions"
                     :sizeOption="currentFrameOption"
-                    @change="chooseFrame"
                     :price="frameMoney || 0"
+                    @change="back2First(chooseFrame, $event)"
                 />
 
                 <!--卡纸选择（选择画框并且画框支持和有卡纸选项才有）-->
@@ -152,49 +153,43 @@
                     v-model:matWidth="currentMaterialWidth"
                     :options="materialOptions"
                     :material-option="currentMaterialOption"
+                    @change="slideTo(0)"
                 />
 
-                <!--Summary-->
-                <!--<div class="acea-row row-middle px-md-20 px-15 py-10">
-                  <span class="iconfont icon-info-fill text-20"/>
-                  <p class="ml-6 text-20 flex-1 line1">
-                    <span class="cursor-pointer text-underline" @click="centerDialogVisible = true">
-                      <b class="f-bold">Click here:</b>Summary of differences.
-                    </span>
-                  </p>
-                </div>-->
+                <hr>
 
-                <div class="p-md-20 p-15 f-bold-500 text-16 border-t-sm">
-                  <p>Product Parameter</p>
+                <div class="my-15 text-14">
+                  <p>Product Parameter: </p>
                   <p class="mt-10" v-for="(val, key) in specs">{{ key }}: {{ val }}</p>
                 </div>
-                <div class="border-t-sm p-md-20 p-15 text-16 f-bold-500">
+
+                <hr>
+
+                <div class="text-14 text-gray-400 my-15">
                   All framing includes free canvas stretching, mounting & wall hooks.Your framed
                   oil painting will arrive to your door ready to hang on your wall.
                 </div>
-                <div class="p-md-20 p-15 acea-row row-between-wrapper text-20 bg-gray-100">
-                  <p class="f-bold-500">
-                    Price Details
-                    <span
-                        class="text-underline cursor-pointer"
-                        ref="checkButtonRef"
-                        v-click-outside="onClickOutside"
-                    >Check</span>
-                  </p>
-                  <p class="f-bold">
-                    Total：
-                    <span class="text-26 text-error">{{ formatToCurrency(totalPrice || 0) }}</span>
-                  </p>
+
+                <div class="my-15 acea-row">
+                  <el-button
+                      class="add-cart__button rounded-none flex-1"
+                      size="large"
+                      type="primary"
+                      @click="addToCart"
+                      :disabled="isBan"
+                  >
+                    {{ isBan ? 'Sold Out' : 'Add To Cart' }}
+                  </el-button>
+                  <el-button
+                      class="rounded-none flex-1"
+                      size="large"
+                      plain
+                      @click="buyNow"
+                      :disabled="isBan"
+                  >
+                    {{ isBan ? 'Sold Out' : 'Buy Now' }}
+                  </el-button>
                 </div>
-                <el-button
-                    class="w-full add-cart__button rounded-none"
-                    size="large"
-                    type="danger"
-                    @click="addToCart"
-                    :disabled="isBan"
-                >
-                  {{ isBan ? 'Sold Out' : 'Add To Cart' }}
-                </el-button>
               </div>
             </ComboSkeleton>
           </div>
@@ -423,57 +418,6 @@
     </div>
   </section>
 
-  <!-- 品牌-->
-  <section class="" v-if="goodsDetail?.brand?.id">
-    <div class="container">
-      <div class="brand-topic mb-20">
-        <div class="brand-topic-caption text-white text-26">
-          <p>{{ goodsDetail?.brand?.name }}</p>
-          <p class="text-60 f-bold my-xs-20 my-15">{{ goodsDetail?.brand?.title }}</p>
-          <p>{{ goodsDetail?.brand?.intro }}</p>
-        </div>
-        <button class="caption-btn text-28 p-xs-20 p-15" @click="handleClickBrand">
-          Brand Home
-          <span class="iconfont icon-right-arrow text-28 ml-xs-60 ml-30"></span>
-        </button>
-        <img class="w-full pc" :src="imagePrefix(goodsDetail?.brand?.background)" alt="brand">
-        <img class="w-full app" :src="imagePrefix(goodsDetail?.brand?.img)" alt="brand">
-      </div>
-      <ClientOnly>
-        <div class="recommend-swiper" v-if="brandRecList.length">
-          <swiper
-              :modules="modules"
-              :navigation="{ nextEl: '.brand-next', prevEl: '.brand-prev' }"
-              :pagination="{
-                el: '.pagination-brand',
-                type: 'fraction'
-               }"
-              :autoplay="{ delay: 5000 }"
-              :breakpoints="{
-                '1680': { slidesPerView: 5, slidesPerGroup: 5, spaceBetween: 20 },
-                '1460': { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 20 },
-                '1260': { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 10 },
-                '375': { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 10 },
-              }"
-          >
-            <swiper-slide v-for="item in brandRecList" :key="item.id">
-              <NuxtLink class="explore-item block" :to="productLink(item)" target="_blank">
-                <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
-                </div>
-                <p class="line1 text-14 my-8">{{ item.title }}</p>
-                <p class="text-12 f-bold">{{ item.retailPrice }}</p>
-              </NuxtLink>
-            </swiper-slide>
-          </swiper>
-          <div class="recommend-button swiper-button-next brand-next"></div>
-          <div class="recommend-button swiper-button-prev brand-prev"></div>
-          <div class="recommend-pagination swiper-pagination pagination-brand"></div>
-        </div>
-      </ClientOnly>
-    </div>
-  </section>
-
   <!-- FQ4-->
   <section>
     <div class="container">
@@ -493,27 +437,17 @@
   </section>
 
   <!-- PROCESS -->
-  <section class="sec-process py-lg-40 py-20 mt-20">
+  <section class="sec-process py-lg-30 py-20 mt-20">
     <div class="container">
       <div class="process-list">
         <div class="process-item text-center" v-for="item in PROCESS_LIST" :key="item.title">
-          <span class="iconfont text-60" :class="[item.icon]"/>
-          <p class="text-24 mt-20">{{ item.title }}</p>
-          <p class="text-20 text-gray-500 mt-10">{{ item.desc }}</p>
+          <span class="iconfont" :class="[item.icon]"/>
+          <p class="text-20 mt-15">{{ item.title }}</p>
+          <p class="text-16 text-gray-500 mt-10">{{ item.desc }}</p>
         </div>
       </div>
     </div>
   </section>
-
-  <el-dialog v-model="centerDialogVisible" title="Summary of Differences" width="720" center>
-    <span>
-      It should be noted that the content will not be aligned in center by default
-    </span>
-    <template #footer>
-      <el-button @click="centerDialogVisible = false">Cancel</el-button>
-      <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
-    </template>
-  </el-dialog>
 
   <!-- 背景墙 -->
   <WallColor :wall-image="generatorImg" ref="wallColorRef" @close="toggleWidget(true)"/>
@@ -525,17 +459,37 @@
   <!--  图片查看器 -->
   <el-image-viewer
       v-if="imgViewVisible"
-      :url-list="[generatorImg]"
+      :url-list="urlList"
       @close="toggleImageViewer"
       hide-on-click-modal
-  />
+      :initial-index="urlListIndex"
+      @switch="handleSwitch"
+  >
+    <template #toolbar="{ actions, prev, next }">
+      <el-icon @click="prev">
+        <Back/>
+      </el-icon>
+      <span class="text-white custom-progress">
+        {{ urlListIndex + 1 }} / {{ urlList.length }}
+      </span>
+      <el-icon @click="next">
+        <Right/>
+      </el-icon>
+      <el-icon @click="actions('zoomOut')">
+        <ZoomOut/>
+      </el-icon>
+      <el-icon @click="actions('zoomIn')">
+        <ZoomIn/>
+      </el-icon>
+    </template>
+  </el-image-viewer>
 
   <!--价格详情弹窗-->
   <el-popover
       ref="checkPopoverRef"
       trigger="click"
-      width="50vw"
-      placement="top"
+      :width="appStore.isPc ? '50vw' : '95vw'"
+      placement="bottom"
       title="Price Details"
       :virtual-ref="checkButtonRef"
       :popper-style="{ padding: '20px', 'padding-bottom': '10px'}"
@@ -568,15 +522,29 @@
         v-bind="step"
     />
   </el-tour>
+
+  <!--底部预览-->
+  <transition name="slide-up">
+    <div class="footer-preview acea-row row-middle" v-show="!appStore.isPc && isShowFooterPreview">
+      <div class="footer-preview-img" @click="toggleImageViewer('core')">
+        <img class="w-full h-full fit-contain" :src="generatorImg" alt="">
+      </div>
+      <div class="footer-preview-text f-bold">VIEW PREVIEW</div>
+      <div class="footer-preview-right" @click="openRoom">
+        <span class="iconfont icon-pictures"></span>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script setup lang="ts">
 import {Swiper, SwiperSlide} from 'swiper/vue'
-import {Autoplay, Navigation, Pagination} from 'swiper'
+import type SwiperClass from 'swiper'
+import {Autoplay, Navigation, Pagination, Thumbs} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import {getBrandRecommendApi, getRelatedRecommendApi} from "~/api/modules/product/product";
+import {getRelatedRecommendApi} from "~/api/modules/product/product";
 import type {IProduct} from "~/api/interface/product/product";
 import WallColor from '~/components/WallColor.vue'
 import Room from '~/components/Room.vue'
@@ -591,7 +559,7 @@ import {useAppStore} from "~/stores/modules/app";
 import {gen_path_obj} from "~/utils/product";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {useUserStore} from "~/stores/modules/user";
-import {PRODUCT_URL, APP_HAS_SEEN_PAINT_GUIDE} from "~/config";
+import {APP_HAS_SEEN_PAINT_GUIDE, COLLECTIONS_URL} from "~/config";
 import {getFaqByQuote} from "~/config/faq";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IResultData} from "~/api/interface";
@@ -602,8 +570,6 @@ import type {IMessage} from "~/api/interface/message/message";
 import {getCommentList} from "~/api/modules/message/message";
 import ProInfinite from "~/components/ProInfinite.vue";
 import ProList from "~/components/ProList/index.vue";
-import {TechniqueCodeEnum} from "~/types/enumeration";
-import {useVerticalDrag} from '~/composables/useVerticalDrag'
 import {QUALITY_LIST, PROCESS_LIST} from "~/constant";
 import SizeSelector from "~/components/Custom/SizeSelector.vue";
 import FrameSelector from "~/components/Custom/FrameSelector.vue";
@@ -612,27 +578,38 @@ import CraftSelector from "~/components/Custom/CraftSelector.vue";
 import ComboSkeleton from "~/components/Custom/ComboSkeleton.vue";
 import {usePaintCombo} from '~/composables/usePaintCombo'
 import {useImage} from "~/composables/useImage";
+import {Back, Right, ZoomIn, ZoomOut } from '@element-plus/icons-vue'
+import ToolFloatBall from "~/components/ToolFloatBall.vue";
+import {useBreadcrumbStore} from "~/stores/modules/breadcrumb";
 
 defineOptions({
   name: 'PaintDetail'
 })
 
+definePageMeta({
+  showBreadcrumb: true
+})
+
 onMounted(async () => {
   await getSpecsList() // 获取Spec列表
   await getCombination() // 获取组合
-  if (goodsDetail.value.brand?.id) await getBrandRecommend() // 获取品牌推荐
   await getRelatedRecommend()
   if (userStore.isLogin) {
     await getIsThumbs()
+  }
+  if (!appStore.isPc) {
+    window.addEventListener('scroll', monitorPreview)
   }
   $bus.on('loginSuccess', getIsThumbs)
 })
 
 onUnmounted(() => {
   $bus.off('loginSuccess', getIsThumbs)
+  window.removeEventListener('scroll', monitorPreview)
+
 })
 
-const { imagePrefix } = useImage()
+const {imagePrefix} = useImage()
 const {$bus} = useNuxtApp()
 const userStore = useUserStore()
 const appStore = useAppStore()
@@ -640,23 +617,18 @@ const cartStore = useCartStore()
 const route = useRoute();
 const router = useRouter();
 const {formatToCurrency, currentCurrency} = useCurrencyStore();
+const breadcrumbStore = useBreadcrumbStore()
+const origin = useRequestURL().origin
 
-const modules = [Autoplay, Pagination, Navigation]
+const modules = [Autoplay, Pagination, Navigation, Thumbs]
+const thumbsSwiper = ref<SwiperClass>()
+const setThumbsSwiper = (swiper: SwiperClass) => thumbsSwiper.value = swiper
 const activeName = ref('')
 const activeTabs = ref('artist')
 const squareImageUrl = ref('') // 1:1图片
 const generatorImg = ref('') // 最终图片
 const pixel = ref({width: 0, height: 0}) // 最终尺寸
 const imgViewVisible = ref(false)
-const centerDialogVisible = ref(false)
-const functionalRef = ref<HTMLElement | null>(null)
-const {
-  top: functionalTop,
-  enableTransition,
-  onTouchStart,
-  onTouchMove,
-  onTouchEnd
-} = useVerticalDrag(functionalRef, {initialTop: 100})
 
 const initShowGuide = () => {
   if (process.server) return;
@@ -671,11 +643,9 @@ const {
   frameOptions, currentFrameId, currentFrameOption, isInnerFrame, hasFrame, frameMoney,
   materialOptions, currentMaterialId, currentMaterialOption, currentMaterialWidth, matVisible,
   totalPrice, specs, parts,
-
   fetchCombination,
   chooseSize,
   chooseFrame,
-
 } = usePaintCombo({
   onGuideInit: initShowGuide,
   getCode: () => currentSpecOption.value!.code!,
@@ -708,18 +678,43 @@ const {data: goodsDetail, pending: isSkeleton} = await useAsyncData(
           'X-Currency': currentCurrency
         }
       })
+      // if (data.banners && data.banners.length) {
+      //   data.banners.shift()
+      // }
       return data
     }
 )
 
+breadcrumbStore.setBreadcrumbs([{ name: goodsDetail.value?.name }])
+
+const canonicalUrl = `${origin}${route.path}`
+const pageTitle = computed(() => `${goodsDetail.value?.title} by ${goodsDetail.value?.creator?.name} Reproduction | Painting Replicas on Canvas`)
+const pageDescription = computed(() => {
+  const { description = '' } = goodsDetail.value
+  if (!description) return ''
+  return description.length > 155 ? `${description.substring(0, 155).replace(/\n/g, ' ')}...` : description;
+})
+
 useHead({
-  // title: `${goodsDetail.value?.name || ''} - ${config.public?.siteName}`,
-  title: `${goodsDetail.value?.name} by ${goodsDetail.value?.creator?.name} Reproduction | Pink Impressionist Landscape Wall Art for Bedroom`,
+  title: pageTitle.value,
   meta: [
-    {
-      name: "description",
-      content: goodsDetail.value?.description
-    }
+    ...(pageDescription.value ? [{ name: 'description', content: pageDescription.value }] : []),
+    ...(goodsDetail.value?.keywords ? [{ name: 'keywords', content: goodsDetail.value.keywords }] : []),
+
+    { property: 'og:type', content: 'product' },
+    { property: 'og:title', content: pageTitle.value },
+    { property: 'og:image', content: imagePrefix(goodsDetail.value.img) },
+    { property: 'og:url', content: canonicalUrl },
+    ...(pageDescription.value ? [{ property: 'og:description', content: pageDescription.value }] : []),
+
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: pageTitle.value },
+    { name: 'twitter:image', content: `${imagePrefix(goodsDetail.value.img)}` },
+    { name: 'twitter:image:alt', content: pageTitle.value },
+    ...(pageDescription.value ? [{ property: 'twitter:description', content: pageDescription.value }] : []),
+  ],
+  link: [
+    {rel: 'canonical', href: canonicalUrl},
   ]
 })
 
@@ -755,7 +750,7 @@ const getCombination = async (senior = false) => {
 }
 
 // 添加购物车
-const addToCart = () => {
+const addToCart = (justAdd = true) => {
   const cartRow: IShopping.ShoppingCartsStorageRow = {
     productId: goodsDetail.value.id, // 商品ID
     techniqueId: goodsDetail.value.techniqueId, // 工艺编号
@@ -774,8 +769,17 @@ const addToCart = () => {
     isPriceStale: false
   }
   cartStore.addition(cartRow)
-  ElMessage.success('Add to cart success!')
-  $bus.emit('openCartWindow')
+  if (justAdd) {
+    ElMessage.success('Add to cart success!')
+    $bus.emit('openCartWindow')
+  }
+}
+
+// 立即购买
+const buyNow = () => {
+  addToCart(false)
+  router.push('/cart')
+
 }
 
 // 价格详情弹窗
@@ -794,16 +798,6 @@ const getRelatedRecommend = async () => {
     creatorId: goodsDetail.value.creator.id
   })
   relatedList.value = data
-}
-
-// 获取品牌推荐产品
-const brandRecList = ref<General.GoodsItem[]>([])
-const getBrandRecommend = async () => {
-  const {data} = await getBrandRecommendApi({
-    brandId: goodsDetail.value.brand.id,
-    productId: goodsDetail.value.id,
-  })
-  brandRecList.value = data
 }
 
 // 选择背景墙颜色
@@ -840,16 +834,8 @@ const productThumbs = debounce(async () => {
 // 点击艺术家
 const handleClickArtist = () => {
   router.push({
-    path: PRODUCT_URL,
+    path: COLLECTIONS_URL,
     query: {q: packQuery(gen_path_obj(goodsDetail.value.creator, 'ARTIST', ['name']))}
-  })
-}
-
-// 点击品牌
-const handleClickBrand = () => {
-  router.push({
-    path: PRODUCT_URL,
-    query: {q: packQuery(gen_path_obj(goodsDetail.value.brand, 'BRAND', ['name']))}
   })
 }
 
@@ -869,11 +855,64 @@ const handleCommentRequestSuccess = () => {
   hasComment.value = commentTotal.value > 0
 }
 
-const toggleImageViewer = () => {
+// 查看图片预览
+const urlList = ref<string[]>([])
+const urlListIndex = ref<number>(0)
+const toggleImageViewer = (type?: 'all' | 'core', index?: number) => {
+  if (type === 'all') {
+    // 在“打开”预览动作发生前，重置 urlListIndex
+    if (!imgViewVisible.value) {
+      // 如果显式传入了 index 就用传入的，否则默认读取 swiper 当前真实的索引
+      urlListIndex.value = index ?? (mainSwiperInstance.value?.activeIndex || 0)
+    }
+    urlList.value = [generatorImg.value, ...(banners.value.map(i => imagePrefix(i)))]
+  } else if (type === 'core') {
+    urlList.value = [generatorImg.value]
+    urlListIndex.value = 0 // 只有画芯的情况下只展示第0张
+  }
   toggleWidget(imgViewVisible.value)
   imgViewVisible.value = !imgViewVisible.value
 }
 
+const handleSwitch = (index: number) => {
+  urlListIndex.value = index
+}
+
+const onSlideChange = (swiper: SwiperClass) => {
+  urlListIndex.value = swiper.activeIndex
+}
+
+const mainSwiperInstance = ref<SwiperClass | null>(null)
+const onSwiper = (swiper: SwiperClass) => {
+  mainSwiperInstance.value = swiper
+}
+
+const slideTo = (index: number) => {
+  if (urlListIndex.value === index) return
+  mainSwiperInstance.value.slideTo(index)
+}
+
+/**
+ * @param handle 需要执行的函数
+ * @param args 需要传给 handle 的参数（支持多个）
+ */
+const back2First = <T extends (...args: any[]) => any>(
+    handle: T,
+    ...args: Parameters<T>
+): ReturnType<T> => {
+
+  // 1. 立即执行原函数并传入参数
+  const result = handle(...args);
+
+  // 2. 触发副作用
+  nextTick(() => {
+    slideTo(0);
+  });
+
+  return result;
+};
+
+// 切换显示客服组件
 const toggleWidget = (flag: boolean) => {
   if (import.meta.env.MODE !== 'production') return
   if (flag) {
@@ -883,30 +922,18 @@ const toggleWidget = (flag: boolean) => {
   }
 }
 
-const appPreviewRef = ref<HTMLElement>()
-const appSticky = ref(true)
 const openTour = ref(false)
 const beginGuide = async () => {
-  let top = 0
-  if (appStore.isPc) {
-    await appStore.forceFoldHeader() // 锁定并折叠，等待动画
-  } else {
-    top = appPreviewRef.value.offsetHeight
-    appSticky.value = false
-  }
+  await appStore.forceFoldHeader() // 锁定并折叠，等待动画
   window.scrollTo({
-    top: top,
+    top: 0,
     behavior: "instant",
   })
   openTour.value = true
   toggleWidget(false)
 }
 const handleTouchClose = () => {
-  if (appStore.isPc) {
-    appStore.cancelForceFoldHeader() // 引导结束，恢复自动控制
-  } else {
-    appSticky.value = true
-  }
+  appStore.cancelForceFoldHeader() // 引导结束，恢复自动控制
   window.scrollTo({
     top: 0,
     behavior: "instant",
@@ -921,7 +948,7 @@ const createStep = (condition: boolean, target: any, title: string, description:
 }
 const tourSteps = computed(() => {
   const steps = [
-    createStep(true, appStore.isPc ? '#tour-step-preview-pc' : '#tour-step-preview-app', 'Preview Artwork', 'Get a first look at your core image to ensure it’s exactly how you envision before customizing the details.'),
+    createStep(true, '#tour-step-preview', 'Preview Artwork', 'Get a first look at your core image to ensure it’s exactly how you envision before customizing the details.'),
     createStep(specsCombination.value.length > 1, '#tour-step-craft', 'Choose Craftsmanship', 'Select the material and texture that best suits your style.'),
     createStep(true, '#tour-step-size', 'Choose Size', 'Pick the perfect dimensions to fit your space.'),
     createStep(true, '#tour-step-frame', 'Choose Frame', 'Complete the look with one of our premium frames.'),
@@ -960,47 +987,177 @@ const imageGeneratorProps = computed(() => {
     ]
   }
 })
+
+// 显示移动端底部预览
+const isShowFooterPreview = ref(false)
+const spuPreviewRef = ref<HTMLElement | null>(null)
+const monitorPreview = () => {
+  if (!spuPreviewRef.value) return
+  // 获取 spuPreviewRef 元素相对于视口的位置信息
+  const rect = spuPreviewRef.value.getBoundingClientRect()
+
+  // 当元素的 bottom 小于等于 0 时，说明该元素已经完全滚出视口上方
+  // 如果你希望“滚动超过元素自身高度的一半”就开始显示，可以改为：rect.top < -(rect.height / 2)
+  // 如果你希望“滚动超过元素自身高度”就开始显示，可以改为：rect.bottom <= 0
+  if (rect.top < -(rect.height / 2)) {
+    isShowFooterPreview.value = true
+  } else {
+    isShowFooterPreview.value = false
+  }
+}
+
+const tools = [
+  { name: 'guide', label: 'Guide', icon: 'icon-help', handler: () => beginGuide() },
+  { name: 'preview', label: 'Preview', icon: 'icon-quanping', handler: () => toggleImageViewer('all') },
+  { name: 'wallColor', label: 'WallColor', icon: 'icon-user-defined', handler: () => openWallColor() },
+  { name: 'room', label: 'Room', icon: 'icon-pictures', handler: () => openRoom() },
+]
+
+const banners = computed(() => {
+  const tailImage = ['/static/artdafen/brand-advantages.webp', '/static/artdafen/framing-options.webp']
+  const imgs = goodsDetail.value?.banners ?? []
+  return [...imgs, ...tailImage]
+})
 </script>
 
 <style scoped lang="scss">
+  .footer-preview {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: var(--color-primary);
+    color: #fff;
+    padding: 8px;
 
-  /*移动端视图*/
-  .app-preview {
-    display: flex;
-    flex-direction: column;
-    position: sticky;
-    top: 50px;
-    background: #fff;
-    z-index: 119;
-
-    .btn {
-      width: 100%;
-      height: 37px;
-      background: var(--color-primary);
-      color: #fff;
-      text-align: center;
-      line-height: 37px;
+    .footer-preview-img {
+      padding: 3px;
+      width: 54px;
+      height: 54px;
+      background: var(--color-bg-primary);
     }
-  }
 
-  .spu-wrapper {
-    row-gap: var(--gutter-base);
+    .footer-preview-text {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+    }
 
-    .spu-preview {
-      position: sticky;
-      top: 150px;
+    .footer-preview-right {
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      background: var(--color-bg-primary);
+      color: var(--color-text-primary);
+      border-radius: 50%;
 
-      .preview-box {
-        position: relative;
-        width: 100%;
-        height: 26vw;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .iconfont {
+        font-size: 20px;
       }
     }
 
+  }
+
+  /* 进场和离场过程中的动画过渡属性 */
+  .slide-up-enter-active,
+  .slide-up-leave-active {
+    transition: all 0.3s ease-out; /* 0.3秒的平滑过渡 */
+  }
+
+  /* 进场的初始状态 和 离场的最终状态 */
+  .slide-up-enter-from,
+  .slide-up-leave-to {
+    transform: translateY(100%); /* 移动到自身高度的下方 (屏幕外部) */
+    opacity: 0; /* 如果你想要透明度渐变也可以加上，不需要可以删掉 */
+  }
+
+  .spu-wrapper {
+    --gutter: var(--gutter-md);
+
+    .spu-preview {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--gutter-base);
+
+      .thumb-swiper-wrapper {
+        width: 64px;
+        flex-shrink: 0;
+        flex-wrap: unset;
+
+        .thumb-swiper {
+          width: 100%;
+          height: 100%;
+          padding-bottom: 20px;
+
+          .swiper-slide {
+            position: relative;
+
+            &::after {
+              content: '';
+              width: 100%;
+              height: 2px;
+              background: transparent;
+              position: absolute;
+              left: 0;
+              bottom: -10px;
+              transition: background-color 0.38s ease;
+            }
+
+            &.swiper-slide-thumb-active {
+              &::after {
+                background: var(--color-primary);
+              }
+            }
+
+          }
+        }
+
+      }
+
+      .main-swiper-wrapper {
+        position: relative;
+        width: 86.48%;
+        aspect-ratio: 1 / 1;
+
+        .main-swiper {
+          width: 100%;
+          height: 100%;
+
+          :deep(.swiper-button-prev),
+          :deep(.swiper-button-next) {
+            width: 50%;
+            top: 0;
+            height: 100%;
+            margin-top: 0;
+
+            &::after {
+              content: '';
+            }
+          }
+
+          :deep(.swiper-button-prev) {
+            left: 0;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='48' height='48'%3E%3Ccircle cx='512' cy='512' r='512' fill='%23FFFFFF'/%3E%3Cpath transform='translate(256,256) scale(0.5)' d='M623.5 718.5c14.1 14.1 14.1 36.9 0 50.9-7 7-16.2 10.5-25.5 10.5s-18.4-3.5-25.5-10.5L340.6 537.5c-14.1-14.1-14.1-36.9 0-50.9l232-232c14.1-14.1 36.9-14.1 50.9 0 14.1 14.1 14.1 36.9 0 50.9L416.9 512l206.6 206.5z' fill='%23333333'/%3E%3C/svg%3E") 16 16, pointer;
+          }
+
+          :deep(.swiper-button-next) {
+            right: 0;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' width='48' height='48'%3E%3Ccircle cx='512' cy='512' r='512' fill='%23FFFFFF'/%3E%3Cpath transform='translate(256,256) scale(0.5)' d='M400.5 305.5c-14.1-14.1-14.1-36.9 0-50.9 14.1-14.1 36.9-14.1 50.9 0l232 231.9c14.1 14.1 14.1 36.9 0 50.9l-231.9 232c-7 7-16.2 10.5-25.5 10.5s-18.4-3.5-25.5-10.5c-14.1-14.1-14.1-36.9 0-50.9L607.1 512z' fill='%23333333'/%3E%3C/svg%3E") 16 16, pointer;
+          }
+        }
+
+      }
+
+    }
+
     .spu-spec {
+      .price-wrapper {
+        background: #fff;
+        position: sticky;
+        z-index: 10;
+      }
     }
   }
 
@@ -1046,34 +1203,6 @@ const imageGeneratorProps = computed(() => {
       &.swiper-button-next {
         right: 40%;
       }
-    }
-  }
-
-  .brand-topic {
-    position: relative;
-
-    .brand-topic-caption {
-      position: absolute;
-      z-index: 1;
-      left: 60px;
-      top: 60px;
-    }
-
-    .caption-btn {
-      position: absolute;
-      z-index: 2;
-      border: var(--border-width-sm) solid #fff;
-      color: #fff;
-      cursor: pointer;
-      left: 60px;
-      bottom: 60px;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
     }
   }
 
@@ -1205,42 +1334,44 @@ const imageGeneratorProps = computed(() => {
       .process-item {
         .iconfont {
           color: #b18147;
-          font-size: clamp(50px, 5vw, 100px);
+          font-size: clamp(50px, 5vw, 75px);
         }
       }
     }
   }
 
-  .functional-area {
-    position: fixed;
-    z-index: 120;
-    top: 100px;
-    right: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 5px;
-    border-radius: 100px;
-    background: var(--color-gray-700);
-    color: var(--color-gray-400);
-    gap: 10px;
-    user-select: none;
-    touch-action: none;
-
-    .iconfont {
-      font-size: 20px;
-    }
-
-    .split {
-      width: 10px;
-      height: 1px;
-      background: var(--color-gray-300);
-      transform: scaleY(0.5);
-      transform-origin: center; /* 确保缩放后仍然居中 */
-    }
-  }
-
   @media (max-width: 1260px) {
+    .spu-wrapper {
+      .spu-preview {
+
+        flex-direction: column;
+
+        .thumb-swiper-wrapper {
+          order: 2;
+          width: 100%;
+          margin-bottom: 15px;
+
+          .thumb-swiper {
+            box-sizing: content-box;
+            padding-bottom: 10px;
+
+            .swiper-slide {
+              width: 64px;
+
+              &::after {
+                height: 2px;
+                left: 0;
+                bottom: -6px;
+              }
+            }
+          }
+        }
+
+        .main-swiper-wrapper {
+          width: 100%;
+        }
+      }
+    }
 
     .recommend-swiper {
 
@@ -1271,18 +1402,6 @@ const imageGeneratorProps = computed(() => {
       }
     }
 
-    .brand-topic {
-      .brand-topic-caption {
-        left: 30px;
-        top: 30px;
-      }
-
-      .caption-btn {
-        left: 30px;
-        bottom: 30px;
-      }
-    }
-
     .reviews-list {
       column-count: 3; /* 列数 */
       column-gap: 20px; /* 列间距 */
@@ -1295,6 +1414,25 @@ const imageGeneratorProps = computed(() => {
   }
 
   @media (max-width: 991px) {
+    .spu-wrapper {
+      --gutter: var(--gutter-base);
+
+      .spu-preview .main-swiper-wrapper .tools-wrapper {
+        right: 10px;
+        bottom: 10px;
+
+        .tools-item {
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+
+          .iconfont {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
     .reviews-list {
       column-count: 2; /* 列数 */
       column-gap: 15px; /* 列间距 */
@@ -1379,18 +1517,6 @@ const imageGeneratorProps = computed(() => {
   }
 
   @media (max-width: 414px) {
-    .brand-topic {
-      .brand-topic-caption {
-        left: 20px;
-        top: 20px;
-      }
-
-      .caption-btn {
-        left: 20px;
-        bottom: 20px;
-      }
-    }
-
     .sec-desc {
       .img-box {
 
@@ -1398,6 +1524,29 @@ const imageGeneratorProps = computed(() => {
           height: 300px;
         }
       }
+    }
+  }
+</style>
+
+<style>
+  .custom-progress {
+    font-size: 16px;
+    user-select: none;
+    white-space: nowrap
+  }
+
+  .el-image-viewer__mask {
+    background-color: #fff !important;
+    opacity: 1;
+  }
+  @media (max-width: 768px) {
+    .el-image-viewer__wrapper .el-image-viewer__prev,
+    .el-image-viewer__wrapper .el-image-viewer__next {
+      display: none !important;
+    }
+
+    .custom-progress {
+      font-size: 14px;
     }
   }
 </style>

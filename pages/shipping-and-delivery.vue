@@ -110,7 +110,9 @@
         Where do your artworks ship from?
       </h2>
       <p class="f-bold">
-        To ensure direct-from-studio value and prevent any intermediary delays, all artworks are securely packaged and shipped directly from our master studio in Dafen, Shenzhen, China.
+        We believe in complete transparency and direct-to-collector value. To eliminate intermediary delays, every piece is securely packaged and dispatched directly from our own master studio:
+        <br>
+        ArtDafen Studio {{ STUDIO_ADDRESS }}
       </p>
       <h2 class="text-18 f-bold my-15">
         Who takes care of the delivery?
@@ -160,6 +162,8 @@
 </template>
 
 <script setup lang="ts">
+import {STUDIO_ADDRESS} from "~/config";
+
 defineOptions({
   name: 'ShippingAndDelivery'
 })

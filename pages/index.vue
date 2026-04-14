@@ -134,7 +134,7 @@
             </div>
           </div>
           <NuxtLink
-              :to="`${PRODUCT_URL}?q=q1ZKVLJSMjQAAkMDJR2lJCCvOkapILEoNa_EMyVGySpGycjAwASoIkZJJ0YpEyJkDOQbGhjFKNUC9SQD9RiDTTBSqgUA`"
+              :to="COLLECTIONS_URL"
               class="block mt-25">
             <el-button type="primary" size="large" class="w-full">
               VIEW AVAILABLE WORKS
@@ -445,7 +445,7 @@
         </div>
       </el-skeleton>
       <div class="acea-row row-center-wrapper py-lg-40 py-30" v-aos="'fade-up'">
-        <NuxtLink :to="BEST_URL + '?q=' + packQuery({MENU_ID: '1000001'})">
+        <NuxtLink :to="COLLECTIONS_URL + '/curator\'s-choice' + '?q=' + packQuery({MENU_ID: '2000014'})">
           <el-button class="home-button" plain>SEE MORE</el-button>
         </NuxtLink>
       </div>
@@ -665,7 +665,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import {useAppStore} from "~/stores/modules/app";
 import {jumpToUrl, productLink, youtubeProxyPrefix} from "~/utils";
-import {BEST_URL, PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IArtists} from "~/api/interface/artists/artists";
@@ -716,7 +716,7 @@ useHead(resolvePageMeta("/"));
 
 // 点击艺术家
 const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
-  return PRODUCT_URL + '?q=' + packQuery(gen_path_obj(creator, 'ARTIST', ['name']))
+  return COLLECTIONS_URL + '?q=' + packQuery(gen_path_obj(creator, 'ARTIST', ['name']))
 }
 
 // 获取首页数据
@@ -733,11 +733,6 @@ const disVibeData = computed(() => (homeData.value?.ad ?? []).filter(i => i.tags
 const officialData = computed(() => (homeData.value?.ad ?? []).filter(i => i.tags === 'index:official'))
 const exploreData = computed(() => (homeData.value?.product ?? [])) // Top 100 作品
 const artistsData = computed(() => (homeData.value?.artists ?? [])) // Top 50 艺术家
-
-// 查看更多Top100
-const handleSeeMoreBest = () => {
-  return BEST_URL + '?q=' + packQuery({MENU_ID: '1000001'})
-}
 
 // 消息订阅
 const handleSubscribe = async () => {

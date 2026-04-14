@@ -60,6 +60,7 @@ import {emailReg} from "~/regular";
 import {HOME_URL, STORAGE_BACK_URL} from "~/config";
 import { useGoogleAuth } from "~/composables/useGoogleAuth";
 import {isoDurationToSecondsStrict} from "~/utils/isoDurationToSeconds";
+import {resolvePageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 
 defineOptions({
   name: 'Login'
@@ -174,11 +175,15 @@ const toGoogleAuth = () => {
   $google.oAuth()
 }
 
-useHead({
-  meta: [
-    {name: 'robots', content: 'noindex, follow'},
-  ]
-})
+
+useHead(mergeHeadWithLodash(
+    resolvePageMeta("/login"),
+    {
+      meta: [
+        {name: 'robots', content: 'noindex, follow'},
+      ]
+    }
+))
 </script>
 
 <style scoped lang="scss">

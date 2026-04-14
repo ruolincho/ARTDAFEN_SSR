@@ -1,11 +1,13 @@
-import { watch, onUnmounted, isRef, type Ref } from 'vue'
+import { watch, onUnmounted, isRef, type Ref, type ComputedRef } from 'vue'
+
+type LockTarget = Ref<boolean> | ComputedRef<boolean>;
 
 /**
  * 用于锁定滚动
  * @param args
  * @example useLockScroll(xxx,xxx)、useLockScroll([xxx,xxx])
  */
-export function useLockScroll(...args: (Ref<boolean> | Ref<boolean>[])[]) {
+export function useLockScroll(...args: (LockTarget | LockTarget[])[]) {
     let isLocked = false
     let touchStartX = 0
     let touchStartY = 0

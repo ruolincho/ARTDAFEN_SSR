@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import {getArtistsListBySearchApi} from "~/api/modules/artists/artists";
 import type {IArtists} from "~/api/interface/artists/artists";
-import {PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {gen_path_obj} from "~/utils/product";
 import {mergeHeadWithLodash, resolvePageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
@@ -71,7 +71,7 @@ useHead(mergeHeadWithLodash(
     resolvePageMeta("/artists-all", route.params.id as string),
     {
       link: [
-        {rel: 'canonical', href: `${origin}/artists-all/${route.params.id}`},
+        {rel: 'canonical', href: `${origin}${route.path}`},
       ]
     }
 ))
@@ -105,7 +105,7 @@ const seeAll = (letter: string) => {
 // 点击艺术家
 const handleClickArtist = (artist: IArtists.Row) => {
   router.push({
-    path: PRODUCT_URL,
+    path: COLLECTIONS_URL,
     query: {q: packQuery(gen_path_obj(artist, 'ARTIST', ['name']))}
   })
 }

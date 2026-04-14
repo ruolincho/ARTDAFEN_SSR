@@ -15,20 +15,21 @@ export type QueryParams = {
     SEARCH_TYPE?: string
     START_PRICE?: string
     END_PRICE?: string
-    PRICE_SORT?: string
-    SALES_SORT?: string
+    SORT?: string
     PAGE?: string
+    SHAPE?: string
 }
 
 // 将原有的key映射到新的key
 const KMAP: Record<string, string> = {
     MENU_ID: 'a',
-    TECHNIQUE: 'c',
     MUTEX: 'b',
+    TECHNIQUE: 'c',
     CHECKBOX: 'd',
     COLOR: 'e',
     PRICE: 'f',
     ARTIST: 'g',
+    SHAPE: 'h',
     GROUP: 'k',
     RADIO: 'l',
     BRAND: 'm',
@@ -36,8 +37,7 @@ const KMAP: Record<string, string> = {
     SEARCH_TYPE: 'o',
     START_PRICE: 'p',
     END_PRICE: 'q',
-    PRICE_SORT: 'r',
-    SALES_SORT: 's',
+    SORT: 's',
     PAGE: 't',
 /*------------------------------------------------------------------------------------------------*/
     parentId: 'x',
@@ -51,7 +51,7 @@ const RMAP = Object.fromEntries(Object.entries(KMAP).map(([k, v]) => [v, k]));
 // 对象数组 → 元组数组
 const TUPLE_ARRAY_KEYS = new Set(['d', 'e', 'k', 'l']);   // CHECKBOX, COLOR, GROUP, RADIO
 // 单个对象 → 单元组
-const TUPLE_OBJECT_KEYS = new Set(['b', 'f', 'g', 'm', 'r', 's']); // MUTEX, PRICE, ARTIST, BRAND, PRICE_SORT, SALES_SORT
+const TUPLE_OBJECT_KEYS = new Set(['b', 'f', 'g', 'm', 's', 'h']); // MUTEX, PRICE, ARTIST, BRAND, SORT, SHAPE
 
 // 压缩键名
 function shrinkKeys(obj: any): any {

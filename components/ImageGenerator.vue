@@ -10,13 +10,13 @@
         :class="['image-container', { 'inner-frame': innerFrame }]"
         v-else-if="!isLoading && !isError"
     >
-      <img :src="imageSrc" alt="image generator" ref="imgRef" @load="onImgLoad" :style="shapeImgStyle[shape]"/>
+      <img :src="imageSrc" alt="image generator" ref="imgRef" @load="onImgLoad"/>
       <!-- 扫光 -->
       <div class="touch-container" :style="{ width: imgRefWidth + 'px', height: imgRefHeight + 'px' }"  v-show="hasMat">
         <div class="scan-light" :style="{ width: wRatio + '%', height: hRatio + '%' }"></div>
       </div>
       <!-- 点击区域 -->
-      <div class="touch-container touch-container-click" :style="{ width: imgRefWidth + 'px', height: imgRefHeight + 'px' }" @click="handleScreenClick" />
+      <div class="touch-container" :class="{ 'touch-container-click': hasTouchListener }" :style="{ width: imgRefWidth + 'px', height: imgRefHeight + 'px' }" @click="handleScreenClick" />
     </div>
     <!-- 错误信息 -->
     <p v-else>Image generation error, please refresh the page and try again.</p>
@@ -649,17 +649,16 @@ const shapeWidthMap = {
   'slim': 0.4,
 }
 
-const shapeImgStyle = {
-  'square': { height: '100%' },
-  'slim': { height: '100%' },
-  'portrait': { height: '100%' },
-  'landscape': { height: '100%' },
-  'panoramic': { width: '100%' },
-}
-
 const handleScreenClick = () => {
   emit('touchScreen', squareImageSrc.value);
 }
+
+// 获取当前组件实例
+const instance = getCurrentInstance()
+// 判断父组件是否传递了 @touchScreen (底层会编译为 onTouchScreen)
+const hasTouchListener = computed(() => {
+  return !!instance?.vnode.props?.onTouchScreen;
+})
 
 watch(
     () => ({

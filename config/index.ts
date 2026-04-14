@@ -7,9 +7,7 @@ export const FORGET_PASSWORD_URL: string = '/forget-password';
 // 首页地址（默认）
 export const HOME_URL: string = '/';
 // 产品检索地址
-export const PRODUCT_URL: string = '/product';
-// Top100检索地址
-export const BEST_URL: string = '/best';
+export const COLLECTIONS_URL: string = '/collections';
 // 客服国际区号
 export const COUNTRY_CODE: string = '+86';
 // 客服电话
@@ -44,5 +42,7 @@ export const APP_HAS_SEEN_PAINT_GUIDE: string = 'app_has_seen_paint_guide'
 export const APP_HAS_SEEN_CUSTOM_GUIDE: string = 'app_has_seen_custom_guide'
 // 新闻和博客的分页大小
 export const MEDIA_SIZE: number = 12
-// 专区的分页大小
-export const ZONE_SIZE: number = 50
+// 专区详情中的商品分页大小
+export const ZONE_DETAIL_SIZE: number = 50
+// 专区列表分页大小
+export const ZONE_LIST_SIZE: number = 8

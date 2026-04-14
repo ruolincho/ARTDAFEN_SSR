@@ -112,6 +112,10 @@ declare namespace General {
         labels: Dict.AttributeAndLabelsType
         /*图片, 封面*/
         img: string
+        /*图片, 场景图*/
+        sceneImg?: string
+        /*图片, 带框图*/
+        framedImg?: string
         /*图片, 透明封面*/
         cover?: string
         /*起始价*/

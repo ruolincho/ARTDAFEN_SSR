@@ -9,13 +9,25 @@ export const useCurrencyStore = defineStore(
     'currency',
     () => {
 
+        const symbols: Record<string, string> = {
+            "CHF": "CHF", "MXN": "$", "CLP": "$", "ZAR": "R", "THB": "฿",
+            "AUD": "$", "ILS": "₪", "JPY": "¥", "PLN": "zł", "GBP": "£",
+            "HUF": "Ft", "PHP": "₱", "RUB": "₽", "TWD": "NT$", "HKD": "$",
+            "EUR": "€", "DKK": "kr", "CAD": "$", "USD": "$", "NOK": "kr",
+            "SGD": "$", "CZK": "Kč", "SEK": "kr", "NZD": "$", "ANG": "ƒ",
+            "BRL": "R$", "KRW": "₩"
+        }
+
         const currentCurrency = ref<string>('USD')
 
         const currencyList = ref<IHome.CurrencyRow[]>()
 
         const getCurrency = async () => {
             const {data} = await getCurrencyApi()
-            currencyList.value = data.filter((item) => item.code !== currentCurrency.value)
+            currencyList.value = data.map(item => ({
+                ...item,
+                symbol: symbols[item.code] || ''
+            }));
         }
 
         const setCurrentCurrency = async (currency: string) => {

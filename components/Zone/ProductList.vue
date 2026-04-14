@@ -1,6 +1,11 @@
 <template>
   <section class="sec-main">
-    <DataState :loading="pending" :is-empty="pageData.total === 0 && !pending">
+    <DataState
+        :loading="pending"
+        :is-empty="pageData.records.length === 0"
+        :error="error"
+        :retry="refresh"
+    >
       <div class="row product-list gap-row-base">
         <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="item in pageData.records" :key="item.id">
           <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="updateArtist!"/>
@@ -24,22 +29,24 @@ import LoginWindow from "~/components/LoginWindow.vue";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import type {General} from "~/types/global";
 import {type SeoOptions, useSeoPaginationLogic} from "~/composables/useSeoPaginationLogic";
-import {ZONE_SIZE} from "~/config";
+import {ZONE_DETAIL_SIZE} from "~/config";
 
 const userStore = useUserStore()
 
 const parentFilterParams = inject<ComputedRef<IProduct.ZoneCollectQuery>>('zoneFilterParams');
 const baseRoute = inject<ComputedRef<string>>('baseRoute');
 const seoInfo = inject<ComputedRef<SeoOptions>>('seoInfo');
+const executeScroll = inject<() => void>('executeScroll');
 
-const {pageData, currentPage, totalPages, pending, refresh} = await useSeoPaginationLogic<General.GoodsItem[], IProduct.ZoneCollectQuery>(
+const {pageData, currentPage, totalPages, pending, refresh, error} = await useSeoPaginationLogic<General.GoodsItem[], IProduct.ZoneCollectQuery>(
      {
       apiPath: `${TRADE_MODULE}/product/zone/collect`,
       baseRoute: baseRoute!.value,
       uniqueKey: 'zone-detail-collect',
-      pageSize: ZONE_SIZE,
+      pageSize: ZONE_DETAIL_SIZE,
       filterParams: () => toValue(parentFilterParams!),
       seo: () => toValue(seoInfo!),
+      callBack: executeScroll
     },
 )
 

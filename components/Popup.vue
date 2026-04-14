@@ -117,7 +117,7 @@ useLockScroll(toRef(props, 'modelValue'))
 
   .popup-content {
     width: 100%;
-    height: 75vh;
+    height: 85vh;
     background: white;
     border-radius: 16px 16px 0 0;
     padding: 8px 20px;

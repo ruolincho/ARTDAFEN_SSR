@@ -82,6 +82,11 @@ onMounted(() => {
   if (route.params.id) getOrderDetail()
 })
 
+useSeoMeta({
+  title: 'Order Details | ARTDAFEN',
+  robots: 'noindex, nocache, noarchive, nofollow'
+})
+
 const { imagePrefix } = useImage()
 const route = useRoute()
 const { formatToCurrency } = useCurrencyStore();

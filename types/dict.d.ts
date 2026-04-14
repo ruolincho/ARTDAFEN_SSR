@@ -60,7 +60,7 @@ declare namespace Dict {
     /*属性以及标签的类型*/
     type AttributeAndLabelsType = string | Record<string, any> | Array<any>
     /*分类类型*/
-    type CategoryType = 'BEST' | 'LIST' | 'CUSTOM' | 'GROUP' | 'PRICE' | 'COLOR' | 'RADIO' | 'CHECKBOX' | 'ARTIST' | 'MUTEX' | 'SORT'
+    type CategoryType = 'BEST' | 'LIST' | 'CUSTOM' | 'GROUP' | 'PRICE' | 'COLOR' | 'RADIO' | 'CHECKBOX' | 'ARTIST' | 'MUTEX' | 'SORT' | 'LINK'
     /* 跳转类型 0: 图片, 1: 视频 */
     type AdType = '0' | '1'
     /* 形状 square: 广场 1:1, portrait: 肖像 3:4, landscape: 景观 4:3, panoramic: 全景 16:9, slim: 苗条 16:10 */

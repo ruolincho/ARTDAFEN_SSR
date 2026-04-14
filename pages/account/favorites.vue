@@ -30,7 +30,7 @@
             <span class="iconfont icon-empty text-50"></span>
             <p class="text-20 f-bold mt-20">No Favorites Found</p>
             <p class="text-14 my-20">You have not collected any products yet.</p>
-            <el-button size="large" type="primary" @click="router.push(PRODUCT_URL)">START SHOPPING</el-button>
+            <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">START SHOPPING</el-button>
           </div>
         </template>
       </ProList>
@@ -45,9 +45,10 @@ import type {IPageQuery} from "~/api/interface";
 import {jumpToProduct} from "~/utils";
 import {useHandleData} from "~/composables/useHandleData";
 import {productThumbsApi} from "~/api/modules/likes/likes";
-import {PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useImage} from "~/composables/useImage";
+import {resolvePageMeta} from "~/config/pageMeta";
 
 defineOptions({
   name: 'Favorites'
@@ -57,9 +58,7 @@ definePageMeta({
   auth: true
 })
 
-useSeoMeta({
-  robots: 'noindex, nofollow'
-})
+useHead(resolvePageMeta("/favorites"));
 
 const { imagePrefix } = useImage()
 const router = useRouter()

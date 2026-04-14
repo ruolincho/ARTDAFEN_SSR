@@ -124,3 +124,11 @@ export const getProductAlbumApi = (id: string) => {
 export const getZoneExploreApi = (zoneId: string) => {
     return $http().get<IProduct.ZoneRow[]>(TRADE_MODULE + `/product/zone/explore/${zoneId}`)
 }
+
+/**
+ * 专区Topic
+ * @returns {*}
+ */
+export const getZoneTopicApi = () => {
+    return $http().get<IProduct.ZoneRow[]>(TRADE_MODULE + `/product/zone/topic`)
+}

@@ -1,8 +1,9 @@
 <template>
   <div class="product-item">
     <div class="relative aspect-ratio">
-      <NuxtLink class="img-wrapper bg-gray-100 w-full h-full block" :to="productLink(item)">
-        <img v-lazy="imagePrefix(item.img)" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
+      <NuxtLink class="img-wrapper bg-gray-100 w-full h-full block" :class="{ 'hover-enabled': !!item.sceneImg }" :to="productLink(item)">
+        <img class="img-default" v-lazy="imagePrefix(item.framedImg || item.img)" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
+        <img class="img-hover" v-lazy="imagePrefix(item.sceneImg)" v-if="item.sceneImg" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
       </NuxtLink>
       <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === TechniqueCodeEnum.Originals">
         <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
@@ -88,6 +89,24 @@ const handleClickArtist = () => {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        transition: opacity 0.38s ease-in-out;
+      }
+
+      .img-default {
+        opacity: 1;
+      }
+
+      .img-hover {
+        opacity: 0;
+      }
+
+      &.hover-enabled:hover {
+        .img-hover {
+          opacity: 1;
+        }
+        .img-default {
+          opacity: 0;
+        }
       }
     }
 

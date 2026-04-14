@@ -1,12 +1,10 @@
 <template>
-  <div class="craft-selector-wrapper">
-    <div class="acea-row row-between-wrapper m-md-20 m-15">
-      <div class="acea-row row-middle flex-1 mr-10">
-        <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-        <span class="text-26">Choose a Craft</span>
-      </div>
-    </div>
-    <div class="m-md-20 m-15" :id="tourId">
+  <div class="my-15">
+    <p class="acea-row row-middle mb-15">
+      <span class="text-16">Artwork Style: {{ option?.craft }}</span>
+    </p>
+
+    <div :id="tourId">
       <div class="width-list row">
         <div
             class="col-6"
@@ -14,7 +12,7 @@
             :key="index"
         >
           <div
-              class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-xl-20 py-md-15 py-10"
+              class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-md-15 py-10"
               :class="{ 'border-gray-700': modelValue === item[valueKey] }"
               @click="handleClick(item)"
           >
@@ -31,6 +29,7 @@
 interface Props {
   modelValue: string | number | boolean
   options: Array<Record<string, any>>
+  option: Record<string, any>
   labelKey?: string
   valueKey?: string
   tourId?: string
@@ -38,6 +37,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   options: () => [],
+  option: () => {},
   labelKey: 'label',
   valueKey: 'value',
   tourId: 'tour-step-craft'

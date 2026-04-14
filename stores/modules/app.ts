@@ -2,6 +2,7 @@ import {defineStore} from 'pinia';
 import {computed, ref} from 'vue';
 import piniaPersistConfig from "../helper/persist";
 import type {DeviceType} from "../interface/app";
+import type {IHome} from "~/api/interface/home/home";
 
 export const useAppStore = defineStore(
     'app',
@@ -57,6 +58,12 @@ export const useAppStore = defineStore(
 
         const isPc = computed(() => device.value === 'pc')
 
+        const menuList = ref<IHome.MenuRow[]>([])
+
+        const setMenuList = (menu: IHome.MenuRow[]) => {
+            menuList.value = menu
+        }
+
         // AppHeader组件逻辑：
         const headerState = reactive({
             height: 0, // 用来存储头部高度
@@ -109,7 +116,9 @@ export const useAppStore = defineStore(
             setHeaderHeight,
             setScrollFold,
             forceFoldHeader,
-            cancelForceFoldHeader
+            cancelForceFoldHeader,
+            menuList,
+            setMenuList
         };
     },
     {

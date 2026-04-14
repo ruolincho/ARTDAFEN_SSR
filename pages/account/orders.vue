@@ -86,7 +86,7 @@
           <span class="iconfont icon-empty text-50"></span>
           <p class="text-20 f-bold mt-20">No Orders Found</p>
           <p class="text-14 my-20">No data found, please check the query or try again later.</p>
-          <el-button size="large" type="primary" @click="router.push(PRODUCT_URL)">START SHOPPING</el-button>
+          <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">START SHOPPING</el-button>
         </div>
       </template>
     </ProList>
@@ -98,9 +98,10 @@ import {getOrderListApi} from "~/api/modules/physical/physical";
 import type {IPhysical} from "~/api/interface/physical/physical";
 import ProList from "~/components/ProList/index.vue";
 import {formatAttr} from "~/utils";
-import {PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useImage} from "~/composables/useImage";
+import {resolvePageMeta} from "~/config/pageMeta";
 
 defineOptions({
   name: 'Orders'
@@ -110,9 +111,7 @@ definePageMeta({
   auth: true
 })
 
-useSeoMeta({
-  robots: 'noindex, nofollow'
-})
+useHead(resolvePageMeta("/orders"));
 
 const { imagePrefix } = useImage()
 const { formatToCurrency } = useCurrencyStore();

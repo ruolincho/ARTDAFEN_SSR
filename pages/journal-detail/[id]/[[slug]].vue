@@ -68,6 +68,7 @@ import {productLink} from "~/utils";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useImage} from "~/composables/useImage";
 
+const origin = useRequestURL().origin
 const { imagePrefix } = useImage()
 const { formatToCurrency } = useCurrencyStore();
 const route = useRoute()
@@ -77,6 +78,47 @@ const {data: blogDetail} = await useAsyncData(() => `blog-detail-${route.params.
   const config = useRuntimeConfig()
   const {data} = await $fetch<IResultData<IBlog.Row>>(config.public.apiBase + TRADE_MODULE + '/blog/detail/' + route.params.id)
   return data
+})
+
+const canonicalUrl = `${origin}${route.path}`
+const pageDescription = computed(() => {
+  const { content } = blogDetail.value
+  if (!content) return ''
+  return content.length > 155 ? `${content.substring(0, 155).replace(/\n/g, ' ')}...` : content;
+})
+
+useHead({
+  title: `${blogDetail.value.title} | ARTDAFEN Journal`,
+  meta: [
+    {
+      name: 'description',
+      content: pageDescription.value
+    },
+    {  //关键词：从 labels 中提取并处理
+      name: 'keywords',
+      content: blogDetail.value.labels[0]?.replace(/#/g, '').split(' ').join(', ')
+    },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:title', content: blogDetail.value.title },
+    {
+      property: 'og:description',
+      content: pageDescription.value
+    },
+    { property: 'og:image', content: `${imagePrefix(blogDetail.value.img)}` },
+    { property: 'og:url', content: canonicalUrl },
+
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: blogDetail.value.title },
+    { name: 'twitter:description', content: pageDescription.value },
+    { name: 'twitter:image', content: `${imagePrefix(blogDetail.value.img)}` }
+  ],
+  // 规范链接（防止重复内容影响权重）
+  link: [
+    {
+      rel: 'canonical',
+      href: canonicalUrl
+    }
+  ]
 })
 
 </script>

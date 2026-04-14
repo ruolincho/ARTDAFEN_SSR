@@ -1,65 +1,44 @@
 <template>
-  <div class="acea-row row-between-wrapper m-md-20 m-15">
-    <div class="acea-row row-middle">
-      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-      <span class="text-26">Count of {{ themeName }}</span>
-      <span
-          class="text-20 ml-md-20 ml-10 cursor-pointer text-secondary f-bold acea-row row-center-wrapper"
-          @click="showInfo = !showInfo"
-      >
-        <span class="pc">{{ showInfo ? 'LESS INFO' : 'MORE INFO' }}</span>
-        <span class="iconfont icon-down" :class="{'rotate-180': showInfo}"></span>
-      </span>
-    </div>
-    <div class="text-20 f-bold"></div>
-  </div>
-  <div class="mx-20 text-16 info-box" v-show="showInfo">
-    <p class="p-15 bg-gray-200">
-      Please select the number of figures in your photo. Each person or pet/animal in a photo would be
-      counted
-      as one figure. Houses, cars, boats and travel scenery would each count as one figure.
+  <div class="my-15">
+    <p class="acea-row row-middle mb-15">
+      <span class="text-16">{{ themeName }} Count: {{ modelValue }}</span>
+      <span class="iconfont icon-info-fill text-20 ml-8 cursor-pointer" @click="openNotice"></span>
     </p>
-  </div>
 
-  <!-- Pc端复杂程度选择 -->
-  <div class="m-md-20 m-15" v-if="appStore.isPc">
-    <div class="width-list row" :id="tourId">
-      <div
-          class="col-xl-average col-md-3 col-xs-4 col-6"
-          v-for="(item, index) in maxNumber"
-          :key="index"
-      >
+    <div :id="tourId">
+      <!-- Pc端复杂程度选择 -->
+      <div class="size-picker" v-if="appStore.isPc">
         <div
-            class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-20"
-            :class="{'border-gray-700': modelValue === item}"
+            class="size-option cursor-pointer text-14"
+            :class="{ 'on': modelValue === item }"
+            v-for="(item, index) in maxNumber" :key="index"
             @click="handleChange(item)"
         >
-          <span>{{ item }}</span>
+          {{ item }}
         </div>
+      </div>
+      <!-- 移动端复杂程度选择 -->
+      <div class="acea-row row-between-wrapper gap-base" v-else>
+        <div class="flex-1">
+          <el-slider
+              :show-tooltip="false"
+              v-model="sliderValue"
+              :step="1"
+              :max="maxNumber"
+              :min="1"
+              show-stops
+          />
+        </div>
+        <div class="flex-auto f-bold">{{ sliderValue }}</div>
       </div>
     </div>
   </div>
-
-  <!-- 移动端复杂程度选择 -->
-  <div class="px-20 acea-row row-between-wrapper gap-base" :id="tourId" v-else>
-    <div class="flex-1">
-      <el-slider
-          :show-tooltip="false"
-          v-model="sliderValue"
-          :step="1"
-          :max="maxNumber"
-          :min="1"
-          show-stops
-      />
-    </div>
-    <div class="flex-auto f-bold">{{ sliderValue }}</div>
-  </div>
-
 </template>
 
 <script setup lang="ts">
 import {useAppStore} from "~/stores/modules/app";
 import {debounce} from "~/utils";
+import { ElMessageBox } from 'element-plus';
 
 interface Props {
   modelValue: number
@@ -79,7 +58,6 @@ const emit = defineEmits<{
 
 const appStore = useAppStore()
 
-const showInfo = ref(false)
 
 const handleChange = (num: number) => {
   if (props.modelValue === num) return
@@ -111,22 +89,35 @@ const sliderValue = computed({
   }
 })
 
+const openNotice = () => {
+  ElMessageBox({
+    title: 'Notice',
+    message: 'Please select the number of figures in your photo. Each person or pet/animal in a photo would be counted as one figure. Houses, cars, boats and travel scenery would each count as one figure.',
+  })
+}
 </script>
 
 <style scoped lang="scss">
-  .width-list {
-    --gutter: var(--gutter-base);
-    row-gap: var(--gutter);
+  .size-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 
-    .width-item {
-      width: 100%;
+    .size-option {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 36px;
+      padding: 0 12px;
+      border: var(--border-width-sm) solid var(--color-gray-300);
+
+      &.on,
+      &:hover {
+        border-color: var(--color-gray-700);
+        border-width: var(--border-width-md);
+      }
     }
   }
-
-  @media (max-width: 1260px) {
-    .width-list {
-      --gutter: var(--gutter-sm);
-    }
-  }
-
 </style>

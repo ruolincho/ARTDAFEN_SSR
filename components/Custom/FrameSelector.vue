@@ -1,29 +1,21 @@
 <template>
-  <div class="acea-row row-between-wrapper m-md-20 m-15">
-    <div class="acea-row row-middle flex-1 mr-10">
-      <span class="text-30 f-bold mr-md-20 mr-10 step-index"></span>
-      <span class="text-26">Choose a Frame</span>
-    </div>
-    <div class="text-20 f-bold">{{ formatToCurrency(price) }}</div>
-  </div>
-  <div class="m-md-20 m-15" :id="tourId">
-    <div class="frame-scroll border-sm p-10">
+  <div class="my-15">
+
+    <p class="acea-row row-middle mb-15">
+      <span class="text-16">Frame: {{ sizeOption?.name }}</span>
+    </p>
+
+    <div :id="tourId">
       <div class="frame-list">
         <div
-            v-for="item in options" :key="item.id"
-            class="frame-item text-14 bg-gray-100 p-5 cursor-pointer"
+            class="frame-option cursor-pointer overflow-hidden"
             :class="{ on: modelValue === item.id }"
+            v-for="item in options" :key="item.id"
             @click="handleChange(item)"
         >
-          <div class="frame-box">
-            <div class="frame-img aspect-ratio">
-              <img class="w-full h-full fit-cover" v-lazy="imagePrefix(item.img!)" :alt="item.name">
-            </div>
-            <p class="line2 mt-10 frame-name">{{ item.name }}</p>
-            <p class="f-bold-500 frame-money">
-              {{ formatToCurrency((Number(item.price) + Number(item.surcharge)) || 0) }}
-            </p>
-          </div>
+          <el-tooltip :content="item.name" placement="top" :hide-after="100">
+            <img class="w-full h-full fit-cover" v-lazy="imagePrefix(item.img!)" :alt="item.name">
+          </el-tooltip>
         </div>
       </div>
     </div>
@@ -35,7 +27,7 @@ import type {IPaint} from "~/api/interface/paint/paint";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useImage} from "~/composables/useImage";
 
-const { imagePrefix } = useImage()
+const {imagePrefix} = useImage()
 
 interface Props {
   modelValue: string;
@@ -64,72 +56,39 @@ const handleChange = (item: IPaint.CombinationParts) => {
 </script>
 
 <style scoped lang="scss">
-  .frame-scroll {
-    max-height: 427px;
-    overflow: auto;
+  .frame-list {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
 
-    .frame-list {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      grid-gap: 10px;
+    .frame-option {
+      width: 54px;
+      height: 54px;
+      border: var(--border-width-sm) solid var(--color-gray-300);
+      flex-shrink: 0;
 
-      .frame-item {
-        position: relative;
-        background: var(--color-gray-100);
-
-        .frame-box {
-          padding-bottom: 25px;
-
-          .frame-money {
-            position: absolute;
-            left: 5px;
-            bottom: 5px;
-          }
-        }
-
-        &.on {
-          background: var(--color-gray-700);
-          color: #fff;
-        }
+      img {
+        transition: transform 0.3s ease ;
       }
-    }
-  }
 
-  @media (max-width: 1460px) {
-    .frame-scroll {
-      .frame-list {
-        grid-template-columns: repeat(5, 1fr);
-        grid-gap: 5px;
-      }
-    }
-  }
+      &.on,
+      &:hover {
+        border-color: var(--color-gray-700);
+        border-width: var(--border-width-lg);
 
-  @media (max-width: 1260px) {
-    .frame-scroll {
-      max-height: 350px;
-
-      .frame-list {
-        grid-template-columns: repeat(4, 1fr);
+        img {
+          transform: scale(0.9);
+        }
       }
     }
   }
 
   @media (max-width: 768px) {
-    .frame-scroll {
-      max-height: unset;
-
-      .frame-list {
-        display: flex;
-        grid-template-columns: unset;
-        flex-wrap: nowrap;
-
-        .frame-item {
-          width: 65px;
-          flex-shrink: 0;
-        }
-
-      }
+    .frame-list {
+      width: 100%;
+      overflow-x: auto;
+      flex-wrap: nowrap;
     }
   }
-
 </style>

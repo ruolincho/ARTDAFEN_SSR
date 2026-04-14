@@ -10,7 +10,7 @@
           and emotion that our artists bring to life.
         </p>
       </div>
-      <DataState :loading="themeLoading" :is-empty="!themeLoading && caseContrastData.length === 0">
+      <DataState :loading="themeLoading" :is-empty="caseContrastData.length === 0">
         <div class="case-waterfall">
           <div class="item cursor-pointer overflow-hidden" v-for="(sample, index) in caseContrastData" :key="sample.id"
                @click="showCaseContrast(index)">
@@ -40,6 +40,7 @@ import {getSampleApi} from "~/api/modules/paint/paint";
 import {useImage} from "~/composables/useImage";
 import {ArtCodeEnum} from "~/types/enumeration";
 import FootBar from '~/components/Custom/FootBar.vue'
+import {mergeHeadWithLodash, resolvePageMeta} from "~/config/pageMeta";
 
 onMounted(() => {
   if (route.params.id) seeMoreSample()
@@ -49,6 +50,7 @@ const { imagePrefix } = useImage()
 const {$bus} = useNuxtApp()
 const route = useRoute()
 const router = useRouter()
+const origin = useRequestURL().origin
 
 // 获取喜欢的风格预览图
 const themeLoading = ref(false)
@@ -59,6 +61,15 @@ const seeMoreSample = async () => {
   caseContrastData.value = data
   themeLoading.value = false
 }
+
+useHead(mergeHeadWithLodash(
+    resolvePageMeta("/custom-case", route.params.slug as string),
+    {
+      link: [
+        {rel: 'canonical', href: `${origin}${route.path}`},
+      ]
+    }
+))
 
 const caseIndex = ref(-1)
 const isShowCaseContrast = ref(false)

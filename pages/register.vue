@@ -70,13 +70,10 @@ import {type ElForm} from "element-plus";
 import { useAuth } from "~/composables/useAuth";
 import {emailReg} from "~/regular";
 import VerificationCode from "~/components/VerificationCode.vue";
+import {mergeHeadWithLodash, resolvePageMeta} from "~/config/pageMeta";
 
 defineOptions({
   name: 'Register '
-})
-
-useSeoMeta({
-  robots: 'noindex, follow'
 })
 
 const { registerFn } = useAuth()
@@ -132,6 +129,15 @@ const register = () => {
     }
   })
 }
+
+useHead(mergeHeadWithLodash(
+    resolvePageMeta("/register"),
+    {
+      meta: [
+        {name: 'robots', content: 'noindex, follow'},
+      ]
+    }
+))
 </script>
 
 <style scoped lang="scss">

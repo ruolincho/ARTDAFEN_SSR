@@ -21,6 +21,14 @@
           <template #suffix>
             <span class="iconfont icon-search text-40 cursor-pointer text-gray-700" @click="search"></span>
           </template>
+          <template #default="{ item }">
+            <div class="acea-row row-between-wrapper">
+              <span>{{ item.keyword }}</span>
+              <el-tag :type="item.type === 'product' ? 'primary' : 'success'" effect="plain" v-if="item.type !== 'notData'">
+                <span class="text-uppercase">{{ item.type }}</span>
+              </el-tag>
+            </div>
+          </template>
         </el-autocomplete>
 
         <!-- 历史搜索 -->
@@ -75,7 +83,7 @@
           <div class="row gap-row-base">
             <div class="col-6" v-for="(item, index) in hotList" :key="index">
             <span class="cursor-pointer text-16" @click="clickKeyword(item)">
-              <span class="mr-10">{{ index + 1 }}</span>
+              <span class="mr-10">{{ index + 1 }}.</span>
               <span>{{ item.keyword }}</span>
             </span>
             </div>
@@ -95,7 +103,7 @@ import {
   getSearchCompletionApi,
   getSearchHistoryApi
 } from "~/api/modules/search/search";
-import {PRODUCT_URL} from "~/config";
+import {COLLECTIONS_URL} from "~/config";
 import {useUserStore} from "~/stores/modules/user";
 import {useHandleData} from "~/composables/useHandleData";
 import type {ISearch} from "~/api/interface/search/search";
@@ -172,7 +180,7 @@ const clickKeyword = (item: ISearch.CompletionRow) => {
 const search = () => {
   if (keyword.value) {
     const q = packQuery({KEYWORD: keyword.value})
-    router.push({path: PRODUCT_URL, query: {q}})
+    router.push({path: COLLECTIONS_URL, query: {q}})
   }
 }
 
@@ -216,7 +224,7 @@ const handleInput = (text: string) => {
 const startJump = (rawItem: ISearch.CompletionRow) => {
   if (rawItem.type === 'product') {
     const q = packQuery({KEYWORD: rawItem.keyword})
-    router.push({path: PRODUCT_URL, query: {q}})
+    router.push({path: COLLECTIONS_URL, query: {q}})
   }
   if (rawItem.type === 'artists') {
     const params = {
@@ -226,7 +234,7 @@ const startJump = (rawItem: ISearch.CompletionRow) => {
     }
     const q = packQuery(params)
     router.push({
-      path: PRODUCT_URL,
+      path: COLLECTIONS_URL,
       query: {q}
     })
   }
