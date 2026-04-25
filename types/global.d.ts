@@ -69,15 +69,10 @@ declare namespace ObjectNode {
         intro: string
         /*区域*/
         region: string
-        /*详细信息*/
-        detail?: {
-            /*展览数据*/
-            exhibition: {
-                intro: string[]
-                localtion: string[]
-                time: string[]
-            }[]
-        }
+        /*slug*/
+        slug: string
+        /*SEO简介*/
+        description: string
     }
 
     /*品牌信息*/

@@ -57,6 +57,7 @@ const handleContinue = () => {
     left: 0;
     background: #fff;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: -30px;
 
     .foot-inner {
       position: relative;
@@ -91,6 +92,12 @@ const handleContinue = () => {
     }
 
 
+  }
+
+  @media (max-width: 991px) {
+    .foot-wrapper {
+      margin-bottom: -15px;
+    }
   }
 
   @media (max-width: 768px) {

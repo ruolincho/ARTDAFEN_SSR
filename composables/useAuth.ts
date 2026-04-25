@@ -14,13 +14,13 @@ import {useUserStore} from "~/stores/modules/user";
 import {useTawk} from "~/composables/useTawk";
 
 export const useAuth = () => {
-    const { $encrypt } = useNuxtApp()
 
     const userStore = useUserStore()
     const customStore = useCustomStore()
 
     // 用户登录
     const loginFn = async (params: IOauth.LoginQuery & { component?: boolean }) => {
+        const { $encrypt } = useNuxtApp()
         params.inviteCode = ''
         if (params.password) {
             params.password = await $encrypt.encrypt(params.password!)
@@ -41,6 +41,7 @@ export const useAuth = () => {
 
     // 用户注册
     const registerFn = async (params: IOauth.RegisterQuery, authToken: string) => {
+        const { $encrypt } = useNuxtApp()
         params.password = await $encrypt.encrypt(params.password!)
         return new Promise<IOauth.LoginRow>((resolve, reject) => {
             registerApi(params, authToken)
@@ -69,6 +70,7 @@ export const useAuth = () => {
 
     // 重置密码
     const resetPasswordFn = async (params: IOauth.ResetPasswordQuery, authToken: string) => {
+        const { $encrypt } = useNuxtApp()
         params.password = await $encrypt.encrypt(params.password)
         return new Promise((resolve, reject) => {
             resetPasswordApi(params, authToken)

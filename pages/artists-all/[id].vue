@@ -18,7 +18,12 @@
   <section class="sec-letter ignore">
     <div class="container">
       <div class="letter-list acea-row row-between-wrapper gap-column-base">
-        <NuxtLink class="letter-item text-22 py-lg-20 py-10" v-for="(letter, index) in letters" :key="index" :to="seeAll(letter)" replace>
+        <NuxtLink
+            class="letter-item text-22 py-lg-20 py-10"
+            v-for="letter in letters" :key="letter"
+            :to="{ path: `/artists-all/${letter}`, query: categoryId ? { categoryId } : undefined }"
+            replace
+        >
           {{ letter }}
         </NuxtLink>
       </div>
@@ -26,7 +31,7 @@
   </section>
 
   <!--列表-->
-  <div class="sec-list ignore">
+  <div class="sec-list">
     <div class="container">
       <DataState
           :loading="isLoading"
@@ -34,11 +39,14 @@
           :error="error"
           :retry="getArtistsListBySearch"
       >
-        <div class="row artist-list my-20 gap-row-base" v-if="artistsList.length">
+        <div class="row artist-list my-20 gap-row-base ignore" v-if="artistsList.length">
           <div class="col-lg-3 col-sm-4 col-6" v-for="art in artistsList" :key="art.id">
-            <div class="artist-item text-20 cursor-pointer line1" @click="handleClickArtist(art)">
+            <NuxtLink
+                class="artist-item text-20 cursor-pointer line1 block"
+                :to="`/artist-detail/${art.id}/${art.slug}`"
+            >
               {{ art.name }}
-            </div>
+            </NuxtLink>
           </div>
         </div>
       </DataState>
@@ -62,7 +70,6 @@ onMounted(() => {
   getArtistsListBySearch()
 })
 
-const router = useRouter()
 const route = useRoute()
 const letters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i))
 const origin = useRequestURL().origin
@@ -83,6 +90,7 @@ const artistsList = ref<IArtists.Row[]>([])
 const getArtistsListBySearch = async () => {
   try {
     isLoading.value = true
+    error.value = null
     const params: IArtists.Query = {letter: letter.value as string}
     if (categoryId.value) params.categoryId = categoryId.value as string
     const {data} = await getArtistsListBySearchApi(params)
@@ -92,22 +100,6 @@ const getArtistsListBySearch = async () => {
   } finally {
     isLoading.value = false
   }
-}
-
-// 点击查看更多
-const seeAll = (letter: string) => {
-  let path = `/artists-all/${letter}`
-  if (categoryId.value) path += `?categoryId=${categoryId.value}`
-  // router.replace(path)
-  return path
-}
-
-// 点击艺术家
-const handleClickArtist = (artist: IArtists.Row) => {
-  router.push({
-    path: COLLECTIONS_URL,
-    query: {q: packQuery(gen_path_obj(artist, 'ARTIST', ['name']))}
-  })
 }
 
 // 获取分类ID

@@ -156,7 +156,7 @@ export namespace IProduct {
         /*标题 */
         title: string;
         /*副标题 */
-        subTitle: string;
+        name: string;
         img: string;
         banners: string[];
         keywords: string;

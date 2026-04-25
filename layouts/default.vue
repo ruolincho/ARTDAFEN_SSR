@@ -17,6 +17,7 @@ import {useAppStore} from "~/stores/modules/app";
 import {throttle} from "lodash";
 import { useRequestHeaders } from 'nuxt/app'
 import AppHeader from '~/components/AppHeader/index.vue'
+import AppFooter from '~/components/AppFooter/index.vue'
 
 const WIDTH = 768
 const appStore = useAppStore()
@@ -62,5 +63,7 @@ const showDiscountWindow = computed(() => {
 </script>
 
 <style scoped lang="scss">
-
+.main {
+  border-top: 1px solid rgba(26, 26, 26, 0.12);
+}
 </style>

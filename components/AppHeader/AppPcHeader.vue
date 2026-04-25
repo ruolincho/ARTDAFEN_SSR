@@ -1,6 +1,6 @@
 <template>
-  <header class="pc-header" @mouseleave="closeMenu" :style="{ '--header-height': headerHeight + 'px' }">
-    <div class="header-inner-container" :class="{ 'is-active': isDropdownVisible }">
+  <header class="pc-header sandblasting" :class="{ 'is-dropdown': isDropdownVisible || activeLocType }" @mouseleave="closeMenu">
+    <div class="header-inner-container">
 
       <div class="header-logo">
         <NuxtLink class="logo-link" to="/">
@@ -33,12 +33,15 @@
 
       <div class="header-actions">
 
-        <div class="header-localization">
-          <div class="loc-group ignore">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20"/>
-            </svg>
-            <span class="loc-current">{{ currentServiceId }}</span>
+        <div class="header-localization" ref="containerRef">
+          <!--语言-->
+          <div class="loc-group ignore" :class="{ 'is-dropdown': activeLocType === 'Lang' }">
+            <div class="loc-group-button" @click="toggleLoc('Lang')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20"/>
+              </svg>
+              <span class="loc-current">{{ currentServiceId }}</span>
+            </div>
             <div class="loc-dropdown">
               <ul class="loc-list">
                 <li
@@ -52,14 +55,15 @@
               </ul>
             </div>
           </div>
-
           <span class="loc-divider">/</span>
-
-          <div class="loc-group">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="10"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-            </svg>
-            <span class="loc-current ignore">{{ currentCurrency }}</span>
+          <!--货币-->
+          <div class="loc-group" :class="{ 'is-dropdown': activeLocType === 'Currency' }">
+            <div class="loc-group-button" @click="toggleLoc('Currency')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+              </svg>
+              <span class="loc-current ignore">{{ currentCurrency }}</span>
+            </div>
             <div class="loc-dropdown">
               <ul class="loc-list">
                 <li class="loc-item"
@@ -78,7 +82,7 @@
         <div class="action-separator"></div>
 
         <button class="action-btn" aria-label="Search">
-          <span class="iconfont icon-search" @click="router.push('/search')"></span>
+          <span class="iconfont icon-search" @click="openSearch"></span>
         </button>
         <button class="action-btn" aria-label="Account" v-if="userStore.isLogin" @click="router.push('/account')">
           <span class="iconfont icon-customer"></span>
@@ -159,25 +163,19 @@ import {useTranslateLang} from "~/composables/useTranslateLang";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useCartStore} from "~/stores/modules/cart";
 import type {IHome} from "~/api/interface/home/home";
-import {formatHandle, jumpToUrl} from "~/utils";
-import {packQuery} from "~/composables/useQueryShort";
 import {useLockScroll} from "~/composables/useLockScroll";
-import {COLLECTIONS_URL} from "~/config";
 
 const props = defineProps({
   menuData: {
     type: Array as () => IHome.MenuRow[],
     default: () => []
   },
-  headerHeight: {
-    type: Number,
-    default: 80 // 考虑到放了 Logo 和 Icon，PC端高度通常在 60-80px 之间
-  },
   currentId: {
-    type: String
+    type: [String, null]
   }
 })
 
+const {$bus} = useNuxtApp()
 const router = useRouter()
 const userStore = useUserStore()
 const cartStore = useCartStore()
@@ -226,25 +224,49 @@ const closeMenu = () => {
   activeFirstId.value = null
 }
 
-useLockScroll(isDropdownVisible)
-
-if (import.meta.client) {
-  const {$bus} = useNuxtApp()
-  onMounted(() => {
-    $bus.on('closeCartWindow', () => { // 隐藏购物车窗口
-      cartPopoverRef.value?.hide?.()
-    })
-    $bus.on('openCartWindow', () => {  // 打开购物车窗口
-      if (!cartPopoverRef.value?.visible) {
-        cartButtonRef.value?.click()
-      }
-    })
-  })
-  onBeforeUnmount(() => {
-    $bus.off('closeCartWindow')
-    $bus.off('openCartWindow')
-  })
+const openSearch = () => {
+  $bus.emit('openSearchDrawer')
 }
+
+// 定义联合类型，null 表示全部收起
+type ActiveLocType = 'Lang' | 'Currency' | null
+const activeLocType = ref<ActiveLocType>(null)
+const containerRef = ref<HTMLElement | null>(null)
+
+const toggleLoc = (type: ActiveLocType) => {
+  activeLocType.value = activeLocType.value === type ? null : type
+  isDropdownVisible.value = false
+}
+
+// 点击外部自动收起
+const handleClickOutside = (event: MouseEvent) => {
+  if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
+    activeLocType.value = null
+  }
+}
+
+watch(() => isDropdownVisible.value, (isVisible) => {
+  if (isVisible) activeLocType.value = null
+})
+
+onMounted(() => {
+  $bus.on('closeCartWindow', () => { // 隐藏购物车窗口
+    cartPopoverRef.value?.hide?.()
+  })
+  $bus.on('openCartWindow', () => {  // 打开购物车窗口
+    if (!cartPopoverRef.value?.visible) {
+      cartButtonRef.value?.click()
+    }
+  })
+  document.addEventListener('click', handleClickOutside)
+})
+onBeforeUnmount(() => {
+  $bus.off('closeCartWindow')
+  $bus.off('openCartWindow')
+  document.removeEventListener('click', handleClickOutside)
+})
+
+useLockScroll(isDropdownVisible)
 </script>
 
 <style scoped>
@@ -267,10 +289,6 @@ if (import.meta.client) {
     align-items: center;
     justify-content: space-between;
     background-color: rgba(255, 255, 255, 1);
-    border-bottom: 1px solid #f0f0f0;
-  }
-
-  .header-inner-container.is-active {
   }
 
   /* =========================================
@@ -384,6 +402,9 @@ if (import.meta.client) {
   /* 单个设置组 (相对定位，用于包裹下拉框) */
   .loc-group {
     position: relative;
+  }
+
+  .loc-group-button {
     cursor: pointer;
     padding: 10px 0; /* 增加上下感应区，防止鼠标移出时太容易消失 */
     display: flex;
@@ -397,7 +418,7 @@ if (import.meta.client) {
     text-transform: uppercase;
   }
 
-  .loc-group:hover .loc-current {
+  .loc-group-button:hover .loc-current {
     color: #000;
     text-decoration: underline; /* 悬停时加下划线提示可点击 */
   }
@@ -406,8 +427,8 @@ if (import.meta.client) {
   .loc-dropdown {
     position: absolute;
     top: 100%; /* 贴在文字正下方 */
-    left: 50%;
-    transform: translateX(-50%) translateY(10px); /* 居中并稍微往下偏移 */
+    right: 0;
+    transform: translateY(10px); /* 往下偏移 */
     background: #fff;
     border: 1px solid #eee;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
@@ -443,11 +464,11 @@ if (import.meta.client) {
     background-color: #bdbdbd; /* 鼠标悬停在滚动条上时稍微加深 */
   }
 
-  /* 鼠标悬停时显示下拉面板 */
-  .loc-group:hover .loc-dropdown {
+  /* 显示下拉面板 */
+  .loc-group.is-dropdown .loc-dropdown {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0); /* 向上滑入 */
+    transform: translateY(0); /* 向上滑入 */
   }
 
   /* 下拉列表样式 */
@@ -528,7 +549,6 @@ if (import.meta.client) {
     background-color: #ffffff;
     border-bottom: 1px solid #e5e5e5;
     overflow: hidden;
-    //border-top: 1px solid rgba(26, 26, 26, 0.12);
     box-shadow: 0 9999px 0 9999px #0006;
   }
 
@@ -590,6 +610,23 @@ if (import.meta.client) {
     opacity: 0;
     transform: translateY(-5px);
   }
+
+  /*磨砂效果*/
+  .sandblasting {}
+
+  .sandblasting .header-inner-container{
+    background: rgba(255,255,255,0.47);
+    backdrop-filter: blur(16px);
+  }
+
+  .sandblasting .mega-menu-dropdown {
+    border-top: 1px solid rgba(26, 26, 26, 0.12);
+  }
+
+  .sandblasting.is-dropdown {
+    background: rgba(255,255,255,1);
+  }
+
 
   /* 小屏幕 ( <= 991px ) 直接隐藏整个 PC Header */
   @media (max-width: 991px) {

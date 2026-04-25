@@ -89,6 +89,7 @@ defineExpose({
   search,
   reset,
   requestFinished,
+  loading
 });
 
 </script>

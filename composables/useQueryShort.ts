@@ -1,4 +1,5 @@
 import {deflateSync, inflateSync, strFromU8, strToU8} from 'fflate'
+import type {ISearch} from "~/api/interface/search/search";
 
 export type QueryParams = {
     MENU_ID?: string
@@ -12,7 +13,7 @@ export type QueryParams = {
     RADIO?: string
     BRAND?: string
     KEYWORD?: string
-    SEARCH_TYPE?: string
+    SEARCH_TYPE?: ISearch.KeywordType
     START_PRICE?: string
     END_PRICE?: string
     SORT?: string
@@ -84,7 +85,8 @@ function shrinkValuesDeep(obj: any): any {
             if (TUPLE_ARRAY_KEYS.has(k) && Array.isArray(v)) {
                 out[k] = v.map((it: any) => Array.isArray(it) ? it : [it?.h ?? it?.parentId, it?.i ?? it?.id, (it?.j ?? it?.name) ?? undefined].filter(x => x !== undefined));
             } else if (TUPLE_OBJECT_KEYS.has(k) && v && typeof v === 'object' && !Array.isArray(v)) {
-                out[k] = [v?.h ?? v?.parentId, v?.i ?? v?.id, (v?.j ?? v?.name) ?? undefined].filter(x => x !== undefined);
+                const val = v as Record<string, any>;
+                out[k] = [val?.h ?? val?.parentId, val?.i ?? val?.id, (val?.j ?? val?.name) ?? undefined].filter(x => x !== undefined);
             } else {
                 out[k] = shrinkValuesDeep(v);
             }
@@ -128,16 +130,14 @@ function restoreValuesDeep(obj: any): any {
 // URL-safe base64 helpers
 function b64urlFromBytes(bytes: Uint8Array): string {
     let binary = '';
-    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-    // @ts-ignore
-    const b64 = typeof btoa !== 'undefined' ? btoa(binary) : Buffer.from(binary, 'binary').toString('base64');
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]!);
+    const b64 = typeof btoa !== 'undefined' ? btoa(binary) : (globalThis as any).Buffer.from(binary, 'binary').toString('base64');
     return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
 
 function bytesFromB64url(s: string): Uint8Array {
     const b64 = s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4);
-    // @ts-ignore
-    const binary = typeof atob !== 'undefined' ? atob(b64) : Buffer.from(b64, 'base64').toString('binary');
+    const binary = typeof atob !== 'undefined' ? atob(b64) : (globalThis as any).Buffer.from(b64, 'base64').toString('binary');
     const out = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) out[i] = binary.charCodeAt(i);
     return out;

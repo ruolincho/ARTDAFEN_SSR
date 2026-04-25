@@ -2,8 +2,8 @@
   <div class="product-item">
     <div class="relative aspect-ratio">
       <NuxtLink class="img-wrapper bg-gray-100 w-full h-full block" :class="{ 'hover-enabled': !!item.sceneImg }" :to="productLink(item)">
-        <img class="img-default" v-lazy="imagePrefix(item.framedImg || item.img)" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
-        <img class="img-hover" v-lazy="imagePrefix(item.sceneImg)" v-if="item.sceneImg" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
+        <img class="img-default" v-lazy="imagePrefix(item.framedImg || item.img)" crossorigin="anonymous" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
+        <img class="img-hover" v-lazy="imagePrefix(item.sceneImg)" v-if="item.sceneImg" crossorigin="anonymous" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
       </NuxtLink>
       <div class="tags-wrapper acea-row row-between-wrapper" v-if="item.techniqueId === TechniqueCodeEnum.Originals">
         <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
@@ -20,7 +20,7 @@
     </div>
     <div class="content-wrapper">
       <p class="my-8 line1 cursor-pointer text-hover">
-        <span class="text-16 f-bold" @click.stop="handleClickArtist()">
+        <span class="text-16 f-bold" @click.stop="clickArtist()">
           {{ item.creator?.name }}
         </span>
         <span class="iconfont icon-right text-16"></span>
@@ -51,7 +51,8 @@ import {useImage} from "~/composables/useImage";
 // 定义 Props
 interface Props {
   item: General.GoodsItem
-  index: number
+  index: number,
+  clickArtistFn?: (creator: ObjectNode.Creator) => void
 }
 
 const { imagePrefix } = useImage()
@@ -62,17 +63,25 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   'thumbsClick': [value: General.GoodsItem]
-  'artistClick': [value: ObjectNode.Creator]
 }>()
 
+const router = useRouter()
 const { formatToCurrency } = useCurrencyStore();
 
 const productThumbs = () => {
   emit('thumbsClick', props.item);
 }
 
-const handleClickArtist = () => {
-  emit('artistClick', props.item.creator);
+const defaultArtistClick = () => {
+  router.replace(`/artist-detail/${props.item.creator.id}/${props.item.creator.slug}`)
+}
+
+const clickArtist = () => {
+  if (props.clickArtistFn) {
+    props.clickArtistFn(props.item.creator)
+  } else {
+    defaultArtistClick()
+  }
 }
 
 </script>

@@ -1,91 +1,5 @@
-// @ts-ignore
-
-import {ArtCodeEnum, type ArtCodeType, SortCodeEnum, TechniqueCodeEnum} from "~/types/enumeration";
+import {ArtCodeEnum, type ArtCodeType} from "~/types/enumeration";
 import type {IHome} from "~/api/interface/home/home";
-
-// 移动端中Popup模拟工艺的菜单数据
-export const techniqueMenu: IHome.MenuRow = {
-    id: '7777',
-    parentId: '0',
-    name: 'Technique',
-    config: {type: 'SORT'},
-    children: [
-        {
-            id: '7776',
-            parentId: '7777',
-            name: 'Hand-painted oil painting',
-            config: {type: 'SORT', code: TechniqueCodeEnum.Painting},
-            children: [],
-        },
-        // {
-        //   id: '7775',
-        //   parentId: '7777',
-        //   name: 'Print painting',
-        //   config: {type: 'SORT', code: TechniqueCodeEnum.Prints},
-        //   children: []
-        // },
-        {
-            id: '7774',
-            parentId: '7777',
-            name: 'Relief painting',
-            config: {type: 'SORT', code: TechniqueCodeEnum.Relief},
-            children: [],
-        },
-        {
-            id: '7773',
-            parentId: '7777',
-            name: 'Originals paintings',
-            config: {type: 'SORT', code: TechniqueCodeEnum.Originals},
-            children: [],
-        },
-    ],
-}
-// 移动端中Popup模拟价格排序的菜单数据
-export const priceMenu: IHome.MenuRow = {
-    id: '9999',
-    parentId: '0',
-    name: 'Price Sort',
-    config: {type: 'SORT'},
-    children: [
-        {
-            id: '9998',
-            parentId: '9999',
-            name: 'Price Sort By Desc',
-            config: {type: 'SORT', code: SortCodeEnum.Desc},
-            children: [],
-        },
-        {
-            id: '9997',
-            parentId: '9999',
-            name: 'Price Sort By Asc',
-            config: {type: 'SORT', code: SortCodeEnum.Asc},
-            children: [],
-        },
-    ],
-}
-// 移动端中Popup模拟销量排序的菜单数据
-export const salesMenu: IHome.MenuRow = {
-    id: '8888',
-    parentId: '0',
-    name: 'Sales Sort',
-    config: {type: 'SORT'},
-    children: [
-        {
-            id: '8887',
-            parentId: '8888',
-            name: 'Sales Sort By Desc',
-            config: {type: 'SORT', code: SortCodeEnum.Desc},
-            children: [],
-        },
-        {
-            id: '8886',
-            parentId: '8888',
-            name: 'Sales Sort By Asc',
-            config: {type: 'SORT', code: SortCodeEnum.Asc},
-            children: [],
-        },
-    ],
-}
 
 // 排序的菜单数据
 export const SORT_MENU: IHome.MenuRow = {
@@ -139,10 +53,6 @@ export const SORT_MENU: IHome.MenuRow = {
 
     ],
 }
-
-export const ARTIST_MENU_NAME = 'Artists' // 艺术家菜单名称
-export const CUSTOM_MENU_NAME = 'Photo to art' // 自定义商品菜单名称
-export const BEST_MENU_NAME = 'Best Sellers' // 热门商品菜单名称
 
 // 定制不同工艺的示例图片
 export const TECHNIQUE_EXAMPLE: Record<ArtCodeType, { photo: string, paint: string }[]> = {
@@ -230,9 +140,6 @@ export const TECHNIQUE_EXAMPLE: Record<ArtCodeType, { photo: string, paint: stri
     ],
 }
 
-// 现货MenuId
-export const SPOT_MENU_ID = '1000002'
-
 export const HOW_IT_WORKS = [
     {
         title: 'Choose Subject',
@@ -296,14 +203,9 @@ export const PROCESS_LIST = [
         icon: 'icon-framing-packing'
     },
     {
-        title: 'Free Shipping',
-        desc: 'Safe, free global delivery.',
-        icon: 'icon-free-shipping'
-    },
-    {
-        title: 'Easy Returns',
-        desc: 'Hassle-free 30-day returns.',
-        icon: 'icon-easy-returns'
+        title: 'Delivery & Returns', // 合并了 Shipping 和 Returns
+        desc: 'Free global delivery with hassle-free 30-day returns.',
+        icon: 'icon-free-shipping' // 可以用一个表示保障（盾牌）或物流包装的图标
     },
 ]
 
@@ -452,7 +354,11 @@ export const HONOR_LIST = [
     {img: '/static/artdafen/honor/about-honor5.webp', name: 'PARTICIPATING MERCHANTS OF SUMMER CAMP', id: '5'},
     {img: '/static/artdafen/honor/about-honor6.webp', name: 'CHINA METAVERSE WHITE PAPER EDITORIAL', id: '6'},
     {img: '/static/artdafen/honor/about-honor7.webp', name: 'OIL PAINTING TRADE PROMOTION CENTER', id: '7'},
-    {img: '/static/artdafen/honor/about-honor8.webp', name: 'DAFEN FINE ART INDUSTRY ASSOCIATION PRESIDENT UNIT', id: '8'},
+    {
+        img: '/static/artdafen/honor/about-honor8.webp',
+        name: 'DAFEN FINE ART INDUSTRY ASSOCIATION PRESIDENT UNIT',
+        id: '8'
+    },
 ]
 
 export const PARTNER_LIST = [
@@ -539,11 +445,61 @@ export const PARTNER_LIST = [
 ]
 
 export const CASE_LIST = [
-    {img: '/static/artdafen/case/case-1.webp', title: 'The Carter Houston TX', size: '180*180', name: 'untitled no. 1 (gold)', id: '1'},
-    {img: '/static/artdafen/case/case-2.webp', title: 'Capital One, Las Vegas NV', size: '190x260', name: 'Colorful Botanical04', id: '2'},
-    {img: '/static/artdafen/case/case-3.webp', title: 'Tate at Tanglewood TX', size: '240*630', name: 'The Eight Steeds', id: '3'},
-    {img: '/static/artdafen/case/case-4.webp', title: 'The Oriental Spa HK', size: '95*70', name: 'Flowers in a Blue Vase', id: '4'},
-    {img: '/static/artdafen/case/case-5.webp', title: 'JW Marriott Mexico City', size: '310x440', name: 'Cerulean Abstract01', id: '5'},
-    {img: '/static/artdafen/case/case-6.webp', title: 'Marriott, Newport RI', size: '350x135', name: 'Gray Golden Blossoms05', id: '6'},
-    {img: '/static/artdafen/case/case-7.webp', title: 'Private Residence, Henderson Nevada', size: '300x140', name: 'Untitled_', id: '7'},
+    {
+        img: '/static/artdafen/case/case-1.webp',
+        title: 'The Carter Houston TX',
+        size: '180*180',
+        name: 'untitled no. 1 (gold)',
+        id: '1'
+    },
+    {
+        img: '/static/artdafen/case/case-2.webp',
+        title: 'Capital One, Las Vegas NV',
+        size: '190x260',
+        name: 'Colorful Botanical04',
+        id: '2'
+    },
+    {
+        img: '/static/artdafen/case/case-3.webp',
+        title: 'Tate at Tanglewood TX',
+        size: '240*630',
+        name: 'The Eight Steeds',
+        id: '3'
+    },
+    {
+        img: '/static/artdafen/case/case-4.webp',
+        title: 'The Oriental Spa HK',
+        size: '95*70',
+        name: 'Flowers in a Blue Vase',
+        id: '4'
+    },
+    {
+        img: '/static/artdafen/case/case-5.webp',
+        title: 'JW Marriott Mexico City',
+        size: '310x440',
+        name: 'Cerulean Abstract01',
+        id: '5'
+    },
+    {
+        img: '/static/artdafen/case/case-6.webp',
+        title: 'Marriott, Newport RI',
+        size: '350x135',
+        name: 'Gray Golden Blossoms05',
+        id: '6'
+    },
+    {
+        img: '/static/artdafen/case/case-7.webp',
+        title: 'Private Residence, Henderson Nevada',
+        size: '300x140',
+        name: 'Untitled_',
+        id: '7'
+    },
+]
+
+export const SOCIAL_LIST = [
+    {name: 'youtube', icon: 'icon-Youtube', url: 'https://www.youtube.com/@artdafen'},
+    {name: 'instagram', icon: 'icon-instagram', url: 'https://www.instagram.com/art_dafen/'},
+    {name: 'pinterest', icon: 'icon-pinterest', url: 'https://www.pinterest.com/artdafen/'},
+    {name: 'tiktok', icon: 'icon-douyinjumuguanli', url: 'https://www.tiktok.com/@artdafencom'},
+    {name: 'x', icon: 'icon-tuite', url: 'https://x.com/artdafen'},
 ]

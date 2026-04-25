@@ -12,10 +12,20 @@ export function useLockScroll(...args: (LockTarget | LockTarget[])[]) {
     let touchStartX = 0
     let touchStartY = 0
 
+    // 保存 body 原始的样式，以便解锁时恢复
+    let originalOverflow = ''
+    let originalPaddingRight = ''
+
     const isClient = process.client && typeof window !== 'undefined';
 
     const sources: Ref<boolean>[] = args.flat().filter(isRef)
     const preventKeys = new Set(['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown', 'Home', 'End'])
+
+    // --- 获取滚动条宽度，防止隐藏滚动条时页面抖动 ---
+    const getScrollbarWidth = (): number => {
+        if (!isClient) return 0
+        return window.innerWidth - document.documentElement.clientWidth
+    }
 
     // 1. 辅助：判断是否是可滚动元素 (同时支持 X 和 Y 轴检测)
     const isElementScrollable = (el: HTMLElement): boolean => {
@@ -155,6 +165,16 @@ export function useLockScroll(...args: (LockTarget | LockTarget[])[]) {
     const lockScroll = () => {
         if (!isClient || isLocked) return
         isLocked = true
+        // --- 隐藏滚动条并补偿宽度 ---
+        const scrollbarWidth = getScrollbarWidth()
+        originalOverflow = document.body.style.overflow
+        originalPaddingRight = document.body.style.paddingRight
+        document.body.style.overflow = 'hidden'
+        if (scrollbarWidth > 0) {
+            const computedPadding = window.getComputedStyle(document.body).paddingRight // 获取当前可能的 padding，防止覆盖用户原有的样式
+            document.body.style.paddingRight = `calc(${computedPadding} + ${scrollbarWidth}px)`
+        }
+        // ----------------------------------
         window.addEventListener('wheel', handleWheel, { passive: false })
         window.addEventListener('touchmove', handleTouchMove, { passive: false })
         window.addEventListener('touchstart', handleTouchStart, { passive: false })
@@ -164,6 +184,10 @@ export function useLockScroll(...args: (LockTarget | LockTarget[])[]) {
     const unlockScroll = () => {
         if (!isClient || !isLocked) return
         isLocked = false
+        // --- 恢复原始样式 ---
+        document.body.style.overflow = originalOverflow
+        document.body.style.paddingRight = originalPaddingRight
+        // ------------------------------
         window.removeEventListener('wheel', handleWheel)
         window.removeEventListener('touchmove', handleTouchMove)
         window.removeEventListener('touchstart', handleTouchStart)

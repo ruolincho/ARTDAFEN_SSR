@@ -72,7 +72,7 @@
           </div>
 
           <!--预览图-->
-          <div v-else :style="{ top: appStore?.headerState?.height + 'px', position: 'sticky' }">
+          <div v-else :style="{ top: 'var(--header-height)', position: 'sticky' }">
             <div class="spu-preview" id="tour-step-preview">
               <div class="acea-row row-center-wrapper w-full h-full">
                 <ClientOnly>
@@ -171,7 +171,7 @@
                   </p>
 
                   <div class="my-15 acea-row row-middle price-wrapper py-10"
-                       :style="{ top: appStore?.headerState?.height + 'px' }">
+                       :style="{ top: 'var(--header-height)' }">
                     <span class="text-28 f-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
                     <el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"
                             ref="checkButtonRef">Check
@@ -322,7 +322,7 @@
   <el-popover
       ref="checkPopoverRef"
       trigger="click"
-      :width="appStore.isPc ? '50vw' : '95vw'"
+      :width="appStore.isPc ? '50vw' : '100vw'"
       placement="top"
       title="Price Details"
       :virtual-ref="checkButtonRef"
@@ -800,7 +800,6 @@ watch(() => currentView.value, () => {
 
 const openTour = ref(false)
 const beginGuide = async () => {
-  await appStore.forceFoldHeader() // 锁定并折叠，等待动画
   window.scrollTo({
     top: 0,
     behavior: "instant",
@@ -809,7 +808,6 @@ const beginGuide = async () => {
   toggleWidget(false)
 }
 const handleTouchClose = () => {
-  appStore.cancelForceFoldHeader() // 引导结束，恢复自动控制
   window.scrollTo({
     top: 0,
     behavior: "instant",

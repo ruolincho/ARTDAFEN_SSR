@@ -1,6 +1,7 @@
 import { $http } from '~/api/http'
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import type {ISearch} from "~/api/interface/search/search";
+import type { GenericAbortSignal } from 'axios'
 
 /**
  * 查询用户搜索历史记录
@@ -33,8 +34,17 @@ export const getHotSearchApi = () => {
 
 /**
  * 搜索关键字补全
- * @param keyword
+ * * @param keyword 搜索词
+ * * @param signal 取消请求的信号源 (从组件传入)
  */
-export const getSearchCompletionApi = (keyword: string) => {
-    return $http().get<ISearch.CompletionRow[]>(TRADE_MODULE + `/search/completion`, { keyword })
+export const getSearchCompletionApi = (keyword: string, signal?: GenericAbortSignal) => {
+    return $http().get<ISearch.KeywordData>(TRADE_MODULE + `/search/completion`, { keyword }, {signal})
+}
+
+/**
+ * 获取 SEO 信息视图
+ * @param params
+ */
+export const getSearchSeoApi = (params: ISearch.SearchSeoReq) => {
+    return $http().get<ISearch.SearchSeoRow>(TRADE_MODULE + `/search/seo`, params)
 }

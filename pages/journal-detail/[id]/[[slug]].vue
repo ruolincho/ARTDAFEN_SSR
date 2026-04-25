@@ -38,7 +38,7 @@
         <div class="col-sm-3 col-6" v-for="item in blogDetail?.products" :key="item.id">
           <NuxtLink :to="productLink(item)" target="_blank" class="product-item">
             <div class="img-wrapper bg-gray-100">
-              <img v-lazy="imagePrefix(item.img)" :alt="item.title">
+              <img v-lazy="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title">
             </div>
             <div class="content-wrapper">
               <h1 class="line2 text-14">{{ item.title }}</h1>

@@ -11,7 +11,7 @@
               <div class="acea-row nowrap row-middle gap-base">
                 <el-checkbox v-model="item.selected" size="large" @change="changeCheck"/>
                 <div class="aspect-ratio p-10 border-sm border-gray-200 cursor-pointer" @click="jumpToProduct(item)">
-                  <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" :alt="item.title">
+                  <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title">
                 </div>
               </div>
             </div>

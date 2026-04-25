@@ -25,3 +25,12 @@ export const getArtistsListBySearchApi = (params: IArtists.Query) => {
 export const getArtistDetailApi = (id: string) => {
     return $http().get<ObjectNode.Creator>(TRADE_MODULE + `/artists/detail/${id}`)
 }
+
+/**
+ * 艺术家探索
+ * @param id
+ * @returns {*}
+ */
+export const getArtistExploreApi = (id: string) => {
+    return $http().get<ObjectNode.Creator[]>(TRADE_MODULE + `/artists/explore/${id}`)
+}

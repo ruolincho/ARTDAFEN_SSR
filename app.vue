@@ -1,5 +1,7 @@
 <template>
+  <VitePwaManifest />
   <el-config-provider :locale="currentElementPlusLocale">
+    <PwaUpdateBanner />
     <NuxtLayout>
       <NuxtPage/>
     </NuxtLayout>

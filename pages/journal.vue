@@ -6,14 +6,12 @@
 <script setup lang="ts">
 import {resolvePageMeta} from "~/config/pageMeta";
 import {nextTick, watch} from "vue";
-import {useAppStore} from "~/stores/modules/app";
 
 defineOptions({
   name: 'Blog'
 })
 
 const route = useRoute()
-const appStore = useAppStore()
 
 useHead(resolvePageMeta("/journal"));
 
@@ -27,7 +25,9 @@ const executeScroll = () => {
 
     if (anchor) {
       // 偏移量计算
-      const headerOffset = appStore.headerState.height
+      const root = document.documentElement
+      const cssValue = getComputedStyle(root).getPropertyValue('--header-height').trim()
+      const headerOffset = parseInt(cssValue, 10) || 0
       const elementPosition = anchor.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset
       window.scrollTo({

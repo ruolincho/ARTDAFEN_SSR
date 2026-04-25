@@ -3,6 +3,7 @@ import {USER_MODULE, TRADE_MODULE} from "~/api/helper/prefix";
 import type {IMine} from "~/api/interface/mine/mine";
 import type {IPage, IPageQuery} from "~/api/interface";
 import type {AxiosRequestConfig} from "axios";
+import type {General} from "~/types/global";
 
 /**
  * 获取用户基本信息

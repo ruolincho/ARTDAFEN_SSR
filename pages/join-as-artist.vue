@@ -338,6 +338,8 @@ const handleSend = () => {
 }
 
 .sec-form {
+  margin-bottom: -30px;
+
   .form-wrapper {
     display: flex;
     justify-content: space-between;
@@ -391,6 +393,11 @@ const handleSend = () => {
       }
     }
   }
+
+  .sec-form {
+    margin-bottom: -15px;
+  }
+
 }
 
 @media (max-width: 768px) {
@@ -409,7 +416,6 @@ const handleSend = () => {
   }
 
   .sec-form {
-    margin-bottom: -20px;
 
     .form-wrapper {
       flex-direction: column;

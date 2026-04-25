@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="text-40 f-bold-500 py-50">MY PAGE</h1>
+    <h1 class="text-40 f-bold-500 py-lg-50 py-30">MY PAGE</h1>
     <div class="account-container acea-row row-between row-top">
       <div class="account-panel shadow-lg">
         <div class="account-info acea-row row-middle p-20 border-b-sm border-gray-200">

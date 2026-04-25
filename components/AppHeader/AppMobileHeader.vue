@@ -1,5 +1,5 @@
 <template>
-  <header class="mobile-header" :style="{ '--header-height': headerHeight + 'px' }">
+  <header class="mobile-header sandblasting">
     <div class="header-bar">
       <NuxtLink class="logo" to="/">
         <img src="~/assets/images/logo.png" alt="ARTDAFEN"/>
@@ -9,7 +9,7 @@
       <div class="header-tools">
         <TransitionGroup name="nike-zoom">
           <div class="tool-item" v-if="!isDrawerOpen">
-            <span class="iconfont icon-search" @click="router.push('/search')"></span>
+            <span class="iconfont icon-search" @click="openSearch"></span>
           </div>
           <div class="tool-item" v-if="!isDrawerOpen">
             <el-badge :value="cartStore.subtotalQuantity" :show-zero="false" color="#000">
@@ -43,12 +43,18 @@
           <Transition :name="transitionName">
             <div :key="currentLevel.id" class="menu-level">
               <!--层级标题-->
-              <div v-if="history.length > 0" class="level-header" @click="goBack">
-                <svg class="icon-back" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="2">
-                  <path d="M15 18l-6-6 6-6"/>
+              <div class="level-header">
+                <div class="level-header__text" v-if="history.length > 0" @click="goBack">
+                  <svg class="icon-back" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                  </svg>
+                  <span class="back-text">{{ currentLevel.name }}</span>
+                </div>
+                <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" @click="toggleDrawer">
+                  <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
-                <span class="back-text">{{ currentLevel.name }}</span>
               </div>
               <!--层级列表-->
               <ul class="menu-list" :class="{ 'is-root': history.length === 0, ignore: settingType === 'LANG' }">
@@ -97,8 +103,10 @@
 
                 <div class="footer-settings">
                   <button class="setting-btn" @click="openSetting('LANG')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                      <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20"/>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="1.5">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M2 12h20M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20"/>
                     </svg>
                     <span>{{ currentLang }}</span>
                   </button>
@@ -106,17 +114,42 @@
                   <div class="divider"></div>
 
                   <button class="setting-btn" @click="openSetting('CURRENCY')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                      <circle cx="12" cy="12" r="10"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="1.5">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
                     </svg>
-                    <span>{{ currentCurrency }} <i class="ignore">({{getCurrencySymbol}})</i></span>
+                    <span>{{ currentCurrency }} <i class="ignore">({{ getCurrencySymbol }})</i></span>
                   </button>
+
+                  <AndroidInstallBtn v-slot="{ handleInstall }">
+                    <div class="divider"></div>
+                    <button class="setting-btn" @click="handleInstall">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                      </svg>
+                      <span>Install App</span>
+                    </button>
+                  </AndroidInstallBtn>
+
+                  <IosInstallPrompt v-slot="{ handleInstall }">
+                    <div class="divider"></div>
+                    <button class="setting-btn" @click="handleInstall">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                      </svg>
+                      <span>Install App</span>
+                    </button>
+                  </IosInstallPrompt>
                 </div>
               </div>
             </div>
           </Transition>
         </div>
-
       </div>
     </Transition>
   </header>
@@ -126,28 +159,20 @@
 import {ref, computed} from 'vue'
 import {useUserStore} from "~/stores/modules/user";
 import {useCartStore} from "~/stores/modules/cart";
-import {COLLECTIONS_URL} from "~/config";
-import {useCustomStore} from "~/stores/modules/custom";
-import {jumpToUrl} from "~/utils";
 import {useTranslateLang} from "~/composables/useTranslateLang";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useLockScroll} from "~/composables/useLockScroll";
-import {packQuery} from "~/composables/useQueryShort";
+import SearchDrawer from "~/components/SearchDrawer/index.vue";
 
 const props = defineProps({
   menuData: {
     type: Array,
     default: () => []
-  },
-  headerHeight: {
-    type: Number,
-    default: 50
   }
 })
 
 const {currentLang, languageData, switchLanguage} = useTranslateLang()
-const { currentCurrency, currencyList, setCurrentCurrency, getCurrencySymbol } = useCurrencyStore();
-const customStore = useCustomStore()
+const {currentCurrency, currencyList, setCurrentCurrency, getCurrencySymbol} = useCurrencyStore();
 const cartStore = useCartStore()
 const userStore = useUserStore()
 const router = useRouter()
@@ -249,6 +274,23 @@ const openSetting = (type: SettingType) => {
   }
 }
 
+const openSearch = () => {
+  const {$bus} = useNuxtApp()
+  $bus.emit('openSearchDrawer')
+}
+
+watch(
+    () => isDrawerOpen.value,
+    (flag) => {
+      if (import.meta.env.MODE !== 'production') return
+      if (!flag) {
+        window.Tawk_API.showWidget()
+      } else {
+        window.Tawk_API.hideWidget();
+      }
+    }
+)
+
 useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
 </script>
 
@@ -276,7 +318,6 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
 
   .logo {
     font-weight: 800;
-
     height: var(--header-height, 50px);
     vertical-align: middle;
     display: flex;
@@ -347,7 +388,7 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 998;
+    z-index: 1001;
   }
 
   /* Drawer Content */
@@ -357,9 +398,9 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
     right: 0;
     bottom: 0;
     width: 100%;
-    max-width: 320px;
+    max-width: 340px;
     background: #fff;
-    z-index: 999;
+    z-index: 1002;
     overflow: hidden;
   }
 
@@ -367,8 +408,7 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
   .menu-container {
     position: relative;
     width: 100%;
-    height: calc(100% - var(--header-height, 50px));
-    margin-top: var(--header-height, 50px); /* 避开固定的 header bar */
+    height: 100%;
   }
 
   .menu-level {
@@ -380,18 +420,38 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
   }
 
   .level-header {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: var(--header-height, 50px);
+    position: relative;
+  }
+
+  .level-header__text {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #f5f5f5;
-    cursor: pointer;
+    padding-right: 30px;
+    height: 100%;
+  }
+
+  .icon-back {
     flex-shrink: 0;
   }
 
   .back-text {
+    width: 100%;
     font-weight: 600;
     font-size: 14px;
     margin-left: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+  }
+
+  .icon-close {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .menu-list {
@@ -404,7 +464,7 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
   }
 
   .menu-item {
-    border-bottom: 1px solid #f9f9f9;
+    border-top: 1px solid #f9f9f9;
   }
 
   .item-action {
@@ -463,7 +523,7 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
     width: 1px;
     height: 12px;
     background-color: #ddd;
-    margin: 0 16px; /* 控制左右按钮的间距 */
+    margin: 0 10px; /* 控制左右按钮的间距 */
   }
 
   .social-icon {
@@ -572,6 +632,14 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
 
   .nike-zoom-leave-active:nth-child(2) {
     transition-delay: 0s;
+  }
+
+  /*磨砂效果*/
+  .sandblasting {}
+
+  .sandblasting .header-bar{
+    background: rgba(255,255,255,0.47);
+    backdrop-filter: blur(16px);
   }
 
   /* 小屏幕 ( >= 991px ) 直接隐藏整个 PC Header */

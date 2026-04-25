@@ -2,11 +2,11 @@
   <!--规格选择-->
   <section>
     <div class="container">
-      <div class="spu-wrapper row pt-md-50 pt-20">
+      <div class="spu-wrapper row pt-md-50">
         <!--预览图栅格-->
         <div class="col-md-6">
-          <div :style="{ top: appStore?.headerState?.height + 'px', position: 'sticky' }">
-            <div class="spu-preview" id="tour-step-preview" ref="spuPreviewRef">
+          <div :style="{ top: 'var(--header-height)', position: 'sticky' }">
+            <div class="spu-preview" ref="spuPreviewRef">
               <div class="thumb-swiper-wrapper">
                 <swiper
                     class="thumb-swiper"
@@ -41,7 +41,7 @@
                   </swiper-slide>
                 </swiper>
               </div>
-              <div class="main-swiper-wrapper">
+              <div class="main-swiper-wrapper" id="tour-step-preview">
                 <swiper
                     class="main-swiper"
                     :modules="modules"
@@ -97,10 +97,10 @@
                         @click="productThumbs"/>
                 </div>
 
-                <p class="my-15 text-14 cursor-pointer text-underline-hover" @click="handleClickArtist">by: {{ goodsDetail?.creator?.name }}</p>
+                <NuxtLink class="my-15 text-14 cursor-pointer text-underline-hover" :to="handleClickArtist(goodsDetail?.creator!)">by: {{ goodsDetail?.creator?.name }}</NuxtLink>
 
                 <div class="my-15 acea-row row-middle price-wrapper py-10"
-                     :style="{ top: appStore?.headerState?.height + 'px' }">
+                     :style="{ top: 'var(--header-height)' }">
                   <span class="text-28 f-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
                   <el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"
                           ref="checkButtonRef">Check
@@ -397,8 +397,9 @@
           >
             <swiper-slide v-for="item in relatedList" :key="item.id">
               <NuxtLink class="explore-item block" :to="productLink(item)" target="_blank">
-                <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
+                <div class="img-wrapper aspect-ratio bg-gray-100" :class="{ 'hover-enabled': !!item.sceneImg }">
+                  <img class="img-default" :src="imagePrefix(item.framedImg || item.img)" crossorigin="anonymous" :alt="item.title"/>
+                  <img class="img-hover" :src="imagePrefix(item.sceneImg)" v-if="item.sceneImg" crossorigin="anonymous" :alt="item.title"/>
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p>
@@ -433,19 +434,6 @@
           <div class="px-20 py-24" v-html="subItem.content"></div>
         </el-collapse-item>
       </el-collapse>
-    </div>
-  </section>
-
-  <!-- PROCESS -->
-  <section class="sec-process py-lg-30 py-20 mt-20">
-    <div class="container">
-      <div class="process-list">
-        <div class="process-item text-center" v-for="item in PROCESS_LIST" :key="item.title">
-          <span class="iconfont" :class="[item.icon]"/>
-          <p class="text-20 mt-15">{{ item.title }}</p>
-          <p class="text-16 text-gray-500 mt-10">{{ item.desc }}</p>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -488,7 +476,7 @@
   <el-popover
       ref="checkPopoverRef"
       trigger="click"
-      :width="appStore.isPc ? '50vw' : '95vw'"
+      :width="appStore.isPc ? '50vw' : '100vw'"
       placement="bottom"
       title="Price Details"
       :virtual-ref="checkButtonRef"
@@ -525,7 +513,7 @@
 
   <!--底部预览-->
   <transition name="slide-up">
-    <div class="footer-preview acea-row row-middle" v-show="!appStore.isPc && isShowFooterPreview">
+    <div class="footer-preview acea-row row-middle rounded-md border-sm border-gray-200" v-show="!appStore.isPc && isShowFooterPreview">
       <div class="footer-preview-img" @click="toggleImageViewer('core')">
         <img class="w-full h-full fit-contain" :src="generatorImg" alt="">
       </div>
@@ -551,8 +539,6 @@ import Room from '~/components/Room.vue'
 import {debounce, youtubeProxyPrefix, productLink} from "~/utils";
 import {useCartStore} from '~/stores/modules/cart'
 import type {IShopping} from "~/api/interface/shopping/shopping";
-import {getSpecsListApi} from "~/api/modules/specs/specs";
-import type {ISpecs} from "~/api/interface/specs/specs";
 import {ElMessage, type ElPopover} from "element-plus";
 import {getIsThumbsApi, productThumbsApi} from "~/api/modules/likes/likes";
 import {useAppStore} from "~/stores/modules/app";
@@ -570,7 +556,7 @@ import type {IMessage} from "~/api/interface/message/message";
 import {getCommentList} from "~/api/modules/message/message";
 import ProInfinite from "~/components/ProInfinite.vue";
 import ProList from "~/components/ProList/index.vue";
-import {QUALITY_LIST, PROCESS_LIST} from "~/constant";
+import {QUALITY_LIST} from "~/constant";
 import SizeSelector from "~/components/Custom/SizeSelector.vue";
 import FrameSelector from "~/components/Custom/FrameSelector.vue";
 import MatSelector from "~/components/Custom/MatSelector.vue";
@@ -581,6 +567,7 @@ import {useImage} from "~/composables/useImage";
 import {Back, Right, ZoomIn, ZoomOut } from '@element-plus/icons-vue'
 import ToolFloatBall from "~/components/ToolFloatBall.vue";
 import {useBreadcrumbStore} from "~/stores/modules/breadcrumb";
+import type {ObjectNode} from "~/types/global";
 
 defineOptions({
   name: 'PaintDetail'
@@ -591,7 +578,6 @@ definePageMeta({
 })
 
 onMounted(async () => {
-  await getSpecsList() // 获取Spec列表
   await getCombination() // 获取组合
   await getRelatedRecommend()
   if (userStore.isLogin) {
@@ -606,7 +592,6 @@ onMounted(async () => {
 onUnmounted(() => {
   $bus.off('loginSuccess', getIsThumbs)
   window.removeEventListener('scroll', monitorPreview)
-
 })
 
 const {imagePrefix} = useImage()
@@ -723,16 +708,9 @@ injectProductJsonLd()
 
 console.log(' =>', jsonLd.value)
 
-// 获取Sku
-const specsCombination = ref<ISpecs.Row[]>([])
-const getSpecsList = async () => {
-  const {data} = await getSpecsListApi(route.params.id)
-  specsCombination.value = data
-  currentSpecId.value = route.query.specId as string || data[0]?.id
-}
-
 // 选择工艺（只有spec中出现了一个以上的才可以选择工艺）
-const currentSpecId = ref('')
+const specsCombination = computed(() => goodsDetail.value?.specsCombo || []) // 获取Sku
+const currentSpecId = ref(route.query.specId || specsCombination.value[0]?.id || '')
 const currentSpecOption = computed(() => specsCombination.value.find(item => item.id === currentSpecId.value))
 const chooseTechnique = () => {
   getCombination(true)
@@ -832,11 +810,9 @@ const productThumbs = debounce(async () => {
 }, 300)
 
 // 点击艺术家
-const handleClickArtist = () => {
-  router.push({
-    path: COLLECTIONS_URL,
-    query: {q: packQuery(gen_path_obj(goodsDetail.value.creator, 'ARTIST', ['name']))}
-  })
+const handleClickArtist = (creator: ObjectNode.Creator ): string => {
+  const q = packQuery({PAGE: 1, SEARCH_TYPE: 'artists'})
+  return `${COLLECTIONS_URL}/${creator.slug}?q=${q}`
 }
 
 const loginWindowRef = ref<InstanceType<typeof LoginWindow>>()
@@ -924,7 +900,6 @@ const toggleWidget = (flag: boolean) => {
 
 const openTour = ref(false)
 const beginGuide = async () => {
-  await appStore.forceFoldHeader() // 锁定并折叠，等待动画
   window.scrollTo({
     top: 0,
     behavior: "instant",
@@ -933,7 +908,6 @@ const beginGuide = async () => {
   toggleWidget(false)
 }
 const handleTouchClose = () => {
-  appStore.cancelForceFoldHeader() // 引导结束，恢复自动控制
   window.scrollTo({
     top: 0,
     behavior: "instant",
@@ -1023,19 +997,19 @@ const banners = computed(() => {
 <style scoped lang="scss">
   .footer-preview {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
     z-index: 20;
-    background: var(--color-primary);
-    color: #fff;
+    background: #fff;
+    color: var(--color-primary);
     padding: 8px;
 
     .footer-preview-img {
       padding: 3px;
       width: 54px;
       height: 54px;
-      background: var(--color-bg-primary);
+      background: var(--color-gray-100);
     }
 
     .footer-preview-text {
@@ -1049,8 +1023,8 @@ const banners = computed(() => {
       height: 32px;
       line-height: 32px;
       text-align: center;
-      background: var(--color-bg-primary);
-      color: var(--color-text-primary);
+      background: var(--color-text-primary);
+      color: var(--color-bg-primary);
       border-radius: 50%;
 
       .iconfont {
@@ -1135,6 +1109,10 @@ const banners = computed(() => {
             &::after {
               content: '';
             }
+
+            &.swiper-button-disabled {
+              pointer-events: unset;
+            }
           }
 
           :deep(.swiper-button-prev) {
@@ -1202,6 +1180,39 @@ const banners = computed(() => {
 
       &.swiper-button-next {
         right: 40%;
+      }
+    }
+
+    .explore-item {
+      .img-wrapper {
+        position: relative;
+
+        img {
+          max-width: 95%;
+          max-height: 95%;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          transition: opacity 0.38s ease-in-out;
+        }
+
+        .img-default {
+          opacity: 1;
+        }
+
+        .img-hover {
+          opacity: 0;
+        }
+
+        &.hover-enabled:hover {
+          .img-hover {
+            opacity: 1;
+          }
+          .img-default {
+            opacity: 0;
+          }
+        }
       }
     }
   }
@@ -1321,25 +1332,6 @@ const banners = computed(() => {
     display: flex !important;
   }
 
-  .sec-process {
-    background: #262626;
-    color: #fff;
-
-    .process-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      gap: var(--gutter-base);
-
-      .process-item {
-        .iconfont {
-          color: #b18147;
-          font-size: clamp(50px, 5vw, 75px);
-        }
-      }
-    }
-  }
-
   @media (max-width: 1260px) {
     .spu-wrapper {
       .spu-preview {
@@ -1417,17 +1409,27 @@ const banners = computed(() => {
     .spu-wrapper {
       --gutter: var(--gutter-base);
 
-      .spu-preview .main-swiper-wrapper .tools-wrapper {
-        right: 10px;
-        bottom: 10px;
+      .spu-preview .main-swiper-wrapper {
 
-        .tools-item {
-          width: 30px;
-          height: 30px;
-          line-height: 30px;
+        .main-swiper {
+          :deep(.swiper-button-prev),
+          :deep(.swiper-button-next) {
+            display: none;
+          }
+        }
 
-          .iconfont {
-            font-size: 16px;
+        .tools-wrapper {
+          right: 10px;
+          bottom: 10px;
+
+          .tools-item {
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+
+            .iconfont {
+              font-size: 16px;
+            }
           }
         }
       }
@@ -1498,19 +1500,6 @@ const banners = computed(() => {
 
         iframe {
           height: 450px;
-        }
-      }
-    }
-
-    .sec-process {
-      margin-bottom: -20px;
-
-      .process-list {
-        gap: var(--gutter-base) 0;
-
-        .process-item {
-          width: 50%;
-          flex-shrink: 0;
         }
       }
     }

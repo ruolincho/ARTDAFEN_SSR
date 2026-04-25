@@ -9,7 +9,7 @@
         <template #default="scope">
           <div class="row favorites-list gap-row-base">
             <div class="col-lg-3 col-md-4 col-6" v-for="item in scope.rows" :key="item.id">
-              <div class="favorites-item cursor-pointer border-sm border-gray-200 p-10" @click.stop="jumpToProduct(item, false)">
+              <NuxtLink class="favorites-item cursor-pointer border-sm border-gray-200 p-10 block" :to="productLink(item)">
                 <div class="aspect-ratio relative">
                   <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                   <div class="operation rounded-full p-5">
@@ -21,7 +21,7 @@
                   <span class="text-14 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
                   <span class="text-gray-400 text-through ml-5 text-12" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
                 </p>
-              </div>
+              </NuxtLink>
             </div>
           </div>
         </template>
@@ -49,6 +49,7 @@ import {COLLECTIONS_URL} from "~/config";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useImage} from "~/composables/useImage";
 import {resolvePageMeta} from "~/config/pageMeta";
+import {productLink} from "../../utils";
 
 defineOptions({
   name: 'Favorites'

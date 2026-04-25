@@ -1,21 +1,21 @@
 <template>
   <div class="expandable-wrapper" :class="{ open: modelValue }">
     <!-- Header -->
-    <slot name="header" :open="modelValue" :toggle="toggle">
-      <!-- 默认 Header -->
-      <div class="expandable-header my-24 acea-row row-between-wrapper">
-        <span class="text-20 f-bold flex-1">{{ title }}</span>
-        <span
-            class="text-18 cursor-pointer iconfont"
-            :class="[modelValue ? 'icon-up' : 'icon-down']"
-            @click="toggle"
-        />
-      </div>
-    </slot>
+    <div class="py-20 border-t-sm cursor-pointer" @click="toggle">
+      <slot name="header" :open="modelValue" :toggle="toggle">
+        <!-- 默认 Header -->
+        <div class="expandable-header acea-row row-between-wrapper text-uppercase">
+          <span class="f-bold flex-1 header-text">{{ title }}</span>
+          <div class="header-icon">
+            <span class="iconfont icon-down" />
+          </div>
+        </div>
+      </slot>
+    </div>
 
     <!-- Main -->
     <div
-        class="expandable-main"
+        class="expandable-main pb-20"
         @transitionend="onTransitionEnd"
         v-show="mainVisible"
     >
@@ -176,6 +176,34 @@ const onTransitionEnd = (e: TransitionEvent) => {
 
 <style scoped lang="scss">
   .expandable-wrapper {
+
+    .expandable-header {
+      .header-text {
+        font-size: 14px;
+      }
+
+      .header-icon {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        background: #e8e8e8;
+        border-radius: 50%;
+        text-align: center;
+        transition: all .2s ease-in-out;
+
+        .iconfont {
+          font-size: 12px;
+        }
+      }
+
+      &:hover {
+        .header-icon {
+          background: var(--color-primary);
+          color: #fff;
+        }
+      }
+    }
+
     .expandable-main {
       display: grid;
       grid-template-rows: 0fr;
@@ -187,6 +215,11 @@ const onTransitionEnd = (e: TransitionEvent) => {
     }
 
     &.open {
+
+      .expandable-header .header-icon {
+        transform: rotate(180deg);
+      }
+
       .expandable-main {
         grid-template-rows: 1fr;
       }

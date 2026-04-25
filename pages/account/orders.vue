@@ -44,7 +44,7 @@
               <p class="text-gray-600 p-operation text-center">Qty: {{ goods.quantity }}</p>
             </div>
             <div class="py-lg-20 py-10 border-b-sm border-gray-200 acea-row row-middle">
-              <div class="flex-1 p-content">
+              <div class="flex-1 p-content" style="line-height: 1.7">
                 <template v-if="item.status === '0'">
                   <el-tag type="warning" effect="dark">Obligation</el-tag>
                   <span class="ml-10">Your order has not been paid yet, please make the payment as soon as possible!</span>
@@ -73,9 +73,11 @@
               </div>
               <div class="f-bold p-price text-center">{{ formatToCurrency(item.actualAmount, item.currencyCode) }}</div>
               <div class="p-operation">
-                <el-button class="w-full" size="large" @click="router.push(`/order-detail/${item.tradeNo}`)">View
-                  Order
-                </el-button>
+                <NuxtLink class="block" :to="`/order-detail/${item.tradeNo}`">
+                  <el-button class="w-full" size="large" type="primary">
+                    View Order
+                  </el-button>
+                </NuxtLink>
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import path from 'path';
 // @ts-ignore
 export default defineNuxtConfig({
     ssr: process.env.NUXT_PUBLIC_ENABLE_SSR === 'true',
-    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/google-fonts', '@nuxt/image'],
+    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/google-fonts', '@nuxt/image', '@vite-pwa/nuxt'],
     runtimeConfig: {
         public: {
             siteName: process.env.NUXT_PUBLIC_SITE_NAME,
@@ -138,5 +138,38 @@ export default defineNuxtConfig({
                 }
             }
         }
-    }
+    },
+    pwa: {
+        // 开启 PWA
+        registerType: 'prompt',
+        manifest: {
+            name: 'ARTDAFEN',
+            short_name: 'ARTDAFEN',
+            description: 'Artdafen — the Dafen community\'s hub for the latest art news, gallery highlights, and creative resources. Explore pixel art showcases, installation art examples, and hands-on art & craft project ideas, plus curated drawing tutorials and inspiration from platforms like DeviantArt and ArtStation. Perfect for artists, students, and collectors seeking trends, techniques, and project-ready references.',
+            theme_color: '#ffffff',
+            background_color: '#ffffff',
+            display: 'standalone', // 这个属性让应用全屏显示，看起来像原生 App
+            icons: [
+                {
+                    src: 'pwa-192x192.png',
+                    sizes: '192x192',
+                    type: 'image/png'
+                },
+                {
+                    src: 'pwa-512x512.png',
+                    sizes: '512x512',
+                    type: 'image/png'
+                }
+            ]
+        },
+        workbox: {
+            navigateFallback: '/',
+            globPatterns: ['**/*.{js,css,html,png,svg,ico}']
+        },
+        // 开发环境也能测试 PWA
+        devOptions: {
+            enabled: true,
+            type: 'module'
+        }
+    },
 })

@@ -80,7 +80,6 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import {jumpToUrl} from "~/utils";
 import {formatTimestamp} from "~/utils/format";
-import {useAppStore} from "~/stores/modules/app";
 import type {INews} from "~/api/interface/news/news";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
@@ -94,7 +93,6 @@ defineOptions({
 
 const {imagePrefix} = useImage()
 const route = useRoute()
-const appStore = useAppStore()
 const modules = [Pagination, Navigation]
 
 const {data: topData} = await useAsyncData(
@@ -121,10 +119,11 @@ const executeScroll = () => {
 
     if (anchor) {
       // 偏移量计算
-      const headerOffset = appStore.headerState.height
+      const root = document.documentElement
+      const cssValue = getComputedStyle(root).getPropertyValue('--header-height').trim()
+      const headerOffset = parseInt(cssValue, 10) || 0
       const elementPosition = anchor.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset
-
       window.scrollTo({
         top: offsetPosition - 15,
         behavior: 'smooth' // 建议用 auto (瞬间)，配合骨架屏体验更好；smooth 可能会有视觉上的拉扯

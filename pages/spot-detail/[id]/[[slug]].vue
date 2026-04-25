@@ -221,7 +221,7 @@
             <swiper-slide v-for="item in relatedList" :key="item.id">
               <NuxtLink class="explore-item block" :to="productLink(item)" target="_blank">
                 <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
+                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title"/>
                 </div>
                 <p class="line1 text-14 my-8">{{ item.title }}</p>
                 <p class="text-12">

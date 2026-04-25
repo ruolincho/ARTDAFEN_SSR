@@ -142,6 +142,7 @@ const pointList = ref([
 .info-section {
   padding: clamp(30px, 3.75vw, 72px) 0;
   background: #fafafa;
+  margin-bottom: -30px;
 
   .info-list {
     --gutter: var(--gutter-md);
@@ -187,6 +188,8 @@ const pointList = ref([
 
 @media (max-width: 991px) {
   .info-section {
+    margin-bottom: -15px;
+
     .info-list {
       --gutter: 15px;
     }

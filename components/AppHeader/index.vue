@@ -1,12 +1,15 @@
 <template>
   <!--pc-导航-->
-  <AppPcHeader :menuData="headerList" :headerHeight="pcPlaceHeight" :currentId="highlightMenuId" />
+  <AppPcHeader :menuData="headerList" :currentId="highlightMenuId"/>
 
   <!--app-导航-->
-  <AppMobileHeader :menuData="headerList" :headerHeight="appPlaceHeight" :currentId="highlightMenuId" />
+  <AppMobileHeader :menuData="headerList" :currentId="highlightMenuId"/>
 
-  <div id="header-placeholder"
-       :style="{ height: appStore.headerState.height + 'px', transition: `height ${appStore.headerState.duration}ms ease` }"/>
+  <!--搜索组件-->
+  <SearchDrawer v-model="isSearchOpen" />
+
+  <!--高度占位-->
+  <div id="header-placeholder" />
 </template>
 
 <script setup lang="ts">
@@ -19,26 +22,14 @@ import {TRADE_MODULE} from "~/api/helper/prefix";
 import AppPcHeader from './AppPcHeader.vue'
 import AppMobileHeader from './AppMobileHeader.vue'
 import {COLLECTIONS_URL} from "~/config";
-
-// ✅ 只在客户端挂载/清理监听
-if (import.meta.client) {
-  const {$bus} = useNuxtApp()
-  onMounted(() => {
-    getCurrency()
-    handleResize()
-    window.addEventListener('resize', handleResize)
-  })
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('resize', handleResize)
-  })
-}
+import {isExternal} from "~/utils";
+import SearchDrawer from "~/components/SearchDrawer/index.vue";
 
 // 递归处理函数
 const processMenuData = (menuList: IHome.MenuRow[]) => {
   menuList.forEach(item => {
     let url = '';
-    let isExternal = false;
+    let isExternalFlag = false;
     let isPureLink = false;
 
     // 如果有子集，说明当前项不可直接跳转，递归处理它的子集
@@ -49,17 +40,17 @@ const processMenuData = (menuList: IHome.MenuRow[]) => {
       isPureLink = true;
       if (item.config?.url) {
         url = item.config.url;
-        isExternal = url.indexOf('http') !== -1;
+        isExternalFlag = isExternal(url);
       } else {
-        const q = packQuery({ MENU_ID: item.id, PAGE: 1 });
-        url = `${COLLECTIONS_URL}/${formatHandle(item.name)}?q=${q}`;
+        const q = packQuery({MENU_ID: item.id, PAGE: 1});
+        url = `${COLLECTIONS_URL}/${item.slug}?q=${q}`;
       }
     }
 
     // 将计算结果直接挂载到 item 上
     item.linkProps = {
       to: url,
-      target: isExternal ? '_blank' : '_self',
+      target: isExternalFlag ? '_blank' : '_self',
       isPureLink: isPureLink
     };
   });
@@ -151,19 +142,34 @@ const highlightMenuId = computed(() => {
   return null
 })
 
-const pcPlaceHeight = ref(80) // pc 头部理论高度
-const appPlaceHeight = ref(50) // app 头部理论高度
-const currentPlaceHeight = ref(0) // 用于存储当前实际应用的高度
-// 定义处理窗口尺寸变化的函数
-const handleResize = () => {
-  if (window.innerWidth < 991) {
-    currentPlaceHeight.value = appPlaceHeight.value
-  } else {
-    currentPlaceHeight.value = pcPlaceHeight.value
-  }
-  appStore.setHeaderHeight(currentPlaceHeight.value)
-}
+const isSearchOpen = ref(false)
+const {$bus} = useNuxtApp()
+
+onMounted(() => {
+  getCurrency()
+  $bus.on('openSearchDrawer', () => {isSearchOpen.value = true})
+})
+
+onBeforeUnmount(() => {
+  $bus.off('openSearchDrawer')
+})
 </script>
 
-<style scoped>
+<style>
+  :root {
+    /* 默认 PC 高度 */
+    --header-height: 80px;
+  }
+
+  /* 移动端屏幕小于 991px 时自动切换 */
+  @media (max-width: 991px) {
+    :root {
+      --header-height: 50px;
+    }
+  }
+
+  #header-placeholder {
+    height: var(--header-height);
+    transition: height 300ms ease;
+  }
 </style>

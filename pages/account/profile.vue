@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="p-20 shadow-lg rounded-sm mb-15">
+    <div class="p-20 shadow-lg rounded-sm">
       <div class="acea-row row-between-wrapper mb-20 f-bold">
         <span class="text-18">Password</span>
         <span class="text-14 cursor-pointer" @click="handleEditPassword">Edit</span>

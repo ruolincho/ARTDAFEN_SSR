@@ -15,7 +15,7 @@
                 class="p-img mr-10 border-sm cursor-pointer"
                 @click="jumpToProduct(item)"
               >
-                <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" :alt="item.title">
+                <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title">
                 <p class="tip text-14 py-3 text-center">
                   {{ item.disable ? 'Temporarily unavailable' : Number(item.retailStock) <= 0 ? 'Out of stock' : '' }}
                 </p>

@@ -12,7 +12,11 @@
             class="ball-item-wrapper"
             :style="{ transitionDelay: `${index * 50}ms` }"
         >
-          <button class="ball-item-default" @click="handleAction(item)">
+          <button
+              class="ball-item-default"
+              @click.stop="handleAction(item)"
+              @touchend.stop.prevent="handleAction(item)"
+          >
             <slot :name="item.name" :item="item">
               <span v-if="typeof item.icon === 'string'" :class="['iconfont', item.icon]"></span>
               <component v-else-if="item.icon" :is="item.icon" class="icon-svg" />
@@ -27,7 +31,8 @@
     <button
         class="ball-main-btn"
         :class="{ 'is-active': isOpen }"
-        @click="isOpen = !isOpen"
+        @click.stop="isOpen = !isOpen"
+        @touchend.stop.prevent="isOpen = !isOpen"
     >
       <span class="plus-icon"></span>
     </button>
@@ -68,7 +73,7 @@ const containerStyle = computed(() => ({
 
 const handleAction = (item: ActionItem) => {
   if (item.handler) item.handler()
-  isOpen.value = false
+  // isOpen.value = false
 }
 
 // 点击外部自动收起
@@ -127,13 +132,6 @@ const handleAction = (item: ActionItem) => {
     padding: 0;
   }
 
-  .ball-item-default:hover {
-    color: #FFFFFF;
-    border-color: var(--color-gray-600);
-    background-color: var(--color-gray-700);
-    transform: translateY(-2px);
-  }
-
   /* 主按钮 */
   .ball-main-btn {
     width: 52px;
@@ -189,11 +187,6 @@ const handleAction = (item: ActionItem) => {
     transition: opacity 0.2s, transform 0.2s;
   }
 
-  .ball-item-wrapper:hover .ball-tooltip {
-    opacity: 1;
-    transform: translateY(-50%) translateX(-5px);
-  }
-
   /* 动画 */
   .ball-pop-enter-active,
   .ball-pop-leave-active {
@@ -210,7 +203,21 @@ const handleAction = (item: ActionItem) => {
     width: 20px;
     height: 20px;
   }
-  
+
+  @media (hover: hover) {
+    .ball-item-default:hover {
+      color: #FFFFFF;
+      border-color: var(--color-gray-600);
+      background-color: var(--color-gray-700);
+      transform: translateY(-2px);
+    }
+
+    .ball-item-wrapper:hover .ball-tooltip {
+      opacity: 1;
+      transform: translateY(-50%) translateX(-5px);
+    }
+  }
+
   @media (max-width: 768px) {
     .ball-main-btn {
       width: 42px;

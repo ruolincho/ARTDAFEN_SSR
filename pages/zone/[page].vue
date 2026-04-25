@@ -52,7 +52,7 @@
             </div>
             <div class="content-box mt-20">
               <h2 class="title text-30 f-bold-500">{{ item.title }}</h2>
-              <p class="subtitle text-22 mt-5">{{ item.subTitle }}</p>
+              <p class="subtitle text-22 mt-5">{{ item.name }}</p>
             </div>
           </NuxtLink>
         </div>

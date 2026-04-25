@@ -212,8 +212,8 @@
         </swiper-slide>
       </swiper>
       <div class="acea-row row-center-wrapper mt-15 gap-base">
-        <div class="artists-button artists-prev"><span class="iconfont icon-left text-white text-24"></span></div>
-        <div class="artists-button artists-next"><span class="iconfont icon-right text-white text-24"></span></div>
+        <div class="artists-button artists-prev"><span class="iconfont icon-left text-24"></span></div>
+        <div class="artists-button artists-next"><span class="iconfont icon-right text-24"></span></div>
       </div>
     </div>
   </section>
@@ -590,7 +590,7 @@ useHead(mergeHeadWithLodash(
   .sec-artists {
     position: relative;
     z-index: 2;
-    background: #4d4d4d;
+    background: #000000;
     padding: 6.25vw 0;
 
     .artists-swiper-wrapper {
@@ -622,8 +622,9 @@ useHead(mergeHeadWithLodash(
         position: absolute;
         width: clamp(33px, 2.60vw, 50px);
         height: clamp(33px, 2.60vw, 50px);
-        background: rgba(0, 0, 0, 0.6);
+        background: #fff;
         border-radius: 50%;
+        color: #000;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -645,9 +646,9 @@ useHead(mergeHeadWithLodash(
   .sec-partner {
     position: relative;
     z-index: 2;
-    color: #fff;
-    background: #000;
+    background: #fff;
     padding: 6.25vw 0;
+    margin-bottom: -30px;
 
     .explore-swiper-wrapper {
       position: relative;
@@ -658,7 +659,7 @@ useHead(mergeHeadWithLodash(
         position: absolute;
         width: clamp(33px, 2.60vw, 50px);
         height: clamp(33px, 2.60vw, 50px);
-        background: #4d4d4d;
+        background: #000;
         border-radius: 50%;
         cursor: pointer;
         display: flex;
@@ -726,6 +727,10 @@ useHead(mergeHeadWithLodash(
         display: none;
       }
     }
+
+    .sec-partner {
+      margin-bottom: -15px;
+    }
   }
 
   @media (max-width: 768px) {
@@ -791,10 +796,6 @@ useHead(mergeHeadWithLodash(
         max-width: 50%;
         padding: 15px;
       }
-    }
-
-    .sec-partner {
-      margin-bottom: -20px;
     }
   }
 

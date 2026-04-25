@@ -64,45 +64,6 @@ export const useAppStore = defineStore(
             menuList.value = menu
         }
 
-        // AppHeader组件逻辑：
-        const headerState = reactive({
-            height: 0, // 用来存储头部高度
-            isFold: false,   // 当前是否折叠
-            isLocked: false, // 是否被锁定（锁定期间忽略滚动）
-            duration: 300 // 对应 CSS transition
-        })
-
-        // 设置头部高度的方法
-        const setHeaderHeight = (val: number) => {
-            headerState.height = val;
-        }
-
-        // 组件监听到滚动时调用此方法。如果处于锁定状态，则忽略更新
-        const setScrollFold = (shouldFold: boolean)=> {
-            if (!headerState.isLocked) {
-                headerState.isFold = shouldFold;
-            }
-        }
-
-        // 外部业务调用：强制折叠（开始引导）。返回 Promise，等待 320ms 动画结束
-        const forceFoldHeader = () => {
-            return new Promise<void>((resolve) => {
-                if (!isPc.value) return resolve();
-                headerState.isLocked = true; // 上锁
-                headerState.isFold = true;   // 强制折叠
-
-                setTimeout(() => {
-                    resolve();
-                }, headerState.duration);
-            });
-        }
-
-        // 外部业务调用：取消强制折叠（结束引导）。解锁后，组件会监听到 isLocked 变化并自动校准状态
-        const cancelForceFoldHeader = () => {
-            if (!isPc.value) return;
-            headerState.isLocked = false;
-        }
-
         return {
             codeCountDown,
             startCodeCountDown,
@@ -111,12 +72,6 @@ export const useAppStore = defineStore(
             device,
             toggleDevice,
             isPc,
-            // AppHeader组件逻辑：
-            headerState,
-            setHeaderHeight,
-            setScrollFold,
-            forceFoldHeader,
-            cancelForceFoldHeader,
             menuList,
             setMenuList
         };

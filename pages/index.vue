@@ -9,30 +9,32 @@
           :loop="true"
           :lazy="true"
       >
-        <swiper-slide class="cursor-pointer" v-for="item in topicData" :key="item.id" @click="jumpToUrl(item.url)" :lazt="true">
+        <swiper-slide class="cursor-pointer" v-for="item in topicData" :key="item.id" :lazy="true">
           <!-- 图片 -->
           <template v-if="item.type === '0'">
-            <picture>
-              <!-- Mobile -->
-              <source
-                  media="(max-width: 768px)"
-                  :srcset="getMobileSrcset(item.mobileImg).srcset"
-                  sizes="100vw"
-              />
-              <!-- PC -->
-              <source
-                  media="(min-width: 769px)"
-                  :srcset="getPcSrcset(item.img).srcset"
-                  sizes="100vw"
-              />
-              <!-- fallback img -->
-              <img
-                  :src="getPcSrcset(item.img).src"
-                  alt="banner"
-                  class="w-full h-auto fit-cover"
-                  loading="lazy"
-              />
-            </picture>
+            <NuxtLink :to="item.url" :target="isExternal(item.url) ? '_blank' : '_self'">
+              <picture>
+                <!-- Mobile -->
+                <source
+                    media="(max-width: 768px)"
+                    :srcset="getMobileSrcset(item.mobileImg).srcset"
+                    sizes="100vw"
+                />
+                <!-- PC -->
+                <source
+                    media="(min-width: 769px)"
+                    :srcset="getPcSrcset(item.img).srcset"
+                    sizes="100vw"
+                />
+                <!-- fallback img -->
+                <img
+                    :src="getPcSrcset(item.img).src"
+                    alt="banner"
+                    class="w-full h-auto fit-cover"
+                    loading="lazy"
+                />
+              </picture>
+            </NuxtLink>
           </template>
           <!-- 视频 -->
           <template v-if="item.type === '1'">
@@ -426,7 +428,7 @@
                   v-aos="{ name: 'fade-up', delay: index % 6 * 100}"
               >
                 <NuxtLink class="img-wrapper aspect-ratio block overflow-hidden" :to="productLink(item)">
-                  <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`" lazy />
+                  <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`" lazy />
                 </NuxtLink>
                 <div class="content-wrapper">
                   <NuxtLink class="my-10 line1 block text-hover" :to="handleClickArtist(item.creator)">
@@ -524,7 +526,7 @@
           <template v-for="(item, index) in artistsData" :key="item.id">
             <div class="col-4 col-sm-3 col-md-average col-lg-2" v-if="appStore.isPc || index < 9">
               <NuxtLink
-                  :to="handleClickArtist(item)"
+                  :to="`/artist-detail/${item.id}/${item.slug}`"
                   class="artist-item block"
                   v-aos="{ name: 'fade-up', delay: index % 6 * 100}"
               >
@@ -685,6 +687,7 @@ import type {IMessage} from "~/api/interface/message/message";
 import {WHY_CHOOSE_LIST} from "~/constant";
 import type {ObjectNode} from "~/types/global";
 import {useImage} from "~/composables/useImage";
+import {isExternal} from "../utils";
 
 defineOptions({
   name: 'Home'
@@ -706,7 +709,7 @@ const route = useRoute()
 const router = useRouter()
 const appStore = useAppStore()
 const customStore = useCustomStore()
-const { formatToCurrency } = useCurrencyStore();
+const { formatToCurrency, currentCurrency } = useCurrencyStore();
 const userStore = useUserStore()
 const modules = [Autoplay, Pagination, Navigation, Lazy]
 const playYoutube = ref(false)
@@ -715,14 +718,21 @@ const agree = ref(false)
 useHead(resolvePageMeta("/"));
 
 // 点击艺术家
-const handleClickArtist = (creator: ObjectNode.Creator | IArtists.Row) => {
-  return COLLECTIONS_URL + '?q=' + packQuery(gen_path_obj(creator, 'ARTIST', ['name']))
+const handleClickArtist = (creator: IArtists.Row) => {
+  const q = packQuery({PAGE: 1, SEARCH_TYPE: 'artists'})
+  return `${COLLECTIONS_URL}/${creator.slug}?q=${q}`
 }
 
 // 获取首页数据
 const {data: homeData, pending: isSkeleton} = await useAsyncData('homeData', async () => {
   const config = useRuntimeConfig()
-  const {data} = await $fetch<IResultData<IHome.HomeDataRow>>(config.public.apiBase + TRADE_MODULE + '/home/data')
+  const {data} = await $fetch<IResultData<IHome.HomeDataRow>>(config.public.apiBase + TRADE_MODULE + '/home/data', {
+    method: 'GET',
+    headers: {
+      'Token': userStore.token || '',
+      'X-Currency': currentCurrency
+    }
+  })
   return data
 })
 

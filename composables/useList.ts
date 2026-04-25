@@ -107,7 +107,9 @@ export const useList = (
      * @return void
      * */
     const search = (initPage: boolean = true) => {
+        // console.log('initPage=>>>>>',initPage)
         if (initPage) state.pageable.pageNum = 1;
+        // console.log('state=>>>>>', state)
         getTableList();
     };
 

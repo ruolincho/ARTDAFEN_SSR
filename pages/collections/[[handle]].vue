@@ -1,10 +1,13 @@
 <template>
+  <!--锚点-->
+  <div id="list-anchor"></div>
+
   <!-- 标题 -->
-  <section class="title-wrapper" v-if="pageTitle">
+  <section class="title-wrapper pt-15" v-if="pageSeo">
     <div class="container-fluid">
       <div class="title-box text-center">
-        <h1 class="text-60 f-bold-500">{{ pageTitle.name }}</h1>
-        <p class="mt-10 text-gray-500" style="line-height: 1.7">{{ pageTitle.description }}</p>
+        <h1 class="text-60 f-bold-500">{{ pageSeo.name }}</h1>
+        <p class="mt-10 text-gray-500" style="line-height: 1.7">{{ pageSeo.description }}</p>
       </div>
     </div>
   </section>
@@ -12,32 +15,22 @@
   <!-- 关键字搜索 -->
   <section class="search-wrapper" v-if="routerParams.KEYWORD">
     <div class="container-fluid">
-      <div class="search-box">
-        <!-- 输入框 -->
-        <el-autocomplete
-            ref="searchRef"
-            v-model="keyword"
-            value-key="keyword"
-            placeholder="Search..."
-            :fetch-suggestions="searchCompletionList"
-            :debounce="450"
-            :trigger-on-focus="false"
-            @select="handleClickSearchCompletion"
-            @click.stop
-            :hide-loading="true"
-            @input="handleInput"
-        >
-          <template #suffix>
-            <span class="iconfont icon-search text-40 cursor-pointer text-gray-700" @click="search"></span>
-          </template>
-        </el-autocomplete>
-        <div class="acea-row mt-15 gap-column-base" v-if="everyoneList.length">
-          <div class="text-14 f-bold">Everyone search</div>
-          <div class="acea-row gap-base flex-1">
-            <span class="cursor-pointer text-14" v-for="(item, index) in everyoneList" :key="index"
-                  @click="clickKeyword(item)">{{ item.keyword }}</span>
-          </div>
+      <div class="search-header pt-md-30 pt-15">
+        <div class="input-wrapper">
+          <input
+              ref="searchInputRef"
+              v-model="keyword"
+              type="text"
+              class="search-input"
+              placeholder="Search for..."
+              @keydown.enter="onSearch"
+          >
         </div>
+        <button class="search-btn" @click="onSearch">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"/>
+          </svg>
+        </button>
       </div>
     </div>
   </section>
@@ -51,139 +44,150 @@
           <div class="side-wrapper mr-40" v-show="appStore.device === 'pc' && groupList.length && isFilter">
 
             <!--后台返回的筛选-->
-            <template v-for="group in groupList" :key="group.id">
-              <!-- PRICE -->
-              <template v-if="group.config?.type === 'PRICE'">
-                <Expandable v-model="group.isShow" :title="group.name">
-                  <div class="pr-4">
-                    <div
-                        class="acea-row row-between-wrapper py-20 border-t-sm cursor-pointer"
-                        v-for="item in group.children"
-                        :key="item.id"
-                        @click="clickPriceType(item)"
-                    >
-                      <span class="text-16">{{ item.name }}</span>
-                      <span
-                          class="iconfont text-18"
-                          :class="[priceSelected.id === item.id && !isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                      />
-                    </div>
-                    <div class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
-                         @click="clickPriceType(undefined)">
-                      <span class="text-16">Custom</span>
+            <div class="side-menu scroll-custom">
+              <div class="py-md-30 py-15 f-bold text-30">
+                FILTERS
+              </div>
+              <template v-for="group in groupList" :key="group.id">
+                <!-- PRICE -->
+                <template v-if="group.config?.type === 'PRICE'">
+                  <Expandable v-model="group.isShow" :title="group.name">
+                    <div class="pr-4">
+                      <div class="acea-row row-column gap-row-sm">
+                        <div
+                            class="acea-row row-middle cursor-pointer"
+                            v-for="item in group.children"
+                            :key="item.id"
+                            @click="clickPriceType(item)"
+                        >
+                       <span
+                           class="iconfont text-18"
+                           :class="[priceSelected.id === item.id && !isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+                       />
+                          <span class="text-14 pl-12">{{ item.name }}</span>
+                        </div>
+                        <div class="acea-row row-middle cursor-pointer" @click="clickPriceType(undefined)">
                       <span
                           class="iconfont text-18"
                           :class="[isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
                       />
-                    </div>
-                    <div v-show="isCustomPrice">
-                      <div class="text-16 my-20">Min Price</div>
-                      <div class="acea-row row-between-wrapper px-15 py-12"
-                           :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']">
-                        <input type="text" placeholder="1400" style="width: 60%" v-model="startPrice"
-                               :disabled="!isCustomPrice" @blur="onStartPriceBlur">
-                        <span class="text-gray-600">{{ getCurrencySymbol }}</span>
+                          <span class="text-14 pl-12">Custom</span>
+                        </div>
+                        <div v-show="isCustomPrice">
+                          <div class="text-14 my-10">Min Price</div>
+                          <div class="acea-row row-between-wrapper px-15 py-12"
+                               :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']">
+                            <input type="text" placeholder="1400" style="width: 60%" v-model="startPrice"
+                                   :disabled="!isCustomPrice" @blur="onStartPriceBlur">
+                            <span class="text-gray-600">{{ getCurrencySymbol }}</span>
+                          </div>
+                          <div class="text-14 my-10">Max Price</div>
+                          <div class="acea-row row-between-wrapper px-15 py-12"
+                               :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']"
+                          >
+                            <input type="text" placeholder="3400" style="width: 60%" v-model="endPrice"
+                                   :disabled="!isCustomPrice" @blur="onEndPriceBlur">
+                            <span class=" text-gray-600">{{ getCurrencySymbol }}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div class="text-16 my-20">Max Price</div>
-                      <div class="acea-row row-between-wrapper px-15 py-12"
-                           :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']"
-                      >
-                        <input type="text" placeholder="3400" style="width: 60%" v-model="endPrice"
-                               :disabled="!isCustomPrice" @blur="onEndPriceBlur">
-                        <span class=" text-gray-600">{{ getCurrencySymbol }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Expandable>
-              </template>
 
-              <!-- RADIO -->
-              <template v-if="group.config?.type === 'RADIO'">
-                <Expandable v-model="group.isShow" :title="group.name">
-                  <div class="scroll-y pr-4 scroll-custom">
-                    <div
-                        class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
-                        v-for="item in group.children"
-                        :key="item.id"
-                        @click="clickRadioType(item)"
-                    >
-                      <span class="text-16">{{ item.name }}</span>
-                      <span
-                          class="iconfont text-18"
-                          :class="[radioSelected.get(item.parentId)?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                      />
-                    </div>
-                  </div>
-                </Expandable>
-              </template>
 
-              <!-- CHECKBOX -->
-              <template v-if="group.config?.type === 'CHECKBOX'">
-                <Expandable v-model="group.isShow" :title="group.name">
-                  <div class="scroll-y pr-4 scroll-custom">
-                    <div
-                        class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
-                        v-for="item in group.children"
-                        :key="item.id"
-                        @click="clickCheckoutType(item)"
-                    >
-                      <span class="text-16">{{ item.name }}</span>
-                      <span
-                          class="iconfont text-18"
-                          :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'icon-checkbox-fill text-primary' : 'icon-checkbox text-gray-400']"
-                      />
                     </div>
-                  </div>
-                </Expandable>
-              </template>
+                  </Expandable>
+                </template>
 
-              <!-- COLOR -->
-              <template v-if="group.config?.type === 'COLOR'">
-                <Expandable v-model="group.isShow" :title="group.name">
-                  <div class="color-list pr-4 scroll-y scroll-custom acea-row">
-                    <div
-                        class="color-item acea-row nowrap row-middle cursor-pointer"
-                        v-for="item in group.children"
-                        :key="item.id"
-                        @click="clickColorType(item)"
-                    >
-                      <div class="rounded-full border-sm p-2"
-                           :class="{ 'border-gray-700': colorSelected?.includes(item) }">
+                <!-- RADIO -->
+                <template v-if="group.config?.type === 'RADIO'">
+                  <Expandable v-model="group.isShow" :title="group.name">
+                    <div class="scroll-y pr-4 scroll-custom">
+                      <div class="acea-row row-column gap-row-sm">
                         <div
-                            class="circle rounded-full "
-                            :style="{ ...getColorStyle(item.config.color!) }"
-                        />
-                      </div>
-                      <div class="pl-10 pr-5 text-16 flex-1" :class="{ 'f-bold': colorSelected?.includes(item) }">
-                        {{ item.name }}
+                            class="acea-row row-middle cursor-pointer"
+                            v-for="item in group.children"
+                            :key="item.id"
+                            @click="clickRadioType(item)"
+                        >
+                       <span
+                           class="iconfont text-18"
+                           :class="[radioSelected.get(item.parentId)?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+                       />
+                          <span class="text-14 pl-12">{{ item.name }}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Expandable>
-              </template>
+                  </Expandable>
+                </template>
 
-              <!-- SHAPE -->
-              <template v-if="group.config?.type === 'SHAPE'">
-                <Expandable v-model="group.isShow" :title="group.name">
-                  <div class="scroll-y pr-4 scroll-custom">
-                    <div
-                        class="acea-row row-between-wrapper py-20 border-t-sm border-b-sm cursor-pointer"
-                        v-for="item in group.children"
-                        :key="item.id"
-                        @click="clickShapeType(item)"
-                    >
-                      <span class="text-16">{{ item.name }}</span>
+                <!-- CHECKBOX -->
+                <template v-if="group.config?.type === 'CHECKBOX'">
+                  <Expandable v-model="group.isShow" :title="group.name">
+                    <div class="scroll-y pr-4 scroll-custom">
+                      <div class="acea-row row-column gap-row-sm">
+                        <div
+                            class="acea-row row-middle cursor-pointer"
+                            v-for="item in group.children"
+                            :key="item.id"
+                            @click="clickCheckoutType(item)"
+                        >
+                       <span
+                           class="iconfont text-18"
+                           :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'icon-checkbox-fill text-primary' : 'icon-checkbox text-gray-400']"
+                       />
+                          <span class="text-14 pl-12">{{ item.name }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Expandable>
+                </template>
+
+                <!-- COLOR -->
+                <template v-if="group.config?.type === 'COLOR'">
+                  <Expandable v-model="group.isShow" :title="group.name">
+                    <div class="scroll-y pr-4 scroll-custom">
+                      <div class="color-list acea-row row-middle gap-sm">
+                        <div
+                            class="color-item cursor-pointer"
+                            :class="{ 'active': colorSelected?.includes(item) }"
+                            v-for="item in group.children"
+                            :key="item.id"
+                            @click="clickColorType(item)"
+                        >
+                          <el-tooltip :content="item.name" placement="top" :hide-after="100">
+                            <div class="circle rounded-full" :style="{ ...getColorStyle(item.config.color!) }"/>
+                          </el-tooltip>
+                        </div>
+                      </div>
+                    </div>
+                  </Expandable>
+                </template>
+
+                <!-- SHAPE -->
+                <template v-if="group.config?.type === 'SHAPE'">
+                  <Expandable v-model="group.isShow" :title="group.name">
+                    <div class="scroll-y pr-4 scroll-custom">
+                      <div class="acea-row row-column gap-row-sm">
+                        <div
+                            class="acea-row row-middle cursor-pointer"
+                            v-for="item in group.children"
+                            :key="item.id"
+                            @click="clickShapeType(item)"
+                        >
                       <span
                           class="iconfont text-18"
                           :class="[shapeSelected?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
                       />
+                          <span class="text-14 pl-12">{{ item.name }}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </Expandable>
+                  </Expandable>
+                </template>
               </template>
-            </template>
+              <hr class="border-t-sm"></hr>
+            </div>
 
-            <div class="acea-row nowrap side-button mt-40 pb-40">
+            <div class="acea-row nowrap side-button py-20">
               <el-button @click="reset()">Reset</el-button>
               <el-button type="primary" class="flex-1" @click="routerJump()">See all items</el-button>
             </div>
@@ -191,13 +195,10 @@
         </transition>
         <!-- 右侧主要区域 -->
         <div class="main-wrapper flex-1">
-          <!--锚点-->
-          <div id="list-anchor"></div>
 
           <!--排序按钮 Pc端-->
           <div
-              class="buttons-wrapper py-md-30 py-15 acea-row row-right row-middle gap-column-base"
-              :style="{ top: appStore.headerState.height + 'px' }"
+              class="py-md-30 py-15 acea-row row-right row-middle gap-column-base"
               v-show="appStore.device === 'pc'"
           >
             <!--展示过滤选项-->
@@ -314,7 +315,7 @@
               class="buttons-wrapper p-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
               v-show="appStore.device === 'app'"
               ref="appFilterRef"
-              :style="{ top: appStore.headerState.height + 'px', margin: '0 -15px' }"
+              :style="{ top: 'var(--header-height)', margin: '0 -15px' }"
           >
 
             <!--排序-->
@@ -336,7 +337,8 @@
                     class="cursor-pointer"
                     @click="clickAppFilter('POPUP', index, group)"
                 >
-                  {{ group.name }}<template v-if="priceSubmitted"> (1) </template>
+                  {{ group.name }}
+                  <template v-if="priceSubmitted"> (1)</template>
                   <span class="iconfont icon-down text-16"></span>
                 </el-tag>
               </template>
@@ -349,7 +351,10 @@
                     class="cursor-pointer"
                     @click="clickAppFilter('POPUP', index, group)"
                 >
-                  {{ group.name }}<template v-if="countsMap[group.config?.type][group.id] > 0"> ({{ countsMap[group.config?.type][group.id] }}) </template>
+                  {{ group.name }}
+                  <template v-if="countsMap[group.config?.type][group.id] > 0">
+                    ({{ countsMap[group.config?.type][group.id] }})
+                  </template>
                   <span class="iconfont icon-down text-16"></span>
                 </el-tag>
               </template>
@@ -362,7 +367,10 @@
                     class="cursor-pointer"
                     @click="clickAppFilter('POPUP', index, group)"
                 >
-                  {{ group.name }}<template v-if="countsMap[group.config?.type][group.id] > 0"> ({{ countsMap[group.config?.type][group.id] }}) </template>
+                  {{ group.name }}
+                  <template v-if="countsMap[group.config?.type][group.id] > 0">
+                    ({{ countsMap[group.config?.type][group.id] }})
+                  </template>
                   <span class="iconfont icon-down text-16"></span>
                 </el-tag>
               </template>
@@ -375,7 +383,10 @@
                     class="cursor-pointer"
                     @click="clickAppFilter('POPUP', index, group)"
                 >
-                  {{ group.name }}<template v-if="countsMap[group.config?.type][group.id] > 0"> ({{ countsMap[group.config?.type][group.id] }}) </template>
+                  {{ group.name }}
+                  <template v-if="countsMap[group.config?.type][group.id] > 0">
+                    ({{ countsMap[group.config?.type][group.id] }})
+                  </template>
                   <span class="iconfont icon-down text-16"></span>
                 </el-tag>
               </template>
@@ -388,7 +399,8 @@
                     class="cursor-pointer"
                     @click="clickAppFilter('POPUP', index, group)"
                 >
-                  {{ group.name }}<template v-if="shapeSubmitted.id"> (1) </template>
+                  {{ group.name }}
+                  <template v-if="shapeSubmitted.id"> (1)</template>
                   <span class="iconfont icon-down text-16"></span>
                 </el-tag>
               </template>
@@ -399,7 +411,7 @@
             <!--商品数据-->
             <ProList
                 ref="proListRef"
-                :request-api="getProductList"
+                :request-api="getProductListApiFn"
                 :init-param="initParam"
                 :request-auto="false"
                 :handle-current-change="handleCurrentChange"
@@ -408,8 +420,9 @@
             >
               <template #default="scope">
                 <div class="row product-list gap-row-base">
-                  <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="(item, index) in scope.rows" :key="item.id">
-                    <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="handleClickArtist"/>
+                  <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="(item, index) in scope.rows"
+                       :key="item.id">
+                    <GoodsItem :item="item" @thumbsClick="productThumbs" :clickArtistFn="handleClickArtist"/>
                   </div>
                 </div>
               </template>
@@ -427,7 +440,7 @@
                 <template #default="scope">
                   <div class="row product-list gap-row-base">
                     <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="item in scope.rows" :key="item.id">
-                      <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="handleClickArtist"/>
+                      <GoodsItem :item="item" @thumbsClick="productThumbs" :clickArtistFn="handleClickArtist"/>
                     </div>
                   </div>
                 </template>
@@ -447,245 +460,237 @@
   </section>
 
   <!-- 移动端弹窗筛选 -->
-  <ClientOnly>
-    <Popup v-model="isPopup" v-if="appStore.device === 'app'">
-      <template #default>
-        <!-- popup 头部 -->
-        <div
-            class="app-popup-header mt-12 mb-20 acea-row nowrap gap-column-base scroll-x scroll-hide"
-            style="white-space: nowrap"
-            ref="popupHeaderRef"
+  <Popup v-model="isPopup" v-if="appStore.device === 'app'">
+    <template #default>
+      <!-- popup 头部 -->
+      <div
+          class="app-popup-header mt-12 mb-20 acea-row nowrap gap-column-base scroll-x scroll-hide"
+          style="white-space: nowrap"
+          ref="popupHeaderRef"
+      >
+        <!-- 排序 -->
+        <span
+            class="head-item"
+            :class="{on: popupCurrentMenu.id === '9999' }"
+            @click="clickPopupHeader(0, SORT_MENU)"
         >
-          <!-- 排序 -->
-          <span
-              class="head-item"
-              :class="{on: popupCurrentMenu.id === '9999' }"
-              @click="clickPopupHeader(0, SORT_MENU)"
-          >
-          By Sort
-        </span>
-          <!-- 菜单标题 -->
-          <span
-              class="head-item"
-              :class="{on: popupCurrentMenu.id === group.id }"
-              v-for="(group, index) in groupList" :key="group.id"
-              @click="clickPopupHeader(index + extraLength, group)"
-          >
-          {{ group.name }}
-        </span>
-        </div>
+        By Sort
+      </span>
+        <!-- 菜单标题 -->
+        <span
+            class="head-item"
+            :class="{on: popupCurrentMenu.id === group.id }"
+            v-for="(group, index) in groupList" :key="group.id"
+            @click="clickPopupHeader(index + extraLength, group)"
+        >
+        {{ group.name }}
+      </span>
+      </div>
 
-        <div>
-          <!-- SORT -->
-          <template v-if="popupCurrentMenu.config?.type === 'SORT'">
-            <div
-                class="text-20 py-16 border-b-sm border-gray-200"
-                :class="[sortSelected.id === item.id? 'text-gray-700': 'text-gray-500']"
+      <div>
+        <!-- SORT -->
+        <template v-if="popupCurrentMenu.config?.type === 'SORT'">
+          <div
+              class="text-20 py-16 border-b-sm border-gray-200"
+              :class="[sortSelected.id === item.id? 'text-gray-700': 'text-gray-500']"
+              v-for="item in popupCurrentMenu.children"
+              :key="item.id"
+              @click="handleSort(item)"
+          >
+            {{ item.name }}
+          </div>
+        </template>
+
+        <!-- PRICE -->
+        <template v-if="popupCurrentMenu.config?.type === 'PRICE'">
+          <div class="mx-12 price-range-text ">
+            <div class="text-center f-bold pt-20 pb-20">
+              {{ getCurrencySymbol }}{{ priceRange[0] }} ~ {{ getCurrencySymbol }}{{ priceRange[1] }}
+              <template v-if="priceRange[1] >= PRICER_MAX">+</template>
+            </div>
+            <el-slider
+                v-model="priceRange"
+                range
+                :max="PRICER_MAX"
+                :show-tooltip="false"
+                @change="priceRangeChange"
+            />
+          </div>
+
+          <div class="acea-row gap-xs mt-20">
+            <el-tag
+                size="large"
+                type="info"
+                round
                 v-for="item in popupCurrentMenu.children"
                 :key="item.id"
-                @click="handleSort(item)"
+                @click="clickPriceType(item, true)"
             >
               {{ item.name }}
-            </div>
-          </template>
+            </el-tag>
 
-          <!-- PRICE -->
-          <template v-if="popupCurrentMenu.config?.type === 'PRICE'">
-            <div class="mx-12 price-range-text ">
-              <div class="text-center f-bold pt-20 pb-20">
-                {{ getCurrencySymbol }}{{ priceRange[0] }} ~ {{ getCurrencySymbol }}{{ priceRange[1] }}
-                <template v-if="priceRange[1] >= PRICER_MAX">+</template>
-              </div>
-              <el-slider
-                  v-model="priceRange"
-                  range
-                  :max="PRICER_MAX"
-                  :show-tooltip="false"
-                  @change="priceRangeChange"
-              />
-            </div>
+          </div>
+        </template>
 
-            <div class="acea-row gap-xs mt-20">
-              <el-tag
-                  size="large"
-                  type="info"
-                  round
-                  v-for="item in popupCurrentMenu.children"
-                  :key="item.id"
-                  @click="clickPriceType(item, true)"
-              >
-                {{ item.name }}
-              </el-tag>
+        <!-- RADIO -->
+        <template v-if="popupCurrentMenu.config?.type === 'RADIO'">
+          <div
+              class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
+              v-for="item in popupCurrentMenu.children"
+              :key="item.id"
+              @click="clickRadioType(item)"
+          >
+            <span>{{ item.name }}</span>
+            <span
+                style="font-size: 20px"
+                class="iconfont"
+                :class="[radioSelected.get(item.parentId)?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+            />
+          </div>
+        </template>
 
-            </div>
-          </template>
+        <!-- CHECKBOX -->
+        <template v-if="popupCurrentMenu.config?.type === 'CHECKBOX'">
+          <div
+              class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
+              v-for="item in popupCurrentMenu.children"
+              :key="item.id"
+              @click="clickCheckoutType(item)"
+          >
+            <span>{{ item.name }}</span>
+            <span
+                style="font-size: 20px"
+                class="iconfont"
+                :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'icon-checkbox-fill text-primary' : 'icon-checkbox text-gray-400']"
+            />
+          </div>
+        </template>
 
-          <!-- RADIO -->
-          <template v-if="popupCurrentMenu.config?.type === 'RADIO'">
-            <div
-                class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
-                v-for="item in popupCurrentMenu.children"
-                :key="item.id"
-                @click="clickRadioType(item)"
-            >
-              <span>{{ item.name }}</span>
-              <span
-                  style="font-size: 20px"
-                  class="iconfont"
-                  :class="[radioSelected.get(item.parentId)?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-              />
-            </div>
-          </template>
-
-          <!-- CHECKBOX -->
-          <template v-if="popupCurrentMenu.config?.type === 'CHECKBOX'">
-            <div
-                class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
-                v-for="item in popupCurrentMenu.children"
-                :key="item.id"
-                @click="clickCheckoutType(item)"
-            >
-              <span>{{ item.name }}</span>
-              <span
-                  style="font-size: 20px"
-                  class="iconfont"
-                  :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'icon-checkbox-fill text-primary' : 'icon-checkbox text-gray-400']"
-              />
-            </div>
-          </template>
-
-          <!-- COLOR -->
-          <template v-if="popupCurrentMenu.config?.type === 'COLOR'">
-            <div class="color-list scroll-y scroll-custom acea-row">
+        <!-- COLOR -->
+        <template v-if="popupCurrentMenu.config?.type === 'COLOR'">
+          <div class="scroll-y pr-4 scroll-custom">
+            <div class="color-list acea-row row-middle gap-sm">
               <div
-                  class="color-item acea-row row-middle cursor-pointer"
+                  class="color-item cursor-pointer"
+                  :class="{ 'active': colorSelected?.includes(item) }"
                   v-for="item in popupCurrentMenu.children"
                   :key="item.id"
                   @click="clickColorType(item)"
               >
-                <div class="rounded-full border-sm p-2" :class="{ 'border-gray-700': colorSelected?.includes(item) }">
-                  <div
-                      class="circle rounded-full"
-                      :style="{ ...getColorStyle(item.config.color!) }"
-                  />
-                </div>
-                <div class="px-10 text-20 flex-1 line1" :class="{ 'f-bold': colorSelected?.includes(item) }">{{
-                    item.name
-                  }}
-                </div>
+                <div class="circle rounded-full" :style="{ ...getColorStyle(item.config.color!) }"/>
               </div>
             </div>
-          </template>
+          </div>
+        </template>
 
-          <!-- SHAPE -->
-          <template v-if="popupCurrentMenu.config?.type === 'SHAPE'">
-            <div
-                class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
-                v-for="item in popupCurrentMenu.children"
-                :key="item.id"
-                @click="clickShapeType(item)"
-            >
-              <span>{{ item.name }}</span>
-              <span
-                  style="font-size: 20px"
-                  class="iconfont"
-                  :class="[shapeSelected?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-              />
-            </div>
-          </template>
-        </div>
-      </template>
-      <template #footer>
-        <div class="mt-20 mb-12 acea-row nowrap gap-column-xs scroll-x scroll-hide">
-          <!--排序 选中的值-->
-          <el-tag
-              v-if="sortSelected.id"
-              size="large"
-              type="info" round
-              class="cursor-pointer"
-              :closable="true"
-              @close="handleSort({} as IHome.MenuRow)"
-          >
-            {{ sortSelected.name }}
-          </el-tag>
-          <!--Price 选中的值-->
-          <el-tag
-              size="large"
-              v-if="priceSubmitted"
-              type="info" round
-              class="cursor-pointer"
-              closable
-              @close="closePriceTag"
-          >
-            {{ priceSubmitted }}
-          </el-tag>
-          <!--Radio 选中的值-->
-          <el-tag
-              size="large"
-              type="info" round
-              v-for="(item, index) in radioSubmitted"
+        <!-- SHAPE -->
+        <template v-if="popupCurrentMenu.config?.type === 'SHAPE'">
+          <div
+              class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
+              v-for="item in popupCurrentMenu.children"
               :key="item.id"
-              class="cursor-pointer"
-              closable
-              @close="closeRadioTag(item, index)"
+              @click="clickShapeType(item)"
           >
-            {{ item.name }}
-          </el-tag>
-          <!--Checkout 选中的值-->
-          <el-tag
-              size="large"
-              type="info" round
-              v-for="(item, index) in checkboxSubmitted"
-              :key="item.id"
-              class="cursor-pointer"
-              closable
-              @close="closeCheckboxTag(item, index)"
-          >
-            {{ item.name }}
-          </el-tag>
-          <!--Color 选中的值-->
-          <el-tag
-              size="large"
-              type="info" round
-              v-for="(item, index) in colorSubmitted"
-              :key="item.id"
-              class="cursor-pointer"
-              closable
-              @close="closeColorTag(item, index)"
-          >
-            {{ item.name }}
-          </el-tag>
-          <!--Shape 选中的值-->
-          <el-tag
-              size="large"
-              type="info" round
-              v-if="shapeSubmitted.id"
-              class="cursor-pointer"
-              closable
-              @close="closeShapeTag()"
-          >
-            {{ shapeSubmitted.name }}
-          </el-tag>
-          <!--Artist 选中的值-->
-          <el-tag
-              v-if="artistSelected.id"
-              size="large"
-              type="info" round
-              class="cursor-pointer"
-              closable
-              @close="closeArtistTag()"
-          >
-            {{ artistSelected.name }}
-          </el-tag>
-        </div>
+            <span>{{ item.name }}</span>
+            <span
+                style="font-size: 20px"
+                class="iconfont"
+                :class="[shapeSelected?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+            />
+          </div>
+        </template>
+      </div>
+    </template>
+    <template #footer>
+      <div class="mt-20 mb-12 acea-row nowrap gap-column-xs scroll-x scroll-hide">
+        <!--排序 选中的值-->
+        <el-tag
+            v-if="sortSelected.id"
+            size="large"
+            type="info" round
+            class="cursor-pointer"
+            :closable="true"
+            @close="handleSort({} as IHome.MenuRow)"
+        >
+          {{ sortSelected.name }}
+        </el-tag>
+        <!--Price 选中的值-->
+        <el-tag
+            size="large"
+            v-if="priceSubmitted"
+            type="info" round
+            class="cursor-pointer"
+            closable
+            @close="closePriceTag"
+        >
+          {{ priceSubmitted }}
+        </el-tag>
+        <!--Radio 选中的值-->
+        <el-tag
+            size="large"
+            type="info" round
+            v-for="(item, index) in radioSubmitted"
+            :key="item.id"
+            class="cursor-pointer"
+            closable
+            @close="closeRadioTag(item, index)"
+        >
+          {{ item.name }}
+        </el-tag>
+        <!--Checkout 选中的值-->
+        <el-tag
+            size="large"
+            type="info" round
+            v-for="(item, index) in checkboxSubmitted"
+            :key="item.id"
+            class="cursor-pointer"
+            closable
+            @close="closeCheckboxTag(item, index)"
+        >
+          {{ item.name }}
+        </el-tag>
+        <!--Color 选中的值-->
+        <el-tag
+            size="large"
+            type="info" round
+            v-for="(item, index) in colorSubmitted"
+            :key="item.id"
+            class="cursor-pointer"
+            closable
+            @close="closeColorTag(item, index)"
+        >
+          {{ item.name }}
+        </el-tag>
+        <!--Shape 选中的值-->
+        <el-tag
+            size="large"
+            type="info" round
+            v-if="shapeSubmitted.id"
+            class="cursor-pointer"
+            closable
+            @close="closeShapeTag()"
+        >
+          {{ shapeSubmitted.name }}
+        </el-tag>
+        <!--Artist 选中的值-->
+        <el-tag
+            v-if="artistSelected.id"
+            size="large"
+            type="info" round
+            class="cursor-pointer"
+            closable
+            @close="closeArtistTag()"
+        >
+          {{ artistSelected.name }}
+        </el-tag>
+      </div>
 
-        <div class="acea-row side-button mt-20 mt-20">
-          <el-button @click="reset()">Reset</el-button>
-          <el-button type="primary" class="flex-1" @click="routerJump()">See all items</el-button>
-        </div>
-      </template>
-    </Popup>
-  </ClientOnly>
+      <div class="acea-row side-button mt-20 mt-20">
+        <el-button @click="reset()">Reset</el-button>
+        <el-button type="primary" class="flex-1" @click="routerJump()">See all items</el-button>
+      </div>
+    </template>
+  </Popup>
 
   <LoginWindow ref="loginWindowRef"/>
 </template>
@@ -698,7 +703,7 @@ import {
 } from "~/api/modules/product/product";
 import type {IHome} from "~/api/interface/home/home";
 import type {IProduct} from "~/api/interface/product/product";
-import {debounce, restoreHandle} from "~/utils";
+import {debounce} from "~/utils";
 import {useAppStore} from "~/stores/modules/app";
 import {ElMessage} from "element-plus";
 import ProList from "~/components/ProList/index.vue";
@@ -713,19 +718,19 @@ import {
   process_PRICE,
   process_SORT
 } from "~/utils/product";
-import {getEveryoneSearchApi, getSearchCompletionApi} from "~/api/modules/search/search";
 import {useUserStore} from "~/stores/modules/user";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {productThumbsApi} from "~/api/modules/likes/likes";
 import {formatInteger} from "~/utils/format";
 import {useCurrencyStore} from "~/stores/modules/currency";
-import type {ISearch} from "~/api/interface/search/search";
 import {cloneDeep} from "lodash-es";
 import {SORT_MENU} from "~/constant";
 import {resolvePageMeta, mergeHeadWithLodash} from "~/config/pageMeta";
 import {unpackQuery, packQuery, type QueryParams} from '~/composables/useQueryShort'
 import type {ObjectNode} from "~/types/global";
 import {useBreadcrumbStore, type BreadcrumbItem} from "~/stores/modules/breadcrumb";
+import type {ISearch} from "~/api/interface/search/search";
+import {getSearchSeoApi} from "~/api/modules/search/search";
 
 defineOptions({
   name: 'ProductList'
@@ -757,35 +762,27 @@ const isDev = import.meta.env.DEV // 区分环境
 const isFilter = ref(true)
 const initPage = ref(true)
 const proListRef = ref<InstanceType<typeof ProList>>();
-const getProductList = (params: IProduct.ListQuery) => getProductListApi(params)
+const getProductListApiFn = (params: IProduct.ListQuery) => getProductListApi(params)
 const initParam = reactive<any>({
   size: 50,
   categoryIds: [],
   attributeValueIds: [],
   keyword: null,
+  searchType: null,
   sort: '0',
   startPrice: null,
   endPrice: null,
-  searchType: null,
   shape: null,
   creatorId: null,
-  path: null
 })
 
 // 当前页码
 const pageSelected = ref<number | null>(null)
 
-// 获取大家都在搜索
-const everyoneList = ref<ISearch.CompletionRow[]>([])
-const getEveryoneSearch = async () => {
-  const {data} = await getEveryoneSearchApi()
-  everyoneList.value = data
-}
-
 // 获取左侧筛选数据
 const menuId = ref<string | null>(null)
 const groupList = ref<IHome.MenuRow[]>([])
-const getProductGroup = async (id: string) => {
+const getProductGroup = async (id?: string) => {
   if (menuId.value === id) return // 相同的 ID 不会多次触发
   menuId.value = id || ''
   const {data} = await getProductGroupApi({parentId: menuId.value})
@@ -794,7 +791,7 @@ const getProductGroup = async (id: string) => {
     const oldItem = oldGroups.find(old => old.id === newItem.id)
     return {
       ...newItem,
-      isShow: oldItem ? oldItem.isShow : true // 已存在的项保留状态，新增项默认true
+      isShow: oldItem ? oldItem.isShow : false // 已存在的项保留状态，新增项默认true
     } as IHome.MenuRow
   })
 
@@ -812,12 +809,15 @@ const getProductGroup = async (id: string) => {
   }
 }
 
-const searchType = ref<string | null>('')
-
-// 点击Keyword类型的选项（这里需要立即更新数据）
+// 搜索框逻辑
+const searchType = ref<ISearch.KeywordType | null>(null)
 const keyword = ref('')
-const clickKeyword = (item: ISearch.CompletionRow) => {
-  startJump(item)
+const activeKeyword = ref('')
+const onSearch = () => {
+  if (proListRef.value?.loading) return
+  activeKeyword.value = keyword.value
+  searchType.value = 'product'
+  routerJump(true, true)
 }
 
 // ------ 点击Artist类型的选项（这里需要立即更新数据） ------
@@ -825,7 +825,6 @@ const artistSelected = ref({} as IHome.MenuRow)
 // 关闭Artist类型的选项
 const closeArtistTag = () => {
   artistSelected.value = {} as IHome.MenuRow
-  searchType.value = ''
   routerJump(true)
 }
 
@@ -837,6 +836,11 @@ const priceSelected = ref({} as IHome.MenuRow) // 选中的值
 const priceSubmitted = ref('') // 确定提交的数据
 const clickPriceType = (item?: IHome.MenuRow, isApp = false) => {
   if (item) {
+    const isSame = priceSelected.value.id === item.id
+    if (isSame) {
+      priceSelected.value = {} as IHome.MenuRow
+      return
+    }
     priceSelected.value = item
     isCustomPrice.value = false
     startPrice.value = ''
@@ -851,7 +855,7 @@ const clickPriceType = (item?: IHome.MenuRow, isApp = false) => {
   // 点击自定义价格区间
   else {
     priceSelected.value = {} as IHome.MenuRow
-    isCustomPrice.value = true
+    isCustomPrice.value = !isCustomPrice.value
   }
 }
 // 关闭Price类型的选项
@@ -926,12 +930,16 @@ const shapeSelected = ref({} as IHome.MenuRow)
 const shapeSubmitted = ref({} as IHome.MenuRow) // 确定提交的数据
 const clickShapeType = (item: IHome.MenuRow) => {
   const isSame = shapeSelected.value.id === item.id
-  if (isSame) return // 相同的选项不做处理
+  if (isSame) {
+    shapeSelected.value = {} as IHome.MenuRow
+    return
+  }
   shapeSelected.value = item
 }
 // 关闭Shape类型的选项
 const closeShapeTag = () => {
   shapeSelected.value = {} as IHome.MenuRow
+  shapeSubmitted.value = {} as IHome.MenuRow
   routerJump(true)
 }
 
@@ -979,6 +987,65 @@ const handleSort = (menu: IHome.MenuRow) => {
   routerJump(true)
 }
 
+// 移动端价格滑块
+const isSliderPrice = ref(false) // 只有触发滑块或者路径参数才会传递给接口
+const PRICER_MAX = 1000
+const priceRange = ref([0, PRICER_MAX])
+const priceRangeChange = () => { isSliderPrice.value = true }
+
+// 移动弹出层
+const popupHeaderRef = ref<HTMLElement>()
+let popupHeaderItemRect = [] as DOMRect[]
+const appFilterRef = ref<HTMLElement>()
+let appFilterItemRect = [] as DOMRect[]
+const isPopup = ref(false)
+const popupCurrentMenu = ref({} as IHome.MenuRow)
+const extraLength = ref(1) // 表示在移动端中PopupHeader中额外的选项数量，目前只有一个是追加的排序
+
+// 点击App端的筛选按钮
+const clickAppFilter = (type: 'SORT' | 'POPUP', index: number, menu?: IHome.MenuRow) => {
+  isPopup.value = true
+
+  if (type === 'SORT') {
+    menu = SORT_MENU
+    clickPopupHeader(index, menu)
+  }
+
+  if (type === 'POPUP') {
+    clickPopupHeader(index + extraLength.value, menu!)
+  }
+
+  nextTick(() => {
+    const container = appFilterRef.value
+    if (!container) return
+    const pageW = document.documentElement.clientWidth
+    const idx = type === 'POPUP' ? index + extraLength.value : index
+    const currentRect = appFilterItemRect[idx]
+    const left = currentRect!.left - pageW / 2 + currentRect!.width / 2
+    container.scrollTo({left, behavior: 'smooth'})
+  })
+}
+
+// 点击PopupHeader
+const clickPopupHeader = (index: number, menu: IHome.MenuRow) => {
+  popupCurrentMenu.value = menu
+
+  nextTick(() => {
+    const container = popupHeaderRef.value
+    if (!container) return
+    // 只获取一次
+    if (!popupHeaderItemRect.length) {
+      Array.from(container?.children ?? []).forEach((node, index) => {
+        popupHeaderItemRect[index] = node.getBoundingClientRect()
+      })
+    }
+    const pageW = document.documentElement.clientWidth
+    const currentRect = popupHeaderItemRect[index]
+    const left = currentRect!.left - pageW / 2 + currentRect!.width / 2
+    container.scrollTo({left, behavior: 'smooth'})
+  })
+}
+
 // 重置
 const reset = () => {
   shapeSelected.value = {} as IHome.MenuRow
@@ -1006,10 +1073,8 @@ const reset = () => {
   routerJump(false)
 }
 
-/**
- * 获取Best列表
- */
-const getProductBest = async () => {
+// 获取产品列表
+const getProductList = async () => {
 
   // SHAPE
   const shape = shapeSelected.value
@@ -1063,77 +1128,17 @@ const getProductBest = async () => {
     ...checkbox.map(item => item.id), // Checkout类型的选项
     ...color.map(item => item.id), // Color类型的选项
   ]
-  initParam.path = route.params.handle ? restoreHandle(route.params.handle) : null
   initParam.sort = sortSelected.value?.config?.code ?? null
   initParam.shape = shape?.config?.referenceId ?? null
   initParam.startPrice = start
   initParam.endPrice = end
   initParam.creatorId = artistSelected.value.config?.referenceId || artistSelected.value.id || null
-  initParam.keyword = keyword.value || null
+  initParam.keyword = handleStr.value || activeKeyword.value || null // 这里的逻辑很奇怪，产品的关键词和菜单共用一个，使用 searchType 区分类型
   initParam.searchType = searchType.value || null
   initParam.page = page || 1
+  await nextTick()
   proListRef.value?.search(initPage.value);
   isPopup.value = false
-}
-
-// 移动端价格滑块
-const isSliderPrice = ref(false) // 只有触发滑块或者路径参数才会传递给接口
-const PRICER_MAX = 1000
-const priceRange = ref([0, PRICER_MAX])
-const priceRangeChange = () => {
-  isSliderPrice.value = true
-}
-
-const popupHeaderRef = ref<HTMLElement>()
-let popupHeaderItemRect = [] as DOMRect[]
-const appFilterRef = ref<HTMLElement>()
-let appFilterItemRect = [] as DOMRect[]
-const isPopup = ref(false)
-const popupCurrentMenu = ref({} as IHome.MenuRow)
-const extraLength = ref(1) // 表示在移动端中PopupHeader中额外的选项数量，目前只有一个是追加的排序
-
-// 点击App端的筛选按钮
-const clickAppFilter = (type: 'SORT' | 'POPUP', index: number, menu?: IHome.MenuRow) => {
-  isPopup.value = true
-
-  if (type === 'SORT') {
-    menu = SORT_MENU
-    clickPopupHeader(index, menu)
-  }
-
-  if (type === 'POPUP') {
-    clickPopupHeader(index + extraLength.value, menu!)
-  }
-
-  nextTick(() => {
-    const container = appFilterRef.value
-    if (!container) return
-    const pageW = document.documentElement.clientWidth
-    const idx = type === 'POPUP' ? index + extraLength.value : index
-    const currentRect = appFilterItemRect[idx]
-    const left = currentRect!.left - pageW / 2 + currentRect!.width / 2
-    container.scrollTo({left, behavior: 'smooth'})
-  })
-}
-
-// 点击PopupHeader
-const clickPopupHeader = (index: number, menu: IHome.MenuRow) => {
-  popupCurrentMenu.value = menu
-
-  nextTick(() => {
-    const container = popupHeaderRef.value
-    if (!container) return
-    // 只获取一次
-    if (!popupHeaderItemRect.length) {
-      Array.from(container?.children ?? []).forEach((node, index) => {
-        popupHeaderItemRect[index] = node.getBoundingClientRect()
-      })
-    }
-    const pageW = document.documentElement.clientWidth
-    const currentRect = popupHeaderItemRect[index]
-    const left = currentRect!.left - pageW / 2 + currentRect!.width / 2
-    container.scrollTo({left, behavior: 'smooth'})
-  })
 }
 
 // 点击艺术家
@@ -1193,7 +1198,7 @@ const routerJump = (partial = false, initPageFlag = true) => {
   }
 
   // SHAPE
-  const shape = shapeSelected.value
+  const shape = partial ? shapeSubmitted.value : shapeSelected.value
   if (Object.keys(shape).length) {
     Object.assign(params, gen_path_obj(shape, 'SHAPE'))
   }
@@ -1217,7 +1222,17 @@ const routerJump = (partial = false, initPageFlag = true) => {
   }
 
   // PRICE
-  if (!partial) {
+  if (partial) {
+    if (priceSubmitted.value) {
+      if (START_PRICE && END_PRICE) {
+        params['START_PRICE'] = START_PRICE
+        params['END_PRICE'] = END_PRICE
+      }
+      if (PRICE) {
+        params['PRICE'] = PRICE
+      }
+    }
+  } else {
     if (appStore.device === 'pc') {
       // 自定义价格区间
       if (isCustomPrice.value) {
@@ -1237,17 +1252,6 @@ const routerJump = (partial = false, initPageFlag = true) => {
         params['START_PRICE'] = priceRange.value[0]
         params['END_PRICE'] = priceRange.value[1]
       }
-
-    }
-  } else {
-    if (priceSubmitted.value) {
-      if (START_PRICE && END_PRICE) {
-        params['START_PRICE'] = START_PRICE
-        params['END_PRICE'] = END_PRICE
-      }
-      if (PRICE) {
-        params['PRICE'] = PRICE
-      }
     }
   }
 
@@ -1258,9 +1262,9 @@ const routerJump = (partial = false, initPageFlag = true) => {
   }
 
   // KEYWORD
-  const keywordStr = keyword.value
-  if (keywordStr) {
-    params['KEYWORD'] = keywordStr
+  const currentKeyword = activeKeyword.value
+  if (currentKeyword) {
+    params['KEYWORD'] = currentKeyword
   }
 
   // 搜索类型
@@ -1281,9 +1285,10 @@ const routerJump = (partial = false, initPageFlag = true) => {
 // 自定义分页页码监听
 const handleCurrentChange = (val: number) => {
   pageSelected.value = val
-  routerJump(false, false)
+  routerJump(true, false)
 }
 
+const handleStr = ref<string | null>(null)
 const routerParams = ref({} as QueryParams)
 /**
  * 监听路由变化
@@ -1306,7 +1311,18 @@ const paramsWatch = async () => {
     SORT,
     MENU_ID
   } = routerParams.value
-  await getProductGroup(MENU_ID)
+
+  // 判断当前路由是否包含了必须依赖 groupList 进行解析的参数
+  // 注意：SHAPE / PRICE / RADIO / CHECKBOX / COLOR / ARTIST 依赖到查字典
+  const needsDictionaryMapping = PRICE || SHAPE || RADIO || CHECKBOX || COLOR || ARTIST;
+
+  // 触发获取字典的请求，并把 Promise 存起来，而不是直接 await
+  const fetchGroupPromise = getProductGroup(MENU_ID)
+
+  //【核心按需阻塞】只有携带了复杂参数，才等待字典返回
+  if (needsDictionaryMapping) {
+    await fetchGroupPromise
+  }
 
   // SHAPE
   if (SHAPE) {
@@ -1319,6 +1335,8 @@ const paramsWatch = async () => {
   if (PAGE) {
     pageSelected.value = Number(PAGE)
     initPage.value = false
+  } else {
+    initPage.value = true
   }
 
   // SORT
@@ -1381,9 +1399,10 @@ const paramsWatch = async () => {
   // 关键词
   if (KEYWORD) {
     keyword.value = KEYWORD
-    !everyoneList.value.length && getEveryoneSearch()
+    activeKeyword.value = KEYWORD
   } else {
     keyword.value = ''
+    activeKeyword.value = ''
   }
 
   // 从搜索页面过来的类型
@@ -1392,73 +1411,17 @@ const paramsWatch = async () => {
   } else {
     searchType.value = null
   }
-  getProductBest()
-}
 
-const search = () => {
-  if (keyword.value && keyword.value !== routerParams.value.KEYWORD) {
-    const q = packQuery({KEYWORD: keyword.value})
-    router.replace({query: {q}})
+  // 获取SEO相关数据
+  const currentHandle = route.params.handle
+  if (!currentHandle) {
+    handleStr.value = null
+  } if (currentHandle !== handleStr.value) {
+    handleStr.value = currentHandle as string
+    getSearchSeo()
   }
 
-  if (!keyword.value) {
-    routerJump(false)
-  }
-}
-
-const lastValidData = ref<ISearch.CompletionRow[]>([]) // 新增缓存变量
-const emptyData = {id: '9999999999999', keyword: 'no search results found...', type: 'notData'} as ISearch.CompletionRow
-
-// 触发搜索建议
-const searchCompletionList = async (queryString: string, cb: Function) => {
-  // 当长度小于4时不触发
-  if (queryString.length < 4) {
-    return cb(lastValidData.value || [emptyData]);
-  }
-
-  try {
-    const {data} = await getSearchCompletionApi(queryString)
-    if (!data.length) {
-      data.push(emptyData)
-    }
-    cb(data)
-    lastValidData.value = data // 缓存最后一次有效数据
-
-  } catch (e) {
-    // 保持当前建议列表不关闭弹窗
-    cb(lastValidData.value || [])
-  }
-}
-
-let prevKeyword = ''
-
-// 点击搜索建议跳转
-const handleClickSearchCompletion = (item: Record<string, any>) => {
-  if (item.id === emptyData.id) {
-    return keyword.value = prevKeyword
-  }
-  startJump(item as ISearch.CompletionRow)
-};
-
-const handleInput = (text: string) => {
-  if (text !== emptyData.keyword) prevKeyword = text
-}
-
-// 跳转
-const startJump = (rawItem: ISearch.CompletionRow) => {
-  if (rawItem.type === 'product') {
-    const q = packQuery({KEYWORD: rawItem.keyword})
-    router.replace({query: {q}})
-  }
-  if (rawItem.type === 'artists') {
-    const params = {
-      SEARCH_TYPE: rawItem.type,
-      KEYWORD: rawItem.keyword,
-      ...gen_path_obj({name: rawItem.keyword, id: rawItem.id!}, 'ARTIST', ['name'])
-    }
-    const q = packQuery(params)
-    router.replace({query: {q}})
-  }
+  getProductList()
 }
 
 // ⬇️ 定义滚动动作
@@ -1471,7 +1434,9 @@ const executeScroll = () => {
 
     if (anchor) {
       // 偏移量计算
-      const headerOffset = appStore.headerState.height
+      const root = document.documentElement
+      const cssValue = getComputedStyle(root).getPropertyValue('--header-height').trim()
+      const headerOffset = parseInt(cssValue, 10) || 0
       const elementPosition = anchor.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset
       window.scrollTo({
@@ -1482,16 +1447,6 @@ const executeScroll = () => {
   })
 }
 
-// 监听路由的变化
-if (import.meta.client) {
-  watch(
-      () => route.fullPath,
-      () => {
-        paramsWatch()
-      },
-      {immediate: false}
-  )
-}
 // 监听生成面包屑
 /**
  * 根据 menuId 查找该项及其所有父级，并直接转换为面包屑所需的数据结构
@@ -1503,7 +1458,7 @@ const getBreadcrumbList = (menuList: IHome.MenuRow[], menuId: string): Breadcrum
   for (const currentItem of menuList) {
     // 1. 如果当前节点就是目标节点，将其转换为 BreadcrumbItem 并作为数组第一项返回
     if (currentItem.id === menuId) {
-      return [{ name: currentItem.name }];
+      return [{name: currentItem.name}];
     }
 
     // 2. 如果当前节点有子节点，进入递归
@@ -1512,7 +1467,7 @@ const getBreadcrumbList = (menuList: IHome.MenuRow[], menuId: string): Breadcrum
 
       // 3. 如果子节点中找到了路径，将当前节点也转换为 BreadcrumbItem，并拼接到路径最前面
       if (childPath.length > 0) {
-        return [{ name: currentItem.name }, ...childPath];
+        return [{name: currentItem.name}, ...childPath];
       }
     }
   }
@@ -1520,15 +1475,15 @@ const getBreadcrumbList = (menuList: IHome.MenuRow[], menuId: string): Breadcrum
   // 4. 当前分支没找到，返回空数组
   return [];
 };
-
 watch(
     () => [route.query.q, appStore.menuList],
     ([newQ, newMenuData]) => {
       // 只有当参数和菜单数据都准备好的时候，才去调用 Store 生成面包屑
       if (newQ && newMenuData && (newMenuData as any[]).length > 0) {
-        const {MENU_ID} =  unpackQuery(route.query.q)
+        const {MENU_ID} = unpackQuery(route.query.q)
         const breadcrumbs = getBreadcrumbList(appStore.menuList, MENU_ID)
         if (breadcrumbs && breadcrumbs.length > 0) breadcrumbStore.setBreadcrumbs(breadcrumbs)
+        else breadcrumbStore.clearBreadcrumbs()
       }
     },
     {immediate: true}
@@ -1550,33 +1505,12 @@ watch(
     }
 )
 
-// ------ 找到页面的标题和描述 ------
-/**
- * 在嵌套的菜单列表中通过 menuId 查找对应的项
- * @param menuList - 菜单数据源
- * @param menuId - 需要查找的目标 id
- * @returns 返回找到的菜单对象，如果没找到则返回 null
- */
-const findMenuById = ( menuList: IHome.MenuRow[],menuId: string): IHome.MenuRow | null => {
-  for (const currentItem of menuList) {
-    if (currentItem.id === menuId) {
-      return currentItem;
-    }
-
-    if (currentItem.children && Array.isArray(currentItem.children)) {
-      const foundItem = findMenuById(currentItem.children, menuId);
-      if (foundItem) {
-        return foundItem;
-      }
-    }
-  }
-
-  return null;
-};
-const pageTitle = computed(() => {
-  if (!menuId.value) return null
-  return findMenuById(appStore.menuList, menuId.value)
-})
+// ------ 获取页面的标题和描述 ------
+const pageSeo = ref<ISearch.SearchSeoRow | null>(null)
+const getSearchSeo = async () => {
+  const {data} = await getSearchSeoApi({ slug: handleStr.value!, type: searchType.value })
+  pageSeo.value = data
+}
 
 // ------ 构建聚合计算属性 ------
 type CountsMapType = Record<Dict.CategoryType, Record<string, number>>;
@@ -1616,19 +1550,40 @@ useHead(computed(() => {
   return mergeHeadWithLodash(
       resolvePageMeta("/collections"),
       {
-        ...(pageTitle.value?.name && { title: `${pageTitle.value.name} - Hand-Painted Canvas Art | ARTDAFEN` }),
+        ...(pageSeo.value?.name && {title: `${pageSeo.value.name} - Hand-Painted Canvas Art | ARTDAFEN`}),
         meta: [
           {
             name: 'robots',
             content: 'index, follow'
           },
-          ...(pageTitle.value?.description ? [{ name: 'description', content: pageTitle.value.description }] : [])
+          ...(pageSeo.value?.description ? [{name: 'description', content: pageSeo.value.description}] : [])
         ],
 
-        link: [{ rel: 'canonical', href: canonicalUrl }]
+        link: [{rel: 'canonical', href: canonicalUrl}]
       }
   );
 }));
+
+// 监听路由的变化
+if (import.meta.client) {
+  watch(
+      () => route.fullPath,
+      () => {
+        paramsWatch()
+      },
+      {immediate: false}
+  )
+  // watch(
+  //     () => route.params.handle,
+  //     (handle: string) => {
+  //       console.log('handle', handle)
+  //       console.log('searchType', searchType.value)
+  //       if (handle) getSearchSeo()
+  //       else pageSeo.value = null
+  //     },
+  //     {immediate: true}
+  // )
+}
 </script>
 
 <style scoped lang="scss">
@@ -1758,45 +1713,43 @@ useHead(computed(() => {
   }
 
   .search-wrapper {
-    .search-box {
+    .search-header {
       max-width: 800px;
-      width: 100%;
-      margin: 15px auto;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #111;
+      padding-bottom: 15px;
+      flex-shrink: 0;
 
-      //.input-box {
-      //  padding: 5px 0;
-      //
-      //  input {
-      //    font-weight: 600;
-      //    width: 100%;
-      //
-      //    &::placeholder {
-      //      color: var(--color-gray-200);
-      //    }
-      //  }
-      //
-      //}
+      .input-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        position: relative;
 
-      :deep(.el-autocomplete) {
-        .el-input__wrapper {
-          padding: 5px 0;
-          box-shadow: none;
-          border-bottom: var(--border-width-xl) solid var(--color-primary);
+        .search-input {
+          width: 100%;
+          border: none;
+          outline: none;
+          font-size: 1.2rem;
+          color: #333;
+          background: transparent;
+          padding-right: 50px; // 为清空按钮留位置
 
-          .el-input__inner {
-            font-weight: bold;
-            font-size: clamp(2.08vw, 16px, 40px);
-            color: var(--color-primary);
-            height: auto;
-            line-height: unset;
-
-            &::placeholder {
-              color: var(--color-gray-200);
-            }
+          &::placeholder {
+            color: #999;
           }
         }
       }
 
+      .search-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #333;
+        margin-left: 15px;
+      }
     }
   }
 
@@ -1804,15 +1757,16 @@ useHead(computed(() => {
 
     .side-wrapper {
       width: 220px;
-      position: relative;
+      height: calc(100vh - 80px);
+      position: sticky;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+
 
       .side-menu {
-        .menu-item {
-          &.on,
-          &:hover {
-            font-weight: bold;
-          }
-        }
+        overflow: hidden auto;
+        padding-right: 6px;
       }
 
       .side-button {
@@ -1820,6 +1774,15 @@ useHead(computed(() => {
         bottom: 0;
         left: 0;
         background: #fff;
+      }
+
+      .ttt {
+        //width: 100%;
+        //height: calc(100vh - 80px);
+        //overflow-y: auto;
+        //position: sticky;
+        //top: 80px;
+        //padding-right: 10px;
       }
     }
 
@@ -1861,15 +1824,41 @@ useHead(computed(() => {
   }
 
   .color-list {
-    max-height: 300px;
-    row-gap: 20px;
 
     .color-item {
-      width: 50%;
+      width: 35px;
+      height: 35px;
+      flex-shrink: 0;
 
       .circle {
-        width: 22px;
-        height: 22px;
+        position: relative;
+        width: 26px;
+        height: 26px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transform-origin: center;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          transform-origin: center;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          border: 1px solid var(--color-primary);
+          transition: all 0.2s;
+          opacity: 0;
+        }
+      }
+
+      &.active .circle::before {
+        width: 34px;
+        height: 34px;
+        opacity: 1;
       }
     }
   }

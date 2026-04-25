@@ -1,25 +1,24 @@
 <template>
   <div class="accordion-container">
-    <NuxtLink
+    <div
         v-for="(item, index) in list"
         :key="item.id"
         class="accordion-item"
         :class="{ active: activeIndex === index }"
         @mouseenter="activeIndex = index"
         @click="activeIndex = index"
-        :to="`/zone-detail/${item.id}/${item.slug}`"
     >
       <img :src="imagePrefix(item.banners[0] || item.img)" :alt="item.title" class="bg-image"/>
-      <div class="content-overlay">
+      <NuxtLink class="content-overlay" :to="`/zone-detail/${item.id}/${item.slug}`">
         <div class="text-box">
           <h2 class="title line1">{{ item.title }}</h2>
-          <p class="subtitle line1">{{ item.subTitle }}</p>
+          <p class="subtitle line1">{{ item.name }}</p>
         </div>
         <div class="link-box">
           <span class="iconfont icon-link"/>
         </div>
-      </div>
-    </NuxtLink>
+      </NuxtLink>
+    </div>
   </div>
 </template>
 
@@ -35,7 +34,6 @@ interface Props {
 const props = defineProps<Props>()
 const { imagePrefix } = useImage()
 const activeIndex = ref(0)
-
 </script>
 
 <style lang="scss" scoped>
@@ -57,7 +55,6 @@ const activeIndex = ref(0)
       flex: 1;
       border-radius: 24px;
       overflow: hidden;
-      cursor: pointer;
       transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
@@ -68,6 +65,7 @@ const activeIndex = ref(0)
           opacity: 1;
           transform: translateY(0);
           transition-delay: 0.2s;
+          pointer-events: auto;
         }
       }
 
@@ -86,9 +84,9 @@ const activeIndex = ref(0)
         background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
         color: white;
         opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.4s ease, transform 0.4s ease;
+        transform: translateY(100%);
         pointer-events: none;
+        transition: opacity 0.4s ease, transform 0.4s ease;
 
         display: flex;
         align-items: center;

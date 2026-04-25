@@ -7,8 +7,8 @@
         :retry="refresh"
     >
       <div class="row product-list gap-row-base">
-        <div class="col-2xl-average col-lg-3 col-md-4 col-6" v-for="item in pageData.records" :key="item.id">
-          <GoodsItem :item="item" @thumbsClick="productThumbs" @artistClick="updateArtist!"/>
+        <div class="col-2xl-average col-lg-3 col-sm-4 col-6" v-for="item in pageData.records" :key="item.id">
+          <GoodsItem :item="item" @thumbsClick="productThumbs" />
         </div>
       </div>
       <div class="py-lg-40 py-20">
@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import {debounce} from "~/utils";
 import type {IProduct} from "~/api/interface/product/product";
-import type {IHome} from "~/api/interface/home/home";
 import {useUserStore} from "~/stores/modules/user";
 import {productThumbsApi} from "~/api/modules/likes/likes";
 import LoginWindow from "~/components/LoginWindow.vue";
@@ -49,8 +48,6 @@ const {pageData, currentPage, totalPages, pending, refresh, error} = await useSe
       callBack: executeScroll
     },
 )
-
-const updateArtist = inject<(item: IHome.MenuRow) => void>('updateArtist');
 
 // 收藏/取消收藏
 const productThumbs = debounce(async (item) => {

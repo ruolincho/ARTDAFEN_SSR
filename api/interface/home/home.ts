@@ -44,7 +44,17 @@ export namespace IHome {
             to: string;
             target: string;
             isPureLink: boolean; // 是否是纯叶子节点（可跳转）
-        }
+        },
+        slug?: string
+    }
+
+    /*底部菜单数据*/
+    export interface FooterMenuRow {
+        name: string
+        children: {
+            name: string
+            url: string
+        }[]
     }
 
     /*更多分类数据*/
