@@ -18,8 +18,8 @@
 
   <section>
     <div class="py-sm-30 py-20 text-center bg-gray-700 text-white">
-      <h1 class="text-50 f-bold-500 text-uppercase">{{ zoneDetail?.title }}</h1>
-      <h2 class="text-24 mt-10" style="max-width: 1000px; margin: auto;">{{ zoneDetail?.name }}</h2>
+      <h1 class="text-30 f-bold-500 text-uppercase">{{ zoneDetail?.title }}</h1>
+      <h2 class="text-16 mt-10" style="max-width: 1000px; margin: auto;">{{ zoneDetail?.name }}</h2>
     </div>
   </section>
 

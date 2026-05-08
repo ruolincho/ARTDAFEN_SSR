@@ -13,7 +13,7 @@
                 <div class="aspect-ratio relative">
                   <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
                   <div class="operation rounded-full p-5">
-                    <span class="iconfont icon-delete text-18" @click.stop="cancelThumbs(item.id)"></span>
+                    <SvgIcon name="delete" @click.stop="cancelThumbs(item.id)" />
                   </div>
                 </div>
                 <p class="line1 text-12 my-8">{{ item.title }}</p>
@@ -27,7 +27,7 @@
         </template>
         <template #empty>
           <div class="text-center py-60">
-            <span class="iconfont icon-empty text-50"></span>
+            <SvgIcon name="empty" class="text-50" />
             <p class="text-20 f-bold mt-20">No Favorites Found</p>
             <p class="text-14 my-20">You have not collected any products yet.</p>
             <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">START SHOPPING</el-button>

@@ -8,10 +8,10 @@
         aria-label="Previous page"
         class="page-item prev"
     >
-      <span class="iconfont icon-left"/>
+      <SvgIcon name="left" />
     </NuxtLink>
     <span class="page-item prev disabled" v-else aria-disabled="true">
-      <span class="iconfont icon-left"/>
+      <SvgIcon name="left" />
     </span>
 
     <template v-for="(p, index) in visiblePages" :key="index">
@@ -34,10 +34,10 @@
         class="page-item next"
         aria-label="Next page"
     >
-      <span class="iconfont icon-right"/>
+      <SvgIcon name="right" />
     </NuxtLink>
     <span class="page-item next disabled" v-else aria-hidden="true">
-      <span class="iconfont icon-right"/>
+      <SvgIcon name="right" />
     </span>
 
     <!-- 无脚本兜底 -->

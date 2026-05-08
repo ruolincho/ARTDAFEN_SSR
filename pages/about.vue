@@ -162,8 +162,8 @@
               </swiper-slide>
             </swiper>
             <div class="acea-row row-center-wrapper mt-15 gap-base">
-              <div class="honor-button honor-prev"><span class="iconfont icon-left text-white text-24"></span></div>
-              <div class="honor-button honor-next"><span class="iconfont icon-right text-white text-24"></span></div>
+              <div class="honor-button honor-prev"><SvgIcon name="left" class="text-white text-24" /></div>
+              <div class="honor-button honor-next"><SvgIcon name="right" class="text-white text-24" /></div>
             </div>
           </div>
         </div>
@@ -212,8 +212,8 @@
         </swiper-slide>
       </swiper>
       <div class="acea-row row-center-wrapper mt-15 gap-base">
-        <div class="artists-button artists-prev"><span class="iconfont icon-left text-24"></span></div>
-        <div class="artists-button artists-next"><span class="iconfont icon-right text-24"></span></div>
+        <div class="artists-button artists-prev"><SvgIcon name="left" class="text-24" /></div>
+        <div class="artists-button artists-next"><SvgIcon name="right" class="text-24" /></div>
       </div>
     </div>
   </section>
@@ -246,8 +246,8 @@
         </swiper-slide>
       </swiper>
       <div class="acea-row row-center-wrapper mt-15 gap-base">
-        <div class="explore-button explore-prev"><span class="iconfont icon-left text-white text-24"></span></div>
-        <div class="explore-button explore-next"><span class="iconfont icon-right text-white text-24"></span></div>
+        <div class="explore-button explore-prev"><SvgIcon name="left" class="text-white text-24" /></div>
+        <div class="explore-button explore-next"><SvgIcon name="right" class="text-white text-24" /></div>
       </div>
     </div>
   </section>

@@ -2,7 +2,7 @@
   <div class="my-15">
     <p class="acea-row row-middle mb-15">
       <span class="text-16">{{ themeName }} Count: {{ modelValue }}</span>
-      <span class="iconfont icon-info-fill text-20 ml-8 cursor-pointer" @click="openNotice"></span>
+      <SvgIcon name="info-fill" class="text-20 ml-8 cursor-pointer" @click="openNotice" />
     </p>
 
     <div :id="tourId">

@@ -3,41 +3,65 @@
   <section class="swiper-section">
     <div class="container">
       <h1 class="mb-15 py-15 border-b-xl border-gray-700 text-26 f-bold">Latest post</h1>
-      <ClientOnly>
-        <div class="latest-swiper">
-          <swiper
-              :modules="modules"
-              :navigation="{ nextEl: '.next', prevEl: '.prev' }"
-              :pagination="{ clickable: true }"
-              :loop="true"
-          >
-            <swiper-slide class="cursor-pointer" v-for="item in topicList" :key="item.id" @click="jumpToUrl(item.url)">
-              <!-- 图片 -->
-              <template v-if="item.type === '0'">
-                <img class="w-full pc fit-cover" :src="imagePrefix(item.img)" :alt="item.title">
-                <img class="w-full app" :src="imagePrefix(item.mobileImg)" :alt="item.title">
-              </template>
-              <!-- 视频 -->
-              <template v-if="item.type === '1'">
-                <div class="video-box w-full h-full">
-                  <video
-                      class="w-full h-full fit-cover"
-                      :src="imagePrefix(item.media)"
-                      :poster="imagePrefix(item.img)"
-                      :autoplay="true"
-                      :loop="true"
-                      :muted="true"
-                      :controls="false"
-                      playsinline
+      <div class="latest-swiper">
+        <swiper
+            :modules="modules"
+            :navigation="{ nextEl: '.next', prevEl: '.prev' }"
+            :pagination="{ clickable: true }"
+            :loop="true"
+            :lazy="true"
+        >
+          <swiper-slide class="cursor-pointer" v-for="item in topicList" :key="item.id" :lazy="true">
+            <!-- 图片 -->
+            <template v-if="item.type === '0'">
+              <NuxtLink :to="item.url" :target="isExternal(item.url) ? '_blank' : '_self'">
+                <picture>
+                  <!-- Mobile -->
+                  <source
+                      media="(max-width: 768px)"
+                      :srcset="getMobileSrcset(item.mobileImg).srcset"
+                      sizes="100vw"
                   />
-                </div>
-              </template>
-            </swiper-slide>
-          </swiper>
-          <div class="swiper-button next iconfont icon-right"></div>
-          <div class="swiper-button prev iconfont icon-left"></div>
+                  <!-- PC -->
+                  <source
+                      media="(min-width: 769px)"
+                      :srcset="getPcSrcset(item.img).srcset"
+                      sizes="100vw"
+                  />
+                  <!-- fallback img -->
+                  <img
+                      :src="getPcSrcset(item.img).src"
+                      :alt="item.title"
+                      class="w-full h-auto fit-cover"
+                      loading="lazy"
+                  />
+                </picture>
+              </NuxtLink>
+            </template>
+            <!-- 视频 -->
+            <template v-if="item.type === '1'">
+              <div class="video-box w-full h-full">
+                <video
+                    class="w-full h-full fit-cover"
+                    :src="imagePrefix(item.media)"
+                    :poster="imagePrefix(item.img)"
+                    :autoplay="true"
+                    :loop="true"
+                    :muted="true"
+                    :controls="false"
+                    playsinline
+                />
+              </div>
+            </template>
+          </swiper-slide>
+        </swiper>
+        <div class="swiper-button next">
+          <SvgIcon name="right"/>
         </div>
-      </ClientOnly>
+        <div class="swiper-button prev">
+          <SvgIcon name="left"/>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -78,7 +102,7 @@ import {Navigation, Pagination} from "swiper";
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import {jumpToUrl} from "~/utils";
+import {isExternal} from "~/utils";
 import {formatTimestamp} from "~/utils/format";
 import type {INews} from "~/api/interface/news/news";
 import type {IResultData} from "~/api/interface";
@@ -91,7 +115,7 @@ defineOptions({
   name: 'News'
 })
 
-const {imagePrefix} = useImage()
+const {imagePrefix, getPcSrcset, getMobileSrcset} = useImage()
 const route = useRoute()
 const modules = [Pagination, Navigation]
 
@@ -105,7 +129,7 @@ const {data: topData} = await useAsyncData(
 )
 
 const topicList = computed(() => topData.value?.topic || [])
-const latestList = computed(() => topData.value?.latest || [])
+const latestList = computed<INews.Row[]>(() => topData.value?.latest || [])
 
 useHead(resolvePageMeta("/magazine"));
 
@@ -188,7 +212,6 @@ watch(
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 50px;
         cursor: pointer;
         color: var(--color-primary);
         z-index: 2;
@@ -211,6 +234,10 @@ watch(
         &.next {
           right: 40px;
         }
+
+        .iconify {
+          font-size: 50px;
+        }
       }
 
     }
@@ -222,7 +249,10 @@ watch(
       .swiper-button {
         width: 53px;
         height: 84px;
-        font-size: 35px;
+
+        .iconify {
+          font-size: 35px;
+        }
       }
     }
   }
@@ -233,7 +263,6 @@ watch(
       .swiper-button {
         width: 38px;
         height: 60px;
-        font-size: 25px;
 
         &.prev {
           left: 20px;
@@ -242,6 +271,11 @@ watch(
         &.next {
           right: 20px;
         }
+
+        .iconify {
+          font-size: 25px;
+        }
+
       }
     }
   }

@@ -7,7 +7,7 @@
         <div class="expandable-header acea-row row-between-wrapper text-uppercase">
           <span class="f-bold flex-1 header-text">{{ title }}</span>
           <div class="header-icon">
-            <span class="iconfont icon-down" />
+            <SvgIcon name="down" />
           </div>
         </div>
       </slot>
@@ -185,13 +185,14 @@ const onTransitionEnd = (e: TransitionEvent) => {
       .header-icon {
         width: 24px;
         height: 24px;
-        line-height: 24px;
         background: #e8e8e8;
         border-radius: 50%;
-        text-align: center;
         transition: all .2s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        .iconfont {
+        .iconify {
           font-size: 12px;
         }
       }

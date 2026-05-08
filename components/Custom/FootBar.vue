@@ -7,7 +7,7 @@
     <div class="container">
       <div class="foot-inner">
         <div class="back-btn acea-row row-middle cursor-pointer" @click="handleBack">
-          <span class="iconfont icon-left text-20"></span>
+          <SvgIcon name="left" class="text-20" />
           <span class="text-20 f-bold">Back</span>
         </div>
         <div class="foot-center">

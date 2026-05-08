@@ -71,6 +71,9 @@
       <p>
         We reserve the right, but are not obligated, to limit the sales of our products or Services to any person, geographic region or jurisdiction. We may exercise this right on a case-by-case basis. We reserve the right to limit the quantities of any products or services that we offer. We reserve the right to discontinue any product at any time. Any offer for any product or service made on this site is void where prohibited.
       </p>
+      <p>
+        Furthermore, due to the fully hand-painted nature of our artworks, slight variations in brushstrokes, composition, and color blending may occur between the final delivered product and the digital reference images displayed on our site. These variations are a standard characteristic of genuine handmade art and do not constitute a product defect or misrepresentation.
+      </p>
       <h2 class="text-18 f-bold my-15">
         Section 6 - Accuracy Of Billing And Account Information
       </h2>

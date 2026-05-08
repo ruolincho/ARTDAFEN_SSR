@@ -14,7 +14,7 @@
               @click="chooseRoom(index)"
             >
               {{ room.name }}
-              <span class="iconfont icon-right"></span>
+              <SvgIcon name="right" />
             </li>
           </ul>
 
@@ -28,7 +28,7 @@
           >
             <div class="upload-btn my-20 p-10 cursor-pointer" ref="uploadBtnPcRef">
               Upload A Photo <br> Of Your Own Room
-              <span class="iconfont icon-right"></span>
+              <SvgIcon name="right" />
             </div>
           </el-upload>
 
@@ -50,12 +50,9 @@
               @touchstart.stop.prevent="onDragStart"
             >
               <img :src="wallImage" alt="Scene Graph">
-              <div
-                class="resize-handle iconfont icon-suofang"
-                @mousedown.stop.prevent="onResizeStart"
-                @touchstart.stop.prevent="onResizeStart"
-                ref="resizeRef"
-              />
+              <div class="resize-handle" ref="resizeRef" @mousedown.stop.prevent="onResizeStart" @touchstart.stop.prevent="onResizeStart">
+                <SvgIcon name="suofang" />
+              </div>
             </div>
           </div>
           <div class="thumb-box mt-10" ref="thumbRef">
@@ -95,7 +92,7 @@
           >
             <div class="acea-row row-column row-middle px-15" ref="uploadBtnAppRef">
               <div class="bg-white rounded-full p-10 shadow-md">
-                <span class="iconfont icon-camera-switching" style="font-size: 25px;"/>
+                <SvgIcon name="camera-switching" style="font-size: 25px;" />
               </div>
               <p class="mt-10 f-bold">Upload Photo</p>
             </div>
@@ -117,18 +114,18 @@
 
       <!-- 关闭按钮 -->
       <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="close">
-        <span class="iconfont icon-close"></span>
+        <SvgIcon name="close" />
       </div>
 
       <!-- 关闭按钮 -->
       <div class="guide-app-btn shadow-md" @click="openTour = true">
-        <span class="iconfont icon-help"></span>
+        <SvgIcon name="help" />
       </div>
 
     </div>
   </div>
 
-  <el-tour v-model="openTour">
+  <el-tour v-model="openTour" :target-area-clickable="false">
     <template #indicators="{ current, total }">
       <span>{{ current + 1 }} / {{ total }}</span>
     </template>
@@ -579,10 +576,6 @@ defineExpose({
             color: #fff;
             font-size: 20px;
           }
-
-          &:hover .resize-handle {
-            display: block;
-          }
         }
       }
 
@@ -629,7 +622,7 @@ defineExpose({
       bottom: 35%;
       display: none;
 
-      .iconfont {
+      .iconify {
         font-size: 20px;
       }
     }
@@ -687,7 +680,7 @@ defineExpose({
         right: 10px;
         top: 10px;
 
-        .iconfont {
+        .iconify {
           font-size: 14px;
         }
       }

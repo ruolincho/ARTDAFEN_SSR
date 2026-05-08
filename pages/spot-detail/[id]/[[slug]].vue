@@ -120,10 +120,11 @@
             <div class="spu-spec">
               <div class="acea-row row-center-wrapper border-t-md border-gray-700">
                 <span class="flex-1 border-r-md border-gray-700 py-20 text-20 f-bold-500">{{ goodsDetail.title }}</span>
-                <span class="iconfont icon-follow text-24 px-20 cursor-pointer" v-show="!isThumbs"
-                      @click="productThumbs"></span>
-                <span class="iconfont icon-follow-fill text-24 px-20 cursor-pointer text-error" v-show="isThumbs"
-                      @click="productThumbs"></span>
+                <SvgIcon
+                    :name="isThumbs ? 'follow-fill' : 'follow'"
+                    class="text-24 px-20 cursor-pointer" :class="{'text-error': isThumbs}"
+                    @click.prevent.stop="productThumbs()"
+                />
               </div>
               <div class="text-14 cursor-pointer text-underline" @click="handleClickArtist">
                 by:{{ goodsDetail.creator?.name }}
@@ -191,7 +192,7 @@
       <div class="btn-box">
         <el-button class="w-full mt-20" plain size="large" @click="isOpenDesc = !isOpenDesc">
           {{ isOpenDesc ? 'Hide Product Details' : 'View More Product Details' }}
-          <span class="iconfont ml-20" :class="isOpenDesc ? 'icon-up' : 'icon-down'"></span>
+          <SvgIcon :name="isOpenDesc ? 'up' : 'down'" class="ml-20" />
         </el-button>
       </div>
     </div>
@@ -247,8 +248,8 @@
         <el-collapse-item v-for="subItem in getFaqByQuote('shopping')" :title="subItem.title" :name="subItem.name"
                           :key="subItem.name">
           <template #icon="{ isActive }">
-            <p style="margin-left:  auto">
-              <span class="iconfont text-20 ml-10" :class="isActive ? 'icon-reduce' : 'icon-add'"></span>
+            <p style="margin-left: auto">
+              <SvgIcon :name="isActive ? 'reduce' : 'add'" class="text-20 ml-10" />
             </p>
           </template>
           <div class="px-20 py-24" v-html="subItem.content"></div>

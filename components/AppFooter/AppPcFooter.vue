@@ -8,22 +8,15 @@
         <el-button type="primary" size="large">
           <a href="/faq">
             FAQ
-            <span class="iconfont icon-right ml-10"></span>
+            <SvgIcon name="right" class="ml-10" />
           </a>
         </el-button>
         <el-button type="primary" size="large">
           <a :href="`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('One-on-One Consultation')}`">
             One-on-One Consultation
-            <span class="iconfont icon-right ml-10"></span>
+            <SvgIcon name="right" class="ml-10" />
           </a>
         </el-button>
-        <!--<el-button type="primary" size="large">-->
-        <!--  <a href="https://www.trustpilot.com/review/artdafen.com" target="_blank" rel="noopener">-->
-        <!--    <span class="iconfont icon-favorites-fill"></span>-->
-        <!--    Check our reviews on Trustpilot-->
-        <!--    <span class="iconfont icon-right ml-10"></span>-->
-        <!--  </a>-->
-        <!--</el-button>-->
       </div>
       <div class="social-icon acea-row gap-base">
         <a
@@ -33,7 +26,7 @@
             v-for="item in SOCIAL_LIST" :key="item.name"
             :title="item.name"
         >
-          <span class="iconfont" :class="[item.icon]"></span>
+          <SvgIcon :name="item.icon" />
         </a>
       </div>
     </div>
@@ -209,16 +202,16 @@ const props = defineProps({
 
     .social-icon {
       .social-item {
-        display: inline-block;
         width: 30px;
         height: 30px;
         background: #000;
         color: #fff;
-        text-align: center;
-        line-height: 30px;
         border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
 
-        .iconfont {
+        .iconify {
           font-size: 20px;
         }
 

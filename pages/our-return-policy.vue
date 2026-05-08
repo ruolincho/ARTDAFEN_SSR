@@ -3,6 +3,12 @@
     <div class="container-middle text-14" style="line-height: 2">
       <h1 class="text-30 f-bold pt-lg-50 py-30">Our Return Policy</h1>
       <h2 class="text-18 f-bold my-15">
+        WHAT IS YOUR RETURN POLICY?
+      </h2>
+      <p>
+        <span class="f-bold">Note on Handmade Variations:</span> Please note that because our oil paintings are 100% hand-painted, slight natural variations in color, brushwork, and texture from the digital reference images are expected. These unique, handmade characteristics represent the human element of authentic art and do not qualify as "defective" or "damaged" items for return purposes. Your final approval of the preview photos serves as confirmation of your satisfaction with the artwork.
+      </p>
+      <h2 class="text-18 f-bold my-15">
         Returns & Exchanges
       </h2>
       <p>

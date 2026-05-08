@@ -74,7 +74,8 @@
   <section class="sec-museum">
     <div class="container">
       <h1 class="text-50 font-bold text-center py-lg-60 py-40">Museum Quality. 100% Hand-Painted.</h1>
-      <img v-if="appStore.isPc" :src="imagePrefix('/static/artdafen/program-2_pc.webp')" alt="Museum Quality. 100% Hand-Painted.">
+      <img v-if="appStore.isPc" :src="imagePrefix('/static/artdafen/program-2_pc.webp')"
+           alt="Museum Quality. 100% Hand-Painted.">
       <img v-else :src="imagePrefix('/static/artdafen/program-2_app.webp')" alt="Museum Quality. 100% Hand-Painted.">
       <div class="museum-wrapper">
         <img class="cover fit-contain" :src="imagePrefix('/static/artdafen/program-3.webp')" alt="bespoke">
@@ -142,43 +143,43 @@
     </div>
   </section>
 
-  <section class="sec-choose pb-lg-60 pb-40">
+  <section class="sec-choose">
     <div class="container">
-      <h1 class="text-50 font-bold text-center py-lg-60 py-40 text-white">Why Choose ARTDAFEN</h1>
-      <div class="row process-list gap-row-base">
-        <div class="col-xs-4 col-12" v-for="item in WHY_CHOOSE_LIST2" :key="item.title">
-          <div class="process-item text-center text-white">
-            <span class="iconfont text-60" :class="[item.icon]"/>
-            <p class="mt-xs-30 mt-15 content">
-              <span class="text-26 f-bold">{{ item.title }}: </span>
-              <span class="text-22">{{ item.desc }}</span>
-            </p>
+      <div class="choose-wrapper acea-row">
+        <div class="process-box flex-1">
+          <h1 class="text-50 font-bold mb-20">Why Choose ARTDAFEN</h1>
+          <div class="process-list">
+            <div
+                class="process-item acea-row row-center-wrapper bg-gray-200 rounded-md overflow-hidden p-20 gap-base"
+                v-for="item in WHY_CHOOSE_LIST2" :key="item.title"
+            >
+              <SvgIcon :name="item.icon" class="text-60"/>
+              <p class="content flex-1">
+                <span class="text-26 f-bold">{{ item.title }}: </span>
+                <span class="text-22">{{ item.desc }}</span>
+              </p>
+            </div>
           </div>
+        </div>
+        <div
+            class="content-box flex-1 bg-gray-200 rounded-md overflow-hidden p-20 text-center acea-row row-column row-center">
+          <p class="text-40 font-bold">
+            Partner with ArtDaFen for VIP 1-on-1 concierge service. <br/>
+            Sign up today and enjoy a 10% welcome discount on qualified wholesale purchases.
+          </p>
+          <div class="py-30">
+            <el-button size="large" type="danger">
+              <a :href="`mailto:${CONTACT_EMAIL}`">
+                Inquire Now
+              </a>
+            </el-button>
+          </div>
+          <p class="text-20">Instantly access curated art collections and exclusive trade deals.</p>
+          <p class="text-20">Streamline your sourcing with our professional platform.</p>
         </div>
       </div>
     </div>
   </section>
-
-  <section class="sec-inquire">
-    <div class="container">
-      <h1 class="text-40 font-bold text-center py-lg-50 py-30">
-        Partner with ArtDaFen for VIP 1-on-1 concierge service. <br/>
-        Sign up today and enjoy a 10% welcome discount on qualified wholesale purchases.
-      </h1>
-      <div class="acea-row row-center-wrapper">
-        <el-button size="large" type="danger">
-          <a :href="`mailto:${CONTACT_EMAIL}`">
-            Inquire Now
-          </a>
-        </el-button>
-      </div>
-      <div class="py-30">
-        <p class="text-center text-20">Instantly access curated art collections and exclusive trade deals.</p>
-        <p class="text-center text-20">Streamline your sourcing with our professional platform.</p>
-      </div>
-    </div>
-  </section>
-
 
 </template>
 
@@ -197,7 +198,7 @@ import {resolvePageMeta} from "~/config/pageMeta";
 useHead(resolvePageMeta("/trade-commercial"));
 
 const modules = [Autoplay, Pagination, Navigation, Lazy]
-const { imagePrefix } = useImage()
+const {imagePrefix} = useImage()
 const appStore = useAppStore()
 const partnerImage = imagePrefix('/static/artdafen/partner-bg.webp');
 const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
@@ -345,29 +346,33 @@ const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
   }
 
   .sec-choose {
-    background: #4d4d4d;
+    margin: 5.20vw 0;
 
-    .process-list {
+    .choose-wrapper {
+      gap: 40px;
 
-      .process-item {
-        .iconfont {
-          color: #b1a383;
-          font-size: clamp(80px, 10.41vw, 200px);
-        }
+      .process-box {
+        .process-list {
+          .process-item {
+            .iconify {
+              color: #b18147;
+              font-size: clamp(80px, 10.41vw, 120px);
+            }
+          }
 
-        .content {
-          max-width: 320px;
-          margin: auto;
+          .process-item + .process-item {
+            margin-top: 10px;
+          }
         }
       }
-    }
-  }
 
-  .sec-inquire {
-    .el-button {
-      max-width: 100%;
-      width: 550px;
-      height: 60px;
+      .content-box {
+        .el-button {
+          max-width: 550px;
+          width: 100%;
+          height: 60px;
+        }
+      }
     }
   }
 
@@ -416,6 +421,19 @@ const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
         }
       }
     }
+
+    .sec-choose {
+      margin: 5.20vw 0;
+
+      .choose-wrapper {
+        flex-direction: column;
+        gap: 10px;
+
+        h1 {
+          text-align: center;
+        }
+      }
+    }
   }
 
   @media (max-width: 768px) {
@@ -425,10 +443,6 @@ const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
       .contact-bg {
         --scroll-distance: 1534px;
       }
-    }
-
-    .sec-inquire {
-      margin-bottom: -20px;
     }
   }
 

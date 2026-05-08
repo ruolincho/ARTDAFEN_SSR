@@ -24,7 +24,7 @@
       </p>
       <el-button class="w-full" type="primary" size="large" @click="router.replace('/')">
         OKAY
-        <span class="iconfont icon-right-arrow ml-8 text-16"></span>
+        <SvgIcon name="right-arrow" class="ml-8" />
       </el-button>
     </div>
   </div>

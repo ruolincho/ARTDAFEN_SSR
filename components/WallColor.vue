@@ -19,7 +19,7 @@
           />
         </div>
         <div class="close-box cursor-pointer acea-row row-center-wrapper" @click="close">
-          <span class="iconfont icon-close"></span>
+          <SvgIcon name="close" />
         </div>
       </div>
     </div>
@@ -156,10 +156,6 @@ defineExpose({
         height: 30px;
         right: 10px;
         top: 10px;
-
-        .iconfont {
-          font-size: 14px;
-        }
       }
     }
   }

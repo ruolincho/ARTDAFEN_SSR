@@ -7,7 +7,7 @@
   >
     <div class="success-icon-wrapper acea-row row-center-wrapper py- 42">
       <div class="success-icon rounded-full bg-primary acea-row row-center-wrapper">
-        <span class="iconfont icon-shopping text-30 text-white"></span>
+        <SvgIcon name="shopping" class="text-30 text-white" />
       </div>
       <div class="ripple ripple-inner"></div>
       <div class="ripple ripple-outer"></div>

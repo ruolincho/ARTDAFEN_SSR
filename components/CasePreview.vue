@@ -61,7 +61,7 @@
       </div>
     </div>
     <div class="close cursor-pointer" @click="close">
-      <span class="iconfont icon-error-fill text-30"></span>
+      <SvgIcon name="error-fill" class="text-30" />
     </div>
   </section>
 </template>

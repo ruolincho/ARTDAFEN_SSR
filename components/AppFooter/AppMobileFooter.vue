@@ -1,5 +1,5 @@
 <template>
-  <footer class="foot-mobile">
+  <footer class="foot-mobile" id="foot-mobile">
     <div class="footer__block-list">
       <div class="footer__block footer__block--text">
         <p class="footer__block-title">ARTDAFEN Vision &amp; Mission</p>
@@ -49,7 +49,7 @@
           v-for="item in SOCIAL_LIST" :key="item.name"
           :title="item.name"
       >
-        <span class="iconfont" :class="[item.icon]"></span>
+        <SvgIcon :name="item.icon" />
       </a>
     </div>
     <div class="partner-list my-30 acea-row gap-sm">
@@ -162,16 +162,16 @@ const props = defineProps({
     .social-list {
 
       .social-item {
-        display: inline-block;
         width: 30px;
         height: 30px;
         background: #000;
         color: #fff;
-        text-align: center;
-        line-height: 30px;
         border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
 
-        .iconfont {
+        .iconify {
           font-size: 20px;
         }
 

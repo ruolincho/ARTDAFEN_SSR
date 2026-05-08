@@ -18,7 +18,7 @@
             <div class="p-cont flex-1">
               <div class="acea-row row-between-wrapper gap-base mb-10">
                 <p class="text-16 f-bold-500 flex-1">{{ item.title }}</p>
-                <span class="iconfont icon-close text-20 cursor-pointer" @click="removeCart(index)"></span>
+                <SvgIcon name="close" class="text-20 cursor-pointer" @click="removeCart(index)" />
               </div>
               <p class="text-14 text-gray-500 mt-4" v-for="(v, k) in item.specs">{{ k }}: {{ v }}</p>
               <div class="acea-row row-between-wrapper mt-10">
@@ -59,7 +59,7 @@
             <div class="acea-row row-middle">
               <span class="f-bold text-16 mr-5">Phone Number</span>
               <el-tooltip :content="phoneRuleText" placement="top" popper-style="max-width: 345px;">
-                <span class="iconfont icon-info-fill text-18"></span>
+                <SvgIcon name="info-fill" class="text-18" />
               </el-tooltip>
             </div>
             <span></span>
@@ -77,11 +77,10 @@
             <div class="acea-row row-middle">
               <span class="f-bold text-16 mr-5">Apply Discount Code</span>
               <el-tooltip :content="discountRuleText" placement="top" popper-style="max-width: 345px;">
-                <span class="iconfont icon-info-fill text-18"></span>
+                <SvgIcon name="info-fill" class="text-18" />
               </el-tooltip>
             </div>
-            <span class="iconfont text-24 cursor-pointer" :class="[showDiscountInput ? 'icon-reduce' : 'icon-add']"
-                  @click="showDiscountInput = !showDiscountInput"/>
+            <SvgIcon :name="showDiscountInput ? 'reduce' : 'add'" class="text-24 cursor-pointer" @click="showDiscountInput = !showDiscountInput" />
           </div>
           <div v-show="showDiscountInput">
             <el-input
@@ -95,11 +94,11 @@
                 <el-button size="large" @click="applyCode">Apply</el-button>
               </template>
             </el-input>
-            <div class="acea-row row-right row-center text-error my-20" v-if="isDiscount">
-            <span class="text-14">
-              not using discounts
-              <i class="iconfont icon-close text-14 cursor-pointer" @click="delCode"/>
-            </span>
+            <div class="acea-row row-right row-center text-error my-20 text-14" v-if="isDiscount">
+              <p>
+                not using discounts
+                <SvgIcon name="close" class="text-14 cursor-pointer" @click="delCode" />
+              </p>
             </div>
           </div>
           <div class="text-16 text-gray-600 my-20 acea-row row-between-wrapper">
@@ -132,19 +131,19 @@
           <div class="mt-15 acea-row row-middle">
             <span class="mr-5 text-16">Promotion Rules</span>
             <el-tooltip :content="promotionRuleText" placement="top" popper-style="max-width: 345px;">
-              <span class="iconfont icon-info-fill text-18"></span>
+              <SvgIcon name="info-fill" class="text-18" />
             </el-tooltip>
           </div>
         </template>
         <div class="text-center py-60" v-else>
-          <span class="iconfont icon-shopping-bag text-50"></span>
+          <SvgIcon name="shopping-bag" class="text-50" />
           <p class="text-20 f-bold mt-20">No Items Selected</p>
           <p class="text-14 my-20">Please select at least one product in your cart before proceeding to checkout.</p>
         </div>
       </div>
     </div>
     <div class="text-center py-60" v-show="canCarts.length === 0">
-      <span class="iconfont icon-shopping-bag text-50"></span>
+      <SvgIcon name="shopping-bag" class="text-50" />
       <p class="text-20 f-bold mt-20">Your Cart is Empty.</p>
       <p class="text-14 my-20">Please add products to your cart to checkout.</p>
       <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">

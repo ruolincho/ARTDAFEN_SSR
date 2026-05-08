@@ -29,8 +29,8 @@
                       :src="imagePrefix(item.img)"
                       :alt="item.title"
                   />
-                  <div class="link-box">
-                    <span class="iconfont icon-link"/>
+                  <div class="link-box  acea-row row-center-wrapper">
+                    <SvgIcon name="link" class="text-20" />
                   </div>
                 </div>
               </template>
@@ -43,8 +43,8 @@
                         :src="imagePrefix(banner)"
                         :alt="item.title"
                     />
-                    <div class="link-box">
-                      <span class="iconfont icon-link"/>
+                    <div class="link-box acea-row row-center-wrapper">
+                      <SvgIcon name="link" class="text-20" />
                     </div>
                   </div>
                 </template>
@@ -109,15 +109,9 @@ const {pageData, currentPage, totalPages, pending} = await useSeoPaginationLogic
               bottom: 30px;
               width: 40px;
               height: 40px;
-              line-height: 40px;
               background: #fff;
               border-radius: 50%;
               color: #000;
-              text-align: center;
-
-              .iconfont {
-                font-size: 20px;
-              }
             }
 
           }
@@ -132,11 +126,6 @@ const {pageData, currentPage, totalPages, pending} = await useSeoPaginationLogic
                 bottom: 15px;
                 width: 30px;
                 height: 30px;
-                line-height: 30px;
-
-                .iconfont {
-                  font-size: 16px;
-                }
               }
             }
 
@@ -152,11 +141,6 @@ const {pageData, currentPage, totalPages, pending} = await useSeoPaginationLogic
                 bottom: 10px;
                 width: 25px;
                 height: 25px;
-                line-height: 25px;
-
-                .iconfont {
-                  font-size: 14px;
-                }
               }
             }
 

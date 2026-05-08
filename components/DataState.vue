@@ -9,7 +9,7 @@
   <div v-else-if="error" class="state-error" :class="wrapperClass">
     <slot name="error" :error="error" :retry="retry">
       <div class="text-center">
-        <span class="iconfont icon-zhongduancuowuxinxi text-50"></span>
+        <SvgIcon name="zhongduancuowuxinxi" class="text-50" />
         <p class="text-14 my-20">{{ computedErrorText }}</p>
         <el-button v-if="retry" size="large" type="primary" @click="retry">TRY AGAIN</el-button>
       </div>
@@ -19,7 +19,7 @@
   <div v-else-if="isEmpty && requestFinished" class="data-state-empty" :class="wrapperClass">
     <slot name="empty">
       <div class="text-center">
-        <span class="iconfont icon-empty text-50"></span>
+        <SvgIcon name="empty" class="text-50" />
         <p class="text-20 f-bold mt-20">No Data</p>
         <p class="text-14 my-20">{{ emptyText }}</p>
       </div>

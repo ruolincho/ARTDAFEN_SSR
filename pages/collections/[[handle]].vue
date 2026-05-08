@@ -27,9 +27,7 @@
           >
         </div>
         <button class="search-btn" @click="onSearch">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"/>
-          </svg>
+          <SvgIcon name="search" />
         </button>
       </div>
     </div>
@@ -60,17 +58,19 @@
                             :key="item.id"
                             @click="clickPriceType(item)"
                         >
-                       <span
-                           class="iconfont text-18"
-                           :class="[priceSelected.id === item.id && !isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                       />
+                          <SvgIcon
+                              class="text-18"
+                              :class="[priceSelected.id === item.id && !isCustomPrice ? 'text-primary' : 'text-gray-400']"
+                              :name="priceSelected.id === item.id && !isCustomPrice ? 'check-fill' : 'check'"
+                          />
                           <span class="text-14 pl-12">{{ item.name }}</span>
                         </div>
                         <div class="acea-row row-middle cursor-pointer" @click="clickPriceType(undefined)">
-                      <span
-                          class="iconfont text-18"
-                          :class="[isCustomPrice ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                      />
+                          <SvgIcon
+                              class="text-18"
+                              :class="[isCustomPrice ? 'text-primary' : 'text-gray-400']"
+                              :name="isCustomPrice ? 'check-fill' : 'check'"
+                          />
                           <span class="text-14 pl-12">Custom</span>
                         </div>
                         <div v-show="isCustomPrice">
@@ -108,10 +108,11 @@
                             :key="item.id"
                             @click="clickRadioType(item)"
                         >
-                       <span
-                           class="iconfont text-18"
-                           :class="[radioSelected.get(item.parentId)?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                       />
+                          <SvgIcon
+                              class="text-18"
+                              :class="[radioSelected.get(item.parentId)?.id === item.id ? 'text-primary' : 'text-gray-400']"
+                              :name="radioSelected.get(item.parentId)?.id === item.id ? 'check-fill' : 'check'"
+                          />
                           <span class="text-14 pl-12">{{ item.name }}</span>
                         </div>
                       </div>
@@ -130,10 +131,11 @@
                             :key="item.id"
                             @click="clickCheckoutType(item)"
                         >
-                       <span
-                           class="iconfont text-18"
-                           :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'icon-checkbox-fill text-primary' : 'icon-checkbox text-gray-400']"
-                       />
+                          <SvgIcon
+                              class="text-18"
+                              :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'text-primary' : 'text-gray-400']"
+                              :name="checkboxSelected.get(item.parentId)?.includes(item) ? 'checkbox-fill' : 'checkbox'"
+                          />
                           <span class="text-14 pl-12">{{ item.name }}</span>
                         </div>
                       </div>
@@ -173,10 +175,11 @@
                             :key="item.id"
                             @click="clickShapeType(item)"
                         >
-                      <span
-                          class="iconfont text-18"
-                          :class="[shapeSelected?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
-                      />
+                          <SvgIcon
+                              class="text-18"
+                              :class="[shapeSelected?.id === item.id ? 'text-primary' : 'text-gray-400']"
+                              :name="shapeSelected?.id === item.id ? 'check-fill' : 'check'"
+                          />
                           <span class="text-14 pl-12">{{ item.name }}</span>
                         </div>
                       </div>
@@ -205,17 +208,17 @@
             <div class="loc-group" :class="{ 'active' : isFilter }" @click="isFilter = !isFilter">
               <div class="loc-current">
                 <span><span class="loc-text">{{ isFilter ? 'Hide' : 'Show' }} Filters</span></span>
-                <span class="loc-arrow"><i class="iconfont icon-editor-left-alignment"></i></span>
+                <span class="loc-arrow"><SvgIcon name="editor-left-alignment" /></span>
               </div>
             </div>
 
             <!--排序选项-->
-            <div class="loc-group" :class="{ 'active' : isSort }" @click="isSort = !isSort">
+            <div class="loc-group" :class="{ 'active' : isSort }" @click="isSort = !isSort" ref="containerRef">
               <div class="loc-current">
                 <span><strong>Sort by:</strong> <span class="loc-text">
                   {{ sortSelected.name || 'Default' }}</span>
                 </span>
-                <span class="loc-arrow"><i class="iconfont icon-down"></i></span>
+                <span class="loc-arrow"><SvgIcon name="down" /></span>
               </div>
               <div class="loc-dropdown">
                 <ul class="loc-list">
@@ -339,7 +342,7 @@
                 >
                   {{ group.name }}
                   <template v-if="priceSubmitted"> (1)</template>
-                  <span class="iconfont icon-down text-16"></span>
+                  <SvgIcon name="down" />
                 </el-tag>
               </template>
 
@@ -355,7 +358,7 @@
                   <template v-if="countsMap[group.config?.type][group.id] > 0">
                     ({{ countsMap[group.config?.type][group.id] }})
                   </template>
-                  <span class="iconfont icon-down text-16"></span>
+                  <SvgIcon name="down" />
                 </el-tag>
               </template>
 
@@ -371,7 +374,7 @@
                   <template v-if="countsMap[group.config?.type][group.id] > 0">
                     ({{ countsMap[group.config?.type][group.id] }})
                   </template>
-                  <span class="iconfont icon-down text-16"></span>
+                  <SvgIcon name="down" />
                 </el-tag>
               </template>
 
@@ -387,7 +390,7 @@
                   <template v-if="countsMap[group.config?.type][group.id] > 0">
                     ({{ countsMap[group.config?.type][group.id] }})
                   </template>
-                  <span class="iconfont icon-down text-16"></span>
+                  <SvgIcon name="down" />
                 </el-tag>
               </template>
 
@@ -401,7 +404,7 @@
                 >
                   {{ group.name }}
                   <template v-if="shapeSubmitted.id"> (1)</template>
-                  <span class="iconfont icon-down text-16"></span>
+                  <SvgIcon name="down" />
                 </el-tag>
               </template>
             </template>
@@ -446,7 +449,7 @@
                 </template>
                 <template #empty>
                   <div class="text-center py-60">
-                    <span class="iconfont icon-empty text-50"></span>
+                    <SvgIcon name="empty" class="text-50" />
                     <p class="text-20 f-bold mt-20">No Data</p>
                     <p class="text-14 my-20">No data found, please check the query or try again later.</p>
                   </div>
@@ -541,10 +544,10 @@
               @click="clickRadioType(item)"
           >
             <span>{{ item.name }}</span>
-            <span
+            <SvgIcon
+                :name="radioSelected.get(item.parentId)?.id === item.id ? 'check-fill' : 'check'"
                 style="font-size: 20px"
-                class="iconfont"
-                :class="[radioSelected.get(item.parentId)?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+                :class="[radioSelected.get(item.parentId)?.id === item.id ? 'text-primary' : 'text-gray-400']"
             />
           </div>
         </template>
@@ -558,10 +561,10 @@
               @click="clickCheckoutType(item)"
           >
             <span>{{ item.name }}</span>
-            <span
+            <SvgIcon
+                :name="checkboxSelected.get(item.parentId)?.includes(item) ? 'checkbox-fill' : 'checkbox'"
                 style="font-size: 20px"
-                class="iconfont"
-                :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'icon-checkbox-fill text-primary' : 'icon-checkbox text-gray-400']"
+                :class="[checkboxSelected.get(item.parentId)?.includes(item) ? 'text-primary' : 'text-gray-400']"
             />
           </div>
         </template>
@@ -592,10 +595,10 @@
               @click="clickShapeType(item)"
           >
             <span>{{ item.name }}</span>
-            <span
+            <SvgIcon
+                :name="shapeSelected?.id === item.id ? 'check-fill' : 'check'"
                 style="font-size: 20px"
-                class="iconfont"
-                :class="[shapeSelected?.id === item.id ? 'icon-check-fill text-primary' : 'icon-check text-gray-400']"
+                :class="[shapeSelected?.id === item.id ? 'text-primary' : 'text-gray-400']"
             />
           </div>
         </template>
@@ -744,10 +747,12 @@ definePageMeta({
 onMounted(() => {
   $bus.on('loginSuccess', paramsWatch)
   paramsWatch()
+  document.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
   $bus.off('loginSuccess', paramsWatch)
+  document.removeEventListener('click', handleClickOutside)
 })
 
 const {$bus} = useNuxtApp()
@@ -978,6 +983,7 @@ const getColorStyle = (colorStr: string) => {
 }
 
 // ------ 排序------
+const containerRef = ref<HTMLElement | null>(null)
 const isSort = ref(false)
 const sortSelected = ref({} as IHome.MenuRow) // 排序选中的值
 const handleSort = (menu: IHome.MenuRow) => {
@@ -1564,6 +1570,13 @@ useHead(computed(() => {
   );
 }));
 
+// 点击外部自动收起
+const handleClickOutside = (event: MouseEvent) => {
+  if (containerRef.value && !containerRef.value.contains(event.target as Node)) {
+    isSort.value = false
+  }
+}
+
 // 监听路由的变化
 if (import.meta.client) {
   watch(
@@ -1614,7 +1627,7 @@ if (import.meta.client) {
         text-align: center;
         transition: all 0.2s;
 
-        .iconfont {
+        .iconify {
           font-size: 12px;
         }
       }
@@ -1656,7 +1669,7 @@ if (import.meta.client) {
       opacity: 0;
       visibility: hidden;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 1010;
+      z-index: 999;
       max-height: 320px; /* 大约能显示 8-10 个选项的高度 */
       overflow-y: auto;
       /* Firefox 浏览器的极简滚动条支持 */
@@ -1749,6 +1762,10 @@ if (import.meta.client) {
         cursor: pointer;
         color: #333;
         margin-left: 15px;
+
+        .iconify {
+          font-size: 24px;
+        }
       }
     }
   }

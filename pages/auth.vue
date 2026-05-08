@@ -17,7 +17,7 @@
         </el-form-item>
         <el-button class="w-full" type="primary" @click="handleVerify">
           VERIFY ME
-          <span class="iconfont icon-right-arrow ml-8 text-16"></span>
+          <SvgIcon name="right-arrow" class="ml-8" />
         </el-button>
       </el-form>
     </div>
@@ -35,7 +35,7 @@
       <!-- 缺少code的错误状态 -->
       <div v-else class="error-content">
         <div class="error-icon">
-          <span class="iconfont icon-error-fill"></span>
+          <SvgIcon name="error-fill" />
         </div>
         <p class="text-20 mt-25 text-gray-600">Authorization failed</p>
         <el-button
@@ -183,7 +183,7 @@ const retryAuth = () => {
     animation: pulse 2s infinite;
     margin: auto;
 
-    span {
+    .iconify {
       font-size: 80px;
     }
   }

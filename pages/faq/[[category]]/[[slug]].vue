@@ -19,7 +19,7 @@
               >
                 <template #icon="{ isActive }">
                   <p style="margin-left: auto">
-                    <span class="iconfont text-20 ml-10" :class="isActive ? 'icon-reduce' : 'icon-add'"></span>
+                    <SvgIcon :name="isActive ? 'reduce' : 'add'" class="text-20 ml-10" />
                   </p>
                 </template>
                 <div class="px-20 py-24" v-html="subItem.content"></div>
@@ -51,7 +51,7 @@
             </el-form-item>
             <el-button class="" type="primary" @click="handleSend">
               SEND MESSAGE
-              <span class="iconfont icon-right-arrow ml-8 text-16"></span>
+              <SvgIcon name="right-arrow" class="ml-8" />
             </el-button>
           </el-form>
         </div>

@@ -53,7 +53,7 @@
         </div>
         <img class="discount-image" :src="imagePrefix(activityData.img)" alt="poster">
         <div class="discount-close-button cursor-pointer" @click="handleClose">
-          <span class="iconfont icon-error-fill"></span>
+          <SvgIcon name="error-fill" class="text-22" />
         </div>
       </div>
     </div>
@@ -246,10 +246,6 @@ const handleDiscountEnd = () => {
         top: 10px;
         z-index: 2;
         color: #fff;
-
-        .iconfont {
-          font-size: 22px;
-        }
       }
     }
 
@@ -308,10 +304,6 @@ const handleDiscountEnd = () => {
 
         .discount-close-button {
           color: var(--color-primary);
-
-          .iconfont {
-            font-size: 20px;
-          }
         }
       }
     }

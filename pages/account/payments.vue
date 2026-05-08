@@ -2,7 +2,7 @@
   <div class="orders-container">
     <div class="acea-row row-right mb-30">
       <el-button class="add-btn" type="primary" size="large">
-        <span class="iconfont icon-add mr-10"></span>
+        <SvgIcon name="add" class="mr-10" />
         Add New Card
       </el-button>
     </div>

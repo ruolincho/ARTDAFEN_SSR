@@ -39,14 +39,17 @@
           </div>
           <div class="text-center my-16 cursor-pointer" v-if="noteInfo?.products?.length > 3 && !moreProduct" @click="moreProduct = true">
             <span>Less Product</span>
-            <span class="iconfont icon-down ml-4"></span>
+            <SvgIcon name="down" class="ml-4" />
           </div>
         </div>
         <div class="bto-container">
           <p>{{ formatTimestamp(noteInfo.createTime, 'MM-DD' ) }}</p>
           <p class="acea-row row-middle">
-            <span class="iconfont icon-follow cursor-pointer text-20" v-show="!noteInfo.like" @click.stop="blogThumbs"></span>
-            <span class="iconfont icon-follow-fill text-error cursor-pointer text-20" v-show="noteInfo.like" @click.stop="blogThumbs"></span>
+            <SvgIcon
+                :name="noteInfo.like ? 'follow-fill' : 'follow'"
+                class="text-20 cursor-pointer" :class="{'text-error': noteInfo.like}"
+                @click.prevent.stop="blogThumbs()"
+            />
             <span class="text-14 ml-4">{{ noteInfo.likeVolume }}</span>
           </p>
         </div>
@@ -55,7 +58,7 @@
 
     <div class="close-circle" @click="close">
       <div class="close">
-        <span class="iconfont icon-close text-20"></span>
+        <SvgIcon name="close" class="text-20" />
       </div>
     </div>
     <div class="back-desk" @click="close"></div>

@@ -14,8 +14,8 @@
           <h2 class="title line1">{{ item.title }}</h2>
           <p class="subtitle line1">{{ item.name }}</p>
         </div>
-        <div class="link-box">
-          <span class="iconfont icon-link"/>
+        <div class="link-box acea-row row-center-wrapper">
+          <SvgIcon name="link" class="text-20" />
         </div>
       </NuxtLink>
     </div>
@@ -122,15 +122,9 @@ const activeIndex = ref(0)
         .link-box {
           width: 40px;
           height: 40px;
-          line-height: 40px;
           background: #fff;
           border-radius: 50%;
           color: #000;
-          text-align: center;
-
-          .iconfont {
-            font-size: 20px;
-          }
         }
 
         @media (max-width: 768px) {
@@ -139,11 +133,6 @@ const activeIndex = ref(0)
           .link-box {
             width: 30px;
             height: 30px;
-            line-height: 30px;
-
-            .iconfont {
-              font-size: 16px;
-            }
           }
         }
       }

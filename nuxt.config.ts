@@ -2,7 +2,7 @@ import path from 'path';
 // @ts-ignore
 export default defineNuxtConfig({
     ssr: process.env.NUXT_PUBLIC_ENABLE_SSR === 'true',
-    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/google-fonts', '@nuxt/image', '@vite-pwa/nuxt'],
+    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/google-fonts', '@nuxt/image', '@vite-pwa/nuxt', '@nuxt/icon'],
     runtimeConfig: {
         public: {
             siteName: process.env.NUXT_PUBLIC_SITE_NAME,
@@ -171,5 +171,14 @@ export default defineNuxtConfig({
             enabled: true,
             type: 'module'
         }
+    },
+    icon: {
+        // 自定义本地图标存放目录，默认就是 assets/icons
+        customCollections: [
+            {
+                prefix: 'my-icon',
+                dir: './assets/icons'
+            }
+        ],
     },
 })

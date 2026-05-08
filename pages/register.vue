@@ -42,11 +42,11 @@
       </el-form-item>
 
       <el-button class="w-full mb-22" type="primary" @click="sendCode" v-if="!authToken">SEND CODE
-        <span class="iconfont icon-right-arrow ml-8 text-16"></span>
+        <SvgIcon name="right-arrow" class="ml-8" />
       </el-button>
 
       <el-button class="w-full my-22" type="primary" @click="register" v-if="authToken">CREATE ACCOUNT
-        <span class="iconfont icon-right-arrow ml-8 text-16"></span>
+        <SvgIcon name="right-arrow" class="ml-8" />
       </el-button>
 
     </el-form>

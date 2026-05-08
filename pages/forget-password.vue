@@ -35,12 +35,12 @@
 
       <el-button class="w-full mb-22" type="primary" @click="sendCode" v-if="!authToken">
         SEND CODE
-        <span class="iconfont icon-right-arrow ml-8 text-16"></span>
+        <SvgIcon name="right-arrow" class="ml-8" />
       </el-button>
 
       <el-button class="w-full mb-22" type="primary" @click="resetPassword" v-if="authToken">
         RESET PASSWORD
-        <span class="iconfont icon-right-arrow ml-8 text-16"></span>
+        <SvgIcon name="right-arrow" class="ml-8" />
       </el-button>
     </el-form>
     <div class="acea-row row-middle text-14">

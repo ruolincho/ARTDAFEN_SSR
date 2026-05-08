@@ -37,9 +37,7 @@
           <!--语言-->
           <div class="loc-group ignore" :class="{ 'is-dropdown': activeLocType === 'Lang' }">
             <div class="loc-group-button" @click="toggleLoc('Lang')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20"/>
-              </svg>
+              <SvgIcon name="duoyuyan" />
               <span class="loc-current">{{ currentServiceId }}</span>
             </div>
             <div class="loc-dropdown">
@@ -59,9 +57,7 @@
           <!--货币-->
           <div class="loc-group" :class="{ 'is-dropdown': activeLocType === 'Currency' }">
             <div class="loc-group-button" @click="toggleLoc('Currency')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="10"/><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-              </svg>
+              <SvgIcon name="duohuobi" />
               <span class="loc-current ignore">{{ currentCurrency }}</span>
             </div>
             <div class="loc-dropdown">
@@ -81,22 +77,24 @@
 
         <div class="action-separator"></div>
 
-        <button class="action-btn" aria-label="Search">
-          <span class="iconfont icon-search" @click="openSearch"></span>
+        <button class="action-btn" aria-label="Search" @click="openSearch">
+          <SvgIcon name="search" />
         </button>
         <button class="action-btn" aria-label="Account" v-if="userStore.isLogin" @click="router.push('/account')">
-          <span class="iconfont icon-customer"></span>
+          <SvgIcon name="customer" />
         </button>
         <button class="action-btn" aria-label="Login" v-if="!userStore.isLogin" @click="router.push('/login')">
-          <span class="iconfont icon-login"></span>
+          <SvgIcon name="login" />
         </button>
-        <button class="action-btn" aria-label="Favorites" v-if="userStore.isLogin"
-                @click="router.push('/account/favorites')">
-          <span class="iconfont icon-follow"></span>
+        <button class="action-btn" aria-label="Favorites" v-if="userStore.isLogin" @click="router.push('/account/favorites')">
+          <SvgIcon name="follow" />
         </button>
         <button class="action-btn" aria-label="Cart" ref="cartButtonRef" v-click-outside="onClickOutside">
-          <el-badge :value="cartStore.subtotalQuantity" :show-zero="false" color="#000">
-            <span class="iconfont icon-shopping-bag"></span>
+          <el-badge
+              :value="cartStore.subtotalQuantity" :show-zero="false" color="#000"
+              :badge-style="{width: '20px', height: '20px', borderRadius: '50%', padding: '6px', fontSize: '10px', border: 'unset'}"
+          >
+            <SvgIcon name="shopping-bag" />
           </el-badge>
         </button>
       </div>
@@ -412,6 +410,10 @@ useLockScroll(isDropdownVisible)
     gap: 6px;
   }
 
+  .loc-group-button .iconify {
+    font-size: 20px;
+  }
+
   /* 当前显示的文字 */
   .loc-current {
     transition: color 0.2s;
@@ -436,7 +438,7 @@ useLockScroll(isDropdownVisible)
     opacity: 0;
     visibility: hidden;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1010;
+    z-index: 999;
     max-height: 320px; /* 大约能显示 8-10 个选项的高度 */
     overflow-y: auto;
     /* Firefox 浏览器的极简滚动条支持 */
@@ -529,7 +531,7 @@ useLockScroll(isDropdownVisible)
     justify-content: center;
     transition: opacity 0.2s ease;
 
-    .iconfont {
+    .iconify {
       font-size: 20px;
     }
   }

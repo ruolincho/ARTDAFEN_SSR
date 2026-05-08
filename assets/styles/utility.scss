@@ -154,13 +154,15 @@
 .block { display: block; }
 .inline-block { display: inline-block; }
 .inline { display: inline; }
-.h-full { height: 100%; }
-.w-full { width: 100%; }
-.h-auto { height: auto; }
+.h-full { height: 100% !important; }
+.w-full { width: 100% !important; }
+.w-half { width: 50% !important; }
+.h-auto { height: auto !important; }
 .min-h-\[300px\] { min-height: 300px; }
 
 .aspect-ratio { aspect-ratio: 1 / 1; }
 .aspect-ratio-16_9 { aspect-ratio: 16 / 9; }
+.aspect-ratio-3_4 { aspect-ratio: 3 / 4; }
 .fit-cover { object-fit: cover; }
 .fit-contain { object-fit: contain; }
 .select-none { user-select: none; }

@@ -44,7 +44,7 @@
           <div class="acea-row row-middle">
             <span class="f-bold text-16 mr-5">Phone Number</span>
             <el-tooltip :content="phoneRuleText" placement="top" popper-style="max-width: 345px;">
-              <span class="iconfont icon-info-fill text-18"></span>
+              <SvgIcon name="info-fill" class="text-18" />
             </el-tooltip>
           </div>
           <span></span>
@@ -66,11 +66,10 @@
           <div class="acea-row row-middle">
             <span class="f-bold text-16 mr-5">Apply Discount Code</span>
             <el-tooltip :content="discountRuleText" placement="top" popper-style="max-width: 345px;">
-              <span class="iconfont icon-info-fill text-18"></span>
+              <SvgIcon name="info-fill" class="text-18" />
             </el-tooltip>
           </div>
-          <span class="iconfont text-24 cursor-pointer" :class="[showDiscountInput ? 'icon-reduce' : 'icon-add']"
-                @click="showDiscountInput = !showDiscountInput"/>
+          <SvgIcon :name="showDiscountInput ? 'reduce' : 'add'" class="text-24 cursor-pointer" @click="showDiscountInput = !showDiscountInput" />
         </div>
         <div v-show="showDiscountInput">
           <el-input
@@ -84,11 +83,11 @@
               <el-button size="large" @click="applyCode">Apply</el-button>
             </template>
           </el-input>
-          <div class="acea-row row-right row-center text-error my-20" v-if="isDiscount">
-            <span class="text-14">
+          <div class="acea-row row-right row-center text-error my-20 text-14" v-if="isDiscount">
+            <p>
               not using discounts
-              <i class="iconfont icon-close text-14 cursor-pointer" @click="delCode"/>
-            </span>
+              <SvgIcon name="close" class="text-14 cursor-pointer" @click="delCode" />
+            </p>
           </div>
           <div class="acea-row row-right row-center text-error mb-10" v-if="isCreate && isDiscount">
             <span class="text-14">The order has been created and the discount code cannot be modified</span>
@@ -124,13 +123,13 @@
         <div class="mt-15 acea-row row-middle">
           <span class="mr-5 text-16">Promotion Rules</span>
           <el-tooltip :content="promotionRuleText" placement="top" popper-style="max-width: 345px;">
-            <span class="iconfont icon-info-fill text-18"></span>
+            <SvgIcon name="info-fill" class="text-18" />
           </el-tooltip>
         </div>
       </div>
     </div>
     <div class="text-center py-60" v-show="customStore.subtotalQuantity === 0">
-      <span class="iconfont icon-shopping-bag text-50"></span>
+      <SvgIcon name="shopping-bag" class="text-50" />
       <p class="text-20 f-bold mt-20">Your Cart is Empty.</p>
       <p class="text-14 my-20">Please add products to your cart to checkout.</p>
       <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">

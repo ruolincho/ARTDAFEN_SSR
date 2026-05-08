@@ -30,9 +30,7 @@
             </div>
 
             <button class="close-btn" @click="closeSearch">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
+              <SvgIcon name="close" />
             </button>
           </div>
 
@@ -380,6 +378,10 @@ onUnmounted(() => {
         cursor: pointer;
         color: #333;
         margin-left: 15px;
+
+        .iconify {
+          font-size: 24px;
+        }
       }
     }
 

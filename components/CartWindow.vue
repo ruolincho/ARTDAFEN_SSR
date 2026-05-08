@@ -25,7 +25,7 @@
                 <p class="f-bold my-5">{{ item.quantity }} × {{ formatToCurrency(item.retailPrice) }}</p>
                 <div class="acea-row row-between-wrapper overflow-hidden">
                   <p class="flex-1 line1 mr-10">{{ formatAttr(item.specs) }}</p>
-                  <span class="iconfont icon-delete text-20 cursor-pointer" @click="cartStore.remove(index)"></span>
+                  <SvgIcon name="delete" class="text-20 cursor-pointer" @click="cartStore.remove(index)" />
                 </div>
               </div>
             </div>

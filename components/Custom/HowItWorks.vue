@@ -7,7 +7,7 @@
         <div class="works-item">
           <p class="acea-row row-between-wrapper">
             <span class="text-26 f-bold">{{ item.title }}</span>
-            <span class="iconfont text-50" :class="item.icon"/>
+            <SvgIcon :name="item.icon" class="text-50" />
           </p>
           <p class="text-20 mt-20">{{ item.desc }}</p>
         </div>
@@ -23,7 +23,7 @@
     >
       <swiper-slide v-for="(item, index) in HOW_IT_WORKS" :key="item.title" style="width: 80%;">
         <div class="works-item text-center relative bg-gray-100 p-10 rounded-md">
-          <span class="iconfont" :class="item.icon" style="font-size: 40px;"/>
+          <SvgIcon :name="item.icon" style="font-size: 40px;" />
           <p class="text-26 f-bold my-20">{{ item.title }}</p>
           <p class="text-20">{{ item.desc }}</p>
           <div class="serial">{{ index + 1 }}</div>

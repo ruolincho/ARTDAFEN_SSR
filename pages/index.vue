@@ -29,7 +29,7 @@
                 <!-- fallback img -->
                 <img
                     :src="getPcSrcset(item.img).src"
-                    alt="banner"
+                    :alt="item.title"
                     class="w-full h-auto fit-cover"
                     loading="lazy"
                 />
@@ -100,7 +100,7 @@
           <div class="row quality-list mt-25">
             <div class="col-6">
               <div class="quality-item">
-                <span class="iconfont icon-palette text-60 mr-10"></span>
+                <SvgIcon name="palette" class="text-60 mr-10" />
                 <p class="" style="line-height: 2">
                   <span class="f-bold text-16">Dafen Origin: </span>
                   <span class="text-14">Authentic craftsmanship from the global art hub.</span>
@@ -109,7 +109,7 @@
             </div>
             <div class="col-6">
               <div class="quality-item">
-                <span class="iconfont icon-edit-document text-60 mr-10"></span>
+                <SvgIcon name="edit-document" class="text-60 mr-10" />
                 <p class="" style="line-height: 2">
                   <span class="f-bold text-16">Master Artists: </span>
                   <span class="text-14">Created by painters with 20+ years of expertise.</span>
@@ -118,7 +118,7 @@
             </div>
             <div class="col-6">
               <div class="quality-item">
-                <span class="iconfont icon-draw text-60 mr-10"></span>
+                <SvgIcon name="draw" class="text-60 mr-10" />
                 <p class="" style="line-height: 2">
                   <span class="f-bold text-16">Zero Prints: </span>
                   <span class="text-14">100% hand-painted with rich, authentic texture.</span>
@@ -127,7 +127,7 @@
             </div>
             <div class="col-6">
               <div class="quality-item">
-                <span class="iconfont icon-scroll-document text-60 mr-10"></span>
+                <SvgIcon name="scroll-document" class="text-60 mr-10" />
                 <p class="" style="line-height: 2">
                   <span class="f-bold text-16">Archival Quality: </span>
                   <span class="text-14">Eco-friendly paints on 400gsm linen canvas.</span>
@@ -162,12 +162,12 @@
           Find the aesthetic that speaks to your soul. From Minimalist calm to Dopamine energy, explore curated collections tailored to every mood and atmosphere.
         </p>
       </div>
-      <el-skeleton :loading="isSkeleton" animated :count="3" class="row gap-row-base">
+      <el-skeleton :loading="isSkeleton" animated :count="appStore.isPc ? 3 : 1" class="row gap-row-base">
         <template #template>
           <div class="col-sm-4 col-12">
-            <el-skeleton-item variant="image" style="width: 100%; height: 25vw"/>
+            <el-skeleton-item variant="image" class="w-full h-auto aspect-ratio-3_4" />
             <div class="text-center">
-              <el-skeleton-item variant="p" class="mt-20" style="width: 50%"/>
+              <el-skeleton-item variant="p" class="mt-20 w-half" />
             </div>
           </div>
         </template>
@@ -178,8 +178,8 @@
               v-aos="{ name: 'fade-up', delay: index % 3 * 100}"
           >
             <NuxtLink class="block" :to="item?.url || '/'">
-              <div class="overflow-hidden">
-                <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
+              <div class="overflow-hidden bg-gray-100 aspect-ratio-3_4">
+                <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
             </NuxtLink>
@@ -197,8 +197,8 @@
         >
           <swiper-slide v-for="item in disVibeData" :key="item.id" style="width: 80%;">
             <NuxtLink class="block" :to="item?.url || '/'">
-              <div class="overflow-hidden">
-                <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
+              <div class="overflow-hidden bg-gray-100 aspect-ratio-3_4">
+                <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
             </NuxtLink>
@@ -349,13 +349,13 @@
           Oil Painting Art Village
         </p>
       </div>
-      <el-skeleton :loading="isSkeleton" animated :count="4" class="row gap-row-base">
+      <el-skeleton :loading="isSkeleton" animated :count="appStore.isPc ? 4 : 1" class="row gap-row-base">
         <template #template>
-          <div class="col-xl-3 col-md-4 col-6">
-            <el-skeleton-item variant="image" style="width: 100%; height: 25vw"/>
+          <div class="col-md-3 col-sm-6 col-12">
+            <el-skeleton-item variant="image" class="w-full h-auto aspect-ratio-3_4" />
             <div class="py-10">
               <el-skeleton-item variant="h1"/>
-              <el-skeleton-item variant="p" class="my-10" style="width: 50%"/>
+              <el-skeleton-item variant="p" class="my-10 w-half" />
             </div>
           </div>
         </template>
@@ -367,8 +367,8 @@
               v-aos="{ name: 'fade-up', delay: index * 100}"
           >
             <NuxtLink class="block" :to="item.url">
-              <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
-                <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
+              <div class="overflow-hidden bg-gray-100 aspect-ratio-3_4">
+                <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
                 <p class="line1 text-28 f-bold">{{ item.name }}</p>
@@ -390,8 +390,8 @@
         >
           <swiper-slide v-for="item in roomData" :key="item.id" style="width: 80%;">
             <NuxtLink class="block" :to="item.url">
-              <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
-                <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
+              <div class="overflow-hidden bg-gray-100 aspect-ratio-3_4">
+                <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
                 <p class="line1 text-28 f-bold">{{ item.name }}</p>
@@ -415,8 +415,8 @@
         <template #template>
           <div class="col-lg-2 col-md-average col-sm-3 col-xs-4 col-6">
             <div class="text-center w-full">
-              <el-skeleton-item variant="image" :style="{ width: '100%', height: appStore.isPc ? '12vw' : '25vw' }"/>
-              <el-skeleton-item variant="text" style="width: 50%" class="mt-15"/>
+              <el-skeleton-item variant="image" class="w-full h-auto aspect-ratio" />
+              <el-skeleton-item variant="text" class="mt-15 w-half"/>
             </div>
           </div>
         </template>
@@ -427,13 +427,13 @@
                   class="product-item"
                   v-aos="{ name: 'fade-up', delay: index % 6 * 100}"
               >
-                <NuxtLink class="img-wrapper aspect-ratio block overflow-hidden" :to="productLink(item)">
+                <NuxtLink class="img-wrapper bg-gray-200 aspect-ratio block overflow-hidden" :to="productLink(item)">
                   <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`" lazy />
                 </NuxtLink>
                 <div class="content-wrapper">
                   <NuxtLink class="my-10 line1 block text-hover" :to="handleClickArtist(item.creator)">
                     <span class="text-16 f-bold">{{ item.creator?.name }}</span>
-                    <span class="iconfont icon-right text-16"></span>
+                    <SvgIcon name="right" />
                   </NuxtLink>
                   <NuxtLink class="line2 text-14 block text-hover" :to="productLink(item)">{{ item.title }}</NuxtLink>
                   <p class="my-10">
@@ -466,13 +466,13 @@
 
       <div class="row gap-row-base" v-if="appStore.isPc">
         <div
-            class="col-sm-4 col-12"
+            class="col-4"
             v-aos="{ name: 'fade-up', delay: index * 100}"
             v-for="(item, index) in WHY_CHOOSE_LIST" :key="item.title"
         >
           <div class="text-center">
-            <div>
-              <el-image class="w-full" fit="cover" :src="imagePrefix(item.img)" :alt="item.title" lazy />
+            <div class="aspect-ratio-16_9 overflow-hidden bg-gray-100">
+              <el-image class="w-full h-full" fit="cover" :src="imagePrefix(item.img)" :alt="item.title" lazy />
             </div>
             <div>
               <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
@@ -494,8 +494,8 @@
       >
         <swiper-slide v-for="item in WHY_CHOOSE_LIST" :key="item.title" style="width: 80%;" :lazy="true">
           <div class="text-center">
-            <div>
-              <el-image class="w-full" fit="cover" :src="imagePrefix(item.img)" :alt="item.title" lazy />
+            <div class="aspect-ratio-16_9 overflow-hidden bg-gray-100">
+              <el-image class="w-full h-full" fit="cover" :src="imagePrefix(item.img)" :alt="item.title" lazy />
             </div>
             <div>
               <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
@@ -615,7 +615,7 @@
               </div>
               <el-button color="#fff" size="large" @click="router.push('/customer-reviews')">
                 View All Testimonials
-                <span class="iconfont icon-right ml-10"></span>
+                <SvgIcon name="right" class="ml-10" />
               </el-button>
             </div>
           </div>
@@ -666,9 +666,8 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import {useAppStore} from "~/stores/modules/app";
-import {jumpToUrl, productLink, youtubeProxyPrefix} from "~/utils";
+import {productLink, youtubeProxyPrefix, isExternal} from "~/utils";
 import {COLLECTIONS_URL} from "~/config";
-import {gen_path_obj} from "~/utils/product";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import type {IArtists} from "~/api/interface/artists/artists";
 import type {IHome} from "~/api/interface/home/home";
@@ -685,9 +684,7 @@ import {resolvePageMeta} from "~/config/pageMeta";
 import {packQuery} from "~/composables/useQueryShort";
 import type {IMessage} from "~/api/interface/message/message";
 import {WHY_CHOOSE_LIST} from "~/constant";
-import type {ObjectNode} from "~/types/global";
 import {useImage} from "~/composables/useImage";
-import {isExternal} from "../utils";
 
 defineOptions({
   name: 'Home'

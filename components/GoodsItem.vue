@@ -10,9 +10,9 @@
         <div class="p-tag bg-error" v-if="item.status === '-1'">Sale Out</div>
       </div>
       <div class="operation rounded-full p-5">
-        <span
-            class="iconfont text-24 cursor-pointer"
-            :class="[item.like ? 'icon-follow-fill text-error' : 'icon-follow text-primary']"
+        <SvgIcon
+            :name="item.like ? 'follow-fill' : 'follow'"
+            class="text-24 cursor-pointer" :class="{'text-error': item.like}"
             @click="productThumbs()"
         />
       </div>
@@ -23,7 +23,7 @@
         <span class="text-16 f-bold" @click.stop="clickArtist()">
           {{ item.creator?.name }}
         </span>
-        <span class="iconfont icon-right text-16"></span>
+        <SvgIcon name="right" />
       </p>
       <NuxtLink class="line2 text-14 block text-hover" :to="productLink(item)">{{ item.title }}</NuxtLink>
       <p class="my-8">

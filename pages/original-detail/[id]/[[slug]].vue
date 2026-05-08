@@ -138,7 +138,7 @@
       <div class="btn-box">
         <el-button class="w-full mt-20" plain size="large" @click="isOpenDesc = !isOpenDesc">
           {{ isOpenDesc ? 'Hide Product Details' : 'View More Product Details' }}
-          <span class="iconfont ml-20" :class="isOpenDesc ? 'icon-up' : 'icon-down'"></span>
+          <SvgIcon :name="isOpenDesc ? 'up' : 'down'" class="ml-20" />
         </el-button>
       </div>
     </div>

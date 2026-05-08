@@ -10,11 +10,11 @@
     <div class="acea-row row-between-wrapper mt-16 mb-10">
       <h1 class="text-22 f-bold-500 flex-1 line2 border-r-sm pr-md-20 pr-10">{{ item.title }}</h1>
       <div class="text-center px-md-20 px-10 text-gray-400">
-      <span
-          class="iconfont cursor-pointer text-20"
-          :class="[item.like ? 'icon-follow-fill text-error' : 'icon-follow']"
-          @click.prevent.stop="blogThumbs()"
-      />
+        <SvgIcon
+            :name="item.like ? 'follow-fill' : 'follow'"
+            class="text-20 cursor-pointer" :class="{'text-error': item.like}"
+            @click.prevent.stop="blogThumbs()"
+        />
         <p class="text-14 mt-2">{{ item.likeVolume }}</p>
       </div>
     </div>

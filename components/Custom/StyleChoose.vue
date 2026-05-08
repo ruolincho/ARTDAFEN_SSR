@@ -57,7 +57,7 @@
       </div>
     </div>
     <div class="text-center py-60" v-show="!loading && !themeOption?.children?.length">
-      <span class="iconfont icon-empty text-50"></span>
+      <SvgIcon name="empty" class="text-50" />
       <p class="text-20 f-bold mt-20">No Data</p>
       <p class="text-14 my-20">No data found, please check the query or try again later.</p>
     </div>

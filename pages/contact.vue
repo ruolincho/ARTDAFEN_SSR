@@ -60,8 +60,8 @@
       <div class="info-list row">
         <div class="col-sm-6" v-for="(item, index) in pointList" :key="index">
           <div class="info-item shadow-md">
-            <div class="icon-wrapper">
-              <span class="iconfont icon-rengongkefu"></span>
+            <div class="icon-wrapper acea-row row-center-wrapper">
+              <SvgIcon name="rengongkefu" />
             </div>
             <div class="content-wrapper">
               <p class="text-18 f-bold-600">Call us now</p>
@@ -75,7 +75,7 @@
               <el-button type="primary" size="large" :disabled="!item.tel">
                 <a :href="item.tel ? `tel:${item.tel}` : 'void:0'">
                   CALL NOW
-                  <span class="iconfont icon-right ml-10"></span>
+                  <SvgIcon name="right" class="ml-10" />
                 </a>
               </el-button>
             </div>
@@ -156,12 +156,10 @@ const pointList = ref([
       .icon-wrapper {
         width: 96px;
         height: 96px;
-        line-height: 96px;
         background: #e6e6e6;
-        text-align: center;
         margin-right: 24px;
 
-        .iconfont {
+        .iconify {
           font-size: 48px;
         }
       }

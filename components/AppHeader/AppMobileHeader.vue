@@ -9,18 +9,21 @@
       <div class="header-tools">
         <TransitionGroup name="nike-zoom">
           <div class="tool-item" v-if="!isDrawerOpen">
-            <span class="iconfont icon-search" @click="openSearch"></span>
+            <SvgIcon name="search" @click="openSearch" />
           </div>
           <div class="tool-item" v-if="!isDrawerOpen">
-            <el-badge :value="cartStore.subtotalQuantity" :show-zero="false" color="#000">
-              <span class="iconfont icon-shopping-bag" @click="handleCartApp"></span>
+            <el-badge
+                :value="cartStore.subtotalQuantity" :show-zero="false" color="#000"
+                :badge-style="{width: '20px', height: '20px', borderRadius: '50%', padding: '6px', fontSize: '10px', border: 'unset'}"
+            >
+              <SvgIcon name="shopping-bag" @click="handleCartApp" />
             </el-badge>
           </div>
           <div class="tool-item" v-if="userStore.isLogin && !isDrawerOpen">
-            <span class="iconfont icon-customer" @click="router.push('/account')"></span>
+            <SvgIcon name="customer" @click="router.push('/account')" />
           </div>
           <div class="tool-item" v-if="!userStore.isLogin && !isDrawerOpen">
-            <span class="iconfont icon-login" @click="router.push('/login')"></span>
+            <SvgIcon name="login" @click="router.push('/login')" />
           </div>
         </TransitionGroup>
         <div class="tool-item burger-box" :class="{ 'is-active': isDrawerOpen }" @click="toggleDrawer">
@@ -45,16 +48,10 @@
               <!--层级标题-->
               <div class="level-header">
                 <div class="level-header__text" v-if="history.length > 0" @click="goBack">
-                  <svg class="icon-back" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                       stroke-width="2">
-                    <path d="M15 18l-6-6 6-6"/>
-                  </svg>
+                  <SvgIcon name="left" class="icon-back" />
                   <span class="back-text">{{ currentLevel.name }}</span>
                 </div>
-                <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="2" @click="toggleDrawer">
-                  <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
+                <SvgIcon name="close" class="icon-close" @click="toggleDrawer" />
               </div>
               <!--层级列表-->
               <ul class="menu-list" :class="{ 'is-root': history.length === 0, ignore: settingType === 'LANG' }">
@@ -74,62 +71,42 @@
                   </NuxtLink>
                   <div v-else class="item-action" @click="handleItemClick(item)">
                     <span class="item-label">{{ item.name }}</span>
-                    <svg v-if="item.children?.length" class="icon-arrow" width="20" height="20" viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M9 18l6-6-6-6"/>
-                    </svg>
+                    <SvgIcon v-if="item.children?.length" name="right" class="icon-arrow" />
                   </div>
                 </li>
               </ul>
               <!--功能位置-->
               <div v-if="history.length === 0" class="level-footer">
                 <div class="social-icon">
-                  <a class="social-item" href="https://www.youtube.com/@artdafen" target="_blank" title="youtube">
-                    <span class="iconfont icon-Youtube"></span>
-                  </a>
-                  <a class="social-item" href="https://www.instagram.com/art_dafen/" target="_blank" title="instagram">
-                    <span class="iconfont icon-instagram"></span>
-                  </a>
-                  <a class="social-item" href="https://www.pinterest.com/artdafen/" target="_blank" title="pinterest">
-                    <span class="iconfont icon-pinterest"></span>
-                  </a>
-                  <a class="social-item" href="https://www.tiktok.com/@artdafencom" target="_blank" title="tiktok">
-                    <span class="iconfont icon-douyinjumuguanli"></span>
-                  </a>
-                  <a class="social-item" href="https://x.com/artdafen" target="_blank" title="x">
-                    <span class="iconfont icon-tuite "></span>
+                  <a
+                      class="social-item"
+                      :href="item.url"
+                      target="_blank"
+                      :title="item.name"
+                      v-for="item in SOCIAL_LIST"
+                      :key="item.name"
+                  >
+                    <SvgIcon :name="item.icon" />
                   </a>
                 </div>
 
                 <div class="footer-settings">
                   <button class="setting-btn" @click="openSetting('LANG')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                         stroke-width="1.5">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M2 12h20M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20"/>
-                    </svg>
+                    <SvgIcon name="duoyuyan" />
                     <span>{{ currentLang }}</span>
                   </button>
 
                   <div class="divider"></div>
 
                   <button class="setting-btn" @click="openSetting('CURRENCY')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                         stroke-width="1.5">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-                    </svg>
+                    <SvgIcon name="duohuobi" />
                     <span>{{ currentCurrency }} <i class="ignore">({{ getCurrencySymbol }})</i></span>
                   </button>
 
                   <AndroidInstallBtn v-slot="{ handleInstall }">
                     <div class="divider"></div>
                     <button class="setting-btn" @click="handleInstall">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                      </svg>
+                      <SvgIcon name="xiazai" />
                       <span>Install App</span>
                     </button>
                   </AndroidInstallBtn>
@@ -137,11 +114,7 @@
                   <IosInstallPrompt v-slot="{ handleInstall }">
                     <div class="divider"></div>
                     <button class="setting-btn" @click="handleInstall">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                      </svg>
+                      <SvgIcon name="xiazai" />
                       <span>Install App</span>
                     </button>
                   </IosInstallPrompt>
@@ -162,7 +135,7 @@ import {useCartStore} from "~/stores/modules/cart";
 import {useTranslateLang} from "~/composables/useTranslateLang";
 import {useCurrencyStore} from "~/stores/modules/currency";
 import {useLockScroll} from "~/composables/useLockScroll";
-import SearchDrawer from "~/components/SearchDrawer/index.vue";
+import {SOCIAL_LIST} from "~/constant";
 
 const props = defineProps({
   menuData: {
@@ -279,18 +252,6 @@ const openSearch = () => {
   $bus.emit('openSearchDrawer')
 }
 
-watch(
-    () => isDrawerOpen.value,
-    (flag) => {
-      if (import.meta.env.MODE !== 'production') return
-      if (!flag) {
-        window.Tawk_API.showWidget()
-      } else {
-        window.Tawk_API.hideWidget();
-      }
-    }
-)
-
 useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
 </script>
 
@@ -337,7 +298,7 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
     color: #111;
   }
 
-  .tool-item .iconfont {
+  .tool-item .iconify {
     font-size: 24px;
   }
 
@@ -435,6 +396,7 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
 
   .icon-back {
     flex-shrink: 0;
+    font-size: 24px;
   }
 
   .back-text {
@@ -452,6 +414,7 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
+    font-size: 24px;
   }
 
   .menu-list {
@@ -486,6 +449,7 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
 
   .icon-arrow {
     color: #ccc;
+    font-size: 20px;
   }
 
   .level-footer {
@@ -518,6 +482,10 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
     color: #757575;
   }
 
+  .setting-btn .iconify {
+    font-size: 20px;
+  }
+
   /* 极简分割线 */
   .divider {
     width: 1px;
@@ -540,11 +508,12 @@ useLockScroll(isDrawerOpen) // 监听状态变化锁定滚动
   .social-item {
     width: 36px;
     height: 36px;
-    line-height: 36px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .social-item .iconfont {
+  .social-item .iconify {
     font-size: 24px;
   }
 

@@ -19,14 +19,14 @@
         :style="previewStyle"
       >
         <div class="close-btn" @click="closeViewer">
-          <span class="iconfont icon-error-fill text-30"></span>
+          <SvgIcon name="error-fill" class="text-30" />
         </div>
         <div ref="osdRef" class="osd-container"></div>
       </div>
     </transition>
 
     <div class="preview-btn" v-if="dziUrl" @click="openViewer">
-      <span class="iconfont icon-zoom-in" />
+      <SvgIcon name="zoom-in" />
     </div>
   </div>
 </template>
@@ -229,7 +229,7 @@ onBeforeUnmount(() => {
   right: 50px;
   bottom: -24px;
 
-  .iconfont {
+  .iconify {
     font-size: 24px;
   }
 

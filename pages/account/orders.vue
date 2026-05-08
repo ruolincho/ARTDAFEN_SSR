@@ -11,7 +11,7 @@
         clearable
       >
         <template #prefix>
-          <span class="iconfont icon-search text-24 text-primary"></span>
+          <SvgIcon name="search" class="text-24 text-primary" />
         </template>
       </el-input>
     </div>
@@ -85,7 +85,7 @@
       </template>
       <template #empty>
         <div class="text-center py-60">
-          <span class="iconfont icon-empty text-50"></span>
+          <SvgIcon name="empty" class="text-50" />
           <p class="text-20 f-bold mt-20">No Orders Found</p>
           <p class="text-14 my-20">No data found, please check the query or try again later.</p>
           <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">START SHOPPING</el-button>

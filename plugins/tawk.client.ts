@@ -11,10 +11,13 @@ export default defineNuxtPlugin(() => {
 
     if (process.server) return; // 确保只在客户端执行
 
+    const zIndex = 99;
+
     // 插入 tawk.to 嵌入脚本
     (function() {
         // 保证 Tawk_API 可访问
         window.Tawk_API = window.Tawk_API || {}
+        window.Tawk_API.customStyle = {zIndex: `${zIndex} !important`}
         window.Tawk_LoadStart = new Date()
 
         // 如果已经加载过脚本，就不重复加载（防止多次触发）

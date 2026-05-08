@@ -5,7 +5,7 @@
     <div class="container">
       <div class="process-list">
         <div class="process-item text-center" v-for="item in PROCESS_LIST" :key="item.title">
-          <span class="iconfont" :class="[item.icon]"/>
+          <SvgIcon :name="item.icon" />
           <p class="text-20 mt-15">{{ item.title }}</p>
           <p class="text-16 text-gray-500 mt-10">{{ item.desc }}</p>
         </div>
@@ -91,7 +91,7 @@ onMounted(() => {
       display: grid;
 
       .process-item {
-        .iconfont {
+        .iconify {
           color: #b18147;
           font-size: clamp(50px, 5vw, 75px);
         }

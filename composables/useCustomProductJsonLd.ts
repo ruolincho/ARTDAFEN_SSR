@@ -32,7 +32,6 @@ export function useCustomProductJsonLd(
         return d.toISOString().slice(0, 10) // 仅日期部分 YYYY-MM-DD
     }
 
-
     const jsonLd = computed(() => {
         const p = goodsDetail
         if (!p) return null
@@ -77,13 +76,21 @@ export function useCustomProductJsonLd(
         }
 
         // 商品详情
+        const mainImg = imagePrefix(p.img.split('?')[0]); // 主图
+        const banners = p.banners ?? []; // 附加图片
+        const additionalImages = banners
+            .map(b => imagePrefix(b.split('?')[0]))
+            .filter(bUrl => bUrl !== mainImg)       // 避免细节图中包含主图，导致重复抓取
+            .filter(Boolean)                        // 过滤掉可能存在的空字符串或 undefined
+            .slice(0, 10); // GMC 最多只接收 10 张附加图，截取前 10 张
         const product: any = {
             "@context": "https://schema.org/",
             "@type": "Product",  // 类型：产品
             "name": p.title, // 父级名称（商品主标题）
             "sku": p.id, // 商品SKU
+            "mpn": p.id, // 制造商零件编号，和 sku 值一致
             "brand": {"@type": "Brand", "name": "ARTDAFEN"},
-            "image": imagePrefix(p.img.split('?')[0]), // 商品图片
+            "image": [mainImg, ...additionalImages], // 商品图片
             "keywords": p.keywords, // 商品关键词
             "description": p.description, // 商品描述（可读友好、与页面一致）
             "url": `${siteUrl.replace(/\/+$/, '')}/paint-detail/${p.id}/${p.slug}`, // 此商品详情页的规范URL（canonical）
@@ -149,7 +156,8 @@ export function useCustomProductJsonLd(
         }
 
         // 返回数组：Google 支持同一 <script> 中输出多个 JSON-LD 对象（shipping 可能是“全局1条 + 每国分组若干条”）
-        return [product, shippingDetailsGlobal, returnPolicy, breadcrumb]
+        return [product, shippingDetailsGlobal, breadcrumb]
+        // return [product, shippingDetailsGlobal, returnPolicy, breadcrumb] 退货政策需要就打开注释
     })
 
     /** 便捷方法：直接把 JSON-LD 注入到 <head>（SSR/CSR均可） */

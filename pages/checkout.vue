@@ -11,7 +11,7 @@
     <!-- 缺少offerId的错误状态 -->
     <div v-else class="error-content">
       <div class="error-icon">
-        <span class="iconfont icon-error-fill"></span>
+        <SvgIcon name="error-fill" />
       </div>
       <p class="text-20 mt-25 text-gray-600">Missing parameter</p>
       <el-button
@@ -164,7 +164,7 @@ const backHome = () => {
     animation: pulse 2s infinite;
     margin: auto;
 
-    span {
+    svg-icon {
       font-size: 80px;
     }
   }

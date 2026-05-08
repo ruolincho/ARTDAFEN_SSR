@@ -144,22 +144,22 @@ export const HOW_IT_WORKS = [
     {
         title: 'Choose Subject',
         desc: 'Pick your most cherished Subject(s). For best quality, choose an image that is clear, in focus, and large enough to see the details.',
-        icon: 'icon-album',
+        icon: 'album',
     },
     {
         title: 'Choose Style',
         desc: 'Pick the medium for your artist to use when creating your portrait, from charcoal to oils. Then choose your desired background.',
-        icon: 'icon-magic-pen',
+        icon: 'magic-pen',
     },
     {
         title: 'Upload Photos',
         desc: 'Upload your photos when you place your order or send them to us by email. You can even request to combine multiple images into one.',
-        icon: 'icon-upload-pictures',
+        icon: 'upload-pictures',
     },
     {
         title: 'Place Order',
         desc: 'fter checkout, you will receive an order number and a detailed email with what to expect next. Time to get excited about your custom portrait!',
-        icon: 'icon-color-palette',
+        icon: 'color-palette',
     },
 ]
 
@@ -190,22 +190,22 @@ export const PROCESS_LIST = [
     {
         title: 'Choose Art & Frame',
         desc: 'Select art, frame, and checkout.',
-        icon: 'icon-choose-art-frame'
+        icon: 'choose-art-frame'
     },
     {
         title: 'Artist Creation',
         desc: 'Hand-painted in 1–2 weeks.',
-        icon: 'icon-artist-creation'
+        icon: 'artist-creation'
     },
     {
         title: 'Framing & Packing',
         desc: 'Expert framing, secure packing.',
-        icon: 'icon-framing-packing'
+        icon: 'framing-packing'
     },
     {
         title: 'Delivery & Returns', // 合并了 Shipping 和 Returns
         desc: 'Free global delivery with hassle-free 30-day returns.',
-        icon: 'icon-free-shipping' // 可以用一个表示保障（盾牌）或物流包装的图标
+        icon: 'free-shipping' // 可以用一个表示保障（盾牌）或物流包装的图标
     },
 ]
 
@@ -231,17 +231,17 @@ export const WHY_CHOOSE_LIST2 = [
     {
         title: 'Factory Direct',
         desc: 'Skip the gallery markup. Connect directly with our production base for the most competitive, transparent pricing.',
-        icon: 'icon-choose-1'
+        icon: 'choose-1'
     },
     {
         title: 'Custom Sizing',
         desc: 'From renderings to reality. We offer interactive resizing and cropping to perfectly fit unique architectural spaces, such as long corridors or high ceilings.',
-        icon: 'icon-choose-2'
+        icon: 'choose-2'
     },
     {
         title: 'Trust & Stability',
         desc: 'Verify us with real factory footage to eliminate risk. We use professional crate packing to ensure safe, damage-free global logistics.',
-        icon: 'icon-choose-3'
+        icon: 'choose-3'
     },
 ]
 
@@ -497,9 +497,9 @@ export const CASE_LIST = [
 ]
 
 export const SOCIAL_LIST = [
-    {name: 'youtube', icon: 'icon-Youtube', url: 'https://www.youtube.com/@artdafen'},
-    {name: 'instagram', icon: 'icon-instagram', url: 'https://www.instagram.com/art_dafen/'},
-    {name: 'pinterest', icon: 'icon-pinterest', url: 'https://www.pinterest.com/artdafen/'},
-    {name: 'tiktok', icon: 'icon-douyinjumuguanli', url: 'https://www.tiktok.com/@artdafencom'},
-    {name: 'x', icon: 'icon-tuite', url: 'https://x.com/artdafen'},
+    {name: 'youtube', icon: 'Youtube', url: 'https://www.youtube.com/@artdafen'},
+    {name: 'instagram', icon: 'instagram', url: 'https://www.instagram.com/art_dafen/'},
+    {name: 'pinterest', icon: 'pinterest', url: 'https://www.pinterest.com/artdafen/'},
+    {name: 'tiktok', icon: 'douyinjumuguanli', url: 'https://www.tiktok.com/@artdafencom'},
+    {name: 'x', icon: 'tuite', url: 'https://x.com/artdafen'},
 ]

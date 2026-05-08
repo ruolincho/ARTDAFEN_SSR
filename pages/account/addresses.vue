@@ -3,7 +3,7 @@
     <template v-if="addressList.length">
       <div class="acea-row row-right mb-30">
         <el-button size="large" @click="openAddEdit('Add a new address')">
-          <span class="iconfont icon-add mr-10"></span>
+          <SvgIcon name="add" class="mr-10" />
           Add New Address
         </el-button>
       </div>
@@ -17,7 +17,7 @@
             </p>
             <p class="my-18">{{ item.detail }}</p>
             <p class="acea-row row-middle">
-              <span class="iconfont icon-phone mr-10 text-20"></span>
+              <SvgIcon name="phone" class="mr-10 text-20" />
               <span>{{ item.mobile }}</span>
             </p>
           </div>
@@ -33,7 +33,7 @@
       </div>
     </template>
     <div class="text-center py-60" v-else>
-      <span class="iconfont icon-location text-50"></span>
+      <SvgIcon name="location" class="text-50" />
       <p class="text-20 f-bold mt-20">No Saved Addresses.</p>
       <p class="text-14 my-20">Add a new address method for faster checkout.</p>
       <el-button size="large" type="primary" @click="openAddEdit('Add a new address')">

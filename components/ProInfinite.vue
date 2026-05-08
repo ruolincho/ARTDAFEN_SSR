@@ -9,7 +9,7 @@
           <div class="acea-row row-center-wrapper py-lg-40 py-20">
             <el-button  size="large" plain @click="startLoadMore">
               See More
-              <span class="iconfont icon-down"></span>
+              <SvgIcon name="down" />
             </el-button>
           </div>
         </slot>
@@ -18,7 +18,7 @@
     <!-- 空数据 -->
     <slot name="empty" v-else-if="requestFinished">
       <div class="text-center py-60">
-        <span class="iconfont icon-empty text-50"></span>
+        <SvgIcon name="empty" class="text-50" />
         <p class="text-20 f-bold mt-20">No Data</p>
         <p class="text-14 my-20">No data found, please check the query or try again later.</p>
         <el-button size="large" type="primary" @click="getTableList">TRY AGAIN</el-button>

@@ -18,10 +18,10 @@
               @touchend.stop.prevent="handleAction(item)"
           >
             <slot :name="item.name" :item="item">
-              <span v-if="typeof item.icon === 'string'" :class="['iconfont', item.icon]"></span>
+              <SvgIcon v-if="typeof item.icon === 'string'" :name="item.icon" />
               <component v-else-if="item.icon" :is="item.icon" class="icon-svg" />
               <span v-else>{{ item.label }}</span>
-              </slot>
+            </slot>
           </button>
           <div class="ball-tooltip">{{ item.label }}</div>
         </div>
@@ -241,7 +241,7 @@ const handleAction = (item: ActionItem) => {
 </style>
 
 <style>
-  .ball-item-default .iconfont {
+  .ball-item-default .iconify {
     font-size: 20px;
   }
 </style>

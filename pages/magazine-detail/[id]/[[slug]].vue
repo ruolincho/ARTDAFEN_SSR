@@ -15,7 +15,7 @@
         >
           <template #reference>
             <el-button round plain>
-              <span class="iconfont icon-share mr-10"></span>
+              <SvgIcon name="share" class="mr-10" />
               Share
             </el-button>
           </template>
@@ -26,20 +26,20 @@
                   target="_blank"
                   rel="noopener noreferrer"
                   :href="item.href"
-                  class="share-item acea-row row-middle py-10 border-gray-200 border-b-sm block"
-                  v-for="(item, index) in share"
+                  class="share-item acea-row row-middle py-10 border-gray-200 border-b-sm"
+                  v-for="item in share"
                   :key="item.name"
               >
-                <span class="iconfont" :class="[item.icon]"></span>
+                <SvgIcon :name="item.icon" />
                 <span class="ml-12">{{ item.name }}</span>
               </a>
               <span
-                  class="share-item acea-row row-middle py-10 border-gray-200 block cursor-pointer"
+                  class="share-item acea-row row-middle py-10 border-gray-200 cursor-pointer"
                   @click="handleCopy"
               >
-                <span class="iconfont icon-link"></span>
+                <SvgIcon name="link" />
                 <span class="ml-12">{{ isClipboard ? 'Link Copied!' : 'Copy Link ' }}</span>
-                <span class="iconfont icon-check ml-6" v-show="isClipboard"></span>
+                <SvgIcon name="check" class="ml-6" v-show="isClipboard" />
               </span>
             </div>
           </div>
@@ -178,10 +178,10 @@ function createShareLink(platform: 'pinterest' | 'x' | 'reddit' | 'email', media
 }
 
 const share = computed(() => [
-  { name: 'Email', icon: 'icon-shopping', href: createShareLink('email') },
-  { name: 'Pinterest', icon: 'icon-pinterest', href: createShareLink('pinterest', imagePrefix(newsDetail.value?.img || '')) },
-  { name: 'X', icon: 'icon-tuite', href: createShareLink('x') },
-  { name: 'Reddit', icon: 'icon-shopping', href: createShareLink('reddit') },
+  { name: 'Email', icon: 'email', href: createShareLink('email') },
+  { name: 'Pinterest', icon: 'pinterest', href: createShareLink('pinterest', imagePrefix(newsDetail.value?.img || '')) },
+  { name: 'X', icon: 'tuite', href: createShareLink('x') },
+  { name: 'Reddit', icon: 'reddit', href: createShareLink('reddit') },
 ])
 
 const isClipboard = ref(false)
@@ -194,6 +194,38 @@ const handleCopy = async () => {
 // 更多新闻
 const initParam = reactive({id: '', categoryId: '', size: 5});
 const getNewsRecommend = (params: INews.RecQuery) => getNewsRecommendApi(params)
+
+
+// 在文件顶部，利用 Vite 提供的方法一次性加载所有本地 SVG 的源码文本
+// eager: true 意味着在构建时就直接把这些文件内容塞进来，不会产生异步请求
+// query: '?raw' 告诉 Vite 不要把它们当成模块处理，而是直接当成纯字符串返回
+const svgRawModules = import.meta.glob('~/assets/icons/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true
+}) as Record<string, string>;
+
+// getIconStr 方法
+const getIconStr = (name: string, className = '') => {
+  // 从加载的模块中匹配对应文件名的 svg
+  const targetPath = Object.keys(svgRawModules).find(path => path.endsWith(`/${name}.svg`));
+  const rawSvg = targetPath ? svgRawModules[targetPath] : '';
+
+  if (!rawSvg) {
+    console.warn(`HTML 拼接错误: 找不到 SVG 文件 assets/icons/${name}.svg`);
+    return ''; // 如果没找到图标，返回空字符串防止报错
+  }
+
+  // 核心魔法：将原始 <svg> 标签进行字符串替换，注入我们需要的样式和类名
+  // 并顺手把源文件自带的硬编码 fill 替换成 currentColor
+  return rawSvg
+      .replace(
+          /<svg\s/,
+          `<svg class="svg-icon ${className}" aria-hidden="true" style="width:1em; height:1em; fill:currentColor; vertical-align:-0.15em;" `
+      )
+      .replace(/fill="[^none][^"]*"/g, 'fill="currentColor"')
+      .replace(/stroke="[^none][^"]*"/g, 'stroke="currentColor"');
+};
 
 watch(() => newsDetail.value, (newVal: INews.Row) => {
   if (newVal && newVal.content) {
@@ -267,7 +299,7 @@ watch(() => newsDetail.value, (newVal: INews.Row) => {
                 <span class="img-wrapper"${wrapperStyle}>
                   <img ${newBefore} src="${src}" ${newAfter}>
                   <a href="${createShareLink('pinterest', src)}" target="_blank" rel="noopener noreferrer" class="img-badge">
-                    <span class="iconfont icon-pinterest"></span>
+                    ${getIconStr('pinterest')}
                   </a>
                 </span>
               </span>
@@ -459,7 +491,7 @@ watch(() => newsDetail.value, (newVal: INews.Row) => {
     bottom: 6px;
     background: var(--color-primary);
     color: #fff;
-    font-size: 12px;
+    font-size: 16px;
     border-radius: 4px;
     width: 33px;
     height: 33px;

@@ -7,7 +7,7 @@
   >
     <template #header="{ close, titleId, titleClass }">
       <div class="acea-row row-right">
-        <span class="iconfont icon-close text-20 cursor-pointer" @click="close" />
+        <SvgIcon name="close" class="text-20 cursor-pointer" @click="close" />
       </div>
     </template>
     <div class="text-center text-gray-700">
@@ -18,7 +18,7 @@
       <div class="acea-row row-between-wrapper border-sm border-dashed my-20 pl-22 pr-8 py-8 rounded-sm">
         <span class="text-26 f-bold-500 text-uppercase line1 flex-1 text-left mr-10">{{ couponDetail?.code }}</span>
         <el-button type="primary" size="large" @click="copyCode(couponDetail?.code)">
-          <span class="iconfont icon-cut mr-10 text-20"></span>
+          <SvgIcon name="cut" class="mr-10 text-20" />
           Copy Code
         </el-button>
       </div>

@@ -5,7 +5,7 @@
         <div class="spu-preview acea-row nowrap row-column">
           <div class="py-15">
             <div class="acea-row row-center-wrapper nowrap gap-column-base">
-              <span class="iconfont icon-iconfontanquan text-50 text-gold"></span>
+              <SvgIcon name="anquan" class="text-50 text-gold" />
               <p class="text-26 f-bold-500 text-gray-700">Your Privacy is Paramount.Images are securely deleted after 3 days.</p>
             </div>
           </div>
@@ -13,7 +13,7 @@
             <div class="preview-box aspect-ratio acea-row row-center-wrapper">
               <img :src="imagePrefix(productAlbum)" alt="" @click="imgViewVisible = true" v-if="productAlbum">
               <div class="text-center py-60" v-else>
-                <span class="iconfont icon-empty text-50"></span>
+                <SvgIcon name="empty" class="text-50" />
                 <p class="text-20 f-bold mt-20">No Data</p>
                 <p class="text-14 my-20">If you can't find the picture you requested, please check the image ID or try
                   again later.</p>

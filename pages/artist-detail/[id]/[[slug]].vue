@@ -23,20 +23,20 @@
   </section>
 
   <!--艺术家作品-->
-  <section class="mt-lg-60 mt-20" v-if="artistDetail?.artworks?.length">
+  <section class="mt-lg-60 mt-20" v-if="artworks.length">
     <div class="container">
       <div class="mb-lg-60 mb-20 acea-row row-between-wrapper">
         <h1 class="section-title text-40 f-bold-500">Art by {{ artistDetail?.name }}</h1>
         <NuxtLink :to="generatedPath" class="view-all acea-row row-middle">
           View all
           <div class="icon-box ml-10">
-            <span class="iconfont icon-right"></span>
+            <SvgIcon name="right" />
           </div>
         </NuxtLink>
       </div>
 
       <div class="row product-list gap-row-base">
-        <div class="col-2xl-average col-md-3 col-sm-4 col-6" v-for="item in artistDetail.artworks" :key="item.id">
+        <div class="col-2xl-average col-md-3 col-sm-4 col-6" v-for="item in artworks" :key="item.id">
           <GoodsItem :item="item" @thumbsClick="productThumbs" :clickArtistFn="handleClickArtist" />
         </div>
       </div>
@@ -61,7 +61,7 @@
         <NuxtLink to="/artists-brief" class="view-all acea-row row-middle">
           View all
           <div class="icon-box ml-10">
-            <span class="iconfont icon-right"></span>
+            <SvgIcon name="right" />
           </div>
         </NuxtLink>
       </div>
@@ -79,7 +79,7 @@
               <div class="artist-content mt-15 acea-row row-center-wrapper overflow-hidden nowrap">
                 <span class="line1">{{ item.name }}</span>
                 <div class="icon-box">
-                  <span class="iconfont icon-right"></span>
+                  <SvgIcon name="right" />
                 </div>
               </div>
             </NuxtLink>
@@ -106,6 +106,8 @@ import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {getArtistExploreApi} from "~/api/modules/artists/artists";
 import {useCurrencyStore} from "~/stores/modules/currency";
+import type {General} from "../../../types/global";
+import {computed} from "../../../.nuxt/imports";
 
 onMounted(() => {
   $bus.on('loginSuccess', () => {
@@ -124,6 +126,7 @@ const artistId = toRef(route.params, 'id') // 响应式拿 id
 
 // 获取详情
 const config = useRuntimeConfig()
+const artworks = ref<General.GoodsItem>([])
 const {data: artistDetail} = await useAsyncData(
     `artist-detail-${artistId.value}`,
     async () => {
@@ -134,6 +137,7 @@ const {data: artistDetail} = await useAsyncData(
           'X-Currency': currentCurrency
         }
       })
+      artworks.value = data.artworks ?? []
       return data
     }
 )
@@ -266,14 +270,15 @@ useHead({
     .icon-box {
       width: 24px;
       height: 24px;
-      line-height: 24px;
       background: var(--color-gray-200);
       border-radius: 50%;
-      text-align: center;
       color: var(--color-primary);
       transition: all 0.35s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-      .iconfont {
+      .iconify {
         font-size: 12px;
       }
     }
@@ -315,7 +320,7 @@ useHead({
           margin-left: 10px;
           flex-shrink: 0;
 
-          .iconfont {
+          .iconify {
             font-size: 12px;
           }
         }

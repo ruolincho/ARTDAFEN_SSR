@@ -6,12 +6,7 @@
           class="artdafen-install-btn"
           @click="handleInstall"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-             stroke-linejoin="round" class="btn-icon">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
+        <SvgIcon name="xiazai" />
         Install App
       </button>
     </slot>
@@ -28,20 +23,12 @@
           <ol>
             <li>
               Tap the
-              <svg class="icon share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                <polyline points="16 6 12 2 8 6" />
-                <line x1="12" y1="2" x2="12" y2="15" />
-              </svg>
+              <SvgIcon name="share-square" class="share-icon" />
               <strong>Share</strong> button below.
             </li>
             <li>
               Scroll down and select
-              <svg class="icon add-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                <line x1="12" y1="8" x2="12" y2="16" />
-                <line x1="8" y1="12" x2="16" y2="12" />
-              </svg>
+              <SvgIcon name="add-square" class="add-icon" />
               <strong>Add to Home Screen</strong>.
             </li>
           </ol>
@@ -114,9 +101,8 @@ defineExpose({
     background-color: #333333;
   }
 
-  .btn-icon {
-    width: 16px;
-    height: 16px;
+  .artdafen-install-btn .iconify {
+    font-size: 16px;
   }
 
   /* ===== IOS 操作指引弹窗样式 ===== */
@@ -177,9 +163,8 @@ defineExpose({
     margin-bottom: 8px;
   }
 
-  .icon {
-    width: 18px;
-    height: 18px;
+  .prompt-body .iconify {
+    font-size: 18px;
     vertical-align: text-bottom;
     margin: 0 4px;
   }

@@ -91,10 +91,11 @@
                     <span class="text-uppercase">{{ goodsDetail.title }}</span>
                     <span>: Hand-painted Oil Painting Reproduction</span>
                   </h1>
-                  <span class="iconfont icon-follow text-40 mr-10 cursor-pointer" v-show="!isThumbs"
-                        @click="productThumbs"/>
-                  <span class="iconfont icon-follow-fill text-40 mr-10 cursor-pointer text-error" v-show="isThumbs"
-                        @click="productThumbs"/>
+                  <SvgIcon
+                      :name="isThumbs ? 'follow-fill' : 'follow'"
+                      class="text-40 mr-10 cursor-pointer" :class="{'text-error': isThumbs}"
+                      @click.prevent.stop="productThumbs()"
+                  />
                 </div>
 
                 <NuxtLink class="my-15 text-14 cursor-pointer text-underline-hover" :to="handleClickArtist(goodsDetail?.creator!)">by: {{ goodsDetail?.creator?.name }}</NuxtLink>
@@ -102,9 +103,11 @@
                 <div class="my-15 acea-row row-middle price-wrapper py-10"
                      :style="{ top: 'var(--header-height)' }">
                   <span class="text-28 f-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
-                  <el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"
-                          ref="checkButtonRef">Check
-                  </el-tag>
+                  <!--<el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"-->
+                  <!--        ref="checkButtonRef">-->
+                  <!--  Check-->
+                  <!--</el-tag>-->
+                  <img class="p-img cursor-pointer" src="~/assets/images/hand-painted.png" alt="hand-painted" v-click-outside="onClickOutside" ref="checkButtonRef">
                 </div>
 
                 <p class="text-14 text-gray-400 my-15">
@@ -213,7 +216,7 @@
                 <p class="text-16 f-bold-500">{{ goodsDetail?.creator?.timeline || '--' }}</p>
                 <p class="text-20 f-bold-500 text-gray-700 my-10">{{ goodsDetail?.creator?.name || '' }}</p>
                 <!--          <p class="text-16 f-bold-500 my-10">19th-Century</p>-->
-                <p class="text-18">{{ goodsDetail?.creator?.intro || '' }}</p>
+                <p class="text-16" style="line-height: 1.25rem">{{ goodsDetail?.creator?.intro || '' }}</p>
               </div>
             </div>
           </el-tab-pane>
@@ -325,7 +328,7 @@
       <div class="btn-box">
         <el-button class="w-full mt-20" plain size="large" @click="isOpenDesc = !isOpenDesc">
           {{ isOpenDesc ? 'Hide Product Details' : 'View More Product Details' }}
-          <span class="iconfont ml-20" :class="isOpenDesc ? 'icon-up' : 'icon-down'"></span>
+          <SvgIcon :name="isOpenDesc ? 'up' : 'down'" class="ml-20" />
         </el-button>
       </div>
     </div>
@@ -427,8 +430,8 @@
         <el-collapse-item v-for="subItem in getFaqByQuote('shopping')" :title="subItem.title" :name="subItem.name"
                           :key="subItem.name">
           <template #icon="{ isActive }">
-            <p style="margin-left:  auto">
-              <span class="iconfont text-20 ml-10" :class="isActive ? 'icon-reduce' : 'icon-add'"></span>
+            <p style="margin-left: auto">
+              <SvgIcon :name="isActive ? 'reduce' : 'add'" class="text-20 ml-10" />
             </p>
           </template>
           <div class="px-20 py-24" v-html="subItem.content"></div>
@@ -438,11 +441,10 @@
   </section>
 
   <!-- 背景墙 -->
-  <WallColor :wall-image="generatorImg" ref="wallColorRef" @close="toggleWidget(true)"/>
+  <WallColor :wall-image="generatorImg" ref="wallColorRef" />
 
   <!-- 房间 -->
-  <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon"
-        @close="toggleWidget(true)"/>
+  <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon" />
 
   <!--  图片查看器 -->
   <el-image-viewer
@@ -500,7 +502,7 @@
   <LoginWindow ref="loginWindowRef"/>
 
   <!--引导-->
-  <el-tour v-model="openTour" @close="handleTouchClose">
+  <el-tour v-model="openTour" @close="handleTouchClose" :target-area-clickable="false">
     <template #indicators="{ current, total }">
       <span>{{ current + 1 }} / {{ total }}</span>
     </template>
@@ -517,9 +519,9 @@
       <div class="footer-preview-img" @click="toggleImageViewer('core')">
         <img class="w-full h-full fit-contain" :src="generatorImg" alt="">
       </div>
-      <div class="footer-preview-text f-bold">VIEW PREVIEW</div>
+      <div class="footer-preview-text f-bold" @click="toggleImageViewer('core')">VIEW PREVIEW</div>
       <div class="footer-preview-right" @click="openRoom">
-        <span class="iconfont icon-pictures"></span>
+        <SvgIcon name="pictures" />
       </div>
     </div>
   </transition>
@@ -568,6 +570,7 @@ import {Back, Right, ZoomIn, ZoomOut } from '@element-plus/icons-vue'
 import ToolFloatBall from "~/components/ToolFloatBall.vue";
 import {useBreadcrumbStore} from "~/stores/modules/breadcrumb";
 import type {ObjectNode} from "~/types/global";
+import {useLockScroll} from "~/composables/useLockScroll";
 
 defineOptions({
   name: 'PaintDetail'
@@ -591,7 +594,9 @@ onMounted(async () => {
 
 onUnmounted(() => {
   $bus.off('loginSuccess', getIsThumbs)
-  window.removeEventListener('scroll', monitorPreview)
+  if (!appStore.isPc) {
+    window.removeEventListener('scroll', monitorPreview)
+  }
 })
 
 const {imagePrefix} = useImage()
@@ -781,14 +786,12 @@ const getRelatedRecommend = async () => {
 // 选择背景墙颜色
 const wallColorRef = ref<InstanceType<typeof WallColor>>()
 const openWallColor = () => {
-  toggleWidget(false)
   wallColorRef.value?.open()
 }
 
 // 选择背景墙颜色
 const roomRef = ref<InstanceType<typeof Room>>()
 const openRoom = () => {
-  toggleWidget(false)
   roomRef.value?.open()
 }
 
@@ -846,7 +849,6 @@ const toggleImageViewer = (type?: 'all' | 'core', index?: number) => {
     urlList.value = [generatorImg.value]
     urlListIndex.value = 0 // 只有画芯的情况下只展示第0张
   }
-  toggleWidget(imgViewVisible.value)
   imgViewVisible.value = !imgViewVisible.value
 }
 
@@ -888,16 +890,6 @@ const back2First = <T extends (...args: any[]) => any>(
   return result;
 };
 
-// 切换显示客服组件
-const toggleWidget = (flag: boolean) => {
-  if (import.meta.env.MODE !== 'production') return
-  if (flag) {
-    window.Tawk_API.showWidget()
-  } else {
-    window.Tawk_API.hideWidget();
-  }
-}
-
 const openTour = ref(false)
 const beginGuide = async () => {
   window.scrollTo({
@@ -905,14 +897,12 @@ const beginGuide = async () => {
     behavior: "instant",
   })
   openTour.value = true
-  toggleWidget(false)
 }
 const handleTouchClose = () => {
   window.scrollTo({
     top: 0,
     behavior: "instant",
   })
-  toggleWidget(true)
 }
 // 参数顺序：[显示条件, 目标Ref, 标题, 描述, 额外配置(可选)]
 const createStep = (condition: boolean, target: any, title: string, description: string, extras: Record<string, any> = {}) => {
@@ -966,25 +956,38 @@ const imageGeneratorProps = computed(() => {
 const isShowFooterPreview = ref(false)
 const spuPreviewRef = ref<HTMLElement | null>(null)
 const monitorPreview = () => {
-  if (!spuPreviewRef.value) return
-  // 获取 spuPreviewRef 元素相对于视口的位置信息
-  const rect = spuPreviewRef.value.getBoundingClientRect()
+  const spuEl = spuPreviewRef.value
+  if (!spuEl) return
 
-  // 当元素的 bottom 小于等于 0 时，说明该元素已经完全滚出视口上方
-  // 如果你希望“滚动超过元素自身高度的一半”就开始显示，可以改为：rect.top < -(rect.height / 2)
-  // 如果你希望“滚动超过元素自身高度”就开始显示，可以改为：rect.bottom <= 0
-  if (rect.top < -(rect.height / 2)) {
-    isShowFooterPreview.value = true
-  } else {
-    isShowFooterPreview.value = false
+  const footEl = document.getElementById('foot-mobile')
+
+  const spuRect = spuEl.getBoundingClientRect()
+
+  const root = document.documentElement
+  const cssValue = getComputedStyle(root).getPropertyValue('--header-height').trim()
+  const headerOffset = parseInt(cssValue, 10) || 0
+
+
+  // 条件 1: SPU 预览图底部是否已经滚出 Header 底部
+  const isSpuPastHeader = spuRect.bottom <= headerOffset
+
+  // 条件 2: 底部导航是否不在视口内
+  let isFootNotVisible = true
+  if (footEl) {
+    const footRect = footEl.getBoundingClientRect()
+    // 只要底部导航的顶部进入了视口高度，就判定为可见
+    isFootNotVisible = footRect.top > window.innerHeight
   }
+
+  // SPU 滚上去了 且 底部导航还没露头
+  isShowFooterPreview.value = isSpuPastHeader && isFootNotVisible
 }
 
 const tools = [
-  { name: 'guide', label: 'Guide', icon: 'icon-help', handler: () => beginGuide() },
-  { name: 'preview', label: 'Preview', icon: 'icon-quanping', handler: () => toggleImageViewer('all') },
-  { name: 'wallColor', label: 'WallColor', icon: 'icon-user-defined', handler: () => openWallColor() },
-  { name: 'room', label: 'Room', icon: 'icon-pictures', handler: () => openRoom() },
+  { name: 'guide', label: 'Guide', icon: 'help', handler: () => beginGuide() },
+  { name: 'preview', label: 'Preview', icon: 'quanping', handler: () => toggleImageViewer('all') },
+  { name: 'wallColor', label: 'WallColor', icon: 'user-defined', handler: () => openWallColor() },
+  { name: 'room', label: 'Room', icon: 'pictures', handler: () => openRoom() },
 ]
 
 const banners = computed(() => {
@@ -992,6 +995,8 @@ const banners = computed(() => {
   const imgs = goodsDetail.value?.banners ?? []
   return [...imgs, ...tailImage]
 })
+
+useLockScroll(openTour) // 监听状态变化锁定滚动
 </script>
 
 <style scoped lang="scss">
@@ -1000,7 +1005,7 @@ const banners = computed(() => {
     bottom: 16px;
     left: 16px;
     right: 16px;
-    z-index: 20;
+    z-index: 100;
     background: #fff;
     color: var(--color-primary);
     padding: 8px;
@@ -1027,7 +1032,7 @@ const banners = computed(() => {
       color: var(--color-bg-primary);
       border-radius: 50%;
 
-      .iconfont {
+      .iconify {
         font-size: 20px;
       }
     }
@@ -1135,6 +1140,10 @@ const banners = computed(() => {
         background: #fff;
         position: sticky;
         z-index: 10;
+
+        .p-img {
+          height: 30px;
+        }
       }
     }
   }
@@ -1415,21 +1424,6 @@ const banners = computed(() => {
           :deep(.swiper-button-prev),
           :deep(.swiper-button-next) {
             display: none;
-          }
-        }
-
-        .tools-wrapper {
-          right: 10px;
-          bottom: 10px;
-
-          .tools-item {
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-
-            .iconfont {
-              font-size: 16px;
-            }
           }
         }
       }

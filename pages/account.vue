@@ -12,15 +12,15 @@
             :auto-upload="false"
             :show-file-list="false"
           >
-            <div class="account-avatar">
+            <div class="account-avatar bg-gray-100 rounded-full overflow-hidden">
               <img
-                class="w-full h-full fit-cover rounded-full"
+                class="w-full h-full fit-cover"
                 :src="userStore.userInfo.avatar"
                 alt="avatar"
                 v-show="userStore.userInfo.avatar"
               >
               <div class="camera acea-row row-center-wrapper">
-                <span class="iconfont icon-camera-switching"/>
+                <SvgIcon name="camera-switching" />
               </div>
             </div>
           </el-upload>
@@ -37,15 +37,15 @@
             v-for="menu in menuList"
             :key="menu.path"
           >
-            <span :class="`iconfont ${menu.icon} text-24`"></span>
+            <SvgIcon :name="menu.icon" class="text-24" />
             <span class="text-16 ml-12">{{ menu.name }}</span>
           </div>
           <div class="account-item acea-row row-middle py-16 px-20 cursor-pointer" @click="unsubscribe">
-            <span class="iconfont icon-quxiaodingyue text-24"></span>
+            <SvgIcon name="quxiaodingyue" class="text-24" />
             <span class="text-16 ml-12">Unsubscribe</span>
           </div>
           <div class="account-item acea-row row-middle py-16 px-20 cursor-pointer" @click="logout">
-            <span class="iconfont icon-money-wallet text-24"></span>
+            <SvgIcon name="tuichudenglu" class="text-24" />
             <span class="text-16 ml-12">Log Out</span>
           </div>
         </div>
@@ -97,11 +97,11 @@ const logout = () => {
 }
 
 const menuList = [
-  {name: 'Personal Information', icon: 'icon-customer', path: '/account/profile'},
-  {name: 'My Orders', icon: 'icon-goods', path: '/account/orders'},
-  {name: 'My Wishlists', icon: 'icon-follow', path: '/account/favorites'},
-  // {name: 'Manage Addresses', icon: 'icon-location', path: '/account/addresses'},
-  // {name: 'Saved Cards', icon: 'icon-money-wallet', path: '/account/payments'},
+  {name: 'Personal Information', icon: 'customer', path: '/account/profile'},
+  {name: 'My Orders', icon: 'goods', path: '/account/orders'},
+  {name: 'My Wishlists', icon: 'follow', path: '/account/favorites'},
+  // {name: 'Manage Addresses', icon: 'location', path: '/account/addresses'},
+  // {name: 'Saved Cards', icon: 'money-wallet', path: '/account/payments'},
 ]
 
 const currentRoute = computed(() => route.path);

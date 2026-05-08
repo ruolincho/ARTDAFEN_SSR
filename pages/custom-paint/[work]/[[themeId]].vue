@@ -63,7 +63,7 @@
                   <img :src="imagePrefix(example.paint)" alt="">
                   <p class="acea-row row-center-wrapper text-16 my-15 cursor-pointer text-secondary"
                      @click="handleExample(index)">
-                    <span class="iconfont icon-search text-18 mr-4"></span>
+                    <SvgIcon name="search" class="text-18 mr-4" />
                     <span>Oil Painting</span>
                   </p>
                 </div>
@@ -94,7 +94,7 @@
                       :auto-upload="false"
                       :show-file-list="false"
                   >
-                      <span class="iconfont icon-upload-pictures"></span>
+                    <SvgIcon name="upload-pictures" />
                   </el-upload>
                 </template>
               </ToolFloatBall>
@@ -108,7 +108,7 @@
             <div class="my-15" v-if="!imageUrl">
               <p class="acea-row row-middle mb-15">
                 <span class="text-16">Photo: Not uploaded</span>
-                <span class="iconfont icon-info-fill text-20 ml-8 cursor-pointer" @click="openNotice"></span>
+                <SvgIcon name="info-fill" class="text-20 ml-8 cursor-pointer" @click="openNotice" />
               </p>
 
               <!--点击上传图片-->
@@ -296,11 +296,10 @@
   </el-dialog>
 
   <!-- 背景墙 -->
-  <WallColor :wall-image="generatorImg" ref="wallColorRef" @close="toggleWidget(true)"/>
+  <WallColor :wall-image="generatorImg" ref="wallColorRef" />
 
   <!-- 房间 -->
-  <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon"
-        @close="toggleWidget(true)"/>
+  <Room :wall-image="generatorImg" ref="roomRef" :pixel="pixel" v-if="generatorImg && reReckon" />
 
   <!-- 图片查看器 -->
   <el-image-viewer
@@ -346,7 +345,7 @@
   <LoginWindow ref="loginWindowRef"/>
 
   <!--引导-->
-  <el-tour v-model="openTour" @close="handleTouchClose">
+  <el-tour v-model="openTour" @close="handleTouchClose" :target-area-clickable="false">
     <template #indicators="{ current, total }">
       <span>{{ current + 1 }} / {{ total }}</span>
     </template>
@@ -395,6 +394,7 @@ import CraftSelector from "~/components/Custom/CraftSelector.vue";
 import ComboSkeleton from "~/components/Custom/ComboSkeleton.vue";
 import {usePaintCombo} from '~/composables/usePaintCombo'
 import ToolFloatBall from "~/components/ToolFloatBall.vue";
+import {useLockScroll} from "~/composables/useLockScroll";
 
 defineOptions({
   name: 'CustomPaint'
@@ -549,14 +549,12 @@ const onClickOutside = () => {
 // 选择背景墙颜色
 const wallColorRef = ref<InstanceType<typeof WallColor>>()
 const openWallColor = () => {
-  toggleWidget(false)
   wallColorRef.value?.open()
 }
 
 // 选择背景墙颜色
 const roomRef = ref<InstanceType<typeof Room>>()
 const openRoom = () => {
-  toggleWidget(false)
   roomRef.value?.open()
 }
 
@@ -770,17 +768,7 @@ const showLoginWindow = () => {
 }
 
 const toggleImageViewer = () => {
-  toggleWidget(imgViewVisible.value)
   imgViewVisible.value = !imgViewVisible.value
-}
-
-const toggleWidget = (flag: boolean) => {
-  if (import.meta.env.MODE !== 'production') return
-  if (flag) {
-    window.Tawk_API.showWidget()
-  } else {
-    window.Tawk_API.hideWidget();
-  }
 }
 
 watch(() => route.fullPath,
@@ -805,14 +793,12 @@ const beginGuide = async () => {
     behavior: "instant",
   })
   openTour.value = true
-  toggleWidget(false)
 }
 const handleTouchClose = () => {
   window.scrollTo({
     top: 0,
     behavior: "instant",
   })
-  toggleWidget(true)
 }
 
 // 参数顺序：[显示条件, 目标Ref, 标题, 描述, 额外配置(可选)]
@@ -875,12 +861,14 @@ const openNotice = () => {
 }
 
 const tools = [
-  { name: 'guide', label: 'Guide', icon: 'icon-help', handler: () => beginGuide() },
-  { name: 'preview', label: 'Preview', icon: 'icon-quanping', handler: () => toggleImageViewer('all') },
-  { name: 'wallColor', label: 'WallColor', icon: 'icon-user-defined', handler: () => openWallColor() },
-  { name: 'room', label: 'Room', icon: 'icon-pictures', handler: () => openRoom() },
+  { name: 'guide', label: 'Guide', icon: 'help', handler: () => beginGuide() },
+  { name: 'preview', label: 'Preview', icon: 'quanping', handler: () => toggleImageViewer() },
+  { name: 'wallColor', label: 'WallColor', icon: 'user-defined', handler: () => openWallColor() },
+  { name: 'room', label: 'Room', icon: 'pictures', handler: () => openRoom() },
   { name: 'upload', label: 'Re-Upload' },
 ]
+
+useLockScroll(openTour) // 监听状态变化锁定滚动
 </script>
 
 <style scoped lang="scss">

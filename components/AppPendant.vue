@@ -1,15 +1,8 @@
 <template>
   <div class="customer-widget">
-<!--    <a-->
-<!--      :href="`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('One-on-One Consultation')}`"-->
-<!--      class="widget-btn"-->
-<!--    >-->
-<!--      <span class="iconfont icon-message "></span>-->
-<!--    </a>-->
     <span v-if="showBackTop" class="widget-btn" @click="scrollToTop">
-      <span class="iconfont icon-top "></span>
+      <SvgIcon name="top" />
     </span>
-
   </div>
 </template>
 

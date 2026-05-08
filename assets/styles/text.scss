@@ -28,7 +28,7 @@ $font-size-map: (
 // ----------------------------------------------------------------
 @each $size, $values in $font-size-map {
   .text-#{$size} {
-    font-size: nth($values, 1);
+    font-size: nth($values, 1) !important;
   }
 }
 
@@ -39,42 +39,42 @@ $font-size-map: (
 // --- Loop 1: 超小屏幕 (xs) - < 414px ---
 @media (max-width: 414px) {
   @each $size, $values in $font-size-map {
-    .text-#{$size} { font-size: nth($values, 6); }
+    .text-#{$size} { font-size: nth($values, 6) !important; }
   }
 }
 
 // --- Loop 2: 小屏幕 (sm) - 414px ~ 768px ---
 @media (min-width: 414px) and (max-width: 768px) {
   @each $size, $values in $font-size-map {
-    .text-#{$size} { font-size: nth($values, 5); }
+    .text-#{$size} { font-size: nth($values, 5) !important; }
   }
 }
 
 // --- Loop 3: 中等屏幕 (md) - 768px ~ 992px ---
 @media (min-width: 768px) and (max-width: 992px) {
   @each $size, $values in $font-size-map {
-    .text-#{$size} { font-size: nth($values, 4); }
+    .text-#{$size} { font-size: nth($values, 4) !important; }
   }
 }
 
 // --- Loop 4: 大屏幕 (lg) - 992px ~ 1260px ---
 @media (min-width: 992px) and (max-width: 1260px) {
   @each $size, $values in $font-size-map {
-    .text-#{$size} { font-size: nth($values, 3); }
+    .text-#{$size} { font-size: nth($values, 3) !important; }
   }
 }
 
 // --- Loop 5: 超大屏幕 (xl) - 1260px ~ 1460px ---
 @media (min-width: 1260px) and (max-width: 1460px) {
   @each $size, $values in $font-size-map {
-    .text-#{$size} { font-size: nth($values, 2); }
+    .text-#{$size} { font-size: nth($values, 2) !important; }
   }
 }
 
 // --- Loop 6: 超大屏幕 (2xl) - 1460px ~ 1680px ---
 @media (min-width: 1460px) and (max-width: 1680px) {
   @each $size, $values in $font-size-map {
-    .text-#{$size} { font-size: nth($values, 1); }
+    .text-#{$size} { font-size: nth($values, 1) !important; }
   }
 }
 

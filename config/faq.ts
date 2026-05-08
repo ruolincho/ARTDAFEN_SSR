@@ -196,6 +196,24 @@ const faqListUnBuild: FaqCategory[] = [
         list: [
             {
                 slug: '',
+                title: 'WILL MY PAINTING LOOK EXACTLY LIKE THE PICTURE ON THE WEBSITE?',
+                url: '',
+                quote: ['shopping'],
+                content: `
+            <p>
+              At ARTDAFEN, every piece is 100% hand-painted from a blank canvas by our master artists. Because we strictly refuse to use printing or mechanical reproduction methods, no two paintings are ever perfectly identical.
+            </p>
+            <p>
+             You may notice slight, natural variations in brushwork, texture, or subtle color blending compared to the reference image. This is not a flaw; rather, it is the defining characteristic and beautiful hallmark of genuine, handmade oil painting. These natural nuances ensure that the artwork you receive is a truly unique, one-of-a-kind masterpiece crafted exclusively for your space.
+            </p>
+            <p>
+              Rest assured, through our Photo Preview Service, you will review high-resolution photos of your actual completed painting for approval before it is ever shipped.
+            </p>
+        `
+            },
+
+            {
+                slug: '',
                 title: 'YOUR VISION, OUR MASTERPIECE — DO YOU ACCEPT CUSTOM REQUESTS?',
                 url: '',
                 content: `
