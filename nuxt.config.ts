@@ -180,5 +180,13 @@ export default defineNuxtConfig({
                 dir: './assets/icons'
             }
         ],
+        // 强制将你的 my-icon 集合打包进客户端
+        clientBundle: {
+            includeCustomCollections: true,
+        },
+        // 确保服务端运行时也能访问到这些图标数据
+        serverBundle: {
+            collections: ['my-icon']
+        }
     },
 })

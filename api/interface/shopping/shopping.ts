@@ -42,6 +42,7 @@ export namespace IShopping {
         discountAmount?: number
         /*金额计算中状态*/
         isPriceStale: boolean
+        slug: string
     }
 
     /** 购物车数据 */

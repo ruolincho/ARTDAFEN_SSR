@@ -173,9 +173,10 @@
                   <div class="my-15 acea-row row-middle price-wrapper py-10"
                        :style="{ top: 'var(--header-height)' }">
                     <span class="text-28 f-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
-                    <el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"
-                            ref="checkButtonRef">Check
-                    </el-tag>
+                    <img class="p-img cursor-pointer" src="~/assets/images/hand-painted.png" alt="hand-painted" v-click-outside="onClickOutside" ref="checkButtonRef">
+                    <!--<el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"-->
+                    <!--        ref="checkButtonRef">Check-->
+                    <!--</el-tag>-->
                   </div>
 
                   <p class="text-14 text-gray-400 my-15">
@@ -325,7 +326,7 @@
       placement="top"
       title="Price Details"
       :virtual-ref="checkButtonRef"
-      :popper-style="{ padding: '20px', 'padding-bottom': '10px'}"
+      :popper-style="{ padding: '20px', 'padding-bottom': '10px', 'z-index': 999}"
       virtual-triggering
   >
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20">
@@ -410,10 +411,11 @@ const {formatToCurrency} = useCurrencyStore();
 const {saveBase64} = useIndexedDBBase64()
 
 const initShowGuide = () => {
-  if (process.server) return;
-  if (localStorage.getItem(APP_HAS_SEEN_CUSTOM_GUIDE) === 'true') return
-  beginGuide()
-  localStorage.setItem(APP_HAS_SEEN_CUSTOM_GUIDE, 'true')
+  // if (process.server) return;
+  // if (localStorage.getItem(APP_HAS_SEEN_CUSTOM_GUIDE) === 'true') return
+  // beginGuide()
+  // localStorage.setItem(APP_HAS_SEEN_CUSTOM_GUIDE, 'true')
+  return false
 }
 
 const {
@@ -909,6 +911,10 @@ useLockScroll(openTour) // 监听状态变化锁定滚动
         background: #fff;
         position: sticky;
         z-index: 10;
+
+        .p-img {
+          height: 30px;
+        }
       }
     }
   }

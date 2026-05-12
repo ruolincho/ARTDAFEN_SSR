@@ -53,6 +53,7 @@ const couponDetail = ref({} as ICoupon.Row)
 const getCouponDetail = async (id: string) => {
   try {
     const {data} = await getCouponDetailApi(id)
+    if (!data) return ElMessage.info('The coupon is incorrect, please contact platform customer service')
     couponDetail.value = data
     visible.value = true
   } catch (error) {

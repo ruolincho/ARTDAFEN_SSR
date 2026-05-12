@@ -627,8 +627,21 @@
   <!--CONTACT-->
   <section class="sec-contact">
     <div class="container-fluid">
+      <div class="scroll-container">
+        <div class="scroll-track">
+          <img
+              v-for="i in 4"
+              :key="i"
+              :src="getResponsiveImage(contactImage).src"
+              :srcset="getResponsiveImage(contactImage).srcset"
+              sizes="100vw"
+              alt="background"
+              class="scroll-img"
+              decoding="async"
+          />
+        </div>
+      </div>
       <div class="contact-container">
-        <div class="contact-bg" :style="{ backgroundImage: `url(${contactImage})` }"></div>
         <div class="contact-wrapper text-center">
           <h2 class="text-46 f-bold-500 mb-20">Keep up with the latest at ArtDaFen.com.<br/>Sign up now & get 15% off*
             your purchase of $99 or more!</h2>
@@ -700,8 +713,8 @@ onMounted(() => {
   if (route.query.couponId) showPromoCode(route.query.couponId)
 })
 
-const { imagePrefix, getPcSrcset, getMobileSrcset } = useImage()
-const contactImage = imagePrefix('/static/artdafen/contact-bg.webp');
+const { imagePrefix, getPcSrcset, getMobileSrcset, getResponsiveImage } = useImage()
+const contactImage = '/static/artdafen/contact-bg.webp';
 const route = useRoute()
 const router = useRouter()
 const appStore = useAppStore()
@@ -947,24 +960,49 @@ const _getLatestComment = async () => {
   }
 
   .sec-contact {
+    .scroll-container {
+      width: 100%;
+      overflow: hidden;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 10%;
+      bottom: 10%;
+      mask: radial-gradient(50% 50% at 50% 50%, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
+      opacity: 0.35;
+
+      .scroll-track {
+        display: flex;
+        width: max-content;
+        height: 100%;
+        animation: infiniteScroll 30s linear infinite;
+        will-change: transform;
+
+        .scroll-img {
+          height: 100%;
+          width: auto;
+          object-fit: cover;
+          display: block;
+          pointer-events: none;
+        }
+      }
+    }
+
+    @keyframes infiniteScroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-25%);
+      }
+    }
+
     .contact-container {
       position: relative;
       height: 26.04vw;
-      min-height: 450px;
+      min-height: 350px;
       overflow: hidden;
-
-      .contact-bg {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        width: 200%; /* 图片宽度为容器的两倍 */
-        height: 80%;
-        background-repeat: repeat;
-        background-size: contain;
-        animation: scroll 50s linear infinite; /* 调整时间来控制滚动速度 */
-        mask: radial-gradient(50% 50% at 50% 50%, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%);
-        opacity: 0.35;
-      }
+      margin-bottom: -30px;
 
       .contact-wrapper {
         width: 100%;
@@ -1103,15 +1141,6 @@ const _getLatestComment = async () => {
     }
   }
 
-  @keyframes scroll {
-    0% {
-      transform: translateX(0) translateY(-50%);
-    }
-    100% {
-      transform: translateX(-50%) translateY(-50%); /* 移动图片的一半宽度 */
-    }
-  }
-
   @media (max-width: 1260px) {
     .sec-style .categories-list .categories-item .categories-text {
       bottom: 20px;
@@ -1218,6 +1247,10 @@ const _getLatestComment = async () => {
         }
 
       }
+    }
+
+    .contact-container {
+      margin-bottom: -15px;
     }
   }
 

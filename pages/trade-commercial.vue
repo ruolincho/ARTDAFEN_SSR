@@ -134,8 +134,34 @@
 
   <section class="sec-contact">
     <div class="contact-container">
-      <div class="contact-bg contact-bg1" :style="{ backgroundImage: `url(${partnerImage})` }"></div>
-      <div class="contact-bg contact-bg2" :style="{ backgroundImage: `url(${artistImage})` }"></div>
+      <div class="scroll-container company-scroll">
+        <div class="scroll-track">
+          <img
+              v-for="i in 4"
+              :key="i"
+              :src="getResponsiveImage(partnerImage).src"
+              :srcset="getResponsiveImage(partnerImage).srcset"
+              sizes="100vw"
+              alt="background"
+              class="scroll-img"
+              decoding="async"
+          />
+        </div>
+      </div>
+      <div class="scroll-container artist-scroll">
+        <div class="scroll-track">
+          <img
+              v-for="i in 4"
+              :key="i"
+              :src="getResponsiveImage(artistImage).src"
+              :srcset="getResponsiveImage(artistImage).srcset"
+              sizes="100vw"
+              alt="background"
+              class="scroll-img"
+              decoding="async"
+          />
+        </div>
+      </div>
       <div class="contact-wrapper text-center px-15">
         <p class="text-40">Trusted by Industry Leaders, Crafted by Global Artists.</p>
         <p class="text-40">The preferred art partner for top-tier furniture brands and interior design firms.</p>
@@ -165,7 +191,7 @@
             class="content-box flex-1 bg-gray-200 rounded-md overflow-hidden p-20 text-center acea-row row-column row-center">
           <p class="text-40 font-bold">
             Partner with ArtDaFen for VIP 1-on-1 concierge service. <br/>
-            Sign up today and enjoy a 10% welcome discount on qualified wholesale purchases.
+            Sign up today and enjoy a 20% welcome discount on qualified wholesale purchases.
           </p>
           <div class="py-30">
             <el-button size="large" type="danger">
@@ -198,10 +224,10 @@ import {resolvePageMeta} from "~/config/pageMeta";
 useHead(resolvePageMeta("/trade-commercial"));
 
 const modules = [Autoplay, Pagination, Navigation, Lazy]
-const {imagePrefix} = useImage()
+const {imagePrefix, getResponsiveImage} = useImage()
 const appStore = useAppStore()
-const partnerImage = imagePrefix('/static/artdafen/partner-bg.webp');
-const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
+const partnerImage = '/static/artdafen/partner-bg.webp';
+const artistImage = '/static/artdafen/artist-bg.webp';
 </script>
 
 <style scoped lang="scss">
@@ -312,28 +338,57 @@ const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
       height: 680px;
       overflow: hidden;
 
-      .contact-bg {
-        --scroll-distance: 2978px;
-        position: absolute;
-        left: 0;
+      .scroll-container {
         width: 100%;
         height: 49%;
-        background-repeat: repeat-x;
-        background-position: 0 0;
-        background-size: auto 100%;
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        right: 0;
         opacity: 0.35;
 
+        &.company-scroll {
+          top: 0;
+          .scroll-track {
+            animation: infiniteScroll 60s linear infinite;
+          }
+        }
+
+        &.artist-scroll {
+          bottom: 0;
+          .scroll-track {
+            animation: infiniteScroll 60s linear infinite reverse;
+          }
+        }
+
+
+        .scroll-track {
+          display: flex;
+          width: max-content;
+          height: 100%;
+          will-change: transform;
+
+          .scroll-img {
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+          }
+        }
       }
 
-      .contact-bg1 {
-        top: 0;
-        animation: bg-scroll 30s linear infinite reverse; /* 调整时间来控制滚动速度 */
+      @keyframes infiniteScroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-25%);
+        }
       }
 
-      .contact-bg2 {
-        bottom: 0;
-        animation: bg-scroll 30s linear infinite; /* 调整时间来控制滚动速度 */
-      }
+
+
 
       .contact-wrapper {
         width: 100%;
@@ -439,10 +494,6 @@ const artistImage = imagePrefix('/static/artdafen/artist-bg.webp');
   @media (max-width: 768px) {
     .sec-contact .contact-container {
       height: 350px;
-
-      .contact-bg {
-        --scroll-distance: 1534px;
-      }
     }
   }
 

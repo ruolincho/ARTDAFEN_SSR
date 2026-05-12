@@ -72,7 +72,7 @@ export const useList = (
             // 先把初始化参数和分页参数放到总参数里面
             Object.assign(state.totalParam, isPageable ? pageParam.value : {}, initParam);
             let { data } = await api({ ...state.totalParam });
-            dataCallBack && (data = dataCallBack(data));
+            dataCallBack && (data = await Promise.resolve(dataCallBack(data)));
             if (typeof data === 'object' && Object.keys(data).length === 0) {
                 state.tableData = isPageable ? data.records : [];
             } else {

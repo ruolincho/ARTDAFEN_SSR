@@ -482,7 +482,7 @@
       placement="bottom"
       title="Price Details"
       :virtual-ref="checkButtonRef"
-      :popper-style="{ padding: '20px', 'padding-bottom': '10px'}"
+      :popper-style="{ padding: '20px', 'padding-bottom': '10px', 'z-index': 999}"
       virtual-triggering
   >
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20">
@@ -502,7 +502,7 @@
   <LoginWindow ref="loginWindowRef"/>
 
   <!--引导-->
-  <el-tour v-model="openTour" @close="handleTouchClose" :target-area-clickable="false">
+  <el-tour v-model="openTour" @close="handleTouchClose" :target-area-clickable="false" :close-on-press-escape="true">
     <template #indicators="{ current, total }">
       <span>{{ current + 1 }} / {{ total }}</span>
     </template>
@@ -519,7 +519,7 @@
       <div class="footer-preview-img" @click="toggleImageViewer('core')">
         <img class="w-full h-full fit-contain" :src="generatorImg" alt="">
       </div>
-      <div class="footer-preview-text f-bold" @click="toggleImageViewer('core')">VIEW PREVIEW</div>
+      <div class="footer-preview-text f-bold" @click="toggleImageViewer('core')">OPEN PREVIEW</div>
       <div class="footer-preview-right" @click="openRoom">
         <SvgIcon name="pictures" />
       </div>
@@ -544,7 +544,6 @@ import type {IShopping} from "~/api/interface/shopping/shopping";
 import {ElMessage, type ElPopover} from "element-plus";
 import {getIsThumbsApi, productThumbsApi} from "~/api/modules/likes/likes";
 import {useAppStore} from "~/stores/modules/app";
-import {gen_path_obj} from "~/utils/product";
 import LoginWindow from "~/components/LoginWindow.vue";
 import {useUserStore} from "~/stores/modules/user";
 import {APP_HAS_SEEN_PAINT_GUIDE, COLLECTIONS_URL} from "~/config";
@@ -621,10 +620,11 @@ const pixel = ref({width: 0, height: 0}) // 最终尺寸
 const imgViewVisible = ref(false)
 
 const initShowGuide = () => {
-  if (process.server) return;
-  if (localStorage.getItem(APP_HAS_SEEN_PAINT_GUIDE) === 'true') return
-  beginGuide()
-  localStorage.setItem(APP_HAS_SEEN_PAINT_GUIDE, 'true')
+  // if (process.server) return;
+  // if (localStorage.getItem(APP_HAS_SEEN_PAINT_GUIDE) === 'true') return
+  // beginGuide()
+  // localStorage.setItem(APP_HAS_SEEN_PAINT_GUIDE, 'true')
+  return false
 }
 
 const {
@@ -738,6 +738,7 @@ const addToCart = (justAdd = true) => {
     productId: goodsDetail.value.id, // 商品ID
     techniqueId: goodsDetail.value.techniqueId, // 工艺编号
     title: goodsDetail.value.title, // 商品标题
+    slug: goodsDetail.value.slug,
     deliveryType: goodsDetail.value.deliveryType || '0', // 配送方式
     retailPrice: totalPrice.value, // 商品售价
     redeemPoints: goodsDetail.value.redeemPoints, // 商品积分

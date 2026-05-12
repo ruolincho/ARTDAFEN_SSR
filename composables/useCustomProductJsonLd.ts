@@ -98,7 +98,7 @@ export function useCustomProductJsonLd(
                 "@type": "Offer",  // 类型：报价
                 "priceCurrency": defaultCurrency, // 价格币种（ISO 4217）
                 "price": Number(p.retailPrice ?? 0).toFixed(2), // 价格（字符串/数字皆可；建议保留两位）
-                "availability": "https://schema.org/InStock",
+                "availability": String(p.status) === '0' ? "https://schema.org/InStock" : "https://schema.org/OutOfStock", // 根据 status 动态判断库存状态
                 "itemCondition": "https://schema.org/NewCondition",
                 "shippingDetails":[{"@id": "#shipping_global_standard"}], // 引用上面统一的运费对象
                 // "hasMerchantReturnPolicy": {"@id": "#return_policy_global"} // 引用上面统一的退货对象

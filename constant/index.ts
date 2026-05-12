@@ -497,7 +497,7 @@ export const CASE_LIST = [
 ]
 
 export const SOCIAL_LIST = [
-    {name: 'youtube', icon: 'Youtube', url: 'https://www.youtube.com/@artdafen'},
+    {name: 'youtube', icon: 'youtube', url: 'https://www.youtube.com/@artdafen'},
     {name: 'instagram', icon: 'instagram', url: 'https://www.instagram.com/art_dafen/'},
     {name: 'pinterest', icon: 'pinterest', url: 'https://www.pinterest.com/artdafen/'},
     {name: 'tiktok', icon: 'douyinjumuguanli', url: 'https://www.tiktok.com/@artdafencom'},

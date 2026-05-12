@@ -100,14 +100,12 @@ import {productThumbsApi} from "~/api/modules/likes/likes";
 import {COLLECTIONS_URL} from "~/config";
 import type {IArtists} from "~/api/interface/artists/artists";
 import {packQuery} from "~/composables/useQueryShort";
-import type {ObjectNode} from "~/types/global";
+import type {ObjectNode, General} from "~/types/global";
 import {useImage} from "~/composables/useImage";
 import type {IResultData} from "~/api/interface";
 import {TRADE_MODULE} from "~/api/helper/prefix";
 import {getArtistExploreApi} from "~/api/modules/artists/artists";
 import {useCurrencyStore} from "~/stores/modules/currency";
-import type {General} from "../../../types/global";
-import {computed} from "../../../.nuxt/imports";
 
 onMounted(() => {
   $bus.on('loginSuccess', () => {

@@ -65,7 +65,7 @@ declare namespace Dict {
     type AdType = '0' | '1'
     /* 形状 square: 广场 1:1, portrait: 肖像 3:4, landscape: 景观 4:3, panoramic: 全景 16:9, slim: 苗条 16:10 */
     type ShapeType = 'square' | 'portrait' | 'landscape' | 'panoramic' | 'slim'
-    /*商品状态, 0: For Sale, 1: Off tShe shelf, -1: Sale Out */
+    /*商品状态, 0: For Sale, 1: Off the shelf, -1: Sale Out */
     type ProductSaleStatus = '0' | '1' | '-1'
     /* 订阅类型 0: 已订阅, 1: 未订阅 */
     type SubscribeType = '0' | '1'

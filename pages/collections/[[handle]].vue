@@ -418,7 +418,7 @@
                 :init-param="initParam"
                 :request-auto="false"
                 :handle-current-change="handleCurrentChange"
-                :requestSuccess="executeScroll"
+                :dataCallback="executeScroll"
                 :scrollAuto="false"
             >
               <template #default="scope">
@@ -1431,25 +1431,54 @@ const paramsWatch = async () => {
 }
 
 // ⬇️ 定义滚动动作
-const executeScroll = () => {
-  if (!process.client) return
+const executeScroll = (data: any) => {
+  return new Promise((resolve) => {
+    // SSR 环境判断：如果是服务端，直接原样返回数据，不阻塞
+    if (!process.client) return resolve(data)
 
-  // 使用 requestAnimationFrame 确保在浏览器渲染下一帧时执行，防止 DOM 还没准备好
-  requestAnimationFrame(() => {
-    const anchor = document.getElementById('list-anchor')
+    // 使用 requestAnimationFrame 确保在浏览器渲染下一帧时执行
+    requestAnimationFrame(() => {
+      const anchor = document.getElementById('list-anchor')
 
-    if (anchor) {
-      // 偏移量计算
+      // 异常处理：如果没有找到锚点，直接放行数据，让列表正常渲染
+      if (!anchor) return resolve(data)
+
+      // 偏移量计算 (保留你原有的逻辑)
       const root = document.documentElement
       const cssValue = getComputedStyle(root).getPropertyValue('--header-height').trim()
       const headerOffset = parseInt(cssValue, 10) || 0
       const elementPosition = anchor.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      const targetTop = offsetPosition - 15
+      const currentTop = window.pageYOffset
+
+      // 边界优化：如果当前位置已经到达目标位置（误差小于2px），直接放行
+      // 因为如果位置没有变化，浏览器可能根本不会触发 scrollend 事件
+      if (Math.abs(targetTop - currentTop) < 2) return resolve(data)
+
+      // 定义滚动结束的监听函数
+      const handleScrollEnd = () => {
+        window.removeEventListener('scrollend', handleScrollEnd)
+        resolve(data) // 滚动结束，必须把数据交还给 Hook 去渲染 DOM！
+      }
+
+      // 绑定现代浏览器的滚动结束事件
+      window.addEventListener('scrollend', handleScrollEnd)
+
+      // 执行平滑滚动 (此时 DOM 还没更新，滚动的依然是旧数据)
       window.scrollTo({
-        top: offsetPosition - 15,
-        behavior: 'smooth' // 建议用 auto (瞬间)，配合骨架屏体验更好；smooth 可能会有视觉上的拉扯
+        top: targetTop,
+        behavior: 'smooth'
       })
-    }
+
+      // 兜底防御：防止某些旧浏览器或特殊情况下 scrollend 没触发导致请求卡死
+      // 800ms 基本上足够一次平滑滚动完成了，时间到了强制解锁渲染
+      setTimeout(() => {
+        window.removeEventListener('scrollend', handleScrollEnd)
+        resolve(data)
+      }, 800)
+    })
   })
 }
 
