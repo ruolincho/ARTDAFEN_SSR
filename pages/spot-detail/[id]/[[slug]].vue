@@ -2,7 +2,7 @@
   <!--规格选择-->
   <section>
     <div class="container-middle">
-      <div class="spu-wrapper row pt-md-50 pt-20">
+      <div class="spu-wrapper row md:pt-50 pt-20">
         <div class="col-md-6">
           <el-skeleton :loading="isSkeleton" animated>
             <template #template>
@@ -58,6 +58,7 @@
                     <swiper-slide
                       v-for="(banner, index) in goodsDetail?.banners"
                       :key="index"
+                      class="aspect-square cursor-pointer border-2  "
                     >
                       <div class="w-full h-full acea-row row-center-wrapper">
                         <img :src="imagePrefix(banner)" alt="banner"
@@ -67,7 +68,7 @@
                   </swiper>
                 </div>
               </ClientOnly>
-              <div class="p-20 f-bold-500 text-16 border-sm">
+              <div class="p-20 font-500 text-16 border">
                 <p>Product Parameter</p>
                 <p class="mt-10" v-for="(val, key) in selectedCombination">{{ key }}: {{ val }}</p>
                 <template v-if="Object.keys(goodsDetail.attributes).length">
@@ -79,7 +80,7 @@
                   </template>
                 </template>
               </div>
-              <!--              <div class="border-t-sm p-20 text-16 f-bold-500">-->
+              <!--              <div class="border-t  p-20 text-16 font-500">-->
               <!--                All framing includes free canvas stretching, mounting & wall hooks.Your framed-->
               <!--                oil painting will arrive to your door ready to hang on your wall.-->
               <!--              </div>-->
@@ -118,40 +119,40 @@
               </div>
             </template>
             <div class="spu-spec">
-              <div class="acea-row row-center-wrapper border-t-md border-gray-700">
-                <span class="flex-1 border-r-md border-gray-700 py-20 text-20 f-bold-500">{{ goodsDetail.title }}</span>
+              <div class="acea-row row-center-wrapper border-t-2  border-primary">
+                <span class="flex-1 border-r-2  border-primary py-20 text-20 font-500">{{ goodsDetail.title }}</span>
                 <SvgIcon
                     :name="isThumbs ? 'follow-fill' : 'follow'"
                     class="text-24 px-20 cursor-pointer" :class="{'text-error': isThumbs}"
                     @click.prevent.stop="productThumbs()"
                 />
               </div>
-              <div class="text-14 cursor-pointer text-underline" @click="handleClickArtist">
+              <div class="text-14 cursor-pointer underline" @click="handleClickArtist">
                 by:{{ goodsDetail.creator?.name }}
               </div>
               <div class="sku-wrapper" v-for="(item, index1) in mySpecsList" :key="index1">
-                <div class="f-bold text-20 py-24">{{ item.name }}</div>
+                <div class="font-bold text-20 py-24">{{ item.name }}</div>
                 <div class="row sku-list">
                   <div class="col-md-3 col-4" v-for="(item_value, index2) in item.list" :key="index2">
                     <div
-                      class="sku-item border-sm cursor-pointer"
+                      class="sku-item border  cursor-pointer"
                       :class="{
                     'sku-disabled': !item_value.isDisabled,
                     'sku-selected': selectArr[index1] == item_value.val,
-                    'border-gray-700': selectArr[index1] == item_value.val,
+                    'border-primary': selectArr[index1] == item_value.val,
                   }"
                       @click="handleSelectSpecs(item_value, index1, index2, item.name)"
                     >
-                      <div class="sku-img aspect-ratio" v-if="item_value.img">
-                        <img class="w-full h-full fit-cover" :src="imagePrefix(item_value.img)" :alt="item_value.val"/>
+                      <div class="sku-img aspect-square" v-if="item_value.img">
+                        <img class="w-full h-full object-cover" :src="imagePrefix(item_value.img)" :alt="item_value.val"/>
                       </div>
-                      <p class="line1 my-10 mx-20 text-center text-18">{{ item_value.val }}</p>
+                      <p class="truncate my-10 mx-20 text-center text-18">{{ item_value.val }}</p>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="p-20 mt-20 acea-row row-right text-20 bg-gray-100">
-                <p class="f-bold">Total：<span
+                <p class="font-bold">Total：<span
                   class="text-26 text-error">{{ formatToCurrency(currentPrice || 0) }}</span></p>
               </div>
               <el-button class="w-full add-cart__button" size="large" type="danger" @click="addToCart"
@@ -165,17 +166,17 @@
   </section>
 
   <!--创作者-->
-  <section class="mt-lg-60 mt-sm-20" v-if="goodsDetail.creator">
+  <section class="lg:mt-60 sm:mt-20" v-if="goodsDetail.creator">
     <div class="container-middle">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">About the Artist</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">About the Artist</h1>
       <div class="artist-box acea-row gap-base">
         <div class="avatar" v-if="goodsDetail.creator?.portrait">
           <img class="w-full" :src="imagePrefix(goodsDetail.creator?.portrait)" alt="avatar">
         </div>
         <div class="info flex-1 text-gray-600">
-          <p class="text-16 f-bold-500">{{ goodsDetail.creator?.timeline || '--' }}</p>
-          <p class="text-20 f-bold-500 text-gray-700 my-10">{{ goodsDetail.creator?.name }}</p>
-          <!--          <p class="text-16 f-bold-500 my-10">19th-Century</p>-->
+          <p class="text-16 font-500">{{ goodsDetail.creator?.timeline || '--' }}</p>
+          <p class="text-20 font-500 text-gray-700 my-10">{{ goodsDetail.creator?.name }}</p>
+          <!--          <p class="text-16 font-500 my-10">19th-Century</p>-->
           <p class="text-18">{{ goodsDetail.creator?.intro }}</p>
         </div>
       </div>
@@ -183,9 +184,9 @@
   </section>
 
   <!--产品详情-->
-  <section class="sec-desc mt-lg-60 mt-sm-20" :class="{ open: isOpenDesc }" v-if="goodsDetail?.details?.length">
+  <section class="sec-desc lg:mt-60 sm:mt-20" :class="{ open: isOpenDesc }" v-if="goodsDetail?.details?.length">
     <div class="container-middle">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Description</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Product Description</h1>
       <div class="img-box">
         <img v-for="item in goodsDetail.details" :key="item" class="w-full" :src="imagePrefix(item)" alt="detail">
       </div>
@@ -199,9 +200,9 @@
   </section>
 
   <!-- 相关推荐-->
-  <section class="mt-lg-60 mt-sm-20" v-if="relatedList.length">
+  <section class="lg:mt-60 sm:mt-20" v-if="relatedList.length">
     <div class="container-middle">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Related</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Product Related</h1>
       <ClientOnly>
         <div class="recommend-swiper">
           <swiper
@@ -221,13 +222,13 @@
           >
             <swiper-slide v-for="item in relatedList" :key="item.id">
               <NuxtLink class="explore-item block" :to="productLink(item)" target="_blank">
-                <div class="aspect-ratio">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title"/>
+                <div class="aspect-square">
+                  <img class="w-full h-full object-cover" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title"/>
                 </div>
-                <p class="line1 text-14 my-8">{{ item.title }}</p>
+                <p class="truncate text-14 my-8">{{ item.title }}</p>
                 <p class="text-12">
-                  <span class="text-16 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
-                  <span class="text-gray-400 text-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
+                  <span class="text-16 font-bold">{{ formatToCurrency(item.retailPrice) }}</span>
+                  <span class="text-gray-400 line-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
                 </p>
               </NuxtLink>
             </swiper-slide>
@@ -241,9 +242,9 @@
   </section>
 
   <!-- FQ4-->
-  <section class="mt-lg-60 mt-sm-20">
+  <section class="lg:mt-60 sm:mt-20">
     <div class="container-middle">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Frequently Asked Questions</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Frequently Asked Questions</h1>
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item v-for="subItem in getFaqByQuote('shopping')" :title="subItem.title" :name="subItem.name"
                           :key="subItem.name">
@@ -659,9 +660,6 @@ useHead({
 
       .thumb-swiper {
         .swiper-slide {
-          aspect-ratio: 1 / 1;
-          cursor: pointer;
-          border: var(--border-width-md) solid var(--color-gray-200);
 
           &.swiper-slide-thumb-active {
             border-color: var(--color-primary);

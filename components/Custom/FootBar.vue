@@ -8,10 +8,10 @@
       <div class="foot-inner">
         <div class="back-btn acea-row row-middle cursor-pointer" @click="handleBack">
           <SvgIcon name="left" class="text-20" />
-          <span class="text-20 f-bold">Back</span>
+          <span class="text-20 font-bold">Back</span>
         </div>
         <div class="foot-center">
-          <div class="foot-text text-20 f-bold text-center line1">Physically Hand-painted by Artists (Zero Printing)
+          <div class="foot-text text-20 font-bold text-center truncate">Physically Hand-painted by Artists (Zero Printing)
           </div>
           <el-button
               class="foot-btn" type="primary" size="large"

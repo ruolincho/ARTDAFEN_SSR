@@ -1,20 +1,20 @@
 <template>
   <section>
     <div class="container-middle">
-      <div class="spu-wrapper acea-row nowrap gap-column-base pt-md-50 pt-sm-20">
+      <div class="spu-wrapper acea-row nowrap gap-column-base md:pt-50 sm:pt-20">
         <div class="spu-preview acea-row nowrap row-column">
           <div class="py-15">
             <div class="acea-row row-center-wrapper nowrap gap-column-base">
               <SvgIcon name="anquan" class="text-50 text-gold" />
-              <p class="text-26 f-bold-500 text-gray-700">Your Privacy is Paramount.Images are securely deleted after 3 days.</p>
+              <p class="text-26 font-500 text-gray-700">Your Privacy is Paramount.Images are securely deleted after 3 days.</p>
             </div>
           </div>
           <div class="flex-1 bg-gray-100 acea-row row-center-wrapper">
-            <div class="preview-box aspect-ratio acea-row row-center-wrapper">
+            <div class="preview-box aspect-square acea-row row-center-wrapper">
               <img :src="imagePrefix(productAlbum)" alt="" @click="imgViewVisible = true" v-if="productAlbum">
               <div class="text-center py-60" v-else>
                 <SvgIcon name="empty" class="text-50" />
-                <p class="text-20 f-bold mt-20">No Data</p>
+                <p class="text-20 font-bold mt-20">No Data</p>
                 <p class="text-14 my-20">If you can't find the picture you requested, please check the image ID or try
                   again later.</p>
                 <el-button size="large" type="primary" @click="_getProductAlbum">TRY AGAIN</el-button>
@@ -28,13 +28,13 @@
            <img class="" :src="imagePrefix('/static/artdafen/photo-title.webp')" alt="title">
          </div>
           <div class="flex-1">
-            <img class="w-full h-full fit-cover" :src="imagePrefix('/static/artdafen/photo-info.webp')" alt="info">
+            <img class="w-full h-full object-cover" :src="imagePrefix('/static/artdafen/photo-info.webp')" alt="info">
           </div>
           <div class="btn mt-15" @click="goProduct">ORDER YOUR CUSTOM OIL PAINTING</div>
         </div>
       </div>
 
-      <div class="process-wrapper pt-md-40 pt-20">
+      <div class="process-wrapper md:pt-40 pt-20">
         <img class="img" :src="imagePrefix('/static/artdafen/photo-process.webp')" alt="process">
       </div>
     </div>

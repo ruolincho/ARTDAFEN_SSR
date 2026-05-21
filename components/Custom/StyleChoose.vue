@@ -1,7 +1,7 @@
 <template>
-  <div class="text-center my-lg-40 my-30">
+  <div class="text-center lg:my-40 my-30">
     <h2 class="text-50">CHOOSE YOUR FAVORITE STYLE</h2>
-    <p class="mt-20 text-gray-600 text-20 f-bold-500">
+    <p class="mt-20 text-gray-600 text-20 font-500">
       Discover the perfect look for every moment. From soft aesthetics to dramatic fantasy, transform your photos
       with unique textures designed to inspire.
     </p>
@@ -58,7 +58,7 @@
     </div>
     <div class="text-center py-60" v-show="!loading && !themeOption?.children?.length">
       <SvgIcon name="empty" class="text-50" />
-      <p class="text-20 f-bold mt-20">No Data</p>
+      <p class="text-20 font-bold mt-20">No Data</p>
       <p class="text-14 my-20">No data found, please check the query or try again later.</p>
     </div>
   </div>

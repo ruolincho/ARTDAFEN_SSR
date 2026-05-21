@@ -6,28 +6,28 @@
   <section class="sec-wallpaper">
     <section class="sec-about">
       <div class="part-box acea-row">
-        <div class="part-large border-r-sm border-b-sm border-gray-700">
+        <div class="part-large border-r border-b  border-primary">
           <div class="slogan acea-row row-center-wrapper row-column">
-            <h1 class="text-white f-bold">ABOUT<br/>ART<br/>DAFEN</h1>
+            <h1 class="text-white font-bold">ABOUT<br/>ART<br/>DAFEN</h1>
           </div>
         </div>
-        <div class="part-auto border-r-sm border-b-sm border-gray-700 ">
+        <div class="part-auto border-r border-b  border-primary rounded-sm">
           <div class="slogan2 w-full h-full acea-row row-column row-center-wrapper">
             <p class="text-30">Since 1989 · Reimagined 2020</p>
             <p class="text-30">Masterpieces for millions, not millions for a masterpiece.</p>
           </div>
         </div>
-        <div class="part-small border-b-sm border-gray-700"></div>
+        <div class="part-small border-b  border-primary"></div>
       </div>
     </section>
 
     <section class="sec-history">
       <div class="part-box acea-row">
-        <div class="part-large border-r-sm border-b-sm border-gray-700">
+        <div class="part-large border-r border-b  border-primary rounded-sm">
           <div class="intro-box acea-row row-column">
             <img class="w-full" :src="imagePrefix('/static/artdafen/about-1.webp')" alt="Dafeng Oil Painting Village"
             >
-            <div class="p-box text-30 text-white f-bold-200 flex-1 acea-row row-column row-center-wrapper">
+            <div class="p-box text-30 text-white font-200 flex-1 acea-row row-column row-center-wrapper">
               <p style="line-height: 1.7">
                 Operated proudly by YAGENE INTERNATIONAL ART CO., LIMITED, <strong>Artdafen</strong> is your direct link to <strong>Dafen Village</strong>, the world’s leading center for art. Building upon an artistic heritage that dates back to 1989, our modern mission remains unchanged: offering strict "<strong>Museum-Quality Reproductions</strong>" to art lovers worldwide.
                 By <strong>eliminating all intermediaries</strong>, we guarantee <strong>authentic, handcrafted artistry</strong> at true <strong>source-factory value</strong>.
@@ -37,7 +37,7 @@
             >
           </div>
         </div>
-        <div class="part-auto border-r-sm border-b-sm border-g  ray-700">
+        <div class="part-auto border-r border-b  border-primary">
           <div class="history-list">
             <div class="history-item" v-for="(item, index) in HISTORY_LIST" :key="item.id" :data-index="index"
             >
@@ -46,22 +46,22 @@
               </div>
               <div class="year-box">
                 <div class="circle"></div>
-                <div class="text-30 f-bold">{{ item.year }}</div>
+                <div class="text-30 font-bold">{{ item.year }}</div>
               </div>
               <div class="content-box">
-                <p class="text-26 f-bold">{{ item.title }}</p>
+                <p class="text-26 font-bold">{{ item.title }}</p>
                 <p class="text-16 mt-5 flex-1">{{ item.content }}</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="part-small border-r-sm border-b-sm border-gray-700"></div>
+        <div class="part-small border-r border-b  border-primary"></div>
       </div>
     </section>
 
     <section class="sec-relax">
       <div class="part-box acea-row">
-        <div class="part-auto border-r-sm border-b-sm border-gray-700 acea-row row-center-wrapper">
+        <div class="part-auto border-r border-b  border-primary acea-row row-center-wrapper">
           <div class="w-full">
             <div class="content-box acea-row row-between-wrapper">
               <p class="text-30 text-center">
@@ -91,9 +91,9 @@
             </div>
           </div>
         </div>
-        <div class="part-large border-r-sm border-b-sm border-gray-700">
+        <div class="part-large border-r border-b  border-primary">
           <div class="intro-box acea-row row-column">
-            <div class="p-box text-30 text-white f-bold-200 flex-1 acea-row row-column row-center-wrapper">
+            <div class="p-box text-30 text-white font-200 flex-1 acea-row row-column row-center-wrapper">
               <p style="line-height: 1.7">
                 Premium Materials & Exquisite Craftsmanship We create on <strong>400gsm heavy-duty Linen Canvas</strong>
                 using vibrant, <strong>Eco-friendly paints</strong> for archival quality. Each solid wood frame
@@ -112,9 +112,9 @@
 
     <section class="sec-reality">
       <div class="part-box acea-row">
-        <div class="part-large border-r-sm border-b-sm border-gray-700">
+        <div class="part-large border-r border-b  border-primary">
           <div class="intro-box acea-row row-column">
-            <div class="p-box text-30 text-white f-bold-200 flex-1 acea-row row-column row-center-wrapper">
+            <div class="p-box text-30 text-white font-200 flex-1 acea-row row-column row-center-wrapper">
               <p style="line-height: 1.7">
                 <strong>Real Studio. Real People. Real Art.</strong> We refuse to use generic stock photos. What you see
                 here is our actual production floor in Dafen Village—the heartbeat of our brand. We are not just a
@@ -125,7 +125,7 @@
             </div>
           </div>
         </div>
-        <div class="part-auto border-r-sm border-b-sm border-gray-700 acea-row row-center-wrapper">
+        <div class="part-auto border-r border-b  border-primary acea-row row-center-wrapper">
           <div class="content-box m-10">
             <div class="acea-row row-center">
               <p class="text-24">Multiple dedicated studios ensure fast, meticulous framing for any type of art.</p>
@@ -138,13 +138,13 @@
             <img class="w-full" :src="imagePrefix('/static/artdafen/about-6.webp')" alt="">
           </div>
         </div>
-        <div class="part-small border-b-sm border-gray-700"></div>
+        <div class="part-small border-b  border-primary"></div>
       </div>
     </section>
 
     <section class="sec-honor">
       <div class="part-box acea-row">
-        <div class="part-auto border-r-sm border-b-sm border-gray-700 acea-row row-center-wrapper">
+        <div class="part-auto border-r border-b  border-primary acea-row row-center-wrapper">
           <div class="honor-swiper-wrapper">
             <swiper
                 class="honor-swiper"
@@ -167,9 +167,9 @@
             </div>
           </div>
         </div>
-        <div class="part-large border-r-sm border-b-sm border-gray-700">
+        <div class="part-large border-r border-b  border-primary">
           <div class="intro-box acea-row row-column">
-            <div class="p-box text-30 text-white f-bold-200 flex-1 acea-row row-column row-center-wrapper">
+            <div class="p-box text-30 text-white font-200 flex-1 acea-row row-column row-center-wrapper">
               <p style="line-height: 1.7">
                 As a <strong>registered art enterprise</strong> operating within Dafen’s <strong>National Demonstration Base</strong>, we pride ourselves
                 on elevating industry standards. We lead through <strong>transparent business practices</strong>, clear customer
@@ -180,14 +180,14 @@
             </div>
           </div>
         </div>
-        <div class="part-small border-b-sm border-gray-700"></div>
+        <div class="part-small border-b  border-primary"></div>
       </div>
 
     </section>
   </section>
 
   <section class="sec-artists">
-    <h2 class="text-50 f-bold-500 text-center mb-lg-80 mb-40 text-white">WHO WE ARE</h2>
+    <h2 class="text-50 font-500 text-center lg:mb-80 mb-40 text-white">WHO WE ARE</h2>
     <div class="artists-swiper-wrapper">
       <swiper
           class="artists-swiper"
@@ -200,7 +200,7 @@
         <swiper-slide v-for="(item, index) in ARTISTS_LIST" :key="item.id" :lazy="true">
           <div class="artists-item acea-row">
             <div class="p-img">
-              <img class="w-full h-full fit-cover" :src="imagePrefix(item.portrait)" :alt="item.name"/>
+              <img class="w-full h-full object-cover" :src="imagePrefix(item.portrait)" :alt="item.name"/>
             </div>
             <div class="p-cont text-white text-center acea-row row-center-wrapper">
               <div>
@@ -219,7 +219,7 @@
   </section>
 
   <section class="sec-partner">
-    <h2 class="text-50 f-bold-500 text-center mb-lg-80 mb-40">INTERNATIONAL PARTNERS</h2>
+    <h2 class="text-50 font-500 text-center lg:mb-80 mb-40">INTERNATIONAL PARTNERS</h2>
     <div class="explore-swiper-wrapper">
       <swiper
           :modules="modules"
@@ -236,12 +236,12 @@
       >
         <swiper-slide v-for="(item, index) in PARTNER_LIST" :key="item.id" :lazy="true">
           <div
-              class="explore-item text-center p-10 border-sm border-gray-200 cursor-pointer select-none"
+              class="explore-item text-center p-10 border   cursor-pointer select-none"
           >
-            <div class="aspect-ratio">
-              <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
+            <div class="aspect-square">
+              <img class="w-full h-full object-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
             </div>
-            <p class="line2 text-14 mt-15" style="word-break: break-word; min-height: 34px;">{{ item.title }}</p>
+            <p class="line-clamp-2 text-14 mt-15 break-words" style="min-height: 34px;">{{ item.title }}</p>
           </div>
         </swiper-slide>
       </swiper>

@@ -3,7 +3,7 @@
 
     <p class="acea-row row-middle mb-15">
       <span class="text-16">Size: {{ sizeOption?.name }}</span>
-      <SvgIcon name="info-fill" class="text-20 ml-8 cursor-pointer" @click="openNotice" />
+      <SvgIcon name="info-fill" class="ml-8 cursor-pointer" @click="openNotice" style="font-size: 20px;" />
     </p>
 
     <div :id="tourId">
@@ -69,7 +69,7 @@ const openNotice = () => {
       h('span', null, 'To order a custom size, '),
       h('a', {
         href: `mailto:${CONTACT_EMAIL}`,
-        class: 'text-underline cursor-pointer'
+        class: 'underline cursor-pointer'
       }, 'click here'),
       h('span', null, '. Our artists will create a painting in any size you require.'),
     ]),

@@ -30,7 +30,7 @@
                 <img
                     :src="getPcSrcset(item.img).src"
                     :alt="item.title"
-                    class="w-full h-auto fit-cover"
+                    class="w-full h-auto object-cover"
                     loading="lazy"
                 />
               </picture>
@@ -40,7 +40,7 @@
           <template v-if="item.type === '1'">
             <div class="video-box w-full h-full">
               <video
-                  class="w-full h-full fit-cover"
+                  class="w-full h-full object-cover"
                   :src="imagePrefix(item.media)"
                   :poster="imagePrefix(item.img)"
                   :autoplay="true"
@@ -59,9 +59,9 @@
   <!-- MUSEUM-QUALITY -->
   <section class="sec-quality">
     <div class="container">
-      <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+      <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
         <h2 class="text-50">MUSEUM-QUALITY OIL PAINTING REPRODUCTIONS</h2>
-        <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">
+        <p class="mt-20 text-gray-600 text-16 font-500 capitalize" style="max-width: 608px; margin: auto">
           Bring the museum home
         </p>
       </div>
@@ -102,7 +102,7 @@
               <div class="quality-item">
                 <SvgIcon name="palette" class="text-60 mr-10" />
                 <p class="" style="line-height: 2">
-                  <span class="f-bold text-16">Dafen Origin: </span>
+                  <span class="font-bold text-16">Dafen Origin: </span>
                   <span class="text-14">Authentic craftsmanship from the global art hub.</span>
                 </p>
               </div>
@@ -111,7 +111,7 @@
               <div class="quality-item">
                 <SvgIcon name="edit-document" class="text-60 mr-10" />
                 <p class="" style="line-height: 2">
-                  <span class="f-bold text-16">Master Artists: </span>
+                  <span class="font-bold text-16">Master Artists: </span>
                   <span class="text-14">Created by painters with 20+ years of expertise.</span>
                 </p>
               </div>
@@ -120,7 +120,7 @@
               <div class="quality-item">
                 <SvgIcon name="draw" class="text-60 mr-10" />
                 <p class="" style="line-height: 2">
-                  <span class="f-bold text-16">Zero Prints: </span>
+                  <span class="font-bold text-16">Zero Prints: </span>
                   <span class="text-14">100% hand-painted with rich, authentic texture.</span>
                 </p>
               </div>
@@ -129,7 +129,7 @@
               <div class="quality-item">
                 <SvgIcon name="scroll-document" class="text-60 mr-10" />
                 <p class="" style="line-height: 2">
-                  <span class="f-bold text-16">Archival Quality: </span>
+                  <span class="font-bold text-16">Archival Quality: </span>
                   <span class="text-14">Eco-friendly paints on 400gsm linen canvas.</span>
                 </p>
               </div>
@@ -156,18 +156,18 @@
   <!--SHOP BY VIBE-->
   <section class="sec-elevating">
     <div class="container">
-      <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+      <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
         <h2 class="text-50">SHOP BY VIBE</h2>
-        <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">
+        <p class="mt-20 text-gray-600 text-16 font-500 capitalize" style="max-width: 608px; margin: auto">
           Find the aesthetic that speaks to your soul. From Minimalist calm to Dopamine energy, explore curated collections tailored to every mood and atmosphere.
         </p>
       </div>
       <el-skeleton :loading="isSkeleton" animated :count="appStore.isPc ? 3 : 1" class="row gap-row-base">
         <template #template>
           <div class="col-sm-4 col-12">
-            <el-skeleton-item variant="image" class="w-full h-auto aspect-ratio-3_4" />
+            <el-skeleton-item variant="image" class="w-full h-auto aspect-3/4" />
             <div class="text-center">
-              <el-skeleton-item variant="p" class="mt-20 w-half" />
+              <el-skeleton-item variant="p" class="mt-20 object-contain" />
             </div>
           </div>
         </template>
@@ -178,10 +178,10 @@
               v-aos="{ name: 'fade-up', delay: index % 3 * 100}"
           >
             <NuxtLink class="block" :to="item?.url || '/'">
-              <div class="overflow-hidden bg-gray-100 aspect-ratio-3_4">
+              <div class="overflow-hidden bg-gray-100 aspect-3/4">
                 <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
-              <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
+              <p class="text-center text-30 font-500 mt-20">{{ item.name }}</p>
             </NuxtLink>
           </div>
         </div>
@@ -197,10 +197,10 @@
         >
           <swiper-slide v-for="item in disVibeData" :key="item.id" style="width: 80%;">
             <NuxtLink class="block" :to="item?.url || '/'">
-              <div class="overflow-hidden bg-gray-100 aspect-ratio-3_4">
+              <div class="overflow-hidden bg-gray-100 aspect-3/4">
                 <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
-              <p class="text-center text-30 f-bold-500 mt-20">{{ item.name }}</p>
+              <p class="text-center text-30 font-500 mt-20">{{ item.name }}</p>
             </NuxtLink>
           </swiper-slide>
         </swiper>
@@ -211,9 +211,9 @@
   <!--OFFICIAL-->
   <!--  <section class="sec-welcome">
       <div class="container">
-        <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+        <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
           <h1 class="text-50">ARTDAFEN.COM</h1>
-          <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">
+          <p class="mt-20 text-gray-600 text-16 font-500 capitalize" style="max-width: 608px; margin: auto">
             Since 1989 · Reimagined 2020
           </p>
         </div>
@@ -235,13 +235,13 @@
               v-aos="{ name: 'fade-up', delay: index * 100}"
             >
               <div class="cursor-pointer" @click="jumpToUrl(item.url)">
-                <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
+                <div class="border   overflow-hidden bg-gray-200">
                   <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name"/>
                 </div>
                 <div class="content-wrapper p-10 bg-gray-100">
-                  <p class="line1 text-28 f-bold">{{ item.name }}</p>
-                  <p class="line2 text-16 my-10">{{ item.title }}</p>
-                  <p class="text-16 f-bold-500 text-underline">SHOP NOW</p>
+                  <p class="truncate text-28 font-bold">{{ item.name }}</p>
+                  <p class="line-clamp-2 text-16 my-10">{{ item.title }}</p>
+                  <p class="text-16 font-500 underline">SHOP NOW</p>
                 </div>
               </div>
             </div>
@@ -255,9 +255,9 @@
     <div class="container">
       <NuxtLink class="make-wrapper" v-aos="'fade-up'" :to="`/custom-paint/${ArtCodeEnum.Painting}`"
                 @click="goCustomPaint">
-        <div class="make-box flex-1 bg-gray-100 p-md-40 p-20">
-          <p class="text-18 f-bold">MAKE YOUR MEMORIES LAST</p>
-          <p class="text-60 f-bold my-20">Photo To Art</p>
+        <div class="make-box flex-1 bg-gray-100 md:p-40 p-20">
+          <p class="text-18 font-bold">MAKE YOUR MEMORIES LAST</p>
+          <p class="text-60 font-bold my-20">Photo To Art</p>
           <p class="text-22">Easily Transform Life's Real Moments Into A <br> Masterpiece — Made Just For You.</p>
         </div>
         <NuxtImg
@@ -286,7 +286,7 @@
           <div class="problem-list row">
             <div class="col-6">
               <div class="problem-item">
-                <p class="text-20 f-bold-500">Custom Frame Selection</p>
+                <p class="text-20 font-500">Custom Frame Selection</p>
                 <p class="text-16 text-gray-600 mt-20">
                   Choose from an extensive range of frame styles, finishes, and sizes to complement your décor
                   perfectly.
@@ -295,7 +295,7 @@
             </div>
             <div class="col-6">
               <div class="problem-item">
-                <p class="text-20 f-bold-500">Real-Time Scene Swap</p>
+                <p class="text-20 font-500">Real-Time Scene Swap</p>
                 <p class="text-16 text-gray-600 mt-20">
                   Visualize your artwork instantly in living rooms, bedrooms, or gallery settings to find the perfect
                   fit.
@@ -304,7 +304,7 @@
             </div>
             <div class="col-6">
               <div class="problem-item">
-                <p class="text-20 f-bold-500">True-Scale Visualization</p>
+                <p class="text-20 font-500">True-Scale Visualization</p>
                 <p class="text-16 text-gray-600 mt-20">
                   See your artwork at true scale alongside furniture and décor for precise sizing.
                 </p>
@@ -312,7 +312,7 @@
             </div>
             <div class="col-6">
               <div class="problem-item">
-                <p class="text-20 f-bold-500">Interactive Resize & Crop</p>
+                <p class="text-20 font-500">Interactive Resize & Crop</p>
                 <p class="text-16 text-gray-600 mt-20">
                   Easily resize or crop your artwork without losing quality, ensuring it’s just right.
                 </p>
@@ -320,7 +320,7 @@
             </div>
             <div class="col-6">
               <div class="problem-item">
-                <p class="text-20 f-bold-500">Dynamic Style Filters</p>
+                <p class="text-20 font-500">Dynamic Style Filters</p>
                 <p class="text-16 text-gray-600 mt-20">
                   Experiment with matting, wall colors, and lighting presets to achieve perfect aesthetic harmony.
                 </p>
@@ -328,7 +328,7 @@
             </div>
             <div class="col-6">
               <div class="problem-item">
-                <p class="text-20 f-bold-500">One-Click Save & Order</p>
+                <p class="text-20 font-500">One-Click Save & Order</p>
                 <p class="text-16 text-gray-600 mt-20">
                   Create shareable mock-ups and place your order seamlessly in just one click.
                 </p>
@@ -343,19 +343,19 @@
   <!--WELCOME-->
   <section class="sec-welcome">
     <div class="container">
-      <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+      <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
         <h2 class="text-50">LIFESTYLE SPACE</h2>
-        <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">
+        <p class="mt-20 text-gray-600 text-16 font-500 capitalize" style="max-width: 608px; margin: auto">
           Oil Painting Art Village
         </p>
       </div>
       <el-skeleton :loading="isSkeleton" animated :count="appStore.isPc ? 4 : 1" class="row gap-row-base">
         <template #template>
           <div class="col-md-3 col-sm-6 col-12">
-            <el-skeleton-item variant="image" class="w-full h-auto aspect-ratio-3_4" />
+            <el-skeleton-item variant="image" class="w-full h-auto aspect-3/4" />
             <div class="py-10">
               <el-skeleton-item variant="h1"/>
-              <el-skeleton-item variant="p" class="my-10 w-half" />
+              <el-skeleton-item variant="p" class="my-10 object-contain" />
             </div>
           </div>
         </template>
@@ -367,13 +367,13 @@
               v-aos="{ name: 'fade-up', delay: index * 100}"
           >
             <NuxtLink class="block" :to="item.url">
-              <div class="overflow-hidden bg-gray-100 aspect-ratio-3_4">
+              <div class="overflow-hidden bg-gray-100 aspect-3/4">
                 <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
-                <p class="line1 text-28 f-bold">{{ item.name }}</p>
-                <p class="line2 text-16 my-10">{{ item.title }}</p>
-                <p class="text-16 f-bold-500 text-underline">SHOP NOW</p>
+                <p class="truncate text-28 font-bold">{{ item.name }}</p>
+                <p class="line-clamp-2 text-16 my-10">{{ item.title }}</p>
+                <p class="text-16 font-500 underline">SHOP NOW</p>
               </div>
             </NuxtLink>
           </div>
@@ -390,13 +390,13 @@
         >
           <swiper-slide v-for="item in roomData" :key="item.id" style="width: 80%;">
             <NuxtLink class="block" :to="item.url">
-              <div class="overflow-hidden bg-gray-100 aspect-ratio-3_4">
+              <div class="overflow-hidden bg-gray-100 aspect-3/4">
                 <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy />
               </div>
               <div class="content-wrapper p-10 bg-gray-100">
-                <p class="line1 text-28 f-bold">{{ item.name }}</p>
-                <p class="line2 text-16 my-10">{{ item.title }}</p>
-                <p class="text-16 f-bold-500 text-underline">SHOP NOW</p>
+                <p class="truncate text-28 font-bold">{{ item.name }}</p>
+                <p class="line-clamp-2 text-16 my-10">{{ item.title }}</p>
+                <p class="text-16 font-500 underline">SHOP NOW</p>
               </div>
             </NuxtLink>
           </swiper-slide>
@@ -406,17 +406,17 @@
   </section>
 
   <!--100 MOST ART-->
-  <section class="sec-explore mt-lg-40 mt-30">
+  <section class="sec-explore lg:mt-40 mt-30">
     <div class="container">
-      <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+      <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
         <h2 class="text-50">THE 100 MOST POPULAR WORKS OF ART</h2>
       </div>
       <el-skeleton :loading="isSkeleton" animated :count="appStore.isPc ? 12 : 6" class="row gap-row-base">
         <template #template>
           <div class="col-lg-2 col-md-average col-sm-3 col-xs-4 col-6">
             <div class="text-center w-full">
-              <el-skeleton-item variant="image" class="w-full h-auto aspect-ratio" />
-              <el-skeleton-item variant="text" class="mt-15 w-half"/>
+              <el-skeleton-item variant="image" class="w-full h-auto aspect-square" />
+              <el-skeleton-item variant="text" class="mt-15 object-contain"/>
             </div>
           </div>
         </template>
@@ -427,18 +427,18 @@
                   class="product-item"
                   v-aos="{ name: 'fade-up', delay: index % 6 * 100}"
               >
-                <NuxtLink class="img-wrapper bg-gray-200 aspect-ratio block overflow-hidden" :to="productLink(item)">
+                <NuxtLink class="img-wrapper bg-gray-200 aspect-square block overflow-hidden" :to="productLink(item)">
                   <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`" lazy />
                 </NuxtLink>
                 <div class="content-wrapper">
-                  <NuxtLink class="my-10 line1 block text-hover" :to="handleClickArtist(item.creator)">
-                    <span class="text-16 f-bold">{{ item.creator?.name }}</span>
+                  <NuxtLink class="my-10 truncate block text-hover" :to="handleClickArtist(item.creator)">
+                    <span class="text-16 font-bold">{{ item.creator?.name }}</span>
                     <SvgIcon name="right" />
                   </NuxtLink>
-                  <NuxtLink class="line2 text-14 block text-hover" :to="productLink(item)">{{ item.title }}</NuxtLink>
+                  <NuxtLink class="line-clamp-2 text-14 block text-hover" :to="productLink(item)">{{ item.title }}</NuxtLink>
                   <p class="my-10">
-                    <span class="text-16 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
-                    <span class="text-gray-400 text-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
+                    <span class="text-16 font-bold">{{ formatToCurrency(item.retailPrice) }}</span>
+                    <span class="text-gray-400 line-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
                   </p>
                 </div>
               </div>
@@ -446,7 +446,7 @@
           </template>
         </div>
       </el-skeleton>
-      <div class="acea-row row-center-wrapper py-lg-40 py-30" v-aos="'fade-up'">
+      <div class="acea-row row-center-wrapper lg:py-40 py-30" v-aos="'fade-up'">
         <NuxtLink :to="COLLECTIONS_URL + '/curator\'s-choice' + '?q=' + packQuery({MENU_ID: '2000014'})">
           <el-button class="home-button" plain>SEE MORE</el-button>
         </NuxtLink>
@@ -457,9 +457,9 @@
   <!-- WHY CHOOSE ARTDAFEN? -->
   <section class="sec-choose">
     <div class="container">
-      <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+      <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
         <h2 class="text-50">WHY CHOOSE ARTDAFEN?</h2>
-        <p class="mt-20 text-gray-600 text-16 f-bold-500 text-capitalize" style="max-width: 608px; margin: auto">
+        <p class="mt-20 text-gray-600 text-16 font-500 capitalize" style="max-width: 608px; margin: auto">
           Crafted stroke by stroke by real artists. No printing involved
         </p>
       </div>
@@ -471,11 +471,11 @@
             v-for="(item, index) in WHY_CHOOSE_LIST" :key="item.title"
         >
           <div class="text-center">
-            <div class="aspect-ratio-16_9 overflow-hidden bg-gray-100">
+            <div class="aspect-video overflow-hidden bg-gray-100">
               <el-image class="w-full h-full" fit="cover" :src="imagePrefix(item.img)" :alt="item.title" lazy />
             </div>
             <div>
-              <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
+              <p class="text-24 font-bold md:my-20 my-15">{{ item.title }}</p>
               <p class="text-18" style="line-height: 1.7;">{{ item.desc }}</p>
             </div>
           </div>
@@ -494,11 +494,11 @@
       >
         <swiper-slide v-for="item in WHY_CHOOSE_LIST" :key="item.title" style="width: 80%;" :lazy="true">
           <div class="text-center">
-            <div class="aspect-ratio-16_9 overflow-hidden bg-gray-100">
+            <div class="aspect-video overflow-hidden bg-gray-100">
               <el-image class="w-full h-full" fit="cover" :src="imagePrefix(item.img)" :alt="item.title" lazy />
             </div>
             <div>
-              <p class="text-24 f-bold my-md-20 my-15">{{ item.title }}</p>
+              <p class="text-24 font-bold md:my-20 my-15">{{ item.title }}</p>
               <p class="text-18" style="line-height: 1.7;">{{ item.desc }}</p>
             </div>
           </div>
@@ -508,9 +508,9 @@
   </section>
 
   <!-- TOP ARTIST -->
-  <section class="sec-artist mt-lg-40 mt-30">
+  <section class="sec-artist lg:mt-40 mt-30">
     <div class="container">
-      <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+      <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
         <h2 class="text-50">MOST FAMOUS ARTISTS</h2>
       </div>
       <el-skeleton :loading="isSkeleton" animated :count="appStore.isPc ? 12 : 9" class="row gap-row-base">
@@ -530,16 +530,16 @@
                   class="artist-item block"
                   v-aos="{ name: 'fade-up', delay: index % 6 * 100}"
               >
-                <div class="img-wrapper rounded-full aspect-ratio overflow-hidden">
+                <div class="img-wrapper rounded-full aspect-square overflow-hidden">
                   <el-image class="w-full h-full img-hover" fit="cover" :src="imagePrefix(item.portrait)" :alt="item.name" lazy />
                 </div>
-                <p class="text-center text-20 f-bold-500 mt-15 line1">{{ item.name }}</p>
+                <p class="text-center text-20 font-500 mt-15 truncate">{{ item.name }}</p>
               </NuxtLink>
             </div>
           </template>
         </div>
       </el-skeleton>
-      <div class="acea-row row-center-wrapper py-lg-40 py-30" v-aos="'fade-up'">
+      <div class="acea-row row-center-wrapper lg:py-40 py-30" v-aos="'fade-up'">
         <NuxtLink to="/artists-brief">
           <el-button class="home-button" plain>VIEW ALL ARTISTS</el-button>
         </NuxtLink>
@@ -550,7 +550,7 @@
   <!--STYLE-->
   <!--  <section class="sec-style ">
       <div class="container">
-        <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+        <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
           <h2 class="text-50">MORE STYLE</h2>
         </div>
         <el-skeleton :loading="isSkeleton" animated :count="8" class="row gap-row-base">
@@ -567,8 +567,8 @@
               v-aos="{ name: 'fade-up', delay: index % 4 * 100}"
             >
               <div class="categories-item cursor-pointer overflow-hidden" @click="jumpToUrl(item.url)">
-                <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.name">
-                <p class="categories-text text-26 f-bold text-white text-center">{{ item.name }}</p>
+                <img class="w-full h-full object-cover" :src="imagePrefix(item.img)" :alt="item.name">
+                <p class="categories-text text-26 font-bold text-white text-center">{{ item.name }}</p>
               </div>
             </div>
           </div>
@@ -578,7 +578,7 @@
 
   <!--WHAT CUSTOMERS SAY-->
   <!--<section class="sec-review">
-    <div class="text-center py-lg-40 py-30" v-aos="'fade-up'">
+    <div class="text-center lg:py-40 py-30" v-aos="'fade-up'">
       <h2 class="text-50">WHAT CUSTOMERS SAY</h2>
     </div>
 
@@ -600,18 +600,18 @@
       >
         <swiper-slide v-for="item in commentData" :key="item.id" :lazy="true">
           <div class="review-item h-full w-full">
-            <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.name" loading="lazy">
+            <img class="w-full h-full object-cover" :src="imagePrefix(item.img)" :alt="item.name" loading="lazy">
             <div class="p-content acea-row row-column nowrap p-20">
               <div class="flex-1">
-                <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
-                &lt;!&ndash;                <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>&ndash;&gt;
+                <p class="text-18 font-500 md:mb-10 mb-5">{{ item.name }}</p>
+                &lt;!&ndash;                <p class="text-12 font-500 text-gray-400 md:my-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>&ndash;&gt;
                 <el-rate
                     v-model="item.rating"
                     disabled
                     size="small"
                     style="height: auto"
                 />
-                <p class="text-16 mt-md-10 mt-5 line4" style="line-height: 1.5">{{ item.content }}</p>
+                <p class="text-16 md:mt-10 mt-5 line-clamp-4" style="line-height: 1.5">{{ item.content }}</p>
               </div>
               <el-button color="#fff" size="large" @click="router.push('/customer-reviews')">
                 View All Testimonials
@@ -643,7 +643,7 @@
       </div>
       <div class="contact-container">
         <div class="contact-wrapper text-center">
-          <h2 class="text-46 f-bold-500 mb-20">Keep up with the latest at ArtDaFen.com.<br/>Sign up now & get 15% off*
+          <h2 class="text-46 font-500 mb-20">Keep up with the latest at ArtDaFen.com.<br/>Sign up now & get 15% off*
             your purchase of $99 or more!</h2>
           <div class="contact-buttons acea-row row-column gap-row-base">
             <el-button size="large" type="primary" @click="handleSubscribe">

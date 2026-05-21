@@ -2,14 +2,14 @@
   <Teleport to="body">
     <div class="wall-color" v-show="visible" @click="close">
       <div class="wrapper" :style="{'background-color': color }" @click.stop>
-        <div class="preview-box w-full acea-row row-center-wrapper aspect-ratio">
+        <div class="preview-box w-full acea-row row-center-wrapper aspect-square">
           <img :src="wallImage" alt="wallImage">
         </div>
-        <div class="acea-row row-center-wrapper py-sm-40 py-20">
+        <div class="acea-row row-center-wrapper sm:py-40 py-20">
           <span class="text-14 text-gray-700 mr-5">SELECT YOUR WALL COLOR</span>
           <el-color-picker v-model="color"/>
         </div>
-        <div class="swatches-box pb-sm-40 px-sm-40 pb-20 px-20">
+        <div class="swatches-box sm:pb-40 sm:px-40 pb-20 px-20">
           <div
             class="swatches-item cursor-pointer"
             :class="{'on': color === item }"

@@ -10,7 +10,7 @@
             <!--</div>-->
 
             <div class="form-title-box">
-              <h2 class="form-title text-26 f-bold text-center">
+              <h2 class="form-title text-26 font-bold text-center">
                 " {{ activityData.title }} Up To {{ activityData.maxDiscount }}% Off "
               </h2>
             </div>
@@ -25,7 +25,7 @@
               <p class="text-14">Sign Up Now!</p>
             </div>
             <div class="form-field-box">
-              <div class="border-b-md border-b-dotted">
+              <div class="border-b-2 border-dotted">
                 <el-form :model="messageForm" :rules="rules" size="large" ref="ruleFormRef" :disabled="isFinish">
                   <el-form-item prop="email">
                     <el-input v-model="messageForm.email" placeholder="Enter Your Email" size="large"/>
@@ -43,8 +43,8 @@
 
           <template v-else>
             <div class="form-tips-box text-center">
-              <p class="text-50 f-bold text-error">SUCCESS!</p>
-              <p class="text-24 f-bold" style="line-height: 150%">
+              <p class="text-50 font-bold text-error">SUCCESS!</p>
+              <p class="text-24 font-bold" style="line-height: 150%">
                 Automatically Get {{ activityData.maxDiscount }}% OFF Sitewide at Checkout
               </p>
             </div>

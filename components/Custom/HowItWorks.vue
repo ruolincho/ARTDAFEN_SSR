@@ -1,12 +1,12 @@
 <template>
-  <p class="text-60 f-bold-500 text-center my-md-50 my-25">How it Works:</p>
-  <div class="my-md-50 my-25">
+  <p class="text-60 font-500 text-center md:my-50 my-25">How it Works:</p>
+  <div class="md:my-50 my-25">
     <!--桌面端视图-->
     <div class="row works-list gap-row-base" v-if="appStore.isPc">
       <div class="col-lg-3 col-sm-6" v-for="item in HOW_IT_WORKS" :key="item.title">
         <div class="works-item">
           <p class="acea-row row-between-wrapper">
-            <span class="text-26 f-bold">{{ item.title }}</span>
+            <span class="text-26 font-bold">{{ item.title }}</span>
             <SvgIcon :name="item.icon" class="text-50" />
           </p>
           <p class="text-20 mt-20">{{ item.desc }}</p>
@@ -24,7 +24,7 @@
       <swiper-slide v-for="(item, index) in HOW_IT_WORKS" :key="item.title" style="width: 80%;">
         <div class="works-item text-center relative bg-gray-100 p-10 rounded-md">
           <SvgIcon :name="item.icon" style="font-size: 40px;" />
-          <p class="text-26 f-bold my-20">{{ item.title }}</p>
+          <p class="text-26 font-bold my-20">{{ item.title }}</p>
           <p class="text-20">{{ item.desc }}</p>
           <div class="serial">{{ index + 1 }}</div>
         </div>

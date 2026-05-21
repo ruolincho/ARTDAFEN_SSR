@@ -6,7 +6,7 @@
         <template #template>
           <div class="w-full row">
             <div class="col-4" v-for="item in 3" :key="item">
-              <el-skeleton-item variant="image" class="aspect-ratio-16_9" style="width: 100%; height: unset;"/>
+              <el-skeleton-item variant="image" class="aspect-video" style="width: 100%; height: unset;"/>
               <div class="py-10">
                 <el-skeleton-item variant="h1"/>
                 <el-skeleton-item variant="p" class="my-10" style="width: 50%"/>
@@ -25,7 +25,7 @@
               <template v-if="index % 2 === 0">
                 <div class="image-box overflow-hidden">
                   <img
-                      class="w-full h-full fit-cover"
+                      class="w-full h-full object-cover"
                       :src="imagePrefix(item.img)"
                       :alt="item.title"
                   />
@@ -39,7 +39,7 @@
                 <template v-for="(banner, bIndex) in item.banners" :key="bIndex">
                   <div class="image-box overflow-hidden" v-if="bIndex <= 2">
                     <img
-                        class="w-full h-full fit-cover"
+                        class="w-full h-full object-cover"
                         :src="imagePrefix(banner)"
                         :alt="item.title"
                     />
@@ -51,14 +51,14 @@
               </template>
             </div>
             <div class="content-box mt-20">
-              <h2 class="title text-30 f-bold-500">{{ item.title }}</h2>
+              <h2 class="title text-30 font-500">{{ item.title }}</h2>
               <p class="subtitle text-22 mt-5">{{ item.name }}</p>
             </div>
           </NuxtLink>
         </div>
       </el-skeleton>
 
-      <div class="py-lg-40 py-20">
+      <div class="lg:py-40 py-20">
         <SeoPagination :current="currentPage" :totalPages="totalPages" basePath="/zone" />
       </div>
     </div>

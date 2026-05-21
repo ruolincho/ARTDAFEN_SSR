@@ -79,7 +79,7 @@
                     <button
                         v-for="tab in allTypes"
                         :key="tab"
-                        :class="['tab-btn text-capitalize', { active: activeTab === tab }]"
+                        :class="['tab-btn capitalize', { active: activeTab === tab }]"
                         @click="activeTab = tab"
                     >
                       {{ typeMap[tab] }}

@@ -4,7 +4,7 @@
       <el-skeleton :loading="pending" animated :count="MEDIA_SIZE" class="row blog-list gap-row-base mt-15">
         <template #template>
           <div class="col-lg-3 col-md-4 col-6">
-            <el-skeleton-item variant="image" class="aspect-ratio-16_9" style="width: 100%; height: unset;"/>
+            <el-skeleton-item variant="image" class="aspect-video" style="width: 100%; height: unset;"/>
             <div class="py-10">
               <el-skeleton-item variant="h1"/>
               <el-skeleton-item variant="p" class="my-10" style="width: 50%"/>
@@ -22,7 +22,7 @@
         </div>
       </el-skeleton>
 
-      <div class="py-lg-40 py-20">
+      <div class="lg:py-40 py-20">
         <SeoPagination :current="currentPage" :totalPages="totalPages" basePath="/journal"/>
       </div>
     </div>

@@ -26,7 +26,7 @@
             :auto-upload="false"
             :show-file-list="false"
           >
-            <div class="upload-btn my-20 p-10 cursor-pointer" ref="uploadBtnPcRef">
+            <div class="upload-btn border  border-primary my-20 p-10 cursor-pointer" ref="uploadBtnPcRef">
               Upload A Photo <br> Of Your Own Room
               <SvgIcon name="right" />
             </div>
@@ -68,7 +68,7 @@
               <swiper-slide v-for="(photo, index) in roomPhotos" :key="index">
                 <div class="slide acea-row row-center-wrapper bg-gray-200 cursor-pointer" @click="choosePhoto(photo)">
                   <el-image class="w-full h-full" fit="contain" :src="imagePrefix(photo)" :alt="'Scene Graph' + index" lazy />
-                  <!--<img class="w-full h-full fit-contain" :src="imagePrefix(photo)" :alt="'Scene Graph' + index">-->
+                  <!--<img class="w-full h-full object-contain" :src="imagePrefix(photo)" :alt="'Scene Graph' + index">-->
                 </div>
               </swiper-slide>
             </swiper>
@@ -94,18 +94,18 @@
               <div class="bg-white rounded-full p-10 shadow-md">
                 <SvgIcon name="camera-switching" style="font-size: 25px;" />
               </div>
-              <p class="mt-10 f-bold">Upload Photo</p>
+              <p class="mt-10 font-bold">Upload Photo</p>
             </div>
           </el-upload>
           <div class="flex-1 overflow-hidden" ref="menuListAppRef">
-            <div class="app-room-list acea-row nowrap scroll-x scroll-hide py-10">
+            <div class="app-room-list acea-row nowrap overflow-x-auto overflow-y-hidden scroll-hide py-10">
               <div
                   class="item shadow-md"
                   v-for="(item, index) in room" :key="item.name + index"
                   @click="chooseRoom(index)"
               >
                 <img :src="imagePrefix(item.photos[0]!)" alt="">
-                <p class="line1">{{ item.name }}</p>
+                <p class="truncate">{{ item.name }}</p>
               </div>
             </div>
           </div>
@@ -525,7 +525,6 @@ defineExpose({
 
       .upload-btn {
         display: inline-block;
-        border: var(--border-width-sm) solid var(--color-primary);
         line-height: 1.7;
       }
     }

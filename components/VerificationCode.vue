@@ -8,7 +8,7 @@
     width="420px"
   >
     <template #title>
-      <p class="text-20 text-center f-bold mt-16">Verify Your Email Address</p>
+      <p class="text-20 text-center font-bold mt-16">Verify Your Email Address</p>
     </template>
     <p class="text-center text-14 text-gray-600 mb-24">Kindly check your email inbox.</p>
     <el-form
@@ -23,7 +23,7 @@
       <el-form-item label="Verification Code" prop="captcha">
         <template #label>
           <span>Verification Code</span>
-          <p class="float-right text-secondary f-bold-500">
+          <p class="float-right text-secondary font-500">
             <span class="cursor-pointer" v-if="!isShowCountDown" @click.stop="sendCode">Resend Code</span>
             <span v-else>Retrieve again in {{ appStore.codeCountDown }} seconds</span>
           </p>

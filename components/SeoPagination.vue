@@ -114,6 +114,7 @@ const visiblePages = computed(() => {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 14px;
 
     .page-item {
       display: inline-flex;

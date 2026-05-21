@@ -12,7 +12,7 @@
       <div class="ripple ripple-inner"></div>
       <div class="ripple ripple-outer"></div>
     </div>
-    <p class="text-20 f-bold text-center my-20">Your order is confirmed</p>
+    <p class="text-20 font-bold text-center my-20">Your order is confirmed</p>
     <p class="text-14 text-center">
       Thanks for shopping! your order hasn't shipped yet,but we will send you and email when it done.
     </p>

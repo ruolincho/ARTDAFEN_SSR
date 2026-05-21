@@ -1,6 +1,6 @@
 <template>
   <div class="orders-container">
-    <div class="acea-row row-right mb-lg-30 mb-15">
+    <div class="acea-row row-right lg:mb-30 mb-15">
       <el-input
         class="search-input"
         type="text"
@@ -22,7 +22,7 @@
     >
       <template #default="scope">
         <div class="order-list">
-          <div class="order-item mt-lg-20 mt-15" v-for="item in scope.rows" :key="item.id">
+          <div class="order-item lg:mt-20 mt-15" v-for="item in scope.rows" :key="item.id">
             <div
                 class="acea-row row-middle text-16 mt-10"
                 :class="{ 'mb-20': index < item.orderItems.length - 1 }"
@@ -30,20 +30,20 @@
                 :key="index"
             >
               <div class="acea-row row-middle p-content flex-1">
-                <div class="p-img mr-lg-20 mr-10">
-                  <div class="aspect-ratio p-10 border-sm border-gray-200">
-                    <img class="w-full h-full fit-contain" :src="imagePrefix(goods.img)" :alt="goods.title">
+                <div class="p-img lg:mr-20 mr-10">
+                  <div class="aspect-square p-10 border  ">
+                    <img class="w-full h-full object-contain" :src="imagePrefix(goods.img)" :alt="goods.title">
                   </div>
                 </div>
-                <div class="flex-1 mr-lg-20 mr-sm-10">
-                  <p class="f-bold-500">{{ goods.title }}</p>
+                <div class="flex-1 lg:mr-20 sm:mr-10">
+                  <p class="font-500">{{ goods.title }}</p>
                   <p class="text-gray-600 my-5">{{ formatAttr(goods.specs) }}</p>
                 </div>
               </div>
-              <div class="f-bold p-price text-center">{{ formatToCurrency(goods.unitPrice, item.currencyCode) }}</div>
+              <div class="font-bold p-price text-center">{{ formatToCurrency(goods.unitPrice, item.currencyCode) }}</div>
               <p class="text-gray-600 p-operation text-center">Qty: {{ goods.quantity }}</p>
             </div>
-            <div class="py-lg-20 py-10 border-b-sm border-gray-200 acea-row row-middle">
+            <div class="lg:py-20 py-10 border-b   acea-row row-middle">
               <div class="flex-1 p-content" style="line-height: 1.7">
                 <template v-if="item.status === '0'">
                   <el-tag type="warning" effect="dark">Obligation</el-tag>
@@ -71,7 +71,7 @@
                       class="ml-10">Please wait for customer service to provide after-sales service for your order.</span>
                 </template>
               </div>
-              <div class="f-bold p-price text-center">{{ formatToCurrency(item.actualAmount, item.currencyCode) }}</div>
+              <div class="font-bold p-price text-center">{{ formatToCurrency(item.actualAmount, item.currencyCode) }}</div>
               <div class="p-operation">
                 <NuxtLink class="block" :to="`/order-detail/${item.tradeNo}`">
                   <el-button class="w-full" size="large" type="primary">
@@ -86,7 +86,7 @@
       <template #empty>
         <div class="text-center py-60">
           <SvgIcon name="empty" class="text-50" />
-          <p class="text-20 f-bold mt-20">No Orders Found</p>
+          <p class="text-20 font-bold mt-20">No Orders Found</p>
           <p class="text-14 my-20">No data found, please check the query or try again later.</p>
           <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">START SHOPPING</el-button>
         </div>

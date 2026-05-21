@@ -8,10 +8,10 @@
     >
       <div class="row product-list gap-row-base">
         <div class="col-2xl-average col-lg-3 col-sm-4 col-6" v-for="item in pageData.records" :key="item.id">
-          <GoodsItem :item="item" @thumbsClick="productThumbs" />
+          <GoodsItem :item="item" @thumbsClick="productThumbs" :isOperation="false"/>
         </div>
       </div>
-      <div class="py-lg-40 py-20">
+      <div class="lg:py-40 py-20">
         <SeoPagination :current="currentPage" :totalPages="totalPages" :basePath="baseRoute!"/>
       </div>
     </DataState>
@@ -37,7 +37,7 @@ const baseRoute = inject<ComputedRef<string>>('baseRoute');
 const seoInfo = inject<ComputedRef<SeoOptions>>('seoInfo');
 const executeScroll = inject<() => void>('executeScroll');
 
-const {pageData, currentPage, totalPages, pending, refresh, error} = await useSeoPaginationLogic<General.GoodsItem[], IProduct.ZoneCollectQuery>(
+const {pageData, currentPage, totalPages, pending, refresh, error} = await useSeoPaginationLogic<General.GoodsItem, IProduct.ZoneCollectQuery>(
      {
       apiPath: `${TRADE_MODULE}/product/zone/collect`,
       baseRoute: baseRoute!.value,

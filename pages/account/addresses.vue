@@ -8,11 +8,11 @@
         </el-button>
       </div>
       <div class="address-list">
-        <div class="address-item acea-row row-between-wrapper  gap-base pb-20 mb-20 border-b-sm border-gray-200"
+        <div class="address-item acea-row row-between-wrapper gap-base pb-20 mb-20 border-b  "
              v-for="item in addressList"
              :key="item.id">
           <div class="flex-1 text-16">
-            <p class="text-18 f-bold">{{ item.firstName }} {{ item.lastName }}
+            <p class="text-18 font-bold">{{ item.firstName }} {{ item.lastName }}
               <el-tag type="primary" v-if="item.defaultFlag === '0'">Default</el-tag>
             </p>
             <p class="my-18">{{ item.detail }}</p>
@@ -34,7 +34,7 @@
     </template>
     <div class="text-center py-60" v-else>
       <SvgIcon name="location" class="text-50" />
-      <p class="text-20 f-bold mt-20">No Saved Addresses.</p>
+      <p class="text-20 font-bold mt-20">No Saved Addresses.</p>
       <p class="text-14 my-20">Add a new address method for faster checkout.</p>
       <el-button size="large" type="primary" @click="openAddEdit('Add a new address')">
         Add Address

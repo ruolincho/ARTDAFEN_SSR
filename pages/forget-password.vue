@@ -1,9 +1,9 @@
 <template>
-  <div class="login-container border-gray-200 rounded-sm shadow-lg p-lg-32 p-20">
+  <div class="login-container rounded-sm shadow-lg lg:p-32 p-20">
     <NuxtLink to="/">
       <img class="logo" src="~/assets/images/logo.png" alt="logo">
     </NuxtLink>
-    <p class="text-20 text-center f-bold my-24">
+    <p class="text-20 text-center font-bold my-24">
       <template v-if="!authToken">Forget Password</template>
       <template v-else>Reset Password</template>
     </p>
@@ -51,8 +51,8 @@
       <span class="text-gray-600">Don’t have account?</span>
       <NuxtLink to="/register" class="text-secondary ml-6 cursor-pointer">Sign Up</NuxtLink>
     </div>
-    <div class="text-14 text-gray-600 pt-24 mt-24 border-t-sm border-gray-200">You may contact <a :href="`mailto:${CONTACT_EMAIL}`"
-      class="text-primary cursor-pointer f-bold">Customer Service</a> for help restoring access to your account.
+    <div class="text-14 text-gray-600 pt-24 mt-24 border-t  ">You may contact <a :href="`mailto:${CONTACT_EMAIL}`"
+      class="text-primary cursor-pointer font-bold">Customer Service</a> for help restoring access to your account.
     </div>
   </div>
   <VerificationCode

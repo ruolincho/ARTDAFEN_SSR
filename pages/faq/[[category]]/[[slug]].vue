@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="container">
-      <h1 class="text-40 f-bold-500 py-lg-50 py-30">Frequently Asked Questions</h1>
+      <h1 class="text-40 font-500 lg:py-50 py-30">Frequently Asked Questions</h1>
       <div class="fq-container acea-row row-between row-top">
         <div class="fq-left">
           <el-collapse v-model="activeName" accordion>
@@ -10,7 +10,7 @@
                 :key="item.category"
                 :ref="(el) => sectionRefs[index] = el as HTMLElement"
             >
-              <div class="text-center my-20 f-bold-500">{{ item.headTitle }}</div>
+              <div class="text-center my-20 font-500">{{ item.headTitle }}</div>
               <el-collapse-item
                   v-for="subItem in item.list"
                   :title="subItem.title"
@@ -27,8 +27,8 @@
             </div>
           </el-collapse>
         </div>
-        <div class="fq-right shadow-lg p-xl-20 p-15">
-          <p class="text-18 f-bold-500 ">Couldn't find what you need? Contact Support.</p>
+        <div class="fq-right shadow-lg xl:p-20 p-15">
+          <p class="text-18 font-500 ">Couldn't find what you need? Contact Support.</p>
           <p class="text-14 text-gray-600 mt-12 mb-24">
             We typically reply within 5 business days.
           </p>

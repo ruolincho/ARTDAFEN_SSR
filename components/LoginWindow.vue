@@ -7,9 +7,9 @@
       class="wall-dialog"
       @opened="handleOpened"
   >
-    <div class="login-container border-gray-200 rounded-sm shadow-lg p-lg-32 p-20">
+    <div class="login-container  rounded-sm shadow-lg lg:p-32 p-20">
       <img class="logo" src="~/assets/images/logo.png" alt="logo">
-      <p class="text-20 text-center f-bold my-24">Welcome Back</p>
+      <p class="text-20 text-center font-bold my-24">Welcome Back</p>
       <el-form
           ref="ruleFormRef"
           :model="ruleForm"
@@ -25,7 +25,7 @@
         <el-form-item label="Password" prop="password">
           <template #label>
             <span>Password</span>
-            <NuxtLink class="cursor-pointer float-right text-secondary f-bold-500" to="/forget-password">Forget
+            <NuxtLink class="cursor-pointer float-right text-secondary font-500" to="/forget-password">Forget
               Password
             </NuxtLink>
           </template>
@@ -49,7 +49,7 @@
         <NuxtLink to="/register" class="text-secondary ml-6 cursor-pointer">Create account</NuxtLink>
       </div>
       <el-divider><span class="text-gray-600 text-14">or</span></el-divider>
-      <div v-if="isDev" class="other-login text-14 text-gray-600 border-sm border-gray-600 text-center cursor-pointer" @click="toGoogleAuth">
+      <div v-if="isDev" class="other-login text-14 text-gray-600 border  border-primary text-center cursor-pointer" @click="toGoogleAuth">
         <img class="icon" src="~/assets/images/google.png" alt="google">
         Login with Google
       </div>

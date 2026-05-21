@@ -7,7 +7,7 @@
     <div class="my-15" :id="tourId">
       <div class="color-picker">
         <div
-            class="color-option cursor-pointer overflow-hidden"
+            class="color-option border hover:border-2 hover:border-primary [&.on]:border-2 [&.on]:border-primary cursor-pointer overflow-hidden"
             :class="{ on: matId === item.id }"
             v-for="item in options" :key="item.id"
             @click="handleColorChange(item)"
@@ -24,7 +24,7 @@
 
       <div class="size-picker mt-15" v-if="currentMaterialWidthOption.length">
         <div
-            class="size-option cursor-pointer text-14"
+            class="size-option border hover:border-2 hover:border-primary [&.on]:border-2 [&.on]:border-primary cursor-pointer text-14"
             :class="{ 'on': matWidth === item.matWidth }"
             v-for="(item, index) in currentMaterialWidthOption" :key="index"
             @click="handleWidthChange(item.matWidth!)"
@@ -94,15 +94,6 @@ const handleWidthChange = (width: string) => {
     .color-option {
       width: 34px;
       height: 34px;
-      border: var(--border-width-sm) solid var(--color-gray-300);
-
-      &.on,
-      &:hover {
-        border-color: var(--color-gray-700);
-        border-width: var(--border-width-md);
-
-
-      }
 
       .none {
         background: repeating-linear-gradient(
@@ -129,13 +120,6 @@ const handleWidthChange = (width: string) => {
       width: 50px;
       height: 36px;
       padding: 0 12px;
-      border: var(--border-width-sm) solid var(--color-gray-300);
-
-      &.on,
-      &:hover {
-        border-color: var(--color-gray-700);
-        border-width: var(--border-width-md);
-      }
     }
   }
 </style>

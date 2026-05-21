@@ -1,9 +1,9 @@
 <template>
-  <div class="login-container border-gray-200 rounded-sm shadow-lg p-lg-32 p-20">
+  <div class="login-container rounded-sm shadow-lg lg:p-32 p-20">
     <NuxtLink to="/">
       <img class="logo" src="~/assets/images/logo.png" alt="logo">
     </NuxtLink>
-    <p class="text-20 text-center f-bold my-24">Let's get started!</p>
+    <p class="text-20 text-center font-bold my-24">Let's get started!</p>
     <p class="text-center text-14 text-gray-600 mb-24">
       Create an account and get first access to the very best products,
       inspiration and community.

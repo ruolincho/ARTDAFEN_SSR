@@ -2,10 +2,10 @@
   <!--规格选择-->
   <section>
     <div class="container">
-      <div class="spu-wrapper row gap-row-base pt-md-50 pt-20">
+      <div class="spu-wrapper row gap-row-base md:pt-50 pt-20">
         <div class="col-md-6">
           <div class="spu-preview">
-            <div class="aspect-ratio acea-row row-center-wrapper">
+            <div class="aspect-square acea-row row-center-wrapper">
               <ClientOnly>
                 <HighResViewer
                   :thumbnail-src="imagePrefix(goodsDetail.img)"
@@ -19,12 +19,12 @@
           <div class="spu-spec">
             <p class="text-20 text-error">Transaction Price</p>
             <div class="acea-row row-between row-bottom mt-10 mb-40">
-              <span class="text-60 f-bold-500">{{ formatToCurrency(goodsDetail.retailPrice || 0) }}</span>
+              <span class="text-60 font-500">{{ formatToCurrency(goodsDetail.retailPrice || 0) }}</span>
               <el-tag type="danger" effect="dark" v-if="goodsDetail.status === '-1'">Sale Out</el-tag>
               <el-tag type="primary" effect="dark" v-if="goodsDetail.status === '0'">For Sale</el-tag>
             </div>
             <a
-              class="block text-center bg-gray-700 text-white rounded-sm py-xl-20 py-md-15 py-10 text-20"
+              class="block text-center bg-gray-700 text-white rounded-sm xl:py-20 md:py-15 py-10 text-20"
               v-if="goodsDetail.status === '0'"
               :href="`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Initiate A Quotation')}&body=${encodeURIComponent(mailBody)}`"
             >
@@ -37,7 +37,7 @@
                 :key="item.id"
               >
                 <div
-                  class="border-sm border-gray-700 cursor-pointer text-20 py-xl-20 py-md-15 py-10 text-center text-capitalize"
+                  class="border border-primary cursor-pointer text-20 xl:py-20 md:py-15 py-10 text-center capitalize"
                   :class="[currentSpecId === item.id && 'bg-gray-700 text-white']"
                   @click="goReplicas(item)"
                 >
@@ -45,7 +45,7 @@
                 </div>
               </div>
             </div>
-            <div class="py-20 mt-20 border-b-md border-gray-700 text-18 f-bold">
+            <div class="py-20 mt-20 border-b-2  border-primary text-18 font-bold">
               About Original Painting
             </div>
             <ul class="text-gray-600 py-20">
@@ -55,20 +55,20 @@
               </li>
             </ul>
             <div>
-              <div class="row text-26 f-bold mb-40">
+              <div class="row text-26 font-bold mb-40">
                 <div class="col-3">Title</div>
                 <div class="col-9">{{ goodsDetail.title || '-' }}</div>
               </div>
               <div class="row text-22" v-if="goodsDetail.creator">
                 <div class="col-3">Creator</div>
                 <div class="col-9">
-                  <span class="text-underline cursor-pointer" @click="goArtistDetail">
+                  <span class="underline cursor-pointer" @click="goArtistDetail">
                     {{ goodsDetail?.creator?.name || '-' }}
                   </span>
                 </div>
               </div>
               <div class="row text-22 mt-20" v-for="(val, key) in goodsDetail.attributes" :key="key">
-                <div class="col-3 text-capitalize">{{ key }}</div>
+                <div class="col-3 capitalize">{{ key }}</div>
                 <div class="col-9">
                   <template v-if="Array.isArray(val)">{{ val.join(' / ') }}</template>
                 </div>
@@ -81,9 +81,9 @@
   </section>
 
   <!--创作者-->
-  <section class="mt-lg-60 mt-sm-20" v-if="goodsDetail.creator">
+  <section class="lg:mt-60 sm:mt-20" v-if="goodsDetail.creator">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">About the Artist</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">About the Artist</h1>
       <div class="artist-wrapper row gap-row-base">
         <div class="col-md-6">
           <div class="avatar" v-if="goodsDetail?.creator?.portrait">
@@ -93,15 +93,15 @@
               alt="avatar"
             />
           </div>
-          <p class="text-22 f-bold-500 my-20 text-underline cursor-pointer" @click="goArtistDetail">
+          <p class="text-22 font-500 my-20 underline cursor-pointer" @click="goArtistDetail">
             {{ goodsDetail?.creator?.name }}</p>
-          <p class="text-16 f-bold-500 my-20">{{ goodsDetail?.creator?.region }}</p>
+          <p class="text-16 font-500 my-20">{{ goodsDetail?.creator?.region }}</p>
           <p class="text-18">{{ goodsDetail?.creator?.intro }}</p>
         </div>
         <div class="col-md-6" v-if="goodsDetail?.creator?.detail">
           <template v-for="(val, key) in goodsDetail.creator.detail">
-            <p class="text-22 f-bold">{{ key }}</p>
-            <div class="text-18 mt-md-20 mt-15" style="white-space: pre-line;" v-for="(val2, key2) in val" :key="key2">
+            <p class="text-22 font-bold">{{ key }}</p>
+            <div class="text-18 md:mt-20 mt-15" style="white-space: pre-line;" v-for="(val2, key2) in val" :key="key2">
               {{ val2 }}
             </div>
           </template>
@@ -111,9 +111,9 @@
   </section>
 
   <!--产品详情-->
-  <section class="sec-desc mt-lg-60 mt-sm-20" :class="{ open: isOpenDesc }" v-if="goodsDetail?.details?.length">
+  <section class="sec-desc lg:mt-60 sm:mt-20" :class="{ open: isOpenDesc }" v-if="goodsDetail?.details?.length">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Description</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Product Description</h1>
       <div class="img-box">
         <div v-for="item in goodsDetail.details" :key="item">
           <ClientOnly v-if="!item.includes('/')">

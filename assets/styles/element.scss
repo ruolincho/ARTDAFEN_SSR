@@ -10,7 +10,7 @@
 .el-collapse {
   border: none !important;
   .el-collapse-item {
-    border: var(--border-width-sm) solid var(--color-gray-200);
+    border: 1px solid var(--un-default-border-color, #e5e7eb);
 
     .el-collapse-item__header {
       line-height: 20px;

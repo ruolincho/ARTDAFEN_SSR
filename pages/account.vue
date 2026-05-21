@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <h1 class="text-40 f-bold-500 py-lg-50 py-30">MY PAGE</h1>
+    <h1 class="text-40 font-500 lg:py-50 py-30">MY PAGE</h1>
     <div class="account-container acea-row row-between row-top">
       <div class="account-panel shadow-lg">
-        <div class="account-info acea-row row-middle p-20 border-b-sm border-gray-200">
+        <div class="account-info acea-row row-middle p-20 border-b  ">
           <el-upload
             class="mr-16"
             :accept="fileType.join(',')"
@@ -14,7 +14,7 @@
           >
             <div class="account-avatar bg-gray-100 rounded-full overflow-hidden">
               <img
-                class="w-full h-full fit-cover"
+                class="w-full h-full object-cover"
                 :src="userStore.userInfo.avatar"
                 alt="avatar"
                 v-show="userStore.userInfo.avatar"
@@ -26,10 +26,10 @@
           </el-upload>
           <div class="flex-1 overflow-hidden">
             <p class="text-14">Hello 👋 </p>
-            <p class="text-18 f-bold mt-5 line1">{{ userStore.userInfo.nickname }} </p>
+            <p class="text-18 font-bold mt-5 truncate">{{ userStore.userInfo.nickname }} </p>
           </div>
         </div>
-        <div class="account-menu my-lg-20 my-15">
+        <div class="account-menu lg:my-20 my-15">
           <div
             class="account-item acea-row nowrap row-middle py-15 px-20 cursor-pointer"
             :class="{ 'on': currentRoute === menu.path }"

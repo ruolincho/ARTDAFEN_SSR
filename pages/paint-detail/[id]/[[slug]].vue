@@ -2,7 +2,7 @@
   <!--规格选择-->
   <section>
     <div class="container">
-      <div class="spu-wrapper row pt-md-50">
+      <div class="spu-wrapper row md:pt-50">
         <!--预览图栅格-->
         <div class="col-md-6">
           <div :style="{ top: 'var(--header-height)', position: 'sticky' }">
@@ -26,7 +26,7 @@
                     }"
                 >
                   <swiper-slide>
-                    <img class="cursor-pointer w-full h-full fit-contain aspect-ratio" :src="imagePrefix(goodsDetail?.img)" style="user-select: none;"
+                    <img class="cursor-pointer w-full h-full object-contain aspect-square" :src="imagePrefix(goodsDetail?.img)" style="user-select: none;"
                          alt=""/>
                   </swiper-slide>
                   <swiper-slide
@@ -34,14 +34,14 @@
                       :key="index"
                   >
                     <img
-                        class="cursor-pointer w-full h-full fit-contain aspect-ratio"
+                        class="cursor-pointer w-full h-full object-contain aspect-square"
                         :src="imagePrefix(banner)" style="user-select: none;"
                         alt=""
                     />
                   </swiper-slide>
                 </swiper>
               </div>
-              <div class="main-swiper-wrapper" id="tour-step-preview">
+              <div class="main-swiper-wrapper aspect-square overflow-hidden" id="tour-step-preview">
                 <swiper
                     class="main-swiper"
                     :modules="modules"
@@ -53,7 +53,7 @@
                 >
                   <swiper-slide>
                     <ClientOnly>
-                      <div class="acea-row row-center-wrapper w-full h-full bg-gray-100">
+                      <div class="acea-row row-center-wrapper w-full h-full bg-gray-100" @click="toggleImageViewer('all')">
                         <ImageGenerator
                             v-if="goodsDetail.id"
                             v-model="generatorImg"
@@ -70,9 +70,10 @@
                       :key="index"
                   >
                     <img
-                        class="w-full h-full fit-cover"
+                        class="w-full h-full object-cover"
                         :src="imagePrefix(banner)" alt="banner"
                         style="user-select: none"
+                        @click="toggleImageViewer('all')"
                     />
                   </swiper-slide>
                 </swiper>
@@ -86,9 +87,9 @@
           <div class="spu-spec">
             <ComboSkeleton :loading="loadingCombo && !firstLoadCombo">
               <div>
-                <div class="acea-row row-between-wrapper mb-15 gap-column-base">
-                  <h1 class="text-22 flex-1 line2" style="line-height: 1.5">
-                    <span class="text-uppercase">{{ goodsDetail.title }}</span>
+                <div class="acea-row row-between-wrapper my-15 md:mt-0 gap-column-base">
+                  <h1 class="text-22 flex-1 line-clamp-2" style="line-height: 1.5">
+                    <span class="uppercase">{{ goodsDetail.title }}</span>
                     <span>: Hand-painted Oil Painting Reproduction</span>
                   </h1>
                   <SvgIcon
@@ -98,11 +99,11 @@
                   />
                 </div>
 
-                <NuxtLink class="my-15 text-14 cursor-pointer text-underline-hover" :to="handleClickArtist(goodsDetail?.creator!)">by: {{ goodsDetail?.creator?.name }}</NuxtLink>
+                <NuxtLink class="my-15 text-14 cursor-pointer hover:underline" :to="handleClickArtist(goodsDetail?.creator!)">by: {{ goodsDetail?.creator?.name }}</NuxtLink>
 
                 <div class="my-15 acea-row row-middle price-wrapper py-10"
                      :style="{ top: 'var(--header-height)' }">
-                  <span class="text-28 f-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
+                  <span class="text-28 font-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
                   <!--<el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"-->
                   <!--        ref="checkButtonRef">-->
                   <!--  Check-->
@@ -202,7 +203,7 @@
   </section>
 
   <!--Tabs-->
-  <section class="sec-tabs mt-sm-30 mt-20">
+  <section class="sec-tabs sm:mt-30 mt-20">
     <div class="container">
       <ClientOnly>
         <el-tabs v-model="activeTabs" type="border-card">
@@ -213,9 +214,9 @@
                 <img class="w-full" :src="imagePrefix(goodsDetail.creator?.portrait)" alt="avatar">
               </div>
               <div class="info flex-1 text-gray-600">
-                <p class="text-16 f-bold-500">{{ goodsDetail?.creator?.timeline || '--' }}</p>
-                <p class="text-20 f-bold-500 text-gray-700 my-10">{{ goodsDetail?.creator?.name || '' }}</p>
-                <!--          <p class="text-16 f-bold-500 my-10">19th-Century</p>-->
+                <p class="text-16 font-500">{{ goodsDetail?.creator?.timeline || '--' }}</p>
+                <p class="text-20 font-500 text-gray-700 my-10">{{ goodsDetail?.creator?.name || '' }}</p>
+                <!--          <p class="text-16 font-500 my-10">19th-Century</p>-->
                 <p class="text-16" style="line-height: 1.25rem">{{ goodsDetail?.creator?.intro || '' }}</p>
               </div>
             </div>
@@ -232,17 +233,17 @@
                 <div class="reviews-list">
                   <div class="reviews-item" v-for="item in scope.rows" :key="item.id">
                     <img class="w-full" :src="imagePrefix(item.img)" :alt="item.name">
-                    <div class="p-content border-sm">
+                    <div class="p-content border  ">
                       <div class="p-10">
-                        <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
-                        <!--                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
+                        <p class="text-18 font-500 md:mb-10 mb-5">{{ item.name }}</p>
+                        <!--                  <p class="text-12 font-500 text-gray-400 md:my-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
                         <el-rate
                             v-model="item.rating"
                             disabled
                             size="small"
                             style="height: auto"
                         />
-                        <p class="text-16 mt-md-10 mt-5" style="line-height: 1.5">{{ item.content }}</p>
+                        <p class="text-16 md:mt-10 mt-5" style="line-height: 1.5">{{ item.content }}</p>
                       </div>
                     </div>
                   </div>
@@ -253,14 +254,14 @@
           <el-tab-pane label="Payment & Shipping" name="info">
             <div class="info-list">
               <div class="info-item">
-                <h2 class="text-20 f-bold">SECURE PAYMENT</h2>
+                <h2 class="text-20 font-bold">SECURE PAYMENT</h2>
                 <p class="text-14 my-20">Use PayPal to ensure the security of your payments</p>
                 <div class="imgs acea-row row-middle gap-column-xs">
                   <img style="height: 40px" src="~/assets/images/payment-methods.png" alt="payment-methods">
                 </div>
               </div>
               <div class="info-item mt-20">
-                <h2 class="text-20 f-bold">WORLDWIDE FREE SHIPPING</h2>
+                <h2 class="text-20 font-bold">WORLDWIDE FREE SHIPPING</h2>
                 <p class="text-14 my-20">Express Delivery</p>
                 <div class="imgs acea-row row-middle gap-column-xs">
                   <img style="height: 40px" src="~/assets/images/delivery-methods1.png" alt="UPS">
@@ -274,7 +275,7 @@
                 </div>
               </div>
               <div class="info-item mt-20">
-                <h2 class="text-20 f-bold">GUARANTEE</h2>
+                <h2 class="text-20 font-bold">GUARANTEE</h2>
                 <p class="text-14 my-20">100% Satisfaction</p>
                 <div class="imgs acea-row row-middle gap-column-xs">
                   <img style="width: 84px" src="~/assets/images/satisfactionb.png" alt="satisfactionb">
@@ -296,7 +297,7 @@
   <!--产品详情-->
   <section class="sec-desc" :class="{ open: isOpenDesc }" v-if="goodsDetail?.details?.length">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Description</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Product Description</h1>
       <div class="img-box">
         <div v-for="item in goodsDetail.details" :key="item">
           <ClientOnly v-if="!item.includes('/')">
@@ -337,15 +338,15 @@
   <!-- 质量介绍-->
   <section class="">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Commitment to Quality</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Commitment to Quality</h1>
       <div class="quality-list row gap-row-base" v-if="appStore.isPc">
         <div class="col-6" v-for="item in QUALITY_LIST" :key="item.desc">
           <div class="quality-item">
             <div class="p-img">
               <img class="w-full" :src="imagePrefix(item.img)" alt="quality">
             </div>
-            <div class="p-info flex-1 p-lg-25 p-15">
-              <p class="text-22 f-bold p1" v-html="item.title"/>
+            <div class="p-info flex-1 lg:p-25 p-15">
+              <p class="text-22 font-bold p1" v-html="item.title"/>
               <p class="text-16 mt-22 p2">{{ item.desc }}</p>
             </div>
           </div>
@@ -366,8 +367,8 @@
               <div class="p-img">
                 <img class="w-full" :src="imagePrefix(item.img)" alt="quality">
               </div>
-              <div class="p-info flex-1 p-lg-25 p-15">
-                <p class="text-22 f-bold p1" v-html="item.title"/>
+              <div class="p-info flex-1 lg:p-25 p-15">
+                <p class="text-22 font-bold p1" v-html="item.title"/>
                 <p class="text-16 mt-22 p2">{{ item.desc }}</p>
               </div>
             </div>
@@ -380,7 +381,7 @@
   <!-- 相关推荐-->
   <section class="" v-if="relatedList.length">
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Related</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Product Related</h1>
       <ClientOnly>
         <div class="recommend-swiper">
           <swiper
@@ -400,14 +401,14 @@
           >
             <swiper-slide v-for="item in relatedList" :key="item.id">
               <NuxtLink class="explore-item block" :to="productLink(item)" target="_blank">
-                <div class="img-wrapper aspect-ratio bg-gray-100" :class="{ 'hover-enabled': !!item.sceneImg }">
+                <div class="img-wrapper aspect-square bg-gray-100" :class="{ 'hover-enabled': !!item.sceneImg }">
                   <img class="img-default" :src="imagePrefix(item.framedImg || item.img)" crossorigin="anonymous" :alt="item.title"/>
                   <img class="img-hover" :src="imagePrefix(item.sceneImg)" v-if="item.sceneImg" crossorigin="anonymous" :alt="item.title"/>
                 </div>
-                <p class="line1 text-14 my-8">{{ item.title }}</p>
+                <p class="truncate text-14 my-8">{{ item.title }}</p>
                 <p>
-                  <span class="text-14 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
-                  <span class="text-gray-400 text-through ml-5 text-12" v-if="item.retailPrice !== item.marketPrice">
+                  <span class="text-14 font-bold">{{ formatToCurrency(item.retailPrice) }}</span>
+                  <span class="text-gray-400 line-through ml-5 text-12" v-if="item.retailPrice !== item.marketPrice">
                     {{ formatToCurrency(item.marketPrice) }}
                   </span>
                 </p>
@@ -425,7 +426,7 @@
   <!-- FQ4-->
   <section>
     <div class="container">
-      <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Frequently Asked Questions</h1>
+      <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Frequently Asked Questions</h1>
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item v-for="subItem in getFaqByQuote('shopping')" :title="subItem.title" :name="subItem.name"
                           :key="subItem.name">
@@ -486,15 +487,15 @@
       virtual-triggering
   >
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20">
-      <span class="f-bold text-18 flex-1 line1 mr-10">Painting Size Price</span>
+      <span class="font-bold text-18 flex-1 truncate mr-10">Painting Size Price</span>
       <span class="text-14">{{ formatToCurrency(currentSizeOption?.price || 0) }}</span>
     </div>
     <div class="acea-row row-between-wrapper text-gray-700 py-20 mb-10">
-      <span class="f-bold text-18 flex-1 line1 mr-10">Frame Price</span>
+      <span class="font-bold text-18 flex-1 truncate mr-10">Frame Price</span>
       <span class="text-14">{{ formatToCurrency(frameMoney || 0) }}</span>
     </div>
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20" v-if="hasFrame && !!currentMaterialId">
-      <span class="f-bold text-18 flex-1 line1 mr-10">Canvas material Price</span>
+      <span class="font-bold text-18 flex-1 truncate mr-10">Canvas material Price</span>
       <span class="text-14">{{ formatToCurrency(currentMaterialOption?.price || 0) }}</span>
     </div>
   </el-popover>
@@ -515,12 +516,12 @@
 
   <!--底部预览-->
   <transition name="slide-up">
-    <div class="footer-preview acea-row row-middle rounded-md border-sm border-gray-200" v-show="!appStore.isPc && isShowFooterPreview">
+    <div class="footer-preview acea-row row-middle rounded-md border  " v-show="!appStore.isPc && isShowFooterPreview">
       <div class="footer-preview-img" @click="toggleImageViewer('core')">
-        <img class="w-full h-full fit-contain" :src="generatorImg" alt="">
+        <img class="w-full h-full object-contain" :src="generatorImg" alt="">
       </div>
-      <div class="footer-preview-text f-bold" @click="toggleImageViewer('core')">OPEN PREVIEW</div>
-      <div class="footer-preview-right" @click="openRoom">
+      <div class="footer-preview-text font-bold" @click="toggleImageViewer('core')">OPEN PREVIEW</div>
+      <div class="footer-preview-right acea-row row-center-wrapper bg-primary text-white rounded-full" @click="openRoom">
         <SvgIcon name="pictures" />
       </div>
     </div>
@@ -1027,11 +1028,6 @@ useLockScroll(openTour) // 监听状态变化锁定滚动
     .footer-preview-right {
       width: 32px;
       height: 32px;
-      line-height: 32px;
-      text-align: center;
-      background: var(--color-text-primary);
-      color: var(--color-bg-primary);
-      border-radius: 50%;
 
       .iconify {
         font-size: 20px;
@@ -1099,7 +1095,6 @@ useLockScroll(openTour) // 监听状态变化锁定滚动
       .main-swiper-wrapper {
         position: relative;
         width: 86.48%;
-        aspect-ratio: 1 / 1;
 
         .main-swiper {
           width: 100%;
@@ -1351,7 +1346,6 @@ useLockScroll(openTour) // 监听状态变化锁定滚动
         .thumb-swiper-wrapper {
           order: 2;
           width: 100%;
-          margin-bottom: 15px;
 
           .thumb-swiper {
             box-sizing: content-box;

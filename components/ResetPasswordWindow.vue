@@ -6,11 +6,11 @@
     append-to-body
     class="wall-dialog"
   >
-    <div class="login-container border-gray-200 rounded-sm shadow-lg p-lg-32 p-20">
+    <div class="login-container  rounded-sm shadow-lg lg:p-32 p-20">
       <router-link to="/">
         <img class="logo" src="~/assets/images/logo.png" alt="logo">
       </router-link>
-      <p class="text-20 text-center f-bold my-24">
+      <p class="text-20 text-center font-bold my-24">
         <template v-if="!authToken">Reset Password</template>
         <template v-else>Reset Password</template>
       </p>

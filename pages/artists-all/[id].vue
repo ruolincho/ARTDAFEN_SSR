@@ -3,7 +3,7 @@
   <!--头部-->
   <div class="sec-head">
     <div class="container">
-      <div class="text-center py-lg-40 py-20 header-section f-bold-500">
+      <div class="text-center lg:py-40 py-20 header-section font-500">
         <h1 class="text-50 mb-20">Browse All <span class="ignore">"{{ letter }}"</span> Artists</h1>
         <p class="text-16 text-gray-600 description">
           Our oil paintings are 100% hand-painted on canvas by skilled artists
@@ -19,7 +19,7 @@
     <div class="container">
       <div class="letter-list acea-row row-between-wrapper gap-column-base">
         <NuxtLink
-            class="letter-item text-22 py-lg-20 py-10"
+            class="letter-item text-22 lg:py-20 py-10"
             v-for="letter in letters" :key="letter"
             :to="{ path: `/artists-all/${letter}`, query: categoryId ? { categoryId } : undefined }"
             replace
@@ -42,7 +42,7 @@
         <div class="row artist-list my-20 gap-row-base ignore" v-if="artistsList.length">
           <div class="col-lg-3 col-sm-4 col-6" v-for="art in artistsList" :key="art.id">
             <NuxtLink
-                class="artist-item text-20 cursor-pointer line1 block"
+                class="artist-item text-20 cursor-pointer truncate block"
                 :to="`/artist-detail/${art.id}/${art.slug}`"
             >
               {{ art.name }}

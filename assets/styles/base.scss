@@ -1,95 +1,13 @@
-/*重置样式*/
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-border: border-color;
-  -moz-box-sizing: border-box;
-  outline: none;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  font-size: 48px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: inherit;
-  font-weight: 400;
-  line-height: 1.2;
-  color: inherit;
-}
-
-hr {
-  border-style: solid;
-  border-width: 0;
-  border-top-width: 1px;
-  border-color: var(--color-gray-200);
-}
-
-ul, li {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-img, video {
-  vertical-align: middle;
-  outline: none;
-  border: 0;
-  display: block;
-  max-width: 100%;
-}
-
 body {
   font-family: "Roboto", "Open Sans", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", "Hiragino Sans GB", "WenQuanYi Micro Hei", Arial, sans-serif;
-  font-size: 14px;
-  line-height: normal;
-  font-weight: normal;
-  color: #333;
-  background: #fff;
 }
 
-input, button, textarea, select {
-  outline: none;
-  font-family: inherit;
-  border: none;
-  background: none;
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+html, body {
+  font-size: 16px;
 }
 
-select::-ms-expand {
-  display: none;
-}
-
-iframe {
-  border: none;
-  vertical-align: top;
-}
-
-:before, :after {
-  box-sizing: border-box;
-}
-
-em {
-  font-style: normal;
-}
-
-table {
-  border-spacing: 0;
-  border-collapse: collapse;
-  background-color: transparent;
-}
-
-html {
-  font-size: clamp(16px, 1vw, 100px);
+svg {
+  display: inline-block;
 }
 
 ::-webkit-scrollbar { width: 6px; /* 垂直滚动条宽度 */ height: 6px; /* 水平滚动条高度 */ }

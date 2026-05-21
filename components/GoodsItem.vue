@@ -1,6 +1,6 @@
 <template>
   <div class="product-item">
-    <div class="relative aspect-ratio">
+    <div class="relative aspect-square">
       <NuxtLink class="img-wrapper bg-gray-100 w-full h-full block" :class="{ 'hover-enabled': !!item.sceneImg }" :to="productLink(item)">
         <img class="img-default" v-lazy="imagePrefix(item.framedImg || item.img)" crossorigin="anonymous" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
         <img class="img-hover" v-lazy="imagePrefix(item.sceneImg)" v-if="item.sceneImg" crossorigin="anonymous" :alt="`Hand-painted ${item.title} oil painting reproduction by ${item.creator?.name}`">
@@ -9,28 +9,28 @@
         <div class="p-tag bg-gray-700" v-if="item.status === '0'">For Sale</div>
         <div class="p-tag bg-error" v-if="item.status === '-1'">Sale Out</div>
       </div>
-      <div class="operation rounded-full p-5">
+      <div class="operation rounded-full acea-row row-center-wrapper" v-if="isOperation">
         <SvgIcon
             :name="item.like ? 'follow-fill' : 'follow'"
-            class="text-24 cursor-pointer" :class="{'text-error': item.like}"
+            class="cursor-pointer" :class="{'text-error': item.like}"
             @click="productThumbs()"
         />
       </div>
       <div class="num acea-row row-center-wrapper text-20" v-if="index">{{ index }}</div>
     </div>
     <div class="content-wrapper">
-      <p class="my-8 line1 cursor-pointer text-hover">
-        <span class="text-16 f-bold" @click.stop="clickArtist()">
+      <p class="my-8 truncate cursor-pointer text-hover">
+        <span class="text-16 font-bold" @click.stop="clickArtist()">
           {{ item.creator?.name }}
         </span>
         <SvgIcon name="right" />
       </p>
-      <NuxtLink class="line2 text-14 block text-hover" :to="productLink(item)">{{ item.title }}</NuxtLink>
+      <NuxtLink class="line-clamp-2 text-14 block text-hover" :to="productLink(item)">{{ item.title }}</NuxtLink>
       <p class="my-8">
-        <span class="text-16 f-bold">
+        <span class="text-16 font-bold">
           {{ formatToCurrency(item.retailPrice) }}
         </span>
-        <span class="text-gray-400 text-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">
+        <span class="text-gray-400 line-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">
           {{ formatToCurrency(item.marketPrice)}}
         </span>
       </p>
@@ -53,12 +53,14 @@ interface Props {
   item: General.GoodsItem
   index: number,
   clickArtistFn?: (creator: ObjectNode.Creator) => void
+  isOperation?: boolean
 }
 
 const { imagePrefix } = useImage()
 const props = withDefaults(defineProps<Props>(), {
   item: () => ({}) as General.GoodsItem,
-  index: 0
+  index: 0,
+  isOperation: true,
 });
 
 const emit = defineEmits<{
@@ -130,6 +132,12 @@ const clickArtist = () => {
       right: 10px;
       bottom: 10px;
       background: #fff;
+      width: 32px;
+      height: 32px;
+
+      .iconify {
+        font-size: 20px;
+      }
     }
 
     .num {

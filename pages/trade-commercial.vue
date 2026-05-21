@@ -8,7 +8,7 @@
 
   <section class="sec-case">
     <div class="container">
-      <h1 class="text-50 font-bold text-center py-lg-60 py-40">Case Studies</h1>
+      <h1 class="text-50 font-bold text-center lg:py-60 py-40">Case Studies</h1>
       <div class="case-swiper-wrapper">
         <swiper
             class="case-swiper"
@@ -22,14 +22,14 @@
             '414': { slidesPerView: 2, spaceBetween: 10 },
           }"
         >
-          <swiper-slide v-for="(item, index) in CASE_LIST" :key="item.id" :lazy="true">
+          <swiper-slide v-for="item in CASE_LIST" :key="item.id" :lazy="true">
             <div class="case-item">
-              <div class="border-sm border-gray-200 overflow-hidden bg-gray-200">
+              <div class="overflow-hidden bg-gray-200">
                 <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.name"/>
               </div>
-              <div class="content-wrapper p-15 bg-gray-200 f-bold">
-                <p class="line1 text-24">{{ item.title }}</p>
-                <p class="line2 text-16 my-10">{{ item.size }}</p>
+              <div class="content-wrapper p-15 bg-gray-200 font-bold">
+                <p class="truncate text-24">{{ item.title }}</p>
+                <p class="line-clamp-2 text-16 my-10">{{ item.size }}</p>
                 <p class="text-16">{{ item.name }}</p>
               </div>
             </div>
@@ -42,7 +42,7 @@
 
   <section class="sec-history">
     <div class="container">
-      <h1 class="text-50 font-bold text-center py-lg-60 py-40">History & Heritage: The Dafen Legend Since 1989</h1>
+      <h1 class="text-50 font-bold text-center lg:py-60 py-40">History & Heritage: The Dafen Legend Since 1989</h1>
       <div class="history-swiper-wrapper">
         <swiper
             class="history-swiper"
@@ -60,8 +60,8 @@
             <div class="history-item">
               <div class="circle"></div>
               <div class="text-center mt-25">
-                <div class="year text-24 f-bold">{{ item.year }}</div>
-                <div class="title text-24 f-bold my-15">{{ item.title }}</div>
+                <div class="year text-24 font-bold">{{ item.year }}</div>
+                <div class="title text-24 font-bold my-15">{{ item.title }}</div>
                 <div class="content text-16">{{ item.content }}</div>
               </div>
             </div>
@@ -73,14 +73,14 @@
 
   <section class="sec-museum">
     <div class="container">
-      <h1 class="text-50 font-bold text-center py-lg-60 py-40">Museum Quality. 100% Hand-Painted.</h1>
+      <h1 class="text-50 font-bold text-center lg:py-60 py-40">Museum Quality. 100% Hand-Painted.</h1>
       <img v-if="appStore.isPc" :src="imagePrefix('/static/artdafen/program-2_pc.webp')"
            alt="Museum Quality. 100% Hand-Painted.">
       <img v-else :src="imagePrefix('/static/artdafen/program-2_app.webp')" alt="Museum Quality. 100% Hand-Painted.">
       <div class="museum-wrapper">
-        <img class="cover fit-contain" :src="imagePrefix('/static/artdafen/program-3.webp')" alt="bespoke">
+        <img class="cover object-contain" :src="imagePrefix('/static/artdafen/program-3.webp')" alt="bespoke">
         <div class="content text-center acea-row row-column-between gap-row-base">
-          <p class="text-30 f-bold">Premium Material Standards</p>
+          <p class="text-30 font-bold">Premium Material Standards</p>
           <div>
             <p class="text-26" style="line-height: 2;">Canvas & Frame: 400gsm heavy-duty linen canvas on solid wood
               inner frames for lasting durability.</p>
@@ -93,7 +93,7 @@
       </div>
       <div class="trusted-wrapper">
         <div class="content text-center acea-row row-column-between gap-row-base">
-          <p class="text-30 f-bold">Your Trusted Physical Partner in Art Manufacturing</p>
+          <p class="text-30 font-bold">Your Trusted Physical Partner in Art Manufacturing</p>
           <div>
             <p class="text-26" style="line-height: 2;">Step inside ArtDaFen. Unlike dropshippers, we own our
               infrastructure. From our dedicated artisan studios and modern corporate offices to our immersive physical
@@ -103,26 +103,26 @@
         </div>
         <div class="view">
           <div class="large overflow-hidden">
-            <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-4.webp')" alt="">
+            <img class="w-full h-full object-cover img-hover" :src="imagePrefix('/static/artdafen/program-4.webp')" alt="">
           </div>
           <div class="combination-wrapper">
             <div class="combination-item">
               <div class="middle overflow-hidden">
-                <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-5.webp')"
+                <img class="w-full h-full object-cover img-hover" :src="imagePrefix('/static/artdafen/program-5.webp')"
                      alt="">
               </div>
               <div class="small overflow-hidden">
-                <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-6.webp')"
+                <img class="w-full h-full object-cover img-hover" :src="imagePrefix('/static/artdafen/program-6.webp')"
                      alt="">
               </div>
             </div>
             <div class="combination-item reverse">
               <div class="middle overflow-hidden">
-                <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-8.webp')"
+                <img class="w-full h-full object-cover img-hover" :src="imagePrefix('/static/artdafen/program-8.webp')"
                      alt="">
               </div>
               <div class="small overflow-hidden">
-                <img class="w-full h-full fit-cover img-hover" :src="imagePrefix('/static/artdafen/program-7.webp')"
+                <img class="w-full h-full object-cover img-hover" :src="imagePrefix('/static/artdafen/program-7.webp')"
                      alt="">
               </div>
             </div>
@@ -181,7 +181,7 @@
             >
               <SvgIcon :name="item.icon" class="text-60"/>
               <p class="content flex-1">
-                <span class="text-26 f-bold">{{ item.title }}: </span>
+                <span class="text-26 font-bold">{{ item.title }}: </span>
                 <span class="text-22">{{ item.desc }}</span>
               </p>
             </div>

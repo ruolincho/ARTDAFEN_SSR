@@ -11,8 +11,8 @@
       <img :src="imagePrefix(item.banners[0] || item.img)" :alt="item.title" class="bg-image"/>
       <NuxtLink class="content-overlay" :to="`/zone-detail/${item.id}/${item.slug}`">
         <div class="text-box">
-          <h2 class="title line1">{{ item.title }}</h2>
-          <p class="subtitle line1">{{ item.name }}</p>
+          <h2 class="title truncate">{{ item.title }}</h2>
+          <p class="subtitle truncate">{{ item.name }}</p>
         </div>
         <div class="link-box acea-row row-center-wrapper">
           <SvgIcon name="link" class="text-20" />

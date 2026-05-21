@@ -90,7 +90,7 @@ export function useCustomProductJsonLd(
             "sku": p.id, // 商品SKU
             "mpn": p.id, // 制造商零件编号，和 sku 值一致
             "brand": {"@type": "Brand", "name": "ARTDAFEN"},
-            "image": [mainImg, ...additionalImages], // 商品图片
+            "image": [...additionalImages, mainImg], // 商品图片
             "keywords": p.keywords, // 商品关键词
             "description": p.description, // 商品描述（可读友好、与页面一致）
             "url": `${siteUrl.replace(/\/+$/, '')}/paint-detail/${p.id}/${p.slug}`, // 此商品详情页的规范URL（canonical）

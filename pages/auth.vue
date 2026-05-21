@@ -1,8 +1,8 @@
 <template>
   <div class="auth-container">
     <!-- 没有验证邮箱的状态 -->
-    <div class="login-container border-gray-200 rounded-sm shadow-lg p-lg-32 p-20" v-if="notVerified">
-      <p class="text-20 text-center f-bold mb-16">Verify Your Email Address</p>
+    <div class="login-container rounded-sm shadow-lg lg:p-32 p-20" v-if="notVerified">
+      <p class="text-20 text-center font-bold mb-16">Verify Your Email Address</p>
       <p class="text-center text-14 text-gray-600 mb-24">Kindly check your email inbox.</p>
       <el-form
         ref="ruleFormRef"

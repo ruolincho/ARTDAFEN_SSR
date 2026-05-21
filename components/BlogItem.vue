@@ -2,14 +2,14 @@
   <NuxtLink class="blog-item" :to="`/journal-detail/${item.id}/${item.slug}`" target="_blank">
     <div class="overflow-hidden">
       <img
-          class="w-full h-full fit-cover img-hover aspect-ratio-16_9"
+          class="w-full h-full object-cover img-hover aspect-video"
           :src="imagePrefix(item.img)"
           :alt="item.title"
       >
     </div>
     <div class="acea-row row-between-wrapper mt-16 mb-10">
-      <h1 class="text-22 f-bold-500 flex-1 line2 border-r-sm pr-md-20 pr-10">{{ item.title }}</h1>
-      <div class="text-center px-md-20 px-10 text-gray-400">
+      <h1 class="text-22 font-500 flex-1 line-clamp-2 border-r md:pr-20 pr-10">{{ item.title }}</h1>
+      <div class="text-center md:px-20 px-10 text-gray-400">
         <SvgIcon
             :name="item.like ? 'follow-fill' : 'follow'"
             class="text-20 cursor-pointer" :class="{'text-error': item.like}"
@@ -24,7 +24,7 @@
     </div>
     <div class="product-list mt-16" v-if="item.products.length">
       <NuxtLink
-          class="product-item border-t-sm py-8 acea-row row-middle"
+          class="product-item border-t  py-8 acea-row row-middle"
           :to="productLink(goods)"
           target="_blank"
           v-for="goods in item.products"
@@ -34,8 +34,8 @@
           <img :src="imagePrefix(goods.img)" :alt="goods.title">
         </div>
         <div class="flex-1 overflow-hidden">
-          <h1 class="line1 text-16">{{ goods.title }}</h1>
-          <p class="line1 text-14 my-4 text-gray-400">{{ formatAttr(goods.labels) }}</p>
+          <h1 class="truncate text-16">{{ goods.title }}</h1>
+          <p class="truncate text-14 my-4 text-gray-400">{{ formatAttr(goods.labels) }}</p>
           <p class="text-14">{{ formatToCurrency(goods.retailPrice) }}</p>
         </div>
       </NuxtLink>

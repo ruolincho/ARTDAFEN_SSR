@@ -20,7 +20,7 @@
     <slot name="empty">
       <div class="text-center">
         <SvgIcon name="empty" class="text-50" />
-        <p class="text-20 f-bold mt-20">No Data</p>
+        <p class="text-20 font-bold mt-20">No Data</p>
         <p class="text-14 my-20">{{ emptyText }}</p>
       </div>
     </slot>

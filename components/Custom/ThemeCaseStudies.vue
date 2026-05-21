@@ -1,19 +1,19 @@
 <template>
-  <div class="text-center my-lg-40 my-30">
+  <div class="text-center lg:my-40 my-30">
     <h2 class="text-50">MORE CASE STUDIES</h2>
   </div>
   <!--桌面端视图-->
   <div class="case-list" v-if="appStore.isPc">
     <div class="case-item" v-for="item in themeOptions" :key="item.id">
-      <div class="acea-row row-between-wrapper f-bold-500 py-20">
-        <span class="text-uppercase text-26">{{ item.name }}</span>
-        <span class="text-uppercase text-underline text-20 text-gray-600 cursor-pointer"
+      <div class="acea-row row-between-wrapper font-500 py-20">
+        <span class="uppercase text-26">{{ item.name }}</span>
+        <span class="uppercase underline text-20 text-gray-600 cursor-pointer"
               @click="seeMoreSample(item)">see more</span>
       </div>
       <div class="case-content">
         <div class="item" v-for="(sample, index) in item.samples" :key="sample.id"
              @click="showCaseContrast(item.samples, index)">
-          <img class="w-full h-full fit-cover img-hover"
+          <img class="w-full h-full object-cover img-hover"
                v-lazy="imagePrefix(sample.compareImg)"
                :alt="item.name + '_sample'"
           />
@@ -40,15 +40,15 @@
     <swiper-slide v-for="item in themeOptions" :key="item.id">
       <div class="case-list">
         <div class="case-item">
-          <div class="acea-row row-between-wrapper f-bold-500 py-20">
-            <span class="text-uppercase text-26">{{ item.name }}</span>
-            <span class="text-uppercase text-underline text-20 text-gray-600 cursor-pointer"
+          <div class="acea-row row-between-wrapper font-500 py-20">
+            <span class="uppercase text-26">{{ item.name }}</span>
+            <span class="uppercase underline text-20 text-gray-600 cursor-pointer"
                   @click="seeMoreSample(item)">see more</span>
           </div>
           <div class="case-content">
             <div class="item" v-for="(sample, index) in item.samples" :key="sample.id"
                  @click="showCaseContrast(item.samples, index)">
-              <img class="w-full h-full fit-cover img-hover"
+              <img class="w-full h-full object-cover img-hover"
                    :src="imagePrefix(sample.compareImg)"
                    :alt="item.name + '_sample'"
               />

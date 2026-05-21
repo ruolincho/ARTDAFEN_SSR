@@ -6,7 +6,7 @@
   <section class="title-wrapper pt-15" v-if="pageSeo">
     <div class="container-fluid">
       <div class="title-box text-center">
-        <h1 class="text-60 f-bold-500">{{ pageSeo.name }}</h1>
+        <h1 class="text-60 font-500">{{ pageSeo.name }}</h1>
         <p class="mt-10 text-gray-500" style="line-height: 1.7">{{ pageSeo.description }}</p>
       </div>
     </div>
@@ -15,7 +15,7 @@
   <!-- 关键字搜索 -->
   <section class="search-wrapper" v-if="routerParams.KEYWORD">
     <div class="container-fluid">
-      <div class="search-header pt-md-30 pt-15">
+      <div class="search-header md:pt-30 pt-15">
         <div class="input-wrapper">
           <input
               ref="searchInputRef"
@@ -43,7 +43,7 @@
 
             <!--后台返回的筛选-->
             <div class="side-menu scroll-custom">
-              <div class="py-md-30 py-15 f-bold text-30">
+              <div class="md:py-30 py-15 font-bold text-30">
                 FILTERS
               </div>
               <template v-for="group in groupList" :key="group.id">
@@ -75,16 +75,13 @@
                         </div>
                         <div v-show="isCustomPrice">
                           <div class="text-14 my-10">Min Price</div>
-                          <div class="acea-row row-between-wrapper px-15 py-12"
-                               :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']">
+                          <div class="acea-row row-between-wrapper px-15 py-12 border  ">
                             <input type="text" placeholder="1400" style="width: 60%" v-model="startPrice"
                                    :disabled="!isCustomPrice" @blur="onStartPriceBlur">
                             <span class="text-gray-600">{{ getCurrencySymbol }}</span>
                           </div>
                           <div class="text-14 my-10">Max Price</div>
-                          <div class="acea-row row-between-wrapper px-15 py-12"
-                               :class="[!isCustomPrice ?  'bg-gray-100': 'border-sm']"
-                          >
+                          <div class="acea-row row-between-wrapper px-15 py-12 border  ">
                             <input type="text" placeholder="3400" style="width: 60%" v-model="endPrice"
                                    :disabled="!isCustomPrice" @blur="onEndPriceBlur">
                             <span class=" text-gray-600">{{ getCurrencySymbol }}</span>
@@ -100,7 +97,7 @@
                 <!-- RADIO -->
                 <template v-if="group.config?.type === 'RADIO'">
                   <Expandable v-model="group.isShow" :title="group.name">
-                    <div class="scroll-y pr-4 scroll-custom">
+                    <div class="overflow-y-auto overflow-x-hidden pr-4 scroll-custom">
                       <div class="acea-row row-column gap-row-sm">
                         <div
                             class="acea-row row-middle cursor-pointer"
@@ -123,7 +120,7 @@
                 <!-- CHECKBOX -->
                 <template v-if="group.config?.type === 'CHECKBOX'">
                   <Expandable v-model="group.isShow" :title="group.name">
-                    <div class="scroll-y pr-4 scroll-custom">
+                    <div class="overflow-y-auto overflow-x-hidden pr-4 scroll-custom">
                       <div class="acea-row row-column gap-row-sm">
                         <div
                             class="acea-row row-middle cursor-pointer"
@@ -146,7 +143,7 @@
                 <!-- COLOR -->
                 <template v-if="group.config?.type === 'COLOR'">
                   <Expandable v-model="group.isShow" :title="group.name">
-                    <div class="scroll-y pr-4 scroll-custom">
+                    <div class="overflow-y-auto overflow-x-hidden pr-4 scroll-custom">
                       <div class="color-list acea-row row-middle gap-sm">
                         <div
                             class="color-item cursor-pointer"
@@ -167,7 +164,7 @@
                 <!-- SHAPE -->
                 <template v-if="group.config?.type === 'SHAPE'">
                   <Expandable v-model="group.isShow" :title="group.name">
-                    <div class="scroll-y pr-4 scroll-custom">
+                    <div class="overflow-y-auto overflow-x-hidden pr-4 scroll-custom">
                       <div class="acea-row row-column gap-row-sm">
                         <div
                             class="acea-row row-middle cursor-pointer"
@@ -187,7 +184,7 @@
                   </Expandable>
                 </template>
               </template>
-              <hr class="border-t-sm"></hr>
+              <hr>
             </div>
 
             <div class="acea-row nowrap side-button py-20">
@@ -201,7 +198,7 @@
 
           <!--排序按钮 Pc端-->
           <div
-              class="py-md-30 py-15 acea-row row-right row-middle gap-column-base"
+              class="md:py-30 py-15 acea-row row-right row-middle gap-column-base"
               v-show="appStore.device === 'pc'"
           >
             <!--展示过滤选项-->
@@ -236,7 +233,7 @@
           </div>
 
           <!--按钮组 Pc端-->
-          <div class="acea-row gap-xs row-middle pb-md-30 pb-15" v-show="appStore.device === 'pc'">
+          <div class="acea-row gap-xs row-middle md:pb-30 pb-15" v-show="appStore.device === 'pc'">
             <!--Shape 选中的值-->
             <el-tag
                 v-if="shapeSubmitted.id"
@@ -311,11 +308,11 @@
               {{ artistSelected.name }}
               <template v-if="isDev"> - {{ artistSelected.id }}</template>
             </el-tag>
-            <div class="cursor-pointer text-underline" @click="reset" v-if="hasFilterSelected">Clear all</div>
+            <div class="cursor-pointer underline" @click="reset" v-if="hasFilterSelected">Clear all</div>
           </div>
           <!--筛选区域 App端-->
           <div
-              class="buttons-wrapper p-15 acea-row nowrap gap-column-xs scroll-x scroll-hide"
+              class="buttons-wrapper p-15 acea-row nowrap gap-column-xs overflow-x-auto overflow-y-hidden scroll-hide"
               v-show="appStore.device === 'app'"
               ref="appFilterRef"
               :style="{ top: 'var(--header-height)', margin: '0 -15px' }"
@@ -433,7 +430,7 @@
 
             <!--推荐数据-->
             <template v-if="isShowRecommended">
-              <h1 class="py-sm-30 py-20 text-26 f-bold border-b-md border-gray-700 mb-20">Product Related</h1>
+              <h1 class="sm:py-30 py-20 text-26 font-bold border-b-2  border-primary mb-20">Product Related</h1>
               <ProList
                   ref="proListRecommendedRef"
                   :request-api="getProductRecommendedList"
@@ -450,7 +447,7 @@
                 <template #empty>
                   <div class="text-center py-60">
                     <SvgIcon name="empty" class="text-50" />
-                    <p class="text-20 f-bold mt-20">No Data</p>
+                    <p class="text-20 font-bold mt-20">No Data</p>
                     <p class="text-14 my-20">No data found, please check the query or try again later.</p>
                   </div>
                 </template>
@@ -467,7 +464,7 @@
     <template #default>
       <!-- popup 头部 -->
       <div
-          class="app-popup-header mt-12 mb-20 acea-row nowrap gap-column-base scroll-x scroll-hide"
+          class="app-popup-header mt-12 mb-20 acea-row nowrap gap-column-base overflow-x-auto overflow-y-hidden scroll-hide"
           style="white-space: nowrap"
           ref="popupHeaderRef"
       >
@@ -494,7 +491,7 @@
         <!-- SORT -->
         <template v-if="popupCurrentMenu.config?.type === 'SORT'">
           <div
-              class="text-20 py-16 border-b-sm border-gray-200"
+              class="text-20 py-16 border-b  "
               :class="[sortSelected.id === item.id? 'text-gray-700': 'text-gray-500']"
               v-for="item in popupCurrentMenu.children"
               :key="item.id"
@@ -507,7 +504,7 @@
         <!-- PRICE -->
         <template v-if="popupCurrentMenu.config?.type === 'PRICE'">
           <div class="mx-12 price-range-text ">
-            <div class="text-center f-bold pt-20 pb-20">
+            <div class="text-center font-bold pt-20 pb-20">
               {{ getCurrencySymbol }}{{ priceRange[0] }} ~ {{ getCurrencySymbol }}{{ priceRange[1] }}
               <template v-if="priceRange[1] >= PRICER_MAX">+</template>
             </div>
@@ -538,7 +535,7 @@
         <!-- RADIO -->
         <template v-if="popupCurrentMenu.config?.type === 'RADIO'">
           <div
-              class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
+              class="text-20 py-16 border-b   acea-row row-between-wrapper"
               v-for="item in popupCurrentMenu.children"
               :key="item.id"
               @click="clickRadioType(item)"
@@ -555,7 +552,7 @@
         <!-- CHECKBOX -->
         <template v-if="popupCurrentMenu.config?.type === 'CHECKBOX'">
           <div
-              class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
+              class="text-20 py-16 border-b   acea-row row-between-wrapper"
               v-for="item in popupCurrentMenu.children"
               :key="item.id"
               @click="clickCheckoutType(item)"
@@ -571,7 +568,7 @@
 
         <!-- COLOR -->
         <template v-if="popupCurrentMenu.config?.type === 'COLOR'">
-          <div class="scroll-y pr-4 scroll-custom">
+          <div class="overflow-y-auto overflow-x-hidden pr-4 scroll-custom">
             <div class="color-list acea-row row-middle gap-sm">
               <div
                   class="color-item cursor-pointer"
@@ -589,7 +586,7 @@
         <!-- SHAPE -->
         <template v-if="popupCurrentMenu.config?.type === 'SHAPE'">
           <div
-              class="text-20 py-16 border-b-sm border-gray-200 acea-row row-between-wrapper"
+              class="text-20 py-16 border-b   acea-row row-between-wrapper"
               v-for="item in popupCurrentMenu.children"
               :key="item.id"
               @click="clickShapeType(item)"
@@ -605,7 +602,7 @@
       </div>
     </template>
     <template #footer>
-      <div class="mt-20 mb-12 acea-row nowrap gap-column-xs scroll-x scroll-hide">
+      <div class="mt-20 mb-12 acea-row nowrap gap-column-xs overflow-x-auto overflow-y-hidden scroll-hide">
         <!--排序 选中的值-->
         <el-tag
             v-if="sortSelected.id"

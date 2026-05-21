@@ -37,7 +37,7 @@
 
     <!-- 自定义 -->
     <div class="container" v-show="currentView === 'custom'">
-      <div class="spu-wrapper row pt-md-50 pt-20">
+      <div class="spu-wrapper row md:pt-50 pt-20">
         <!--预览图栅格-->
         <div class="col-md-6">
           <!--示例图-->
@@ -46,8 +46,8 @@
               <div class="favorite-list" style="max-width: 640px; margin: auto">
                 <div class="favorite-item">
                   <img class="w-full" :src="imagePrefix(lastThemeObj.img)" alt="">
-                  <p class="p-title text-28 line1 p-sm-15 p-10">{{ lastThemeObj.name }}</p>
-                  <div class="tips text-20 p-8 f-bold">EXAMPLE IMAGE</div>
+                  <p class="p-title text-28 truncate sm:p-15 p-10">{{ lastThemeObj.name }}</p>
+                  <div class="tips text-20 p-8 font-bold">EXAMPLE IMAGE</div>
                 </div>
               </div>
             </div>
@@ -108,7 +108,7 @@
             <div class="my-15" v-if="!imageUrl">
               <p class="acea-row row-middle mb-15">
                 <span class="text-16">Photo: Not uploaded</span>
-                <SvgIcon name="info-fill" class="text-20 ml-8 cursor-pointer" @click="openNotice" />
+                <SvgIcon name="info-fill" class="ml-8 cursor-pointer" @click="openNotice" style="font-size: 20px;" />
               </p>
 
               <!--点击上传图片-->
@@ -131,13 +131,13 @@
               <!--说明-->
               <div class="my-15 text-14">
                 You may also send us your photo(s) by attaching them to an email and sending it to: <a
-                  :href="`mailto:${CONTACT_EMAIL}`" class="text-underline text-secondary">{{ CONTACT_EMAIL }}</a>.
+                  :href="`mailto:${CONTACT_EMAIL}`" class="underline text-secondary">{{ CONTACT_EMAIL }}</a>.
                 Please
                 include your full name and phone number in the email. We will contact you promptly if we have any
                 questions regarding your custom oil painting.
               </div>
               <div class="my-15 text-14">
-                <span class="f-bold">IMPORTANT NOTE:</span>
+                <span class="font-bold">IMPORTANT NOTE:</span>
                 Our artists can combine two or more photos into a single oil painting. If you plan to send us multiple
                 photos, please provide a detailed explanation of which elements from each photo you’d like the artist to
                 incorporate into the final painting.
@@ -147,7 +147,7 @@
                 high-quality photo is essential for the artist to capture all the fine details in the painting.
               </div>
               <div class="my-15 text-14">
-                <span class="f-bold">Copyright:</span>
+                <span class="font-bold">Copyright:</span>
                 You must either be the sole owner of the copyright for the photo or have the copyright owner’s
                 permission to use the photo for the creation of an oil painting. please refer to the "photograph
                 release" section in our terms of use agreement for more details.
@@ -158,8 +158,8 @@
             <template v-else>
               <ComboSkeleton :loading="loadingCombo && !firstLoadCombo">
                 <div>
-                  <div class="acea-row row-between-wrapper mb-15 gap-column-base">
-                    <p class="text-22 flex-1 line2" style="line-height: 1.5">
+                  <div class="acea-row row-between-wrapper my-15 md:mt-0 gap-column-base">
+                    <p class="text-22 flex-1 line-clamp-2" style="line-height: 1.5">
                       <span>Photos to Paintings</span>
                       <span>: Hand-painted Oil Painting Reproduction</span>
                     </p>
@@ -172,7 +172,7 @@
 
                   <div class="my-15 acea-row row-middle price-wrapper py-10"
                        :style="{ top: 'var(--header-height)' }">
-                    <span class="text-28 f-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
+                    <span class="text-28 font-bold mr-10">{{ formatToCurrency(totalPrice || 0) }}</span>
                     <img class="p-img cursor-pointer" src="~/assets/images/hand-painted.png" alt="hand-painted" v-click-outside="onClickOutside" ref="checkButtonRef">
                     <!--<el-tag class="cursor-pointer" type="primary" round effect="dark" v-click-outside="onClickOutside"-->
                     <!--        ref="checkButtonRef">Check-->
@@ -330,15 +330,15 @@
       virtual-triggering
   >
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20">
-      <span class="f-bold text-18 flex-1 line1 mr-10">Painting Size Price</span>
+      <span class="font-bold text-18 flex-1 truncate mr-10">Painting Size Price</span>
       <span class="text-14">{{ formatToCurrency(currentSizeOption?.price || 0) }}</span>
     </div>
     <div class="acea-row row-between-wrapper text-gray-700 py-20 mb-10">
-      <span class="f-bold text-18 flex-1 line1 mr-10">Frame Price</span>
+      <span class="font-bold text-18 flex-1 truncate mr-10">Frame Price</span>
       <span class="text-14">{{ formatToCurrency(frameMoney || 0) }}</span>
     </div>
     <div class="acea-row row-between-wrapper text-gray-700 mb-10 py-20" v-if="hasFrame && !!currentMaterialId">
-      <span class="f-bold text-18 flex-1 line1 mr-10">Canvas material Price</span>
+      <span class="font-bold text-18 flex-1 truncate mr-10">Canvas material Price</span>
       <span class="text-14">{{ formatToCurrency(currentMaterialOption?.price || 0) }}</span>
     </div>
   </el-popover>

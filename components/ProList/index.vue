@@ -10,7 +10,7 @@
     <slot :rows="processTableData"/>
     <!-- 分页组件 -->
     <slot name="pagination">
-      <div class="acea-row row-center-wrapper py-lg-40 py-20">
+      <div class="acea-row row-center-wrapper lg:py-40 py-20">
         <Pagination
             v-if="pagination"
             :pageable="pageable"

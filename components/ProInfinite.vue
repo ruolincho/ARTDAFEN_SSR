@@ -6,7 +6,7 @@
       <!-- 分页组件 -->
       <div ref="loadMoreRef">
         <slot name="pagination" v-if="!isObserver && !loaded">
-          <div class="acea-row row-center-wrapper py-lg-40 py-20">
+          <div class="acea-row row-center-wrapper lg:py-40 py-20">
             <el-button  size="large" plain @click="startLoadMore">
               See More
               <SvgIcon name="down" />
@@ -19,7 +19,7 @@
     <slot name="empty" v-else-if="requestFinished">
       <div class="text-center py-60">
         <SvgIcon name="empty" class="text-50" />
-        <p class="text-20 f-bold mt-20">No Data</p>
+        <p class="text-20 font-bold mt-20">No Data</p>
         <p class="text-14 my-20">No data found, please check the query or try again later.</p>
         <el-button size="large" type="primary" @click="getTableList">TRY AGAIN</el-button>
       </div>

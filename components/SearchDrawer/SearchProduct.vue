@@ -11,10 +11,10 @@
       </div>
       <div class="p-content flex-1 acea-row row-column gap-row-xs">
         <div class="author text-14">{{ item.creator?.name }}</div>
-        <div class="title text-16 f-bold line2" style="line-height: 1.5">{{ item.title }}</div>
+        <div class="title text-16 font-bold line-clamp-2" style="line-height: 1.5">{{ item.title }}</div>
         <div class="price text-14">
           <span>{{ formatToCurrency(item.retailPrice) }}</span>
-          <span class="text-gray-400 text-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">
+          <span class="text-gray-400 line-through ml-5 text-14" v-if="item.retailPrice !== item.marketPrice">
             {{ formatToCurrency(item.marketPrice)}}
           </span>
         </div>

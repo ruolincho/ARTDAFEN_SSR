@@ -9,17 +9,17 @@
         <template #default="scope">
           <div class="row favorites-list gap-row-base">
             <div class="col-lg-3 col-md-4 col-6" v-for="item in scope.rows" :key="item.id">
-              <NuxtLink class="favorites-item cursor-pointer border-sm border-gray-200 p-10 block" :to="productLink(item)">
-                <div class="aspect-ratio relative">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
-                  <div class="operation rounded-full p-5">
-                    <SvgIcon name="delete" @click.stop="cancelThumbs(item.id)" />
+              <NuxtLink class="favorites-item cursor-pointer border  p-10 block" :to="productLink(item)">
+                <div class="aspect-square relative">
+                  <img class="w-full h-full object-cover" :src="imagePrefix(item.img)" :alt="item.title"/>
+                  <div class="operation rounded-full acea-row row-center-wrapper">
+                    <SvgIcon name="delete" @click.stop.prevent="cancelThumbs(item.id)" />
                   </div>
                 </div>
-                <p class="line1 text-12 my-8">{{ item.title }}</p>
+                <p class="truncate text-12 my-8">{{ item.title }}</p>
                 <p>
-                  <span class="text-14 f-bold">{{ formatToCurrency(item.retailPrice) }}</span>
-                  <span class="text-gray-400 text-through ml-5 text-12" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
+                  <span class="text-14 font-bold">{{ formatToCurrency(item.retailPrice) }}</span>
+                  <span class="text-gray-400 line-through ml-5 text-12" v-if="item.retailPrice !== item.marketPrice">{{ formatToCurrency(item.marketPrice) }}</span>
                 </p>
               </NuxtLink>
             </div>
@@ -28,7 +28,7 @@
         <template #empty>
           <div class="text-center py-60">
             <SvgIcon name="empty" class="text-50" />
-            <p class="text-20 f-bold mt-20">No Favorites Found</p>
+            <p class="text-20 font-bold mt-20">No Favorites Found</p>
             <p class="text-14 my-20">You have not collected any products yet.</p>
             <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">START SHOPPING</el-button>
           </div>
@@ -86,9 +86,12 @@ const cancelThumbs = async (id: string) => {
     position: relative;
     .operation {
       position: absolute;
-        right: 10px;
-        top: 10px;
+      right: 10px;
+      top: 10px;
       background: #fff;
+      width: 32px;
+      height: 32px;
+
     }
   }
 }

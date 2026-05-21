@@ -1,11 +1,11 @@
 <template>
   <div class="expandable-wrapper" :class="{ open: modelValue }">
     <!-- Header -->
-    <div class="py-20 border-t-sm cursor-pointer" @click="toggle">
+    <div class="py-20 border-t  cursor-pointer" @click="toggle">
       <slot name="header" :open="modelValue" :toggle="toggle">
         <!-- 默认 Header -->
-        <div class="expandable-header acea-row row-between-wrapper text-uppercase">
-          <span class="f-bold flex-1 header-text">{{ title }}</span>
+        <div class="expandable-header acea-row row-between-wrapper uppercase">
+          <span class="font-bold flex-1 header-text">{{ title }}</span>
           <div class="header-icon">
             <SvgIcon name="down" />
           </div>
@@ -59,7 +59,7 @@
  * <Expandable v-model="open" title="测试">
  *   <template #header="{ open, toggle }">
  *     <div class="acea-row row-between-wrapper">
- *       <span class="f-bold">测试</span>
+ *       <span class="font-bold">测试</span>
  *       <span
  *         class="iconfont"
  *         :class="open ? 'icon-up' : 'icon-down'"
@@ -68,7 +68,7 @@
  *     </div>
  *   </template>
  *
- *   <div class="scroll-y" style="max-height: 300px;">
+ *   <div class="overflow-y-auto overflow-x-hidden" style="max-height: 300px;">
  *     <div v-for="item in 10" :key="item">
  *       {{ item }}
  *     </div>

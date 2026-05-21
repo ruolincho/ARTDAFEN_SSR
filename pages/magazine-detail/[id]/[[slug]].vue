@@ -2,7 +2,7 @@
   <section class="news-detail">
     <div class="container-small">
 
-      <h1 class="text-40 f-bold my-20"> {{ newsDetail.title }}</h1>
+      <h1 class="text-40 font-bold my-20"> {{ newsDetail.title }}</h1>
 
       <div class="my-20 acea-row row-between-wrapper">
         <span class="text-16">{{ formatTimestamp(newsDetail.updateTime, 'YYYY-MM-DD HH:mm') }}</span>
@@ -20,13 +20,13 @@
             </el-button>
           </template>
           <div class="share-wrapper">
-            <p class="share-title text-12 f-bold">SHARE MAGAZINE</p>
+            <p class="share-title text-12 font-bold">SHARE MAGAZINE</p>
             <div class="share-list">
               <a
                   target="_blank"
                   rel="noopener noreferrer"
                   :href="item.href"
-                  class="share-item acea-row row-middle py-10 border-gray-200 border-b-sm"
+                  class="share-item acea-row row-middle py-10 border-b  "
                   v-for="item in share"
                   :key="item.name"
               >
@@ -34,7 +34,7 @@
                 <span class="ml-12">{{ item.name }}</span>
               </a>
               <span
-                  class="share-item acea-row row-middle py-10 border-gray-200 cursor-pointer"
+                  class="share-item acea-row row-middle py-10  cursor-pointer"
                   @click="handleCopy"
               >
                 <SvgIcon name="link" />
@@ -53,7 +53,7 @@
   <!-- 推荐新闻 -->
   <section class="news-more" v-if="newsDetail.id">
     <div class="container-small">
-      <h1 class="my-md-40 my-20 py-20 border-b-xl border-gray-700 text-26 f-bold">RECOMMEND</h1>
+      <h1 class="md:my-40 my-20 py-20 border-b-4  border-primary text-26 font-bold">RECOMMEND</h1>
       <ClientOnly>
         <ProInfinite
           ref="proInfiniteRef"
@@ -65,8 +65,8 @@
               <NuxtLink class="news-more-item acea-row row-between gap-row-base" :to="`/magazine-detail/${item.id}/${item.slug}`" v-for="item in scope.rows" :key="item.id">
                 <div class="p-cont">
                   <div>
-                    <p class="text-26 line2">{{ item.title }}</p>
-                    <p class="text-16 my-10 line2">{{ item.subtitle }}</p>
+                    <p class="text-26 line-clamp-2">{{ item.title }}</p>
+                    <p class="text-16 my-10 line-clamp-2">{{ item.subtitle }}</p>
                   </div>
                   <div class="acea-row row-between-wrapper gap-xs">
                     <div class="acea-row row-middle gap-xs flex-1">
@@ -76,7 +76,7 @@
                   </div>
                 </div>
                 <div class="p-img overflow-hidden">
-                  <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" :alt="item.title">
+                  <img class="w-full h-full object-cover img-hover aspect-video" :src="imagePrefix(item.img)" :alt="item.title">
                 </div>
               </NuxtLink>
             </div>
@@ -469,7 +469,7 @@ watch(() => newsDetail.value, (newVal: INews.Row) => {
     .news-more-item + .news-more-item {
       margin-top: var(--gutter-base);
       padding-top: var(--gutter-base);
-      border-top: var(--border-width-sm) solid var(--color-gray-200);
+      border-top: 1px solid var(--un-default-border-color, #e5e7eb);
     }
   }
 }

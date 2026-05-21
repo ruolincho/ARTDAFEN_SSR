@@ -1,7 +1,7 @@
 <template>
-  <div class="text-center my-lg-40 my-30">
+  <div class="text-center lg:my-40 my-30">
     <h2 class="text-50">TRANSFORM YOUR PHOTOS INTO STUNNING ARTWORKS</h2>
-    <p class="mt-20 text-gray-600 text-20 f-bold-500">
+    <p class="mt-20 text-gray-600 text-20 font-500">
       With Our Artists' Creation, Any Photo Can Be Turned Into An Elaborately Crafted Artwork. Choose From A Variety
       Of Unique Styles You Desire, And You'll Get Professional-Grade Results.
     </p>
@@ -9,9 +9,9 @@
   <div class="row gap-row-base style-list">
     <div class="col-md-3 col-sm-4 col-6" v-for="item in themeOptions" :key="item.id">
       <div class="style-item" @click="chooseTheme(item.id)">
-        <img class="p-img aspect-ratio" :src="imagePrefix(item.img)" alt="">
+        <img class="p-img aspect-square" :src="imagePrefix(item.img)" alt="">
         <p class="p-text text-30">{{ item.name }}</p>
-        <div class="p-btn border-white border-md">CUSTOMIZE NOW</div>
+        <div class="p-btn border-white border-2">CUSTOMIZE NOW</div>
       </div>
     </div>
   </div>

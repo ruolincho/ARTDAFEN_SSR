@@ -1,5 +1,5 @@
 <template>
-  <section class="sec-banner my-md-40 my-20">
+  <section class="sec-banner md:my-40 my-20">
     <div class="container">
       <img class="w-full" :src="imagePrefix('/static/artdafen/reviews-banner.webp')" alt="customer reviews">
     </div>
@@ -14,28 +14,28 @@
           <div class="reviews-list">
             <div class="reviews-item" v-for="item in scope.rows" :key="item.id">
               <img class="w-full" :src="imagePrefix(item.img)" :alt="item.name">
-              <div class="p-content border-sm">
+              <div class="p-content border  ">
                 <div class="p-10">
-                  <p class="text-18 f-bold-500 mb-md-10 mb-5">{{ item.name }}</p>
-<!--                  <p class="text-12 f-bold-500 text-gray-400 my-md-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
+                  <p class="text-18 font-500 md:mb-10 mb-5">{{ item.name }}</p>
+<!--                  <p class="text-12 font-500 text-gray-400 md:my-10 my-5">{{ formatTimestamp(item.createTime, 'YYYY/MM/DD') }}</p>-->
                   <el-rate
                     v-model="item.rating"
                     disabled
                     size="small"
                     style="height: auto"
                   />
-                  <p class="text-16 mt-md-10 mt-5" style="line-height: 1.5">{{ item.content }}</p>
+                  <p class="text-16 md:mt-10 mt-5" style="line-height: 1.5">{{ item.content }}</p>
                 </div>
                 <div class="product-list" v-if="item.product">
                   <div
-                    class="product-item border-t-sm p-10 acea-row row-middle cursor-pointer"
+                    class="product-item border-t   p-10 acea-row row-middle cursor-pointer"
                     @click="jumpToProduct(item.product)"
                   >
                     <div class="p-img mr-6">
-                      <img class="aspect-ratio fit-cover" :src="imagePrefix(item.product.img)" :alt="item.product.title">
+                      <img class="aspect-square object-cover" :src="imagePrefix(item.product.img)" :alt="item.product.title">
                     </div>
                     <div class="flex-1 overflow-hidden">
-                      <p class="line3 text-14">{{ item.product.title }}</p>
+                      <p class="line-clamp-3 text-14">{{ item.product.title }}</p>
                     </div>
                   </div>
                 </div>

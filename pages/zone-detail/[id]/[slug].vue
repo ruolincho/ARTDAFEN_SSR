@@ -11,14 +11,14 @@
       }"
     >
       <swiper-slide v-for="(item, index) in zoneDetail?.banners" :key="index" :lazy="true">
-        <img class="w-full h-full fit-cover" :src="imagePrefix(item)" alt="picturesInTheSpecialArea"/>
+        <img class="w-full h-full object-cover" :src="imagePrefix(item)" alt="picturesInTheSpecialArea"/>
       </swiper-slide>
     </swiper>
   </section>
 
   <section>
-    <div class="py-sm-30 py-20 text-center bg-gray-700 text-white">
-      <h1 class="text-30 f-bold-500 text-uppercase">{{ zoneDetail?.title }}</h1>
+    <div class="sm:py-30 py-20 text-center bg-gray-700 text-white">
+      <h1 class="text-30 font-500 uppercase">{{ zoneDetail?.title }}</h1>
       <h2 class="text-16 mt-10" style="max-width: 1000px; margin: auto;">{{ zoneDetail?.name }}</h2>
     </div>
   </section>
@@ -28,7 +28,7 @@
     <div class="container">
       <!--锚点-->
       <div id="list-anchor"></div>
-      <div class="pt-lg-40 pt-20">
+      <div class="lg:pt-40 pt-20">
         <!--路由插槽-->
         <NuxtPage/>
       </div>
@@ -38,7 +38,7 @@
   <!--更多专区探索-->
   <section>
     <div class="container">
-      <h1 class="pb-lg-30 pb-20 text-26 f-bold border-b-md border-gray-700 mb-lg-30 mb-20">VIBE EXPLORE</h1>
+      <h1 class="lg:pb-30 pb-20 text-26 font-bold border-b-2  border-primary lg:mb-30 mb-20">VIBE EXPLORE</h1>
       <div class="explore-list row gap-row-base">
         <div class="col-6 col-md-4" v-for="item in zoneExploreList" :key="item.id">
           <NuxtLink
@@ -50,8 +50,8 @@
               <img class="w-full img-hover" :src="imagePrefix(item.img)" :alt="item.title"/>
             </div>
             <div class="bg-gray-100 p-10 flex-1">
-              <p class="text-20 f-bold">{{ item.title }}</p>
-              <p class="text-14 mt-10 line2">{{ item.name }}</p>
+              <p class="text-20 font-bold">{{ item.title }}</p>
+              <p class="text-14 mt-10 line-clamp-2">{{ item.name }}</p>
             </div>
           </NuxtLink>
         </div>
@@ -60,13 +60,13 @@
   </section>
 
   <!-- PHOTO TO ART -->
-  <section class="sec-art pt-lg-40 pt-20">
+  <section class="sec-art lg:pt-40 pt-20">
     <div class="container">
-      <h1 class="pb-lg-30 pb-20 text-26 f-bold border-b-md border-gray-700 mb-lg-30 mb-20">CREATE YOUR OWN</h1>
+      <h1 class="lg:pb-30 pb-20 text-26 font-bold border-b-2  border-primary lg:mb-30 mb-20">CREATE YOUR OWN</h1>
       <NuxtLink class="make-wrapper" :to="`/custom-paint/${ArtCodeEnum.Painting}`" @click="goCustomPaint">
-        <div class="make-box flex-1 bg-gray-100 p-md-40 p-20">
-          <p class="text-18 f-bold">MAKE YOUR MEMORIES LAST</p>
-          <p class="text-60 f-bold my-20">Photo To Art</p>
+        <div class="make-box flex-1 bg-gray-100 md:p-40 p-20">
+          <p class="text-18 font-bold">MAKE YOUR MEMORIES LAST</p>
+          <p class="text-60 font-bold my-20">Photo To Art</p>
           <p class="text-22">Easily Transform Life's Real Moments Into A <br> Masterpiece — Made Just For You.</p>
         </div>
         <img class="cover" :src="imagePrefix('/static/artdafen/make.webp')" alt="make"/>

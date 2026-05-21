@@ -1,9 +1,9 @@
 <template>
   <section>
     <div class="container">
-      <div class="text-center py-lg-40 py-30">
+      <div class="text-center lg:py-40 py-30">
         <h1 class="text-50">CUSTOM PORTRAIT SHOWCASE — FROM YOUR PHOTO TO ART</h1>
-        <p class="mt-20 text-gray-600 text-20 f-bold-500 text-capitalize">
+        <p class="mt-20 text-gray-600 text-20 font-500 capitalize">
           Discover how an ordinary photo transforms into extraordinary art. <br/> In our Custom Portrait Showcase,
           you’ll see
           real examples of before-and-after results — side-by-side comparisons revealing the remarkable detail, color,

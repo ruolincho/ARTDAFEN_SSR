@@ -2,14 +2,14 @@
   <div class="my-15">
     <p class="acea-row row-middle mb-15">
       <span class="text-16">{{ themeName }} Count: {{ modelValue }}</span>
-      <SvgIcon name="info-fill" class="text-20 ml-8 cursor-pointer" @click="openNotice" />
+      <SvgIcon name="info-fill" class="ml-8 cursor-pointer" @click="openNotice" style="font-size: 20px;" />
     </p>
 
     <div :id="tourId">
       <!-- Pc端复杂程度选择 -->
       <div class="size-picker" v-if="appStore.isPc">
         <div
-            class="size-option cursor-pointer text-14"
+            class="size-option border hover:border-2 hover:border-primary [&.on]:border-2 [&.on]:border-primary cursor-pointer text-14"
             :class="{ 'on': modelValue === item }"
             v-for="(item, index) in maxNumber" :key="index"
             @click="handleChange(item)"
@@ -29,7 +29,7 @@
               show-stops
           />
         </div>
-        <div class="flex-auto f-bold">{{ sliderValue }}</div>
+        <div class="font-bold">{{ sliderValue }}</div>
       </div>
     </div>
   </div>
@@ -111,13 +111,6 @@ const openNotice = () => {
       width: 50px;
       height: 36px;
       padding: 0 12px;
-      border: var(--border-width-sm) solid var(--color-gray-300);
-
-      &.on,
-      &:hover {
-        border-color: var(--color-gray-700);
-        border-width: var(--border-width-md);
-      }
     }
   }
 </style>

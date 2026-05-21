@@ -2,7 +2,17 @@ import path from 'path';
 // @ts-ignore
 export default defineNuxtConfig({
     ssr: process.env.NUXT_PUBLIC_ENABLE_SSR === 'true',
-    modules: ['@element-plus/nuxt', '@pinia/nuxt', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/google-fonts', '@nuxt/image', '@vite-pwa/nuxt', '@nuxt/icon'],
+    modules: [
+        '@unocss/nuxt',  // 必须放在 element-plus 前面
+        '@element-plus/nuxt',
+        '@pinia/nuxt',
+        '@nuxtjs/sitemap',
+        '@nuxtjs/robots',
+        '@nuxtjs/google-fonts',
+        '@nuxt/image',
+        '@vite-pwa/nuxt',
+        '@nuxt/icon'
+    ],
     runtimeConfig: {
         public: {
             siteName: process.env.NUXT_PUBLIC_SITE_NAME,
@@ -20,7 +30,7 @@ export default defineNuxtConfig({
         installMethods: ['ElMessage', 'ElMessageBox', 'ElNotification', 'ElLoading'],
     },
     // Import our SCSS theme override entry BEFORE any component styles
-    css: ['~/assets/styles/index.scss'], // We only introduce one version that we have compiled ourselves
+    css: ['@unocss/reset/tailwind.css', '~/assets/styles/index.scss'], // We only introduce one version that we have compiled ourselves
     site: {
         url: process.env.NUXT_PUBLIC_SITE_URL,
         name: process.env.NUXT_PUBLIC_SITE_NAME,

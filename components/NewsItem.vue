@@ -1,14 +1,14 @@
 <template>
   <NuxtLink class="news-item" :to="`/magazine-detail/${item.id}/${item.slug}`" target="_blank">
     <div class="p-img overflow-hidden">
-      <img class="w-full h-full fit-cover img-hover aspect-ratio-16_9" :src="imagePrefix(item.img)" :alt="item.title">
+      <img class="w-full h-full object-cover img-hover aspect-video" :src="imagePrefix(item.img)" :alt="item.title">
     </div>
-    <h2 class="text-22 mt-18 line2">{{ item.title }}</h2>
-    <p class="text-14 my-10 line3">{{ item.subtitle || '- -' }}</p>
+    <h2 class="text-22 mt-18 line-clamp-2">{{ item.title }}</h2>
+    <p class="text-14 my-10 line-clamp-3">{{ item.subtitle || '- -' }}</p>
     <div class="acea-row row-middle gap-xs">
       <el-tag type="info" effect="plain" v-for="label in item.labels" :key="label">{{ label }}</el-tag>
     </div>
-    <div class="day text-30 f-bold-200">{{ formatTimestamp(item.createTime, 'MMM Do YY') }}</div>
+    <div class="day text-30 font-200">{{ formatTimestamp(item.createTime, 'MMM Do YY') }}</div>
   </NuxtLink>
 </template>
 

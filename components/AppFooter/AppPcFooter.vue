@@ -30,7 +30,7 @@
         </a>
       </div>
     </div>
-    <div class="foot-menu-gap acea-row row-between py-20 my-20 border-t-sm border-b-sm">
+    <div class="foot-menu-gap acea-row row-between py-20 my-20 border-y">
       <dl class="foot-menu flex-1 overflow-hidden" v-if="noticeData.length">
         <dt>ANNOUNCEMENT</dt>
         <dd v-for="item in noticeData" :key="item.id">
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div class="foot-partner mb-20">
-      <p class="f-bold text-20 mb-20">Cooperative Partner</p>
+      <p class="font-bold text-20 mb-20">Cooperative Partner</p>
       <div class="imgs acea-row gap-base">
         <a href="https://www.paypal.com" target="_blank">
           <img src="~/assets/images/payment-methods.png" alt="payment-methods">

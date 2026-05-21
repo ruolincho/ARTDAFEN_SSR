@@ -20,7 +20,7 @@
                   @touchstart.passive="startDrag"
               ></div>
 
-              <div class="popup-body scroll-hide scroll-y">
+              <div class="popup-body scroll-hide overflow-y-auto overflow-x-hidden">
                 <slot></slot>
               </div>
 

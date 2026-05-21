@@ -8,13 +8,13 @@
           :request-success="onSuccess"
         >
           <template #default="scope">
-            <div class="review-header review-row text-14 py-15 border-b-sm border-gray-700 f-bold">
+            <div class="review-header review-row text-14 py-15 border-b border-primary font-bold">
               <div class="review-col1">Order</div>
               <div class="review-col2">Subject</div>
               <div class="review-col3">Time</div>
             </div>
             <div class="review-list">
-              <div class="review-item  border-b-sm" v-for="(item, index) in scope.rows" :key="item.id" @click="toggleNotice(index)">
+              <div class="review-item border-b" v-for="(item, index) in scope.rows" :key="item.id" @click="toggleNotice(index)">
                 <div class="review-row text-14 py-15 cursor-pointer">
                   <div class="review-col1">{{ item.id }}</div>
                   <div class="review-col2">{{ item.title }}</div>

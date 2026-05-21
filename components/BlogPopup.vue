@@ -20,19 +20,19 @@
       </div>
       <div class="interaction-container">
         <div class="author-container scroll-hide">
-          <div class="text-18 f-bold mb-10">{{ noteInfo.title }}</div>
+          <div class="text-18 font-bold mb-10">{{ noteInfo.title }}</div>
           <div class="text-16">{{ noteInfo.content }}</div>
           <div class="text-14 acea-row gap-xs mt-10" v-if="noteInfo?.labels?.length">
             <span class="text-secondary cursor-pointer" v-for="(label, labelIndex) in noteInfo.labels" :key="labelIndex">#{{ label }}</span>
           </div>
           <div class="product-list mt-16" v-if="noteInfo?.products?.length">
-            <div class="product-item border-t-sm py-8 acea-row row-middle cursor-pointer" v-for="goods in noteInfo.products.slice(0, moreProduct? -1 : 3)" :key="goods.id" @click.stop="jumpToProduct(goods)">
+            <div class="product-item border-t  py-8 acea-row row-middle cursor-pointer" v-for="goods in noteInfo.products.slice(0, moreProduct? -1 : 3)" :key="goods.id" @click.stop="jumpToProduct(goods)">
               <div class="p-img mr-6">
                 <img :src="imagePrefix(goods.img)" alt="">
               </div>
               <div class="flex-1 overflow-hidden">
-                <p class="line1 text-16">{{ goods.title }}</p>
-                <p class="line1 text-14 my-4 text-gray-400">{{ formatAttr(goods.labels) }}</p>
+                <p class="truncate text-16">{{ goods.title }}</p>
+                <p class="truncate text-14 my-4 text-gray-400">{{ formatAttr(goods.labels) }}</p>
                 <p class="text-14">${{ goods.retailPrice }}</p>
               </div>
             </div>

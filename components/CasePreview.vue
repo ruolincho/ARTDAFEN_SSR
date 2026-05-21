@@ -15,15 +15,15 @@
           >
             <div class="contrast-wrapper">
               <div class="contrast-item">
-                <div class="header text-18 py-12 line1">🖼️ OUR PAINTING</div>
+                <div class="header text-18 py-12 truncate">🖼️ OUR PAINTING</div>
                 <div class="content">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.paintImg)" alt=""/>
+                  <img class="w-full h-full object-cover" :src="imagePrefix(item.paintImg)" alt=""/>
                 </div>
               </div>
               <div class="contrast-item">
-                <div class="header text-18 py-12 line1">📸 ORIGINAL PHOTO</div>
+                <div class="header text-18 py-12 truncate">📸 ORIGINAL PHOTO</div>
                 <div class="content">
-                  <img class="w-full h-full fit-cover" :src="imagePrefix(item.actualImg)" alt=""/>
+                  <img class="w-full h-full object-cover" :src="imagePrefix(item.actualImg)" alt=""/>
                 </div>
               </div>
             </div>
@@ -55,7 +55,7 @@
             v-for="item in items"
             :key="item.id + '_thumb'"
           >
-            <img class="w-full h-full fit-cover" :src="imagePrefix(item.paintImg)" alt=""/>
+            <img class="w-full h-full object-cover" :src="imagePrefix(item.paintImg)" alt=""/>
           </swiper-slide>
         </swiper>
       </div>

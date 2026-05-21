@@ -3,7 +3,7 @@
   <!--头部-->
   <section class="sec-head">
     <div class="container">
-      <div class="text-center py-lg-40 py-20 header-section f-bold-500">
+      <div class="text-center lg:py-40 py-20 header-section font-500">
         <h1 class="text-50 mb-20">Shop by Artist</h1>
         <p class="text-16 text-gray-600 description">
           Our comprehensive website contains over 60,000 oil paintings from thousands of the most widely acclaimed
@@ -23,7 +23,7 @@
     <div class="container">
       <div class="letter-list acea-row row-between-wrapper gap-column-base">
         <NuxtLink
-            class="letter-item text-22 py-lg-20 py-10"
+            class="letter-item text-22 lg:py-20 py-10"
             v-for="letter in letters" :key="letter"
             :to="{ path: `/artists-all/${letter}`, query: categoryId ? { categoryId } : undefined }"
         >
@@ -45,17 +45,17 @@
           <div class="row artist-list my-20 gap-row-md ignore">
             <div class="col-lg-3 col-sm-4 col-6" v-for="(val, key) in artistsList" :key="key">
               <div class="artist-item pl-25 text-20">
-                <div class="letter text-22 f-bold ignore">{{ key }}</div>
+                <div class="letter text-22 font-bold ignore">{{ key }}</div>
                 <NuxtLink
                     v-for="art in val" :key="art.id"
-                    class="mb-10 cursor-pointer name line1 block"
+                    class="mb-10 cursor-pointer name truncate block"
                     :to="`/artist-detail/${art.id}/${art.slug}`"
                 >
                   {{ art.name }}
                 </NuxtLink>
 
                 <NuxtLink
-                    class="more text-22 f-bold cursor-pointer"
+                    class="more text-22 font-bold cursor-pointer"
                     v-if="val.length > 4"
                     :to="{
                       path: `/artists-all/${key}`,

@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <h1 class="text-40 f-bold-500 py-lg-50 py-30">Checkout</h1>
+    <h1 class="text-40 font-500 lg:py-50 py-30">Checkout</h1>
     <div class="cart-container acea-row row-between row-top" v-show="canCarts.length > 0">
-      <div class="review-container pr-md-30">
+      <div class="review-container md:pr-30">
 
         <!-- 产品视图 -->
         <div class="review-list">
@@ -10,14 +10,14 @@
             <div class="p-img">
               <div class="acea-row nowrap row-middle gap-base">
                 <el-checkbox v-model="item.selected" size="large" @change="changeCheck"/>
-                <div class="aspect-ratio p-10 border-sm border-gray-200 cursor-pointer" @click="jumpToProduct(item)">
-                  <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title">
+                <div class="aspect-square p-10 border cursor-pointer" @click="jumpToProduct(item)">
+                  <img class="w-full h-full object-contain" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title">
                 </div>
               </div>
             </div>
             <div class="p-cont flex-1">
               <div class="acea-row row-between-wrapper gap-base mb-10">
-                <p class="text-16 f-bold-500 flex-1">{{ item.title }}</p>
+                <p class="text-16 font-500 flex-1">{{ item.title }}</p>
                 <SvgIcon name="close" class="text-20 cursor-pointer" @click="removeCart(index)" />
               </div>
               <p class="text-14 text-gray-500 mt-4" v-for="(v, k) in item.specs">{{ k }}: {{ v }}</p>
@@ -33,33 +33,33 @@
                 <p>
                   <span class="shimmer-text" v-if="item.isPriceStale">Calculating...</span>
                   <template v-else>
-                    <span class="text-14 f-bold">
+                    <span class="text-14 font-bold">
                     {{ formatToCurrency(item.discountAmount === 0 ? getItemTotal(item) : getItemDisCountTotal(item)) }}
                   </span>
-                    <span v-if="item.discountAmount !== 0" class="text-gray-400 text-through ml-5 text-12">
+                    <span v-if="item.discountAmount !== 0" class="text-gray-400 line-through ml-5 text-12">
                       {{ formatToCurrency(getItemTotal(item)) }}
                     </span>
                   </template>
                 </p>
               </div>
-              <div class="mt-10 text-right text-secondary f-bold">
+              <div class="mt-10 text-right text-secondary font-bold">
                 <span>{{ item?.promoOffer?.join(' / ') }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="review-summary shadow-lg p-xl-20 p-15">
+      <div class="review-summary shadow-lg xl:p-20 p-15">
         <template v-if="selectedCarts.length > 0">
-          <div class="acea-row row-between-wrapper text-16 f-bold pb-20 mb-20 border-b-sm border-gray-200">
+          <div class="acea-row row-between-wrapper text-16 font-bold pb-20 mb-20 border-b">
             <span>Subtotal</span>
             <span>{{ formatToCurrency(cartStore.checkoutSubtotal) }}</span>
           </div>
           <div class="acea-row row-between-wrapper mb-20">
             <div class="acea-row row-middle">
-              <span class="f-bold text-16 mr-5">Phone Number</span>
+              <span class="font-bold text-16 mr-5">Phone Number</span>
               <el-tooltip :content="phoneRuleText" placement="top" popper-style="max-width: 345px;">
-                <SvgIcon name="info-fill" class="text-18" />
+                <SvgIcon name="info-fill" style="font-size: 20px;" />
               </el-tooltip>
             </div>
             <span></span>
@@ -75,9 +75,9 @@
           />
           <div class="acea-row row-between-wrapper mb-20">
             <div class="acea-row row-middle">
-              <span class="f-bold text-16 mr-5">Apply Discount Code</span>
+              <span class="font-bold text-16 mr-5">Apply Discount Code</span>
               <el-tooltip :content="discountRuleText" placement="top" popper-style="max-width: 345px;">
-                <SvgIcon name="info-fill" class="text-18" />
+                <SvgIcon name="info-fill" style="font-size: 20px;" />
               </el-tooltip>
             </div>
             <SvgIcon :name="showDiscountInput ? 'reduce' : 'add'" class="text-24 cursor-pointer" @click="showDiscountInput = !showDiscountInput" />
@@ -109,11 +109,11 @@
             <span>Discount Amount</span>
             <span>{{ formatToCurrency(Number(offerData?.discountAmount || 0)) }}</span>
           </div>
-          <div class="acea-row row-between-wrapper text-16 f-bold pt-20 my-20 border-t-sm border-gray-200">
+          <div class="acea-row row-between-wrapper text-16 font-bold pt-20 my-20 border-t">
             <span>Estimated Total</span>
             <div>
               <!-- 优惠之前的金额 -->
-              <p v-if="Number(offerData?.discountAmount || 0) > 0" class="text-through text-gray-600">
+              <p v-if="Number(offerData?.discountAmount || 0) > 0" class="line-through text-gray-600">
                 {{ formatToCurrency(totalBeforeDiscount) }}
               </p>
               <!-- 付款前的预估金额 -->
@@ -131,20 +131,20 @@
           <div class="mt-15 acea-row row-middle">
             <span class="mr-5 text-16">Promotion Rules</span>
             <el-tooltip :content="promotionRuleText" placement="top" popper-style="max-width: 345px;">
-              <SvgIcon name="info-fill" class="text-18" />
+              <SvgIcon name="info-fill" style="font-size: 20px;" />
             </el-tooltip>
           </div>
         </template>
         <div class="text-center py-60" v-else>
           <SvgIcon name="shopping-bag" class="text-50" />
-          <p class="text-20 f-bold mt-20">No Items Selected</p>
+          <p class="text-20 font-bold mt-20">No Items Selected</p>
           <p class="text-14 my-20">Please select at least one product in your cart before proceeding to checkout.</p>
         </div>
       </div>
     </div>
     <div class="text-center py-60" v-show="canCarts.length === 0">
       <SvgIcon name="shopping-bag" class="text-50" />
-      <p class="text-20 f-bold mt-20">Your Cart is Empty.</p>
+      <p class="text-20 font-bold mt-20">Your Cart is Empty.</p>
       <p class="text-14 my-20">Please add products to your cart to checkout.</p>
       <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">
         Start Shopping

@@ -1,15 +1,15 @@
 <template>
   <section>
     <div class="container-middle text-14" style="line-height: 2">
-      <h1 class="text-30 f-bold pt-lg-50 py-30">Privacy Notice</h1>
-      <h2 class="text-18 f-bold my-15">
+      <h1 class="text-30 font-bold lg:pt-50 py-30">Privacy Notice</h1>
+      <h2 class="text-18 font-bold my-15">
         Privacy Statement
       </h2>
       <p>
         We take your privacy seriously and this privacy statement explains how <a class="text-secondary" href="https://www.artdafen.com" target="_blank">artdafen.com</a>
         (collectively, “we,” “us,” or “our”) collect, use, share and process your information.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Collection And Use Of Personal Data
       </h2>
       <p>
@@ -18,7 +18,7 @@
         Personal data does not include data that has been irreversibly anonymized or aggregated so that it can no longer
         enable us, whether in combination with other information or otherwise, to identify you.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Promoting Safety And Security
       </h2>
       <p>
@@ -32,7 +32,7 @@
       <p>
         Here is a description of the types of personal data we may collect and how we may use it:
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         What Personal Data We Collect
       </h2>
       <p>
@@ -55,7 +55,7 @@
         GPS, your IP address, and other technologies to determine a device's approximate location to allow us to improve
         our products and services.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         How We Use Your Personal Data
       </h2>
       <p> Generally speaking, we use personal data to provide, improve, and develop our products and services, to
@@ -90,7 +90,7 @@
         NOTE: For any of the uses of your data described above that require your prior express consent, note that you
         may withdraw your consent by contacting us.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Definition Of "cookies"
       </h2>
       <p>
@@ -100,7 +100,7 @@
         and other software, for similar purposes. In this Cookie Statement, we refer to all of these technologies as
         "cookies."
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Use Of Cookies
       </h2>
       <p>
@@ -108,7 +108,7 @@
         offering and measuring advertisements, understanding user behavior, and providing a safer experience. Please
         note that the specific cookies we may use vary depending on the specific websites and services you use.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Disclosure Of Personal Data
       </h2>
       <p>
@@ -117,7 +117,7 @@
         to provide or improve our products, services, and advertising; it will not be shared with third parties for
         their own marketing purposes without your prior express consent.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Data Disclosure Or Storage, Transfer, And Processing
       </h2>
       <p>
@@ -151,7 +151,7 @@
         if we determine that for purposes of national security, law enforcement, or other issues of public importance,
         disclosure is necessary or appropriate.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Your Rights
       </h2>
       <p>
@@ -166,7 +166,7 @@
         personal data that we maintain. You may contact us to exercise your rights. We will respond to your request in a
         reasonable timeframe, and in any event in less than 30 days.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Third-party Websites And Services
       </h2>
       <p>
@@ -178,7 +178,7 @@
         collected by us through our products and services. We encourage you to read the privacy policies of any third
         party before proceeding to use their websites, products, or services.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Data Security, Integrity, And Retention
       </h2>
       <p>
@@ -187,7 +187,7 @@
         data for as long as it is necessary to fulfill the purposes outlined in this Privacy Statement, unless a longer
         retention period is required or permitted by law.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Changes To This Privacy Statement
       </h2>
       <p>
@@ -195,7 +195,7 @@
         regulatory requirements, among other reasons. If you do not agree to the revised Privacy Statement, please
         refrain from using our products or services and contact us to close any account you may have created.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Storage And Transfer Of Your Personal Data
       </h2>
       <p>
@@ -205,7 +205,7 @@
         transferred, processed or maintained outside the country or jurisdiction in which you reside, you should
         immediately stop accessing or using the services.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Children’s Privacy
       </h2>
       <p>

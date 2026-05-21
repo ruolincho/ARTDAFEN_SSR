@@ -12,8 +12,8 @@
             :key="index"
         >
           <div
-              class="width-item border-sm acea-row row-center-wrapper cursor-pointer text-14 py-md-15 py-10"
-              :class="{ 'border-gray-700': modelValue === item[valueKey] }"
+              class="width-item border acea-row row-center-wrapper cursor-pointer text-14 md:py-15 py-10"
+              :class="{ 'border-primary': modelValue === item[valueKey] }"
               @click="handleClick(item)"
           >
             <span>{{ item[labelKey] }}</span>

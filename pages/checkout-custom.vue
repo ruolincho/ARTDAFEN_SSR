@@ -1,19 +1,19 @@
 <template>
   <div class="container">
-    <h1 class="text-40 f-bold-500 py-lg-50 py-30">Checkout Photo to art </h1>
+    <h1 class="text-40 font-500 lg:py-50 py-30">Checkout Photo to art </h1>
     <div class="cart-container acea-row row-between row-top" v-show="customStore.subtotalQuantity > 0">
       <div class="review-container pr-30">
         <!-- 产品视图 -->
         <div class="review-list">
           <div class="review-item acea-row gap-base">
             <div class="p-img">
-              <div class="aspect-ratio p-10 border-sm border-gray-200">
-                <img class="w-full h-full fit-contain" :src="previewImg" alt="previewImg">
+              <div class="aspect-square p-10 border  ">
+                <img class="w-full h-full object-contain" :src="previewImg" alt="previewImg">
               </div>
             </div>
             <div class="p-cont flex-1">
               <div class="acea-row row-between-wrapper gap-base mb-10">
-                <p class="text-16 f-bold-500 flex-1">{{ customStore.carts.title }}</p>
+                <p class="text-16 font-500 flex-1">{{ customStore.carts.title }}</p>
               </div>
               <p class="text-14 text-gray-500 mt-4" v-for="(v, k) in customStore.carts.specs">{{ k }}: {{ v }}</p>
               <div class="acea-row row-between-wrapper mt-10">
@@ -26,25 +26,25 @@
                   :disabled="isCreate"
                   :value-on-clear="1"
                 />
-                <p class="text-14 f-bold">{{ formatToCurrency(customStore.subtotal) }}</p>
+                <p class="text-14 font-bold">{{ formatToCurrency(customStore.subtotal) }}</p>
               </div>
-              <div class="mt-10 text-right text-secondary f-bold" v-if="getOfferProduct.length">
+              <div class="mt-10 text-right text-secondary font-bold" v-if="getOfferProduct.length">
                 <span> {{ getOfferProduct[0]?.promoOffer.join(' / ') }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="review-summary shadow-lg p-xl-20 p-15">
-        <div class="acea-row row-between-wrapper text-16 f-bold pb-20 mb-20 border-b-sm border-gray-200">
+      <div class="review-summary shadow-lg xl:p-20 p-15">
+        <div class="acea-row row-between-wrapper text-16 font-bold pb-20 mb-20 border-b  ">
           <span>Subtotal</span>
           <span>{{ formatToCurrency(customStore.subtotal) }}</span>
         </div>
         <div class="acea-row row-between-wrapper mb-20">
           <div class="acea-row row-middle">
-            <span class="f-bold text-16 mr-5">Phone Number</span>
+            <span class="font-bold text-16 mr-5">Phone Number</span>
             <el-tooltip :content="phoneRuleText" placement="top" popper-style="max-width: 345px;">
-              <SvgIcon name="info-fill" class="text-18" />
+              <SvgIcon name="info-fill" style="font-size: 20px;" />
             </el-tooltip>
           </div>
           <span></span>
@@ -64,9 +64,9 @@
         </div>
         <div class="acea-row row-between-wrapper mb-20">
           <div class="acea-row row-middle">
-            <span class="f-bold text-16 mr-5">Apply Discount Code</span>
+            <span class="font-bold text-16 mr-5">Apply Discount Code</span>
             <el-tooltip :content="discountRuleText" placement="top" popper-style="max-width: 345px;">
-              <SvgIcon name="info-fill" class="text-18" />
+              <SvgIcon name="info-fill" style="font-size: 20px;" />
             </el-tooltip>
           </div>
           <SvgIcon :name="showDiscountInput ? 'reduce' : 'add'" class="text-24 cursor-pointer" @click="showDiscountInput = !showDiscountInput" />
@@ -101,11 +101,11 @@
           <span>Discount Amount</span>
           <span>{{ formatToCurrency(Number(offerData?.discountAmount || 0)) }}</span>
         </div>
-        <div class="acea-row row-between-wrapper text-16 f-bold pt-20 my-20 border-t-sm border-gray-200">
+        <div class="acea-row row-between-wrapper text-16 font-bold pt-20 my-20 border-t  ">
           <span>Estimated Total</span>
           <div>
             <!-- 优惠之前的金额 -->
-            <p v-if="Number(offerData?.discountAmount || 0) > 0" class="text-through text-gray-600">
+            <p v-if="Number(offerData?.discountAmount || 0) > 0" class="line-through text-gray-600">
               {{ formatToCurrency(totalBeforeDiscount) }}
             </p>
             <!-- 付款前的预估金额 -->
@@ -123,14 +123,14 @@
         <div class="mt-15 acea-row row-middle">
           <span class="mr-5 text-16">Promotion Rules</span>
           <el-tooltip :content="promotionRuleText" placement="top" popper-style="max-width: 345px;">
-            <SvgIcon name="info-fill" class="text-18" />
+            <SvgIcon name="info-fill" style="font-size: 20px;" />
           </el-tooltip>
         </div>
       </div>
     </div>
     <div class="text-center py-60" v-show="customStore.subtotalQuantity === 0">
       <SvgIcon name="shopping-bag" class="text-50" />
-      <p class="text-20 f-bold mt-20">Your Cart is Empty.</p>
+      <p class="text-20 font-bold mt-20">Your Cart is Empty.</p>
       <p class="text-14 my-20">Please add products to your cart to checkout.</p>
       <el-button size="large" type="primary" @click="router.push(COLLECTIONS_URL)">
         Start Shopping

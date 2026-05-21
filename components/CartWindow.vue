@@ -3,35 +3,35 @@
     <div class="shopping-bag-wrapper">
       <template v-if="cartStore.carts.length">
         <p class="text-16 mb-20">You have {{ cartStore.subtotalQuantity }} items in your cart</p>
-        <div class="shopping-bag-scroll scroll-y scroll-hide">
+        <div class="shopping-bag-scroll overflow-y-auto overflow-x-hidden scroll-hide">
           <div class="shopping-bag-list">
             <div
-              class="shopping-bag-item acea-row row-middle pb-20  border-b-sm border-gray-200"
+              class="shopping-bag-item acea-row row-middle pb-20 border-b  "
               :class="{ disabled: item.disable || Number(item.retailStock) <= 0 }"
                v-for="(item, index) in cartStore.carts"
                :key="item.productId"
             >
               <div
-                class="p-img mr-10 border-sm cursor-pointer"
+                class="p-img mr-10 border  cursor-pointer"
                 @click="jumpToProduct(item)"
               >
-                <img class="w-full h-full fit-contain" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title">
+                <img class="w-full h-full object-contain" :src="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title">
                 <p class="tip text-14 py-3 text-center">
                   {{ item.disable ? 'Temporarily unavailable' : Number(item.retailStock) <= 0 ? 'Out of stock' : '' }}
                 </p>
               </div>
               <div class="flex-1 text-16 overflow-hidden">
-                <p class="line1">{{ item.title }}</p>
-                <p class="f-bold my-5">{{ item.quantity }} × {{ formatToCurrency(item.retailPrice) }}</p>
+                <p class="truncate">{{ item.title }}</p>
+                <p class="font-bold my-5">{{ item.quantity }} × {{ formatToCurrency(item.retailPrice) }}</p>
                 <div class="acea-row row-between-wrapper overflow-hidden">
-                  <p class="flex-1 line1 mr-10">{{ formatAttr(item.specs) }}</p>
+                  <p class="flex-1 truncate mr-10">{{ formatAttr(item.specs) }}</p>
                   <SvgIcon name="delete" class="text-20 cursor-pointer" @click="cartStore.remove(index)" />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="acea-row row-between-wrapper py-20 text-16 f-bold">
+        <div class="acea-row row-between-wrapper py-20 text-16 font-bold">
           <p>Subtotal</p>
           <p>{{ formatToCurrency(cartStore.subtotal) }}</p>
         </div>

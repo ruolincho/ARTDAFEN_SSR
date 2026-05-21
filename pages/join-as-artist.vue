@@ -5,11 +5,11 @@
     </div>
   </section>
 
-  <section class="sec-global py-lg-80 py-40">
+  <section class="sec-global lg:py-80 py-40">
     <div class="container">
       <div class="section-header text-center">
-        <div class="text-16 py-10 px-16 border-sm border-gray-700 inline-block" v-aos="'fade-up'">Global Art Collaboration</div>
-        <h1 class="text-50 f-bold-500 mt-30" v-aos="'fade-up'">CREATING BEYOND BORDERS</h1>
+        <div class="text-16 py-10 px-16 border  border-primary inline-block" v-aos="'fade-up'">Global Art Collaboration</div>
+        <h1 class="text-50 font-500 mt-30" v-aos="'fade-up'">CREATING BEYOND BORDERS</h1>
       </div>
       <p class="intro text-22 mt-30" v-aos="'fade-up'">
         At Art Dafen, we believe that great art is born from connection. By collaborating with
@@ -20,18 +20,18 @@
     </div>
   </section>
 
-  <section class="sec-benefits py-lg-80 py-40">
+  <section class="sec-benefits lg:py-80 py-40">
     <div class="container">
       <div class="section-header text-center text-left-md">
-        <div class="text-16 py-10 px-16 border-sm border-gray-700 inline-block" v-aos="'fade-up'">Benefits</div>
-        <h1 class="text-50 f-bold-500 mt-30" v-aos="'fade-up'">PARTNERING WITH ARTDAFEN</h1>
+        <div class="text-16 py-10 px-16 border  border-primary inline-block" v-aos="'fade-up'">Benefits</div>
+        <h1 class="text-50 font-500 mt-30" v-aos="'fade-up'">PARTNERING WITH ARTDAFEN</h1>
       </div>
       <div class="row benefits-list mt-30">
         <div class="col-xs-6 col-12" v-aos="{ name: 'fade-up', delay: 0}">
           <div class="benefits-item bg-gray-200">
             <img class="icon" src="~/assets/images/collaboration-icon1.png" alt="icon">
             <div class="content">
-              <h2 class="text-24 f-bold-500">Global Reach</h2>
+              <h2 class="text-24 font-500">Global Reach</h2>
               <p class="text-22 text-gray-600 ">Showcase your work through exhibitions, digital platforms, and global
                 partnerships.</p>
             </div>
@@ -41,7 +41,7 @@
           <div class="benefits-item bg-gray-200">
             <img class="icon" src="~/assets/images/collaboration-icon2.png" alt="icon">
             <div class="content">
-              <h2 class="text-24 f-bold-500">Cultural Exchange</h2>
+              <h2 class="text-24 font-500">Cultural Exchange</h2>
               <p class="text-22 text-gray-600 ">Collaborate with artists and designers from around the world to inspire
                 fresh ideas.</p>
             </div>
@@ -51,7 +51,7 @@
           <div class="benefits-item bg-gray-200">
             <img class="icon" src="~/assets/images/collaboration-icon3.png" alt="icon">
             <div class="content">
-              <h2 class="text-24 f-bold-500">Creative Support</h2>
+              <h2 class="text-24 font-500">Creative Support</h2>
               <p class="text-22 text-gray-600 ">Access resources and a dedicated team that values both creativity and
                 quality.</p>
             </div>
@@ -61,7 +61,7 @@
           <div class="benefits-item bg-gray-200">
             <img class="icon" src="~/assets/images/collaboration-icon4.png" alt="icon">
             <div class="content">
-              <h2 class="text-24 f-bold-500">Sustainable Growth</h2>
+              <h2 class="text-24 font-500">Sustainable Growth</h2>
               <p class="text-22 text-gray-600 ">Transform your art into lifestyle products that expand your audience and
                 income.</p>
             </div>
@@ -71,13 +71,13 @@
     </div>
   </section>
 
-  <section class="sec-looking py-lg-80 py-40 bg-gray-200">
+  <section class="sec-looking lg:py-80 py-40 bg-gray-200">
     <div class="container">
       <div class="looking-wrapper">
-        <div class="left-block border-sm border-gray-700 text-50 f-bold-500 acea-row row-center-wrapper text-center" v-aos="'fade-right'">
+        <div class="left-block border  border-primary text-50 font-500 acea-row row-center-wrapper text-center" v-aos="'fade-right'">
           WHO WE’RE <br/> LOOKING FOR
         </div>
-        <div class="right-block text-22 border-sm border-gray-700" v-aos="'fade-left'">
+        <div class="right-block text-22 border  border-primary" v-aos="'fade-left'">
           <div class="content">
             <p class="mb-15">
               We welcome artists from all creative backgrounds — whether your practice is in painting, sculpture,
@@ -101,17 +101,17 @@
     </div>
   </section>
 
-  <section class="sec-process py-lg-80 py-40">
+  <section class="sec-process lg:py-80 py-40">
     <div class="container">
       <div class="section-header text-center">
-        <div class="text-16 py-10 px-16 border-sm border-gray-700 inline-block" v-aos="'fade-up'">How to Apply</div>
-        <h1 class="text-50 f-bold-500 mt-30" v-aos="'fade-up'">APPLICATION PROCESS</h1>
+        <div class="text-16 py-10 px-16 border  border-primary inline-block" v-aos="'fade-up'">How to Apply</div>
+        <h1 class="text-50 font-500 mt-30" v-aos="'fade-up'">APPLICATION PROCESS</h1>
       </div>
       <div class="row process-list">
         <div class="col-12 col-xs-6 col-md-3" v-aos="{ name: 'fade-up', delay: 0}">
           <div data-eq="1" class="process-item bg-gray-200 rounded-lg text-center">
-            <p class="text-24 f-bold-500 mb-lg-38 mb-15">Prepare Your Portfolio</p>
-            <p class="text-22 text-gray-600 break-word">
+            <p class="text-24 font-500 lg:mb-38 mb-15">Prepare Your Portfolio</p>
+            <p class="text-22 text-gray-600 break-words">
               Select 5–10 recent works with titles, short descriptions, and any relevant links. Add a brief bio
               highlighting your artistic path.
             </p>
@@ -119,8 +119,8 @@
         </div>
         <div class="col-12 col-xs-6 col-md-3" v-aos="{ name: 'fade-up', delay: 100}">
           <div data-eq="2" class="process-item bg-gray-200 rounded-lg text-center">
-            <p class="text-24 f-bold-500 mb-lg-38 mb-15">Submit Your Application</p>
-            <p class="text-22 text-gray-600 break-word">
+            <p class="text-24 font-500 lg:mb-38 mb-15">Submit Your Application</p>
+            <p class="text-22 text-gray-600 break-words">
               Email your portfolio and bio to us at <a :href="`mailto:${CONTACT_EMAIL}`">{{ CONTACT_EMAIL }}</a>. Be sure to include your full name and contact
               details.
             </p>
@@ -128,8 +128,8 @@
         </div>
         <div class="col-12 col-xs-6 col-md-3" v-aos="{ name: 'fade-up', delay: 200}">
           <div data-eq="3" class="process-item bg-gray-200 rounded-lg text-center">
-            <p class="text-24 f-bold-500 mb-lg-38 mb-15">Review & Response</p>
-            <p class="text-22 text-gray-600 break-word">
+            <p class="text-24 font-500 lg:mb-38 mb-15">Review & Response</p>
+            <p class="text-22 text-gray-600 break-words">
               Our curatorial team will assess your submission. You’ll receive a response within 14 business days if
               selected.
             </p>
@@ -137,8 +137,8 @@
         </div>
         <div class="col-12 col-xs-6 col-md-3" v-aos="{ name: 'fade-up', delay: 300}">
           <div data-eq="4" class="process-item bg-gray-200 rounded-lg text-center">
-            <p class="text-24 f-bold-500 mb-lg-38 mb-15">Begin the Collaboration</p>
-            <p class="text-22 text-gray-600 break-word">
+            <p class="text-24 font-500 lg:mb-38 mb-15">Begin the Collaboration</p>
+            <p class="text-22 text-gray-600 break-words">
               Once approved, you’ll become part of our artist network and explore new opportunities with us.
             </p>
           </div>
@@ -152,26 +152,26 @@
     </div>
   </section>
 
-  <section class="sec-form py-lg-80 py-40 bg-gray-600">
+  <section class="sec-form lg:py-80 py-40 bg-gray-600">
     <div class="container">
       <div class="form-wrapper">
         <div class="form-left text-white" v-aos="'fade-right'">
           <div class="section-header">
-            <div class="text-16 py-10 px-16 border-sm border-white inline-block">Get In Touch</div>
-            <h1 class="text-50 f-bold-500 mt-30">COLLABORATION INQUIRIES</h1>
+            <div class="text-16 py-10 px-16 border  border-white inline-block">Get In Touch</div>
+            <h1 class="text-50 font-500 mt-30">COLLABORATION INQUIRIES</h1>
           </div>
           <p class="text-28 text-gray-300 mt-28 mb-55" style="max-width: 509px;">
             Have questions about the collaboration or need help with your application? We’re here to support you.
           </p>
-          <p class="text-22 f-bold-500">
+          <p class="text-22 font-500">
             Reach us at: {{ CONTACT_EMAIL }}<br/>
             Or use the form to send us a message.
           </p>
-          <p class="text-28 f-bold-600 pt-25 mt-25 border-t-sm border-white">Let’s create something meaningful
+          <p class="text-28 font-600 pt-25 mt-25 border-t  border-white">Let’s create something meaningful
             together.</p>
         </div>
-        <div class="form-right bg-white p-xl-35 p-25" v-aos="'fade-left'">
-          <p class="text-30 f-bold-600">Send a Message</p>
+        <div class="form-right bg-white xl:p-35 p-25" v-aos="'fade-left'">
+          <p class="text-30 font-600">Send a Message</p>
           <p class="text-18 text-gray-600 mt-10 mb-30">
             We typically respond within 3–5 business days.
           </p>

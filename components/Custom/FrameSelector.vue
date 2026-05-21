@@ -8,13 +8,13 @@
     <div :id="tourId">
       <div class="frame-list">
         <div
-            class="frame-option cursor-pointer overflow-hidden"
+            class="frame-option border hover:border-3 hover:border-primary [&.on]:border-3 [&.on]:border-primary cursor-pointer overflow-hidden"
             :class="{ on: modelValue === item.id }"
             v-for="item in options" :key="item.id"
             @click="handleChange(item)"
         >
           <el-tooltip :content="item.name" placement="top" :hide-after="100">
-            <img class="w-full h-full fit-cover" v-lazy="imagePrefix(item.img!)" :alt="item.name">
+            <img class="w-full h-full object-cover" v-lazy="imagePrefix(item.img!)" :alt="item.name">
           </el-tooltip>
         </div>
       </div>
@@ -65,7 +65,6 @@ const handleChange = (item: IPaint.CombinationParts) => {
     .frame-option {
       width: 54px;
       height: 54px;
-      border: var(--border-width-sm) solid var(--color-gray-300);
       flex-shrink: 0;
 
       img {
@@ -74,9 +73,6 @@ const handleChange = (item: IPaint.CombinationParts) => {
 
       &.on,
       &:hover {
-        border-color: var(--color-gray-700);
-        border-width: var(--border-width-lg);
-
         img {
           transform: scale(0.9);
         }

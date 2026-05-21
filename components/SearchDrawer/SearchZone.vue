@@ -10,7 +10,7 @@
       <div class="img-wrapper overflow-hidden">
         <el-image class="w-full img-hover" fit="cover" :src="imagePrefix(item.img)" :alt="item.name" lazy/>
       </div>
-      <p class="text-center text-20 f-bold-500 mt-15 line1">{{ item.name }}</p>
+      <p class="text-center text-20 font-500 mt-15 truncate">{{ item.name }}</p>
     </NuxtLink>
   </div>
 </template>

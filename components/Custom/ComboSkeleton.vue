@@ -1,16 +1,16 @@
 <template>
   <el-skeleton :loading="loading" animated>
     <template #template>
-      <div class="m-md-20 m-15">
+      <div class="md:m-20 m-15">
         <el-skeleton-item variant="h1" style="width: 100%;"/>
       </div>
-      <div class="m-md-20 m-15">
+      <div class="md:m-20 m-15">
         <el-skeleton-item variant="p" style="width: 100%; height: 45px"/>
       </div>
-      <div class="m-md-20 m-15">
+      <div class="md:m-20 m-15">
         <el-skeleton-item variant="h1" style="width: 100%;"/>
       </div>
-      <div class="m-md-20 m-15 row">
+      <div class="md:m-20 m-15 row">
         <div class="col-3" v-for="item in 4" :key="item">
           <el-skeleton-item
               variant="image"
@@ -22,19 +22,19 @@
           </div>
         </div>
       </div>
-      <div class="m-md-20 m-15">
+      <div class="md:m-20 m-15">
         <el-skeleton-item variant="p" style="width: 100%;"/>
         <el-skeleton-item variant="p" style="width: 100%;"/>
         <el-skeleton-item variant="p" style="width: 100%;"/>
       </div>
-      <div class="acea-row row-right m-md-20 m-15">
+      <div class="acea-row row-right md:m-20 m-15">
         <el-skeleton-item variant="p" style="width: 30%;"/>
       </div>
-      <div class="m-md-20 m-15">
+      <div class="md:m-20 m-15">
         <el-skeleton-item variant="p" style="width: 100%;"/>
         <el-skeleton-item variant="p" style="width: 100%;"/>
       </div>
-      <div class="m-md-20 m-15">
+      <div class="md:m-20 m-15">
         <el-skeleton-item variant="button" style="width: 100%; height: 40px;"/>
       </div>
     </template>

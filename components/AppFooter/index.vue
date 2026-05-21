@@ -1,7 +1,7 @@
 <template>
 
   <!--页脚流程-->
-  <section class="sec-process py-lg-50 py-30">
+  <section class="sec-process lg:py-50 py-30">
     <div class="container">
       <div class="process-list">
         <div class="process-item text-center" v-for="item in PROCESS_LIST" :key="item.title">

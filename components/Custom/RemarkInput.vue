@@ -2,7 +2,7 @@
   <div class="my-15">
     <p class="acea-row row-middle mb-15">
       <span class="text-16">Additional Notes: </span>
-      <SvgIcon name="info-fill" class="text-20 ml-8 cursor-pointer" @click="openNotice" />
+      <SvgIcon name="info-fill" class="ml-8 cursor-pointer" @click="openNotice" style="font-size: 20px;" />
     </p>
 
     <div :id="tourId">

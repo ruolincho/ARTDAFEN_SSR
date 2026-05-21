@@ -20,7 +20,7 @@
     <div class="container-small">
       <div class="interaction-container">
         <div class="author-container">
-          <h1 class="text-30 f-bold my-20">{{ blogDetail?.title }}</h1>
+          <h1 class="text-30 font-bold my-20">{{ blogDetail?.title }}</h1>
           <div class="text-18">{{ blogDetail?.content }}</div>
           <div class="text-14 acea-row gap-xs mt-10" v-if="blogDetail?.labels?.length">
             <span class="text-secondary cursor-pointer" v-for="(label, labelIndex) in blogDetail.labels"
@@ -33,7 +33,7 @@
 
   <section class="sec-rec" v-if="blogDetail?.products.length">
     <div class="container-small">
-      <h1 class="my-20 py-20 border-b-xl border-gray-700 text-26 f-bold">RELATED PRODUCTS</h1>
+      <h1 class="my-20 py-20 border-b-4  border-primary text-26 font-bold">RELATED PRODUCTS</h1>
       <div class="row product-list gap-row-base">
         <div class="col-sm-3 col-6" v-for="item in blogDetail?.products" :key="item.id">
           <NuxtLink :to="productLink(item)" target="_blank" class="product-item">
@@ -41,8 +41,8 @@
               <img v-lazy="imagePrefix(item.img)" crossorigin="anonymous" :alt="item.title">
             </div>
             <div class="content-wrapper">
-              <h1 class="line2 text-14">{{ item.title }}</h1>
-              <p class="text-16 f-bold my-8">{{ formatToCurrency(item.retailPrice) }}</p>
+              <h1 class="line-clamp-2 text-14">{{ item.title }}</h1>
+              <p class="text-16 font-bold my-8">{{ formatToCurrency(item.retailPrice) }}</p>
               <div class="acea-row gap-xs">
                 <div class="p-tag bg-gray-400" v-for="label in item.labels" :key="label">{{ label }}</div>
               </div>

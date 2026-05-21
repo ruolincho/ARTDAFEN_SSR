@@ -1,8 +1,8 @@
 <template>
   <section>
     <div class="container-middle text-14" style="line-height: 2">
-      <h1 class="text-30 f-bold pt-lg-50 py-30">Terms and Conditions</h1>
-      <h2 class="text-18 f-bold my-15">
+      <h1 class="text-30 font-bold lg:pt-50 py-30">Terms and Conditions</h1>
+      <h2 class="text-18 font-bold my-15">
         Overview
       </h2>
       <p>
@@ -17,7 +17,7 @@
       <p>
         Any new features or tools which are added to the current store shall also be subject to the TERMS AND CONDITIONS. You can review the most current version of the TERMS AND CONDITIONS at any time on this page. We reserve the right to update, change or replace any part of these TERMS AND CONDITIONS by posting updates and/or changes to our website/application. It is your responsibility to check this page periodically for changes. Your continued use of or access to the website/application following the posting of any changes constitutes acceptance of those changes.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 1 - Online Store Terms
       </h2>
       <p>
@@ -29,7 +29,7 @@
       <p>
         A breach or violation of any of the Terms will result in an immediate termination of your Services.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 2 - General Conditions
       </h2>
       <p>
@@ -41,7 +41,7 @@
       <p>
         The headings used in this agreement are included for convenience only and will not limit or otherwise affect these Terms.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 3 - Accuracy, Completeness And Timeliness Of Information
       </h2>
       <p>
@@ -50,7 +50,7 @@
       <p>
         This site may contain certain historical information. Historical information, necessarily, is not current and is provided for your reference only. We reserve the right to modify the contents of this site at any time, but we have no obligation to update any information on our site. You agree that it is your responsibility to monitor changes to our site.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 4 - Modifications To The Service And Prices
       </h2>
       <p>
@@ -59,7 +59,7 @@
       <p>
         We reserve the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 5 - Products Or Services (if Applicable)
       </h2>
       <p>
@@ -74,7 +74,7 @@
       <p>
         Furthermore, due to the fully hand-painted nature of our artworks, slight variations in brushstrokes, composition, and color blending may occur between the final delivered product and the digital reference images displayed on our site. These variations are a standard characteristic of genuine handmade art and do not constitute a product defect or misrepresentation.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 6 - Accuracy Of Billing And Account Information
       </h2>
       <p>
@@ -86,7 +86,7 @@
       <p>
         For more details, please review our Return Policy.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 7 - Optional Tools
       </h2>
       <p>
@@ -98,7 +98,7 @@
       <p>
         Any use by you of optional tools offered through the site is entirely at your own risk and discretion and you should ensure that you are familiar with and approve of the terms on which tools are provided by the relevant third-party provider(s). We may also, in the future, offer new services and/or features through the website/application (including, the release of new tools and resources). Such new features and/or services shall also be subject to these TERMS AND CONDITIONS.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 8 - Third-party Links
       </h2>
       <p>
@@ -110,7 +110,7 @@
       <p>
         We are not liable for any harm or damages related to the purchase or use of goods, services, resources, content, or any other transactions made in connection with any third-party websites. Please review carefully the third-party's policies and practices and make sure you understand them before you engage in any transaction. Complaints, claims, concerns, or questions regarding third-party products should be directed to the third-party.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 9 - User Comments, Feedback And Other Submissions
       </h2>
       <p>
@@ -122,13 +122,13 @@
       <p>
         You agree that your comments will not violate any right of any third-party, including copyright, trademark, privacy, personality or other personal or proprietary right. You further agree that your comments will not contain libelous or otherwise unlawful, abusive or obscene material, or contain any computer virus or other malware that could in any way affect the operation of the Service or any related website/application. You may not use a false e-mail address, pretend to be someone other than yourself, or otherwise mislead us or third-parties as to the origin of any comments. You are solely responsible for any comments you make and their accuracy. We take no responsibility and assume no liability for any comments posted by you or any third-party.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 10 - Personal Information
       </h2>
       <p>
         Your submission of personal information through the store is governed by our Privacy Policy.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 11 - Errors, Inaccuracies And Omissions
       </h2>
       <p>
@@ -137,13 +137,13 @@
       <p>
         We undertake no obligation to update, amend or clarify information in the Service or on any related website/application, including without limitation, pricing information, except as required by law. No specified update or refresh date applied in the Service or on any related website/application, should be taken to indicate that all information in the Service or on any related website/application has been modified or updated.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 12 - Prohibited Uses
       </h2>
       <p>
         In addition to other prohibitions as set forth in the TERMS AND CONDITIONS, you are prohibited from using the site or its content: (a) for any unlawful purpose; (b) to solicit others to perform or participate in any unlawful acts; (c) to violate any international or HK’s regulations, rules, laws, or local ordinances; (d) to infringe upon or violate our intellectual property rights or the intellectual property rights of others; (e) to harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate based on gender, sexual orientation, religion, ethnicity, race, age, national origin, or disability; (f) to submit false or misleading information; (g) to upload or transmit viruses or any other type of malicious code that will or may be used in any way that will affect the functionality or operation of the Service or of any related website/application, other websites, or the Internet; (h) to collect or track the personal information of others; (i) to spam, phish, pharm, pretext, spider, crawl, or scrape; (j) for any obscene or immoral purpose; or (k) to interfere with or circumvent the security features of the Service or any related website/application, other websites, or the Internet. We reserve the right to terminate your use of the Service or any related website/application for violating any of the prohibited uses.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 13 - Disclaimer Of Warranties; Limitation Of Liability
       </h2>
       <p>
@@ -155,19 +155,19 @@
       <p>
         In no case shall we, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings, loss of data, replacement costs, or any similar damages, whether based in contract, tort (including negligence), strict liability or otherwise, arising from your use of any of the service or any products procured using the service, or for any other claim related in any way to your use of the service or any product, including, but not limited to, any errors or omissions in any content, or any loss or damage of any kind incurred as a result of the use of the service or any content (or product) posted, transmitted, or otherwise made available via the service, even if advised of their possibility. Because some states or jurisdictions do not allow the exclusion or the limitation of liability for consequential or incidental damages, in such states or jurisdictions, our liability shall be limited to the maximum extent permitted by law.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 14 - Indemnification
       </h2>
       <p>
         You agree to indemnify, defend and hold harmless us and our parent, subsidiaries, affiliates, partners, officers, directors, agents, contractors, licensors, service providers, subcontractors, suppliers, interns and employees, harmless from any claim or demand, including reasonable attorneys’ fees, made by any third-party due to or arising out of your breach of these TERMS AND CONDITIONS or the documents they incorporate by reference, or your violation of any law or the rights of a third-party.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 15 - Severability
       </h2>
       <p>
         In the event that any provision of these TERMS AND CONDITIONS is determined to be unlawful, void or unenforceable, such provision shall nonetheless be enforceable to the fullest extent permitted by applicable law, and the unenforceable portion shall be deemed to be severed from these TERMS AND CONDITIONS, such determination shall not affect the validity and enforceability of any other remaining provisions.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 16 - Termination
       </h2>
       <p>
@@ -179,7 +179,7 @@
       <p>
       If in our sole judgment you fail, or we suspect that you have failed, to comply with any term or provision of these TERMS AND CONDITIONS, we also may terminate this agreement at any time without notice and you will remain liable for all amounts due up to and including the date of termination; and/or accordingly may deny you access to our Services (or any part thereof).
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 17 - Entire Agreement
       </h2>
       <p>
@@ -191,13 +191,13 @@
       <p>
       Any ambiguities in the interpretation of these TERMS AND CONDITIONS shall not be construed against the drafting party.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 18 - Governing Law
       </h2>
       <p>
         These TERMS AND CONDITIONS and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of Hong Kong.
       </p>
-      <h2 class="text-18 f-bold my-15">
+      <h2 class="text-18 font-bold my-15">
         Section 19 - Changes To Terms And Conditions
       </h2>
       <p>

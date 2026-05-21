@@ -9,11 +9,11 @@
       <p class="text-20 mt-24 text-gray-600">Cancel subscription, please wait...</p>
     </div>
 
-    <div class="login-container border-gray-200 rounded-sm shadow-lg p-lg-32 p-20" v-else>
+    <div class="login-container  rounded-sm shadow-lg lg:p-32 p-20" v-else>
       <router-link to="/">
         <img class="logo" src="~/assets/images/logo.png" alt="logo">
       </router-link>
-      <h1 class="text-20 text-center f-bold my-24">
+      <h1 class="text-20 text-center font-bold my-24">
 
         <template v-if="isSuccess">Unsubscribed Successfully</template>
         <template v-else>Unsubscribe Failed</template>

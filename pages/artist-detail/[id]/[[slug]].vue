@@ -1,18 +1,18 @@
 <template>
   <!--艺术家信息-->
-  <section class="mt-lg-60 mt-20">
+  <section class="lg:mt-60 mt-20">
     <div class="container-middle">
       <div class="artist-wrapper acea-row row-middle">
-        <div class="artist-avatar aspect-ratio overflow-hidden rounded-md">
+        <div class="artist-avatar aspect-square overflow-hidden rounded-md">
           <img
-              class="w-full h-full fit-cover"
+              class="w-full h-full object-cover"
               :src="imagePrefix(artistDetail?.portrait)"
               :alt="`Portrait of ${artistDetail?.name}`"
           >
         </div>
         <div class="artist-content">
-          <p class="text-14 f-bold-500 text-capitalize" v-if="artistDetail?.region">From {{ artistDetail?.region }}</p>
-          <p class="text-60 f-bold-500 my-20">{{ artistDetail?.name }}</p>
+          <p class="text-14 font-500 capitalize" v-if="artistDetail?.region">From {{ artistDetail?.region }}</p>
+          <p class="text-60 font-500 my-20">{{ artistDetail?.name }}</p>
           <p class="text-16 text-gray-500 mb-20" style="line-height: 1.7">{{ artistDetail?.intro }}</p>
           <el-button type="primary" size="large">
             <NuxtLink :to="generatedPath">Explore Collection</NuxtLink>
@@ -23,10 +23,10 @@
   </section>
 
   <!--艺术家作品-->
-  <section class="mt-lg-60 mt-20" v-if="artworks.length">
+  <section class="lg:mt-60 mt-20" v-if="artworks.length">
     <div class="container">
-      <div class="mb-lg-60 mb-20 acea-row row-between-wrapper">
-        <h1 class="section-title text-40 f-bold-500">Art by {{ artistDetail?.name }}</h1>
+      <div class="lg:mb-60 mb-20 acea-row row-between-wrapper">
+        <h1 class="section-title text-40 font-500">Art by {{ artistDetail?.name }}</h1>
         <NuxtLink :to="generatedPath" class="view-all acea-row row-middle">
           View all
           <div class="icon-box ml-10">
@@ -44,20 +44,20 @@
   </section>
 
   <!--艺术家故事-->
-  <section class="mt-lg-60 mt-20" v-if="artistDetail?.description">
+  <section class="lg:mt-60 mt-20" v-if="artistDetail?.description">
     <div class="container">
       <div class="title-box text-center">
-        <h1 class="text-60 f-bold-500">{{ artistDetail?.name }}</h1>
+        <h1 class="text-60 font-500">{{ artistDetail?.name }}</h1>
         <p class="mt-10 text-gray-500" style="line-height: 1.7">{{ artistDetail?.description }}</p>
       </div>
     </div>
   </section>
 
   <!--艺术家探索-->
-  <section class="mt-lg-60 mt-20">
+  <section class="lg:mt-60 mt-20">
     <div class="container">
-      <div class="mb-lg-60 mb-20 acea-row row-between-wrapper">
-        <h1 class="section-title text-40 f-bold-500">Explore More Artists</h1>
+      <div class="lg:mb-60 mb-20 acea-row row-between-wrapper">
+        <h1 class="section-title text-40 font-500">Explore More Artists</h1>
         <NuxtLink to="/artists-brief" class="view-all acea-row row-middle">
           View all
           <div class="icon-box ml-10">
@@ -74,10 +74,10 @@
         <div class="artist-list row gap-row-base">
           <div class="col-xl-average col-md-3 col-sm-4 col-6" v-for="item in artistExplore" :key="item.id">
             <NuxtLink class="artist-item bg-gray-100 rounded-md text-center" :to="`/artist-detail/${item.id}/${item.slug}`" external>
-              <img class="aspect-ratio fit-cover" :src="imagePrefix(item?.portrait)"
+              <img class="aspect-square object-cover" :src="imagePrefix(item?.portrait)"
                    :alt="`Portrait of ${item.name}`">
               <div class="artist-content mt-15 acea-row row-center-wrapper overflow-hidden nowrap">
-                <span class="line1">{{ item.name }}</span>
+                <span class="truncate">{{ item.name }}</span>
                 <div class="icon-box">
                   <SvgIcon name="right" />
                 </div>
@@ -124,7 +124,7 @@ const artistId = toRef(route.params, 'id') // 响应式拿 id
 
 // 获取详情
 const config = useRuntimeConfig()
-const artworks = ref<General.GoodsItem>([])
+const artworks = ref<General.GoodsItem[]>([])
 const {data: artistDetail} = await useAsyncData(
     `artist-detail-${artistId.value}`,
     async () => {

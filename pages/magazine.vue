@@ -2,7 +2,7 @@
   <!-- Topic -->
   <section class="swiper-section">
     <div class="container">
-      <h1 class="mb-15 py-15 border-b-xl border-gray-700 text-26 f-bold">Latest post</h1>
+      <h1 class="mb-15 py-15 border-b-4  border-primary text-26 font-bold">Latest post</h1>
       <div class="latest-swiper">
         <swiper
             :modules="modules"
@@ -32,7 +32,7 @@
                   <img
                       :src="getPcSrcset(item.img).src"
                       :alt="item.title"
-                      class="w-full h-auto fit-cover"
+                      class="w-full h-auto object-cover"
                       loading="lazy"
                   />
                 </picture>
@@ -42,7 +42,7 @@
             <template v-if="item.type === '1'">
               <div class="video-box w-full h-full">
                 <video
-                    class="w-full h-full fit-cover"
+                    class="w-full h-full object-cover"
                     :src="imagePrefix(item.media)"
                     :poster="imagePrefix(item.img)"
                     :autoplay="true"
@@ -73,13 +73,13 @@
           <NuxtLink class="single-item" :to="`/magazine-detail/${item.id}/${item.slug}`" target="_blank">
             <div class="p-img overflow-hidden">
               <img
-                  class="w-full h-full fit-cover img-hover aspect-ratio-16_9"
+                  class="w-full h-full object-cover img-hover aspect-video"
                   :src="imagePrefix(item.img)"
                   :alt="item.title"
               />
             </div>
-            <p class="text-22 mt-18 line1">{{ item.title }}</p>
-            <p class="text-14 my-10 line2">{{ item.subtitle }}</p>
+            <p class="text-22 mt-18 truncate">{{ item.title }}</p>
+            <p class="text-14 my-10 line-clamp-2">{{ item.subtitle }}</p>
             <div class="acea-row row-between-wrapper gap-row-base">
               <div class="acea-row row-middle gap-xs">
                 <el-tag type="info" effect="plain" v-for="label in item.labels" :key="label">{{ label }}</el-tag>
